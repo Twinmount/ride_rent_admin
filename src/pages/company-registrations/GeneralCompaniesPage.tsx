@@ -10,6 +10,7 @@ import Pagination from '@/components/Pagination'
 import CompanyStatusModal from '@/components/CompanyStatusModal' // Modal for updating company status
 import { toast } from '@/components/ui/use-toast'
 import { CompanyType } from '@/types/api-types/vehicleAPI-types'
+import { CompanyNavDropdown } from '@/components/CompanyNavDropdown'
 
 interface GeneralCompaniesPageProps {
   queryKey: string[]
@@ -22,7 +23,6 @@ export default function GeneralCompaniesPage({
   queryKey,
   approvalStatus,
   isModified = false,
-  title,
 }: GeneralCompaniesPageProps) {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10)
@@ -77,8 +77,7 @@ export default function GeneralCompaniesPage({
 
         if (data) {
           queryClient.invalidateQueries({
-            queryKey: [...queryKey],
-            exact: true,
+            queryKey: [...queryKey, page, limit, sortOrder],
           })
           toast({
             title: 'Company status updated successfully',
@@ -100,10 +99,9 @@ export default function GeneralCompaniesPage({
   }
 
   return (
-    <section className="container min-h-screen py-10 mx-auto">
-      <CompanyRegistrationsNav />
-      <div className="my-8 flex-between max-sm:flex-col">
-        <h1 className="ml-2 text-2xl font-bold tracking-tight">{title}</h1>
+    <section className="container min-h-screen py-5 mx-auto md:py-7">
+      <div className="my-2 mb-6 flex-between max-sm:flex-col">
+        <CompanyNavDropdown />
 
         <div className="flex-between w-fit gap-x-2">
           <SortDropdown

@@ -24,6 +24,7 @@ import { Accordion } from '@/components/ui/accordion'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '@/components/ui/use-toast'
 import { formatFeatures } from '@/helpers/form'
+import { useEffect } from 'react'
 
 type FeaturesFormType = Record<string, string[] | null>
 
@@ -38,8 +39,12 @@ export default function FeaturesForm({ type }: FeaturesFormProps) {
 
   const queryClient = useQueryClient()
 
+  console.log('vehicleID: ', vehicleId)
+  console.log('vehicleCategoryId: ', vehicleCategoryId)
+  console.log('userId: ', userId)
+
   // Fetch levelsFilled only if the type is "Update"
-  const { data: levelsData } = useQuery({
+  const { data: levelsData, isLoading: isLevelsLoading } = useQuery({
     queryKey: ['getLevelsFilled', vehicleId],
     queryFn: () => getLevelsFilled(vehicleId as string),
     enabled: type === 'Update' && !!vehicleId,
@@ -50,7 +55,7 @@ export default function FeaturesForm({ type }: FeaturesFormProps) {
     : 1
 
   const isAddOrIncomplete =
-    type === 'Add' || (type === 'Update' && levelsFilled < 3)
+    type === 'Add' || (type === 'Update' && (levelsFilled ?? 1) < 3)
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -71,12 +76,22 @@ export default function FeaturesForm({ type }: FeaturesFormProps) {
         return await getFeaturesFormData(vehicleId)
       }
     },
-    enabled: !!vehicleId && (!!vehicleCategoryId || levelsFilled < 3),
+    enabled:
+      !!vehicleId &&
+      !isLevelsLoading &&
+      (!!vehicleCategoryId || levelsFilled < 3),
   })
+
+  console.log('FeaturesFormData ', data)
 
   const form = useForm<FeaturesFormType>({
     defaultValues: {},
   })
+
+  useEffect(() => {
+    console.log('levelsFilled: ', levelsFilled)
+    console.log('isAddOrIncomplete: ', isAddOrIncomplete)
+  }, [isLevelsLoading])
 
   async function onSubmit(values: FeaturesFormType) {
     console.log('Form Submitted:', values)
@@ -93,9 +108,9 @@ export default function FeaturesForm({ type }: FeaturesFormProps) {
 
     try {
       let response
-      if (type === 'Add') {
+      if (isAddOrIncomplete) {
         response = await addFeatures(requestBody)
-      } else if (type === 'Update') {
+      } else {
         response = await updateFeatures({ features, vehicleId })
       }
       console.log(response)
@@ -179,7 +194,7 @@ export default function FeaturesForm({ type }: FeaturesFormProps) {
           disabled={form.formState.isSubmitting}
           className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-darkYellow"
         >
-          {type === 'Add' ? 'Add Features' : 'Update Features'}
+          {isAddOrIncomplete ? 'Add Features' : 'Update Features'}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
       </form>

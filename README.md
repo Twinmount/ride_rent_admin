@@ -27,7 +27,7 @@ The Ride Rent Admin Platform is a web application designed to allow agents to ma
    npm install
    ```
 
-## Running the Project
+## Running the Project locally
 
 To run the project locally, use the following command:
 

@@ -90,7 +90,7 @@ export function AllListingTable({
                     >
                       {cell.column.id === 'vehicleModel' ? (
                         <Link
-                          to={`/listings/edit/${row.original.vehicleId}/${row.original.company.companyId}`}
+                          to={`/listings/edit/${row.original.vehicleId}/${row.original.company.companyId}/${row.original.company.userId}`}
                           className="font-semibold text-blue-600 hover:underline "
                         >
                           {cell.getValue() as string}

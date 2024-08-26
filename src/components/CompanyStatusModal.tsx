@@ -30,11 +30,15 @@ import CompanyStatusDropdown from './CompanyStatusDropdown'
 const formSchema = z
   .object({
     approvalStatus: z.enum(['APPROVED', 'REJECTED', 'PENDING']),
-    rejectionReason: z.string().optional(),
+    rejectionReason: z
+      .string()
+      .max(120, 'Rejection reason must be at most 120 characters long.')
+      .optional(),
   })
   .refine(
     (data) => {
       if (data.approvalStatus === 'REJECTED') {
+        // Ensure rejectionReason is provided and not empty when status is REJECTED
         return data.rejectionReason && data.rejectionReason.trim() !== ''
       }
       return true
@@ -69,6 +73,8 @@ export default function CompanyStatusModal({
   const [status, setStatus] = useState<'APPROVED' | 'REJECTED' | 'PENDING'>(
     currentStatus
   )
+
+  const [charCount, setCharCount] = useState<number>(0)
 
   const queryClient = useQueryClient()
 
@@ -112,7 +118,6 @@ export default function CompanyStatusModal({
       await onSubmit(values)
       queryClient.invalidateQueries({
         queryKey: ['companies'], // Updated query key for companies
-        exact: true,
       })
       onClose()
     } catch (error) {
@@ -187,8 +192,15 @@ export default function CompanyStatusModal({
                             placeholder="Rejection reason"
                             {...field}
                             className="h-28 textarea rounded-2xl"
+                            onChange={(e) => {
+                              field.onChange(e)
+                              setCharCount(e.target.value.length)
+                            }}
                           />
                         </FormControl>
+                        <div className="mt-1 ml-auto text-sm text-gray-500 w-fit">
+                          {charCount} / 120
+                        </div>
                         <FormMessage />
                       </div>
                     </FormItem>

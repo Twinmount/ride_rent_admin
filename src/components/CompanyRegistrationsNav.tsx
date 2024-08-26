@@ -27,17 +27,7 @@ export default function CompanyRegistrationsNav() {
           New
           <span className="relative text-xs bottom-2 h-fit">registrations</span>
         </NavLink>
-        {/* <NavLink
-          to="/registrations/updated"
-          className={({ isActive }) =>
-            `w-full h-full flex flex-col items-center   rounded-3xl font-semibold ${
-              isActive ? 'bg-yellow text-white' : 'text-yellow'
-            }`
-          }
-        >
-          Updated
-          <span className="relative text-xs bottom-2 h-fit">registrations</span>
-        </NavLink> */}
+
         <NavLink
           to="/registrations/rejected"
           className={({ isActive }) =>

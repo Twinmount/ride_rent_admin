@@ -16,6 +16,15 @@ export default function CompanyDetailsPage() {
     <section className="py-5 pt-10">
       <h1 className="mb-4 text-3xl font-bold text-center">Company Details</h1>
 
+      {data?.result.approvalStatus === 'REJECTED' && (
+        <div className="p-2 text-white bg-red-400 rounded-2xl mb-4 w-full  max-w-[800px] mx-auto ">
+          <h4 className="font-semibold">
+            Company status is currently REJECTED,
+          </h4>
+          &bull; REASON : {data.result.rejectionReason}
+        </div>
+      )}
+
       {isLoading ? (
         <FormSkelton />
       ) : (

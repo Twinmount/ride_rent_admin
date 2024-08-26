@@ -127,11 +127,16 @@ export const updateCompanyStatus = async (
   companyId: string
 ) => {
   try {
+    // Create the request body, excluding rejectionReason if the status is 'APPROVED'
     const requestBody = {
       ...values,
       companyId,
+      ...(values.approvalStatus === 'APPROVED' && {
+        rejectionReason: undefined,
+      }),
     }
-    // Send the FormData object using the API put method
+
+    // Send the request body using the API put method
     const data = await API.put({
       slug: Slug.PUT_COMPANY_STATUS, // Use the correct slug
       body: requestBody,

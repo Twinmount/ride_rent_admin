@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { CompanyFormDefaultValues } from '@/constants'
 import { CompanyFormSchema } from '@/lib/validator'
-import { ShieldCheck } from 'lucide-react'
+import { Pen, ShieldCheck } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import SingleFileUpload from '../SingleFileUpload'
@@ -250,10 +250,10 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
         ) : (
           <Button
             variant="outline"
-            className="h-12 text-lg font-semibold text-white bg-yellow hover:bg-yellow hover:text-white hover:shadow-lg rounded-xl"
+            className="h-12 gap-2 text-lg font-semibold text-white bg-yellow hover:bg-yellow hover:text-white hover:shadow-lg rounded-xl flex-center"
             onClick={handleEdit}
           >
-            Edit
+            Edit <Pen />
           </Button>
         )}
       </form>

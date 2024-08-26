@@ -8,6 +8,7 @@ import ListingsNav from '@/components/ListingsNav'
 import Pagination from '@/components/Pagination'
 import { LimitDropdown } from '@/components/LimitDropdown'
 import { SortDropdown } from '@/components/SortDropdown'
+import { ListingsNavDropdown } from '@/components/ListingsNavDropdown'
 
 export default function AllListingPage() {
   const [page, setPage] = useState(1)
@@ -56,13 +57,10 @@ export default function AllListingPage() {
   }
 
   return (
-    <section className="container min-h-screen py-10 mx-auto">
-      <ListingsNav />
-      <div className="my-8 flex-between max-md:flex-col">
-        <h1 className="ml-2 text-2xl font-bold tracking-tight max-md:mb-4">
-          All Listings
-        </h1>
-
+    <section className="container min-h-screen py-5 mx-auto md:py-7">
+      <div className="my-2 mb-6 flex-between max-md:flex-col">
+        {/* navigation dropdown */}
+        <ListingsNavDropdown />{' '}
         <div className="flex-between w-fit gap-x-2">
           <SortDropdown
             sortOrder={sortOrder}

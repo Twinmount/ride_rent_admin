@@ -68,7 +68,7 @@ export default function VehiclesFormUpdatePage() {
           <CircleArrowLeft />
         </button>
         <h1 className="text-center h3-bold sm:text-left">
-          New Update Details Page
+          Vehicle Details Form
         </h1>
       </div>
 
@@ -80,8 +80,12 @@ export default function VehiclesFormUpdatePage() {
         >
           <TabsList className="bg-white flex-center gap-x-4">
             <TabsTrigger value="primary">Primary Details</TabsTrigger>
-            <TabsTrigger value="specifications">Specifications</TabsTrigger>
-            <TabsTrigger value="features">Features</TabsTrigger>
+            <TabsTrigger disabled={isLoading} value="specifications">
+              Specifications
+            </TabsTrigger>
+            <TabsTrigger value="features" disabled={isLoading}>
+              Features
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="primary" className="flex-center">
             <Suspense fallback={<LazyLoader />}>

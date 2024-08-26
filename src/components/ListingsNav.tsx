@@ -34,6 +34,16 @@ export default function ListingsNav() {
         Updated
       </NavLink>
       <NavLink
+        to="/listings/pending"
+        className={({ isActive }) =>
+          `w-full h-full flex-center rounded-3xl  font-semibold ${
+            isActive ? 'bg-yellow text-white' : 'text-yellow'
+          }`
+        }
+      >
+        Pending
+      </NavLink>
+      <NavLink
         to="/listings/rejected"
         className={({ isActive }) =>
           `w-full h-full flex-center rounded-3xl  font-semibold ${

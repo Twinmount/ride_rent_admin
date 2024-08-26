@@ -11,12 +11,14 @@ import { GeneralListingColumns } from '@/components/table/live-listing/columns/G
 import { SingleVehicleType } from '@/types/api-types/vehicleAPI-types'
 import VehicleStatusModal from '@/components/VehicleStatusModal'
 import { toast } from '@/components/ui/use-toast'
+import { ListingsNavDropdown } from '@/components/ListingsNavDropdown'
 
 interface GeneralListingPageProps {
   queryKey: any[]
   approvalStatus: VehicleStatusType
   isModified?: boolean
   title: string
+  newRegistration?: boolean
 }
 
 export default function GeneralListingPage({
@@ -24,6 +26,7 @@ export default function GeneralListingPage({
   approvalStatus,
   isModified = false,
   title,
+  newRegistration,
 }: GeneralListingPageProps) {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10)
@@ -42,6 +45,7 @@ export default function GeneralListingPage({
         sortOrder,
         isModified,
         approvalStatus,
+        newRegistration,
       }),
   })
 
@@ -88,11 +92,10 @@ export default function GeneralListingPage({
   }
 
   return (
-    <section className="container min-h-screen py-10 mx-auto">
-      <ListingsNav />
-      <div className="my-8 flex-between max-sm:flex-col">
-        <h1 className="ml-2 text-2xl font-bold tracking-tight">{title}</h1>
-
+    <section className="container min-h-screen py-5 mx-auto md:py-7">
+      <div className="my-2 mb-6 flex-between max-sm:flex-col">
+        {/* navigation dropdown */}
+        <ListingsNavDropdown />{' '}
         <div className="flex-between w-fit gap-x-2">
           <SortDropdown
             sortOrder={sortOrder}

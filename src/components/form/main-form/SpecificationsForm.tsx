@@ -53,8 +53,10 @@ export default function SpecificationsForm({
     ? parseInt(levelsData.result.levelsFilled, 10)
     : 1
 
+  console.log('levels filled ', levelsFilled)
+
   const isAddOrIncomplete =
-    type === 'Add' || (type === 'Update' && (levelsFilled ?? 1) < 3)
+    type === 'Add' || (type === 'Update' && (levelsFilled ?? 1) < 2)
 
   // useQuery for fetching form data, now relying on levelsFilled
   const { data, isLoading } = useQuery({
@@ -81,15 +83,13 @@ export default function SpecificationsForm({
     enabled:
       !!vehicleId &&
       !isLevelsLoading &&
-      (!!vehicleCategoryId || levelsFilled < 3),
+      (!!vehicleCategoryId || levelsFilled < 2),
   })
 
   console.log('specificationFormData ', data)
 
-  const initialValues = {}
-
   const form = useForm<SpecificationFormType>({
-    defaultValues: initialValues,
+    defaultValues: {},
   })
 
   async function onSubmit(values: SpecificationFormType) {
@@ -118,7 +118,7 @@ export default function SpecificationsForm({
 
     try {
       let response
-      if (type === 'Add') {
+      if (isAddOrIncomplete) {
         response = await addSpecifications(requestBody)
         console.log('response ', response)
       } else if (type === 'Update') {
@@ -154,7 +154,7 @@ export default function SpecificationsForm({
 
   const fields = data?.result || []
 
-  return isLoading ? (
+  return isLoading || isLevelsLoading ? (
     <FormSkelton />
   ) : (
     <Form {...form}>
@@ -215,7 +215,7 @@ export default function SpecificationsForm({
           disabled={form.formState.isSubmitting}
           className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-darkYellow"
         >
-          {type === 'Add' ? 'Add Specifications' : 'Update Specifications'}
+          {isAddOrIncomplete ? 'Add Specifications' : 'Update Specifications'}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
       </form>

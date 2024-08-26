@@ -9,6 +9,7 @@ export type CompanyType = {
   companyLogo: string
   commercialLicense: string
   expireDate: string
+  userId: string
 }
 
 // type of single brand

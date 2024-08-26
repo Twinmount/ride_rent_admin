@@ -18,9 +18,9 @@ export function useVehicleIdentifiers(type: 'Add' | 'Update'): {
   vehicleId: string
   vehicleCategoryId?: string
 } {
-  const { vehicleId } = useParams<{ vehicleId: string }>()
-
   if (type === 'Update') {
+    const { vehicleId } = useParams<{ vehicleId: string }>()
+
     const vehicleCategoryId = load<string>(StorageKeys.CATEGORY_ID)
 
     if (!vehicleId) {

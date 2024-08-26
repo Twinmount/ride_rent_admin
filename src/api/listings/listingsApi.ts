@@ -46,6 +46,7 @@ export const fetchNewOrModifiedVehicles = async (urlParams: {
   approvalStatus?: VehicleStatusType
   isModified?: boolean
   userId?: string
+  newRegistration?: boolean
 }): Promise<FetchAllVehiclesResponse> => {
   try {
     // generating query params
@@ -65,6 +66,13 @@ export const fetchNewOrModifiedVehicles = async (urlParams: {
 
     if (urlParams.userId) {
       queryParams.append('userId', urlParams.userId)
+    }
+
+    if (urlParams.newRegistration) {
+      queryParams.append(
+        'newRegistration',
+        urlParams.newRegistration.toString()
+      )
     }
 
     const slugWithParams = `${Slug.GET_NEW_OR_MODIFIED_VEHICLES}?${queryParams}`

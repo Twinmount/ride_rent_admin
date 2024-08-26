@@ -8,6 +8,7 @@ import { fetchAllStates } from '@/api/states'
 import { useEffect } from 'react'
 import { stateType } from '@/types/types'
 import StatesLoadingSkelton from '@/components/skelton/StatesLoader'
+import ScrollToTop from '@/helpers/ScrollToTop'
 
 export default function Layout() {
   const { state, setState } = useAdminContext()
@@ -44,6 +45,7 @@ export default function Layout() {
     <>
       <Navbar options={options} isLoading={isLoading} />
       <Sidebar />
+      <ScrollToTop />
       <MainWrapper>
         {isLoading ? (
           <div>

@@ -139,6 +139,7 @@ const router = createBrowserRouter([
                     approvalStatus="UNDER_REVIEW"
                     title="New Listings"
                     isModified={false}
+                    newRegistration={true}
                   />
                 ),
               },
@@ -165,11 +166,22 @@ const router = createBrowserRouter([
                 ),
               },
               {
+                path: '/listings/pending',
+                element: (
+                  <GeneralListingPage
+                    queryKey={['listings,pending-listings']}
+                    approvalStatus="PENDING"
+                    title="Rejected Listings"
+                    newRegistration={true}
+                  />
+                ),
+              },
+              {
                 path: '/listings/add/:userId',
                 element: <VehiclesFormAddPage />,
               },
               {
-                path: '/listings/edit/:vehicleId/:companyId',
+                path: '/listings/edit/:vehicleId/:companyId/:userId',
                 element: <VehiclesFormUpdatePage />,
               },
 
