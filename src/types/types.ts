@@ -1,0 +1,132 @@
+// admin context org  type
+export type orgType = {
+  id?: string
+  label: string
+  value: string
+}
+
+// admin context  state type
+export type stateType = {
+  stateId?: string
+  stateName: string
+  stateValue: string
+}
+
+// admin context  type
+export type AdminContextType = {
+  isSidebarOpen: boolean
+  setSidebarOpen?: (value: boolean) => void
+  toggleSidebar: () => void
+  isSmallScreen: boolean
+  org: orgType
+  setOrg: (origin: orgType) => void
+  state: stateType
+  setState: (state: stateType) => void
+}
+
+export type VehicleCategoryType =
+  | 'car'
+  | 'sports-car'
+  | 'cycle'
+  | 'motorcycle'
+  | 'sports-bike'
+  | 'leisure-boat'
+  | 'charter'
+  | 'bus'
+  | 'van'
+  | 'buggy'
+  | 'yacht'
+
+export type VehicleCategoriesType = {
+  categoryId: number | string
+  name: string
+  value: VehicleCategoryType
+}
+
+export type VehicleTypeFormType = {
+  typeId?: string
+  name: string
+  value: string
+  vehicleCategoryId?: string
+}
+
+export type BrandFormType = {
+  brandName: string
+  brandValue: string
+  subHeading: string
+  vehicleCategoryId: string
+  metaTitle: string
+  metaDescription: string
+  brandLogo: string
+}
+
+export type StateFormType = {
+  countryId?: string
+  stateId: string
+  stateName: string
+  stateValue: string
+  subHeading: string
+  metaTitle: string
+  metaDescription: string
+  stateImage: any
+}
+
+export type CategoryFormType = {
+  name: string
+  value: string
+}
+
+export type CityFormType = {
+  cityName: string
+  cityValue: string
+}
+
+export type LinkFormType = {
+  linkId?: string
+  label: string
+  link: string
+}
+
+export type PromotionFormType = {
+  promotionImage: any
+  promotionLink: string
+}
+
+export type BrandType = {
+  id: number | string
+  label: string
+  value: VehicleCategoryType
+  link: string
+}
+
+export type CompanyFormType = {
+  companyName: string
+  companyLogo: string
+  commercialLicense: string
+  expireDate: Date
+  regNumber: string
+  agentId?: string
+  approvalStatus?: string
+  rejectionReason?: string
+}
+
+export type CompanyStatusFormType = {
+  approvalStatus: 'PENDING' | 'APPROVED' | 'REJECTED'
+  rejectionReason?: string
+}
+export type VehicleStatusFormType = {
+  approvalStatus: 'PENDING' | 'APPROVED' | 'REJECTED' | 'UNDER_REVIEW'
+  rejectionReason?: string
+}
+
+export type TabsTypes = 'primary' | 'specifications' | 'features'
+
+export interface ApiError {
+  response?: {
+    data?: {
+      error?: {
+        message?: string
+      }
+    }
+  }
+}

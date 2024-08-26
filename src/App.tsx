@@ -1,0 +1,339 @@
+import { lazy } from 'react'
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouterProvider,
+} from 'react-router-dom'
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+
+import Layout from './layout/Layout'
+import ErrorPage from './pages/ErrorPage'
+
+// pages import
+import Login from './pages/login/Login'
+import Register from './pages/Register'
+import VerifyOTP from './pages/VerifyOTP'
+import ProtectedRoute from './layout/ProtectedRoutes'
+
+import { toast } from './components/ui/use-toast'
+import { AdminProvider } from './context/AdminContext'
+
+// lazy loaded pages
+const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'))
+const AllListingPage = lazy(() => import('./pages/live-listing/AllListingPage'))
+
+const GeneralListingPage = lazy(
+  () => import('./pages/live-listing/GeneralListingPage')
+)
+const VehiclesFormUpdatePage = lazy(
+  () => import('./pages/live-listing/VehiclesFormUpdatePage')
+)
+const VehiclesFormAddPage = lazy(
+  () => import('./pages/live-listing/VehiclesFormAddPage')
+)
+
+// company registrations page
+
+const GeneralCompaniesPage = lazy(
+  () => import('./pages/company-registrations/GeneralCompaniesPage')
+)
+const CompanyDetailsPage = lazy(
+  () => import('./pages/company-registrations/CompanyDetailsPage')
+)
+// vehicle categories page imports
+const ManageCategoriesPage = lazy(
+  () => import('./pages/manage-categories/ManageCategoriesPage')
+)
+const AddCategoryPage = lazy(
+  () => import('./pages/manage-categories/AddCategoryPage')
+)
+const EditCategoryPage = lazy(
+  () => import('./pages/manage-categories/EditCategoryPage')
+)
+
+// vehicle types page import
+const ManageTypesPage = lazy(
+  () => import('./pages/manage-types/ManageTypesPage')
+)
+const EditTypePage = lazy(() => import('./pages/manage-types/EditTypePage'))
+const AddTypePage = lazy(() => import('./pages/manage-types/AddTypePage'))
+
+// brands page import
+const ManageBrandsPage = lazy(
+  () => import('./pages/manage-brands/ManageBrandsPage')
+)
+const AddBrandPage = lazy(() => import('./pages/manage-brands/AddBrandPage'))
+const EditBrandPage = lazy(() => import('./pages/manage-brands/EditBrandPage'))
+
+// states page pages
+const ManageStatesPage = lazy(
+  () => import('./pages/manage-states/ManageStatesPage')
+)
+const AddStatePage = lazy(() => import('./pages/manage-states/AddStatePage'))
+const EditStatePage = lazy(() => import('./pages/manage-states/EditStatePage'))
+
+// city pages imports
+const ManageCitiesPage = lazy(
+  () => import('./pages/manage-cities/ManageCitiesPage')
+)
+const AddCityPage = lazy(() => import('./pages/manage-cities/AddCityPage'))
+const EditCityPage = lazy(() => import('./pages/manage-cities/EditCityPage'))
+
+//  links page import
+const ManageLinksPage = lazy(
+  () => import('./pages/manage-links/ManageLinksPage')
+)
+const AddLinkPage = lazy(() => import('./pages/manage-links/AddLinkPage'))
+const EditLinkPage = lazy(() => import('./pages/manage-links/EditLinkPage'))
+
+// ads page import
+const ManagePromotionsPage = lazy(
+  () => import('./pages/manage-promotions/ManagePromotionsPage')
+)
+const AddPromotionPage = lazy(
+  () => import('./pages/manage-promotions/AddPromotionPage')
+)
+const EditPromotionPage = lazy(
+  () => import('./pages/manage-promotions/EditPromotionPage')
+)
+const router = createBrowserRouter([
+  {
+    element: <Outlet />,
+    errorElement: <ErrorPage />,
+    children: [
+      // login route
+      { path: '/login', element: <Login /> },
+      // register and OTP route (just for the first time admin account creation only)
+      { path: '/register', element: <Register /> },
+      { path: '/verify-otp', element: <VerifyOTP /> },
+
+      {
+        element: <Layout />,
+
+        children: [
+          {
+            element: <ProtectedRoute />,
+            children: [
+              // dashboard route
+              { path: '/', element: <Dashboard /> },
+
+              // vehicle listing routes
+              {
+                path: '/listings',
+                element: <Navigate to={'/listings/all'} />,
+              },
+              {
+                path: '/listings/all',
+                element: <AllListingPage />,
+              },
+              {
+                path: '/listings/new',
+                element: (
+                  <GeneralListingPage
+                    queryKey={['listings,new-listings']}
+                    approvalStatus="UNDER_REVIEW"
+                    title="New Listings"
+                    isModified={false}
+                  />
+                ),
+              },
+              {
+                path: '/listings/updated',
+                element: (
+                  <GeneralListingPage
+                    queryKey={['listings,updated-listings']}
+                    approvalStatus="UNDER_REVIEW"
+                    title="Updated Listings"
+                    isModified={true}
+                  />
+                ),
+              },
+              {
+                path: '/listings/rejected',
+                element: (
+                  <GeneralListingPage
+                    queryKey={['listings,rejected-listings']}
+                    approvalStatus="REJECTED"
+                    title="Rejected Listings"
+                    isModified={false}
+                  />
+                ),
+              },
+              {
+                path: '/listings/add/:userId',
+                element: <VehiclesFormAddPage />,
+              },
+              {
+                path: '/listings/edit/:vehicleId/:companyId',
+                element: <VehiclesFormUpdatePage />,
+              },
+
+              // Company routes
+              {
+                path: '/registrations',
+                element: (
+                  <GeneralCompaniesPage
+                    queryKey={['companies', 'all-companies']}
+                    approvalStatus="APPROVED"
+                    title="All Registrations"
+                  />
+                ),
+              },
+              {
+                path: '/registrations/new',
+                element: (
+                  <GeneralCompaniesPage
+                    queryKey={['companies', 'new-companies']}
+                    approvalStatus="PENDING"
+                    title="New Registrations"
+                  />
+                ),
+              },
+
+              {
+                path: '/registrations/rejected',
+                element: (
+                  <GeneralCompaniesPage
+                    queryKey={['companies', 'rejected-companies']}
+                    approvalStatus="REJECTED"
+                    title="Rejected Registrations"
+                  />
+                ),
+              },
+
+              {
+                path: '/registrations/view/:companyId',
+                element: <CompanyDetailsPage />,
+              },
+
+              // vehicle category route
+              {
+                path: '/manage-categories/',
+                element: <ManageCategoriesPage />,
+              },
+              {
+                path: '/manage-categories/add',
+                element: <AddCategoryPage />,
+              },
+              {
+                path: '/manage-categories/edit/:categoryId',
+                element: <EditCategoryPage />,
+              },
+
+              //vehicle types routes
+              {
+                path: '/manage-types',
+                element: <ManageTypesPage />,
+              },
+              {
+                path: '/manage-types/:vehicleCategoryId',
+                element: <ManageTypesPage />,
+              },
+              {
+                path: '/manage-types/:vehicleCategoryId/add',
+                element: <AddTypePage />,
+              },
+              {
+                path: '/manage-types/:vehicleCategoryId/edit/:vehicleTypeId',
+                element: <EditTypePage />,
+              },
+
+              // brands routes
+              {
+                path: '/manage-brands',
+                element: <ManageBrandsPage />,
+              },
+              {
+                path: '/manage-brands/:vehicleCategoryId',
+                element: <ManageBrandsPage />,
+              },
+              {
+                path: '/manage-brands/:vehicleCategoryId/add-brand',
+                element: <AddBrandPage />,
+              },
+              {
+                path: '/manage-brands/edit/:brandId',
+                element: <EditBrandPage />,
+              },
+
+              // state route
+              {
+                path: '/locations/',
+                element: <Navigate to={'/locations/manage-states'} />,
+              },
+              {
+                path: '/locations/manage-states',
+                element: <ManageStatesPage />,
+              },
+              {
+                path: '/locations/manage-states/add',
+                element: <AddStatePage />,
+              },
+              {
+                path: '/locations/manage-states/edit/:stateId',
+                element: <EditStatePage />,
+              },
+
+              // cities route
+              {
+                path: '/locations/manage-cities',
+                element: <ManageCitiesPage />,
+              },
+              {
+                path: '/locations/manage-cities/add',
+                element: <AddCityPage />,
+              },
+              {
+                path: '/locations/manage-cities/edit/:cityId',
+                element: <EditCityPage />,
+              },
+
+              // links route
+              { path: '/manage-links', element: <ManageLinksPage /> },
+              { path: '/manage-links/add', element: <AddLinkPage /> },
+              {
+                path: '/manage-links/edit/:linkId',
+                element: <EditLinkPage />,
+              },
+
+              // promotions route
+              { path: '/manage-promotions', element: <ManagePromotionsPage /> },
+              { path: '/manage-promotions/add', element: <AddPromotionPage /> },
+              {
+                path: '/manage-promotions/edit/:promotionId',
+                element: <EditPromotionPage />,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+])
+
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error) => {
+      toast({
+        variant: 'destructive',
+        title: 'Something went wrong',
+        description: `${error.message}`,
+      })
+    },
+  }),
+})
+
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AdminProvider>
+        <RouterProvider router={router} />
+      </AdminProvider>
+    </QueryClientProvider>
+  )
+}

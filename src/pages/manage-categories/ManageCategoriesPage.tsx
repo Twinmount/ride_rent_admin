@@ -1,0 +1,69 @@
+import { Link, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Plus } from 'lucide-react'
+import GridSkelton from '@/components/skelton/GridSkelton'
+import { useQuery } from '@tanstack/react-query'
+import { fetchAllCategories } from '@/api/vehicle-categories'
+
+export default function ManageCategoriesPage() {
+  const params = useParams()
+
+  useEffect(() => {}, [params])
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => fetchAllCategories({ page: 1, limit: 20, sortOrder: 'ASC' }),
+  })
+
+  // Destructure the result from data
+  const { list: categories = [] } = data?.result || {}
+
+  return (
+    <section className="container h-auto min-h-screen pb-10">
+      {/* vehicle types grid */}
+
+      <div className="h-20 px-10 mb-6 flex-between">
+        <h1 className="text-2xl font-bold">
+          Manage <span className="text-yellow">Vehicle Categories</span>
+        </h1>
+      </div>
+
+      {isLoading ? (
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 place-items-center gap-y-4">
+          <GridSkelton type="category" />
+        </div>
+      ) : categories.length > 0 ? (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 place-items-center gap-y-4">
+          {categories.map((category) => (
+            <Link
+              to={`/manage-categories/edit/${category.categoryId}`}
+              key={category.categoryId}
+              className="flex flex-col w-full overflow-hidden text-xl font-semibold capitalize transition-all bg-white border rounded-lg shadow-md h-36 flex-center hover:text-yellow hover:border-yellow"
+            >
+              <div className="w-full h-[80%]">
+                <img
+                  src="https://static.vecteezy.com/system/resources/previews/017/120/789/original/car-icon-isolated-simple-view-front-logo-illustration-sign-symbol-auto-style-car-logo-design-with-concept-sports-vehicle-icon-silhouette-vector.jpg"
+                  alt="category logo"
+                  className="object-contain w-full h-full"
+                />
+              </div>
+              <span className="mb-1">{category.name}</span>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="text-2xl text-center mt-36">No Categories Found!</div>
+      )}
+
+      {/* add new category */}
+      <button className="fixed z-30 overflow-hidden cursor-pointer w-fit h-fit rounded-xl right-10 bottom-10 shadow-xl  hover:scale-[1.02]  transition-all">
+        <Link
+          className="flex-center gap-x-1 px-3 py-2 text-white  shadow-xl hover:scale-[1.02]  transition-all bg-yellow flex-center"
+          to={`/manage-categories/add`}
+        >
+          New Category <Plus />
+        </Link>
+      </button>
+    </section>
+  )
+}
