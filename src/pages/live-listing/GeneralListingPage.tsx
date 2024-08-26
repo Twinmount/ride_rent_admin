@@ -5,7 +5,6 @@ import { LimitDropdown } from '@/components/LimitDropdown'
 import Pagination from '@/components/Pagination'
 import { fetchNewOrModifiedVehicles, updateVehicleStatus } from '@/api/listings'
 import { GeneralListingTable } from '@/components/table/live-listing/GeneralListingTable'
-import ListingsNav from '@/components/ListingsNav'
 import { VehicleStatusType } from '@/types/formTypes'
 import { GeneralListingColumns } from '@/components/table/live-listing/columns/GeneralListingsColumn'
 import { SingleVehicleType } from '@/types/api-types/vehicleAPI-types'
@@ -25,7 +24,6 @@ export default function GeneralListingPage({
   queryKey,
   approvalStatus,
   isModified = false,
-  title,
   newRegistration,
 }: GeneralListingPageProps) {
   const [page, setPage] = useState(1)

@@ -4,7 +4,6 @@ import { AllListingColumns } from '../../components/table/live-listing/columns/A
 import { fetchAllVehicles, enableOrDisableVehicle } from '@/api/listings'
 import { AllListingTable } from '@/components/table/live-listing/AllListingTable'
 import { toast } from '@/components/ui/use-toast'
-import ListingsNav from '@/components/ListingsNav'
 import Pagination from '@/components/Pagination'
 import { LimitDropdown } from '@/components/LimitDropdown'
 import { SortDropdown } from '@/components/SortDropdown'
