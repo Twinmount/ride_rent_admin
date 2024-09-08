@@ -38,7 +38,7 @@ export default function ManageCitiesPage() {
             <Link
               to={`/locations/manage-cities/edit/${data.cityId}`}
               key={data.cityId}
-              className="w-full overflow-hidden text-lg bg-white border shadow-md md:text-xl rounded-xl h-14 flex-center hover:text-yellow hover:border-yellow"
+              className="w-full overflow-hidden text-base text-center bg-white border shadow-md rounded-xl h-14 flex-center hover:text-yellow hover:border-yellow"
             >
               {data.cityName}
             </Link>

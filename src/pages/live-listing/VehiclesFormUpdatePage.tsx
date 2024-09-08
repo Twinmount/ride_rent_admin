@@ -39,7 +39,11 @@ export default function VehiclesFormUpdatePage() {
   })
 
   // Fetch levelsFilled only if the type is "Update"
-  const { data: levelsData } = useQuery({
+  const {
+    data: levelsData,
+    refetch: refetchLevels,
+    isFetching: isLevelsFetching,
+  } = useQuery({
     queryKey: ['getLevelsFilled', vehicleId],
     queryFn: () => getLevelsFilled(vehicleId as string),
     enabled: !!vehicleId,
@@ -48,6 +52,9 @@ export default function VehiclesFormUpdatePage() {
   const levelsFilled = levelsData
     ? parseInt(levelsData.result.levelsFilled, 10)
     : 1
+
+  const isAddOrIncompleteSpecifications = levelsFilled < 2 // true if only level 1 is filled
+  const isAddOrIncompleteFeatures = levelsFilled < 3
 
   const formData = data ? mapGetPrimaryFormToPrimaryFormType(data.result) : null
   const countryCode = data?.result?.countryCode || ''
@@ -102,12 +109,28 @@ export default function VehiclesFormUpdatePage() {
           </TabsContent>
           <TabsContent value="specifications" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
-              <SpecificationsForm type="Update" />
+              {isLevelsFetching ? (
+                <FormSkelton />
+              ) : (
+                <SpecificationsForm
+                  type="Update"
+                  refetchLevels={refetchLevels}
+                  isAddOrIncomplete={isAddOrIncompleteSpecifications}
+                />
+              )}
             </Suspense>
           </TabsContent>
           <TabsContent value="features" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
-              <FeaturesForm type="Update" />
+              {isLevelsFetching ? (
+                <FormSkelton />
+              ) : (
+                <FeaturesForm
+                  type="Update"
+                  refetchLevels={refetchLevels}
+                  isAddOrIncomplete={isAddOrIncompleteFeatures}
+                />
+              )}
             </Suspense>
           </TabsContent>
         </Tabs>

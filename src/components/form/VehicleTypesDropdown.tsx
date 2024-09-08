@@ -36,7 +36,7 @@ const VehicleTypesDropdown = ({
         page: 1,
         limit: 20,
         sortOrder: 'ASC',
-        vehicleCategoryId: vehicleCategoryId || '',
+        vehicleCategoryId: vehicleCategoryId as string,
       }),
     enabled: !!vehicleCategoryId,
   })

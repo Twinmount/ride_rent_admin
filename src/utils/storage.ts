@@ -4,12 +4,12 @@ export enum StorageKeys {
   /**
    * Key for storing user authentication token.
    */
-  ACCESS_TOKEN = 'accessToken',
+  ACCESS_TOKEN = 'adminAccessToken',
 
   /**
    * Key for storing refresh token.
    */
-  REFRESH_TOKEN = 'refreshToken',
+  REFRESH_TOKEN = 'adminRefreshToken',
 
   /**
    * Key for storing user profile data.

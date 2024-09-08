@@ -82,6 +82,7 @@ export default function PrimaryDetailsForm({
         type: 'manual',
         message: rentalError,
       })
+      form.setFocus('rentalDetails')
       return
     }
 
@@ -126,6 +127,7 @@ export default function PrimaryDetailsForm({
           message:
             'This registration number is already registered. Please use a different one.',
         })
+        form.setFocus('vehicleRegistrationNumber')
       } else {
         toast({
           variant: 'destructive',

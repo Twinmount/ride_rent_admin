@@ -35,7 +35,7 @@ const SpecificationDropdown = ({
               value={option.value}
               className="select-item p-regular-14"
             >
-              {option.value}
+              {option.label}
             </SelectItem>
           ))}
       </SelectContent>

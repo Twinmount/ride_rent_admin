@@ -248,7 +248,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
         </Button>
 
         {/* delete modal button only on "Update" */}
-        {type === 'Update' && (
+        {/* {type === 'Update' && (
           <DeleteModal
             onDelete={deleteStateMutation}
             label="Delete"
@@ -259,7 +259,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
             isLoading={isPending || form.formState.isSubmitting}
             navigateTo="/manage-states"
           ></DeleteModal>
-        )}
+        )} */}
       </form>
     </Form>
   )

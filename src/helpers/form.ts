@@ -285,3 +285,12 @@ export const validateTabAccess = ({
 
   return { canAccess: true, message: '' } // Default case
 }
+
+// Type guard to check if a value has the 'selected' property for specification form
+export function hasSelected(
+  value:
+    | { name: string; label: string; _id?: string }
+    | { name: string; label: string; selected: boolean }
+): value is { name: string; label: string; selected: boolean } {
+  return (value as { selected: boolean }).selected !== undefined
+}

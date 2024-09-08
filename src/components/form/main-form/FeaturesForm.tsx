@@ -15,7 +15,6 @@ import {
   addFeatures,
   getFeaturesFormData,
   getFeaturesFormFieldsData,
-  getLevelsFilled,
   updateFeatures,
 } from '@/api/vehicle'
 import FormSkelton from '@/components/skelton/FormSkelton'
@@ -24,15 +23,20 @@ import { Accordion } from '@/components/ui/accordion'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '@/components/ui/use-toast'
 import { formatFeatures } from '@/helpers/form'
-import { useEffect } from 'react'
 
 type FeaturesFormType = Record<string, string[] | null>
 
 type FeaturesFormProps = {
   type: 'Add' | 'Update'
+  refetchLevels?: () => void
+  isAddOrIncomplete?: boolean
 }
 
-export default function FeaturesForm({ type }: FeaturesFormProps) {
+export default function FeaturesForm({
+  type,
+  refetchLevels,
+  isAddOrIncomplete,
+}: FeaturesFormProps) {
   const { vehicleId, vehicleCategoryId } = useVehicleIdentifiers(type)
   const navigate = useNavigate()
   const { userId } = useParams<{ userId: string }>()
@@ -43,24 +47,9 @@ export default function FeaturesForm({ type }: FeaturesFormProps) {
   console.log('vehicleCategoryId: ', vehicleCategoryId)
   console.log('userId: ', userId)
 
-  // Fetch levelsFilled only if the type is "Update"
-  const { data: levelsData, isLoading: isLevelsLoading } = useQuery({
-    queryKey: ['getLevelsFilled', vehicleId],
-    queryFn: () => getLevelsFilled(vehicleId as string),
-    enabled: type === 'Update' && !!vehicleId,
-  })
-
-  const levelsFilled = levelsData
-    ? parseInt(levelsData.result.levelsFilled, 10)
-    : 1
-
-  const isAddOrIncomplete =
-    type === 'Add' || (type === 'Update' && (levelsFilled ?? 1) < 3)
-
   const { data, isLoading } = useQuery({
     queryKey: [
       isAddOrIncomplete ? 'features-form-data' : 'features-update-form-data',
-      vehicleCategoryId,
       vehicleId,
     ],
     queryFn: async () => {
@@ -76,10 +65,7 @@ export default function FeaturesForm({ type }: FeaturesFormProps) {
         return await getFeaturesFormData(vehicleId)
       }
     },
-    enabled:
-      !!vehicleId &&
-      !isLevelsLoading &&
-      (!!vehicleCategoryId || levelsFilled < 3),
+    enabled: !!vehicleId,
   })
 
   console.log('FeaturesFormData ', data)
@@ -88,16 +74,52 @@ export default function FeaturesForm({ type }: FeaturesFormProps) {
     defaultValues: {},
   })
 
-  useEffect(() => {
-    console.log('levelsFilled: ', levelsFilled)
-    console.log('isAddOrIncomplete: ', isAddOrIncomplete)
-  }, [isLevelsLoading])
+  // Custom validation logic: Ensures at least one checkbox is selected for each feature
+  const validateFeatures = (values: FeaturesFormType) => {
+    let isValid = true
+    const updatedErrors: Record<string, string> = {}
+
+    data?.result.forEach((feature) => {
+      if (!values[feature.name] || values[feature.name]?.length === 0) {
+        updatedErrors[
+          feature.name
+        ] = `Please select at least one option for ${feature.name}`
+        isValid = false
+      }
+    })
+
+    if (!isValid) {
+      Object.keys(updatedErrors).forEach((key) => {
+        form.setError(key, {
+          type: 'manual',
+          message: updatedErrors[key],
+        })
+      })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      toast({
+        title: 'Validation Error',
+        description: 'Please fill in all required fields.',
+        variant: 'destructive',
+        className: 'bg-red-500 text-white',
+      })
+    } else {
+      form.clearErrors() // Clear all errors if valid
+    }
+
+    return isValid
+  }
 
   async function onSubmit(values: FeaturesFormType) {
     console.log('Form Submitted:', values)
 
+    // Validate before submitting
+    const isValid = validateFeatures(values)
+    if (!isValid) return // Exit if not valid
+
     // Prepare the features object for the request body
     const features = formatFeatures(values, data?.result || [])
+
+    console.log('formated features:', features)
 
     const requestBody = {
       features,
@@ -120,10 +142,9 @@ export default function FeaturesForm({ type }: FeaturesFormProps) {
           className: 'bg-yellow text-white',
         })
         queryClient.invalidateQueries({
-          queryKey: ['primary-details-form'],
-          exact: true,
+          queryKey: ['features-update-form-data', vehicleId],
         })
-        console.log('levels Filled: ', levelsFilled)
+        refetchLevels?.()
         navigate('/listings')
       }
     } catch (error) {
