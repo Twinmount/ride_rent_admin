@@ -89,12 +89,13 @@ export default function VehiclesFormAddPage() {
               <SpecificationsForm
                 type={'Add'}
                 onNextTab={() => handleNextTab('features')}
+                isAddOrIncomplete={true}
               />
             </Suspense>
           </TabsContent>
           <TabsContent value="features" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
-              <FeaturesForm type={'Add'} />
+              <FeaturesForm type={'Add'} isAddOrIncomplete={true} />
             </Suspense>
           </TabsContent>
         </Tabs>

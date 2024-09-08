@@ -40,11 +40,11 @@ export default function ManageCategoriesPage() {
               key={category.categoryId}
               className="flex flex-col w-full overflow-hidden text-xl font-semibold capitalize transition-all bg-white border rounded-lg shadow-md h-36 flex-center hover:text-yellow hover:border-yellow"
             >
-              <div className="w-full h-[80%]">
+              <div className="w-[70%] flex-center mx-auto h-[80%]">
                 <img
-                  src="https://static.vecteezy.com/system/resources/previews/017/120/789/original/car-icon-isolated-simple-view-front-logo-illustration-sign-symbol-auto-style-car-logo-design-with-concept-sports-vehicle-icon-silhouette-vector.jpg"
-                  alt="category logo"
-                  className="object-contain w-full h-full"
+                  src={`/assets/icons/vehicle-categories/${category.value}.png`}
+                  alt={`${category.name} logo`}
+                  className="object-contain w-[70%] h-full"
                 />
               </div>
               <span className="mb-1">{category.name}</span>

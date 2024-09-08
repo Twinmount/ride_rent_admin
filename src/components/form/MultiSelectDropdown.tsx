@@ -25,6 +25,7 @@ const MultiSelectDropdown = ({
   uniqueValue,
 }: MultiSelectDropdownProps) => {
   useEffect(() => {
+    // Pre-select the values on mount (for Update case)
     const timer = setTimeout(() => {
       if (value.length === 0) {
         const preSelectedValues = options
@@ -40,24 +41,26 @@ const MultiSelectDropdown = ({
   }, []) // Empty dependency array to run only on mount
 
   const handleCheckboxChange = (checkedValue: string, isChecked: boolean) => {
+    // Modify the selected values based on checkbox interaction
     const newValue = isChecked
       ? [...value, checkedValue]
       : value.filter((val) => val !== checkedValue)
 
-    onChangeHandler(newValue)
+    onChangeHandler(newValue) // Call the handler to update form value
   }
-
   return (
-    <AccordionItem value={uniqueValue} className="mb-1">
+    <AccordionItem value={uniqueValue} className="pb-2 mb-2 border-none">
       <AccordionTrigger
         disabled={isDisabled}
-        className="px-2 overflow-hidden rounded-lg hover:no-underline bg-slate-100"
+        className="px-2 overflow-hidden bg-white border rounded-lg hover:no-underline"
       >
         <div className="text-gray-500">
-          Choose <span className="text-gray-800">{placeholder}</span> features{' '}
+          {value.length > 0
+            ? `${value.length} features selected`
+            : 'Choose features'}
         </div>
       </AccordionTrigger>
-      <AccordionContent>
+      <AccordionContent className="overflow-y-auto max-h-96 bg-slate-50">
         {options.length > 0 &&
           options.map((option) => (
             <FormItem
@@ -66,7 +69,7 @@ const MultiSelectDropdown = ({
             >
               <FormControl>
                 <Checkbox
-                  checked={value.includes(option.name)}
+                  checked={value.includes(option.name)} // Set checkbox state based on selected values
                   onCheckedChange={(checked) =>
                     handleCheckboxChange(option.name, checked as boolean)
                   }

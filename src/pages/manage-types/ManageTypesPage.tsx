@@ -66,6 +66,8 @@ export default function ManageTypesPage() {
     }
   }, [vehicleCategoryId, categories])
 
+  const noTypeCategories = ['buses', 'buggies', 'vans', 'yachts']
+
   return (
     <section className="container h-auto min-h-screen pb-10">
       <div className="h-20 px-10 mb-6 flex-between">
@@ -91,21 +93,30 @@ export default function ManageTypesPage() {
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 place-items-center gap-y-4">
           <GridSkelton type="category" />
         </div>
+      ) : noTypeCategories.includes(selectedCategory?.value as string) ? (
+        <div className="text-2xl text-center mt-36">
+          No vehicle types for{' '}
+          <span className="italic font-semibold">{selectedCategory?.name}</span>
+        </div>
       ) : list && list.length > 0 ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 place-items-center gap-y-4">
           {list.map((data) => (
             <Link
+              key={data.typeId}
               to={`/manage-types/${vehicleCategoryId}/edit/${data.typeId}`}
               className="flex flex-col w-full overflow-hidden text-xl font-semibold capitalize transition-all bg-white border rounded-lg shadow-md h-36 flex-center hover:text-yellow hover:border-yellow"
             >
-              <div className="w-full h-[80%]">
+              <div className="w-[90%] mx-auto h-[80%]">
                 <img
-                  src="https://static.vecteezy.com/system/resources/previews/017/120/789/original/car-icon-isolated-simple-view-front-logo-illustration-sign-symbol-auto-style-car-logo-design-with-concept-sports-vehicle-icon-silhouette-vector.jpg"
-                  alt="category logo"
+                  src={`/assets/icons/vehicle-types/${selectedCategory?.value}/${data.value}.webp`}
+                  alt={`${data.name} logo`}
                   className="object-contain w-full h-full"
                 />
               </div>
-              <span> {data.name}</span>
+              <span className="w-[95%] text-sm text-center truncate">
+                {' '}
+                {data.name}
+              </span>
             </Link>
           ))}
         </div>

@@ -1,6 +1,6 @@
 export enum Slug {
   // Authentication Endpoints
-  LOGIN = '/auth/login',
+  LOGIN = '/auth/admin/login',
   REGISTER = '/auth/send-otp',
   VERIFY_OTP = '/auth/verify-otp',
   REFRESH = '/auth/refresh',
@@ -67,7 +67,7 @@ export enum Slug {
   PUT_VEHICLE_STATUS = '/vehicle/approve-or-reject',
   GET_VEHICLE = '/vehicle',
   DELETE_VEHICLE = '/vehicle',
-  GET_ALL_VEHICLES = '/vehicle/vehicle/listed/all',
+  GET_ALL_VEHICLES = '/vehicle/listed/all',
   GET_NEW_OR_MODIFIED_VEHICLES = '/vehicle/all/modified',
   PUT_TOGGLE_VEHICLE_VISIBILITY = '/vehicle/toggle-visibility',
   GET_LEVELS_FILLED = '/vehicle/level-filled',

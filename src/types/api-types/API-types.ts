@@ -187,14 +187,14 @@ export interface FetchSpecificLinkResponse {
   statusCode: number
 }
 
-// state type
+// single promotion type
 export interface PromotionType {
   promotionId: string
   promotionImage: any
   promotionLink: string
 }
 
-//  interface for the get-all-states  API response
+//  get-all-promotions  API response
 export interface FetchPromotionsResponse {
   result: {
     list: PromotionType[]
@@ -206,7 +206,7 @@ export interface FetchPromotionsResponse {
   statusCode: number
 }
 
-//  interface for the states (by id)  API response
+//  states (by id)  API response
 export interface FetchSpecificPromotionResponse {
   result: PromotionType
   status: string

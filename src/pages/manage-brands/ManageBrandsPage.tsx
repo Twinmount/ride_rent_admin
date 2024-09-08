@@ -70,6 +70,8 @@ export default function ManageBrandsPage() {
   // destructuring brandData
   const brandList = brandData?.result?.list || []
 
+  const baseAssetsUrl = import.meta.env.VITE_ASSETS_URL
+
   // setting selected category
   useEffect(() => {
     if (vehicleCategoryId && categoryData) {
@@ -136,7 +138,7 @@ export default function ManageBrandsPage() {
                 >
                   <div className="flex-center w-auto h-[7.5rem] p-2 ">
                     <img
-                      src={data.brandLogo}
+                      src={`${baseAssetsUrl}/icons/brands/${data.brandName}.png`}
                       alt={data.brandName}
                       className="object-contain w-[95%] h-full max-w-28"
                     />

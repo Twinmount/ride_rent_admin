@@ -44,7 +44,7 @@ const BrandsDropdown = ({
       enabled: !!value, // Only run this query if value is provided
     })
 
-  // Fetch brands by search term and category
+  // Fetch brands by search term and category id
   const {
     data: brandData,
     isLoading: isBrandsLoading,
