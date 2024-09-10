@@ -9,9 +9,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Image, Trash2, Upload } from 'lucide-react'
+import { Image as ImageIcon, Trash2, Upload } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
-import { validateFileSize, validateImageDimensions } from '@/helpers/form'
+import { validateFileSize } from '@/helpers/form'
+import imageCompression from 'browser-image-compression'
+import Spinner from '../general/Spinner'
 
 type FileUploadProps = {
   name: string
@@ -30,16 +32,17 @@ const FileUpload: React.FC<FileUploadProps> = ({
   multiple = false,
   existingFiles = [],
   description,
-  maxSizeMB = 15,
+  maxSizeMB = 1,
   maxWidth = 1920,
   maxHeight = 1920,
 }) => {
   const { control, setValue, clearErrors } = useFormContext()
   const [files, setFiles] = useState<(File | string)[]>(existingFiles)
+  const [isCompressing, setIsCompressing] = useState<boolean>(false)
 
   useEffect(() => {
     setValue(name, files)
-  }, [files, setValue, name])
+  }, [files, setValue, name, isCompressing])
   const handleFilesChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -70,6 +73,31 @@ const FileUpload: React.FC<FileUploadProps> = ({
       }
 
       newFiles.push(file)
+
+      // Compress the file if it exceeds the size threshold (2MB)
+      if (file.size / 1024 / 1024 > 2) {
+        setIsCompressing(true)
+
+        try {
+          const compressedFile = await imageCompression(file, {
+            maxSizeMB: 2,
+            maxWidthOrHeight: maxWidth,
+            useWebWorker: true,
+          })
+
+          newFiles.push(compressedFile)
+        } catch (error) {
+          toast({
+            variant: 'destructive',
+            title: 'Compression error',
+            description: `Failed to compress ${file.name}.`,
+          })
+        } finally {
+          setIsCompressing(false)
+        }
+      } else {
+        newFiles.push(file)
+      }
     }
 
     // Update the state with the newly added files
@@ -150,23 +178,35 @@ const FileUpload: React.FC<FileUploadProps> = ({
                         </Button>
                       </div>
                     ))}
+                    {/* Placeholder for uploading new files */}
                     {Array.from({ length: getMaxCount() - files.length }).map(
                       (_, index) =>
                         index === 0 ? (
                           <label
                             key={`placeholder-${index}`}
                             htmlFor={`file-upload-${name}`}
-                            className="flex flex-col items-center justify-center w-16 h-16 border rounded-lg cursor-pointer bg-gray-50"
+                            className="relative flex flex-col items-center justify-center w-16 h-16 border rounded-lg cursor-pointer bg-gray-50"
                           >
-                            <Upload size={24} className="text-yellow" />
-                            <span className="text-sm text-yellow">upload</span>
+                            {isCompressing ? (
+                              <Spinner
+                                color="text-gray-600"
+                                additionalClass="mr-2"
+                              />
+                            ) : (
+                              <>
+                                <Upload size={24} className="text-yellow" />
+                                <span className="text-sm text-yellow">
+                                  upload
+                                </span>
+                              </>
+                            )}
                           </label>
                         ) : (
                           <div
                             key={`placeholder-${index}`}
                             className="flex items-center justify-center w-16 h-16 bg-gray-100 border rounded-lg"
                           >
-                            <Image size={24} className="text-gray-300" />
+                            <ImageIcon size={24} className="text-gray-300" />
                           </div>
                         )
                     )}

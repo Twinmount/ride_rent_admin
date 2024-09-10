@@ -35,7 +35,7 @@ const BrandsDropdown = ({
 }: BrandsDropdownProps) => {
   const [selectedValue, setSelectedValue] = React.useState<string>(value || '')
   const [searchTerm, setSearchTerm] = React.useState('')
-
+  const [open, setOpen] = React.useState(false)
   // Fetch brand by ID if value is provided
   const { data: specificBrandData, isLoading: isSpecificBrandLoading } =
     useQuery({
@@ -103,7 +103,7 @@ const BrandsDropdown = ({
   ])
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -141,7 +141,10 @@ const BrandsDropdown = ({
                     <CommandItem
                       key={brand.id}
                       value={brand.id}
-                      onSelect={() => handleSelect(brand.id)}
+                      onSelect={() => {
+                        handleSelect(brand.id)
+                        setOpen(false)
+                      }}
                     >
                       <Check
                         className={cn(
