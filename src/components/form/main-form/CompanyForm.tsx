@@ -141,11 +141,9 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
               <SingleFileUpload
                 name={field.name}
                 label="Company Logo"
-                description="Upload a image with a maximum file size of 300KB. The image should have dimensions not exceeding 500x500 pixels"
+                description="Company logo can have a maximum size of 5MB"
                 existingFile={formData?.companyLogo}
-                maxSizeMB={0.3}
-                maxWidth={500}
-                maxHeight={500}
+                maxSizeMB={5}
                 isDisabled={!isEditing}
               />
             )}
@@ -159,11 +157,9 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
               <SingleFileUpload
                 name={field.name}
                 label="Commercial License"
-                description="Upload a image with a maximum file size of 300KB. The image should have dimensions not exceeding 500x500 pixels"
+                description="Commercial License can have a maximum size of 5MB"
                 existingFile={formData?.commercialLicense}
                 maxSizeMB={1}
-                maxWidth={1000}
-                maxHeight={1000}
                 isDisabled={!isEditing}
               />
             )}
@@ -216,8 +212,10 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                     />
                   </FormControl>
                   <FormDescription className="mt-1 ml-1">
-                    Enter your company registration number . eg
-                    :"1234-1234-1234"
+                    Enter your company registration number (e.g., ABC12345). The
+                    number should be a combination of letters and numbers,
+                    without any spaces or special characters, up to 15
+                    characters.
                   </FormDescription>
                   <FormMessage />
                 </div>

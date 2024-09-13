@@ -22,9 +22,7 @@ import Spinner from '../general/Spinner'
 import SingleFileUpload from './SingleFileUpload'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '../ui/use-toast'
-import { addState, deleteState, updateState } from '@/api/states'
-import DeleteModal from '../modal/DeleteModal'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { addState, updateState } from '@/api/states'
 
 type StateFormProps = {
   type: 'Add' | 'Update'
@@ -38,8 +36,6 @@ export default function StateForm({ type, formData }: StateFormProps) {
   const navigate = useNavigate()
   const { stateId } = useParams<{ stateId: string }>()
 
-  const queryClient = useQueryClient()
-
   // 1. Define your form.
   const form = useForm<z.infer<typeof StateFormSchema>>({
     resolver: zodResolver(StateFormSchema),
@@ -48,8 +44,6 @@ export default function StateForm({ type, formData }: StateFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof StateFormSchema>) {
-    console.log('values from form :', values)
-
     try {
       let data
       if (type === 'Add') {
@@ -74,13 +68,6 @@ export default function StateForm({ type, formData }: StateFormProps) {
       })
     }
   }
-
-  const { mutateAsync: deleteStateMutation, isPending } = useMutation({
-    mutationFn: () => deleteState(stateId as string),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['states'], exact: true })
-    },
-  })
 
   return (
     <Form {...form}>
@@ -176,11 +163,9 @@ export default function StateForm({ type, formData }: StateFormProps) {
               <SingleFileUpload
                 name={field.name}
                 label="State Image"
-                description="Upload a image with a maximum file size of 300KB. The image should have dimensions not exceeding 500x500 pixels"
+                description="Upload a image with a maximum file size of 1mb."
                 existingFile={formData?.stateImage}
-                maxSizeMB={0.3}
-                maxWidth={500}
-                maxHeight={500}
+                maxSizeMB={1}
               />
             )}
           />
@@ -240,26 +225,12 @@ export default function StateForm({ type, formData }: StateFormProps) {
         <Button
           type="submit"
           size="lg"
-          disabled={form.formState.isSubmitting || isPending}
+          disabled={form.formState.isSubmitting}
           className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
         >
           {form.formState.isSubmitting ? 'Processing...' : `${type} State`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
-
-        {/* delete modal button only on "Update" */}
-        {/* {type === 'Update' && (
-          <DeleteModal
-            onDelete={deleteStateMutation}
-            label="Delete"
-            title="Delete State"
-            description="Are you sure you want to delete this state? "
-            confirmText="Delete"
-            cancelText="Cancel"
-            isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/manage-states"
-          ></DeleteModal>
-        )} */}
       </form>
     </Form>
   )

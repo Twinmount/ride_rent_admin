@@ -19,11 +19,10 @@ import { BrandFormSchema } from '@/lib/validator'
 import { BrandFormDefaultValues } from '@/constants'
 import { Textarea } from '../ui/textarea'
 import Spinner from '../general/Spinner'
-import DeleteModal from '../modal/DeleteModal'
-import { addBrand, deleteBrand, updateBrand } from '@/api/brands'
+import { addBrand, updateBrand } from '@/api/brands'
 import { toast } from '../ui/use-toast'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import SingleFileUpload from './SingleFileUpload'
 import VehicleCategoryDropdown from './VehicleCategoryDropdown'
 
@@ -79,17 +78,6 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
       })
     }
   }
-
-  const { mutateAsync: deleteStateMutation, isPending } = useMutation({
-    mutationFn: () => deleteBrand(brandId as string),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['brands'], exact: true })
-      toast({
-        title: ` Brand deleted successfully`,
-        className: 'bg-yellow text-white',
-      })
-    },
-  })
 
   return (
     <Form {...form}>
@@ -195,8 +183,6 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
                   description="Upload a image with a maximum file size of 300KB. The image should have dimensions not exceeding 500x500 pixels"
                   existingFile={formData?.brandLogo}
                   maxSizeMB={0.3}
-                  maxWidth={500}
-                  maxHeight={500}
                 />
               )}
             />
@@ -254,20 +240,6 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
           {form.formState.isSubmitting ? 'Submitting...' : `${type} Brand `}{' '}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
-
-        {/* delete modal button only on "Update" */}
-        {type === 'Update' && (
-          <DeleteModal
-            onDelete={deleteStateMutation}
-            label="Delete"
-            title="Delete Brand"
-            description="Are you sure you want to delete this brand? "
-            confirmText="Delete"
-            cancelText="Cancel"
-            isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/manage-brands"
-          ></DeleteModal>
-        )}
       </form>
     </Form>
   )

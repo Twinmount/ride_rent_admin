@@ -21,9 +21,7 @@ import Spinner from '../general/Spinner'
 
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '../ui/use-toast'
-import DeleteModal from '../modal/DeleteModal'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { addCity, deleteCity, updateCity } from '@/api/cities'
+import { addCity, updateCity } from '@/api/cities'
 import { useAdminContext } from '@/context/AdminContext'
 
 type CityFormProps = {
@@ -39,8 +37,6 @@ export default function CityForm({ type, formData }: CityFormProps) {
 
   const navigate = useNavigate()
   const { state } = useAdminContext()
-
-  const queryClient = useQueryClient()
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof CityFormSchema>>({
@@ -76,13 +72,6 @@ export default function CityForm({ type, formData }: CityFormProps) {
       })
     }
   }
-
-  const { mutateAsync: deleteCityMutation, isPending } = useMutation({
-    mutationFn: () => deleteCity(cityId as string),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cities'], exact: true })
-    },
-  })
 
   return (
     <Form {...form}>
@@ -139,26 +128,12 @@ export default function CityForm({ type, formData }: CityFormProps) {
         <Button
           type="submit"
           size="lg"
-          disabled={form.formState.isSubmitting || isPending}
+          disabled={form.formState.isSubmitting}
           className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
         >
           {form.formState.isSubmitting ? 'Processing...' : `${type} City`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
-
-        {/* delete modal button only on "Update" */}
-        {type === 'Update' && (
-          <DeleteModal
-            onDelete={deleteCityMutation}
-            label="Delete"
-            title="Delete City"
-            description="Are you sure you want to delete this city? "
-            confirmText="Delete"
-            cancelText="Cancel"
-            isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/locations/manage-cities"
-          ></DeleteModal>
-        )}
       </form>
     </Form>
   )
