@@ -19,7 +19,6 @@ type MultiSelectDropdownProps = {
 const MultiSelectDropdown = ({
   value = [],
   onChangeHandler,
-  placeholder = 'option',
   options,
   isDisabled = false,
   uniqueValue,

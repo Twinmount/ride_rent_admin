@@ -1,5 +1,3 @@
-import React from 'react'
-
 type SpinnerProps = {
   color?: string // Optional color prop for text color
   additionalClass?: string // Optional additional class prop

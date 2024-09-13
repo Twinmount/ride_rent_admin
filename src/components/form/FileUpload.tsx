@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Image, Trash2, Upload } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
-import { validateFileSize, validateImageDimensions } from '@/helpers/form'
+import { validateFileSize } from '@/helpers/form'
 
 type FileUploadProps = {
   name: string
@@ -31,8 +31,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
   existingFiles = [],
   description,
   maxSizeMB = 15,
-  maxWidth = 1920,
-  maxHeight = 1920,
 }) => {
   const { control, setValue, clearErrors } = useFormContext()
   const [files, setFiles] = useState<(File | string)[]>(existingFiles)

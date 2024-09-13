@@ -34,7 +34,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
   description,
   maxSizeMB = 1,
   maxWidth = 1920,
-  maxHeight = 1920,
 }) => {
   const { control, setValue, clearErrors } = useFormContext()
   const [files, setFiles] = useState<(File | string)[]>(existingFiles)

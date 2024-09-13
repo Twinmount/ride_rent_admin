@@ -22,7 +22,6 @@ import Spinner from '../general/Spinner'
 import { addBrand, updateBrand } from '@/api/brands'
 import { toast } from '../ui/use-toast'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 import SingleFileUpload from './SingleFileUpload'
 import VehicleCategoryDropdown from './VehicleCategoryDropdown'
 
@@ -41,8 +40,6 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
     vehicleCategoryId: string
     brandId: string
   }>()
-
-  const queryClient = useQueryClient()
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof BrandFormSchema>>({
