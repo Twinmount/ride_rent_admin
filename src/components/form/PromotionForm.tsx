@@ -103,11 +103,9 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
               <SingleFileUpload
                 name={field.name}
                 label="Promotion Image"
-                description="Upload a image with a maximum file size of 500KB. The image should have dimensions not exceeding 500x500 pixels"
+                description="Upload a image with a maximum file size of 3MB"
                 existingFile={formData?.promotionImage}
-                maxSizeMB={0.5}
-                maxWidth={500}
-                maxHeight={500}
+                maxSizeMB={3}
               />
             )}
           />

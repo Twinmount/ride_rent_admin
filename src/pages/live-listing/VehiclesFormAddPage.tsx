@@ -60,7 +60,7 @@ export default function VehiclesFormAddPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h1 className="text-center h3-bold sm:text-left">
+        <h1 className="text-center h3-bold max-sm:text-xl sm:text-left">
           Manually Add New Vehicle
         </h1>
       </div>
@@ -71,11 +71,23 @@ export default function VehiclesFormAddPage() {
           onValueChange={handleTabChange}
           className="w-full"
         >
-          <TabsList className="bg-white flex-center gap-x-4">
-            <TabsTrigger value="primary">Primary Details</TabsTrigger>
-            <TabsTrigger value="specifications">Specifications</TabsTrigger>
-            <TabsTrigger value="features">Features</TabsTrigger>
+          <TabsList className="w-full bg-white flex-center gap-x-2">
+            <TabsTrigger
+              value="primary"
+              className="h-9 max-sm:text-sm max-sm:px-2"
+            >
+              Primary Details
+            </TabsTrigger>
+
+            <TabsTrigger value="specifications" className="max-sm:px-2">
+              Specifications
+            </TabsTrigger>
+
+            <TabsTrigger value="features" className="max-sm:px-2">
+              Features
+            </TabsTrigger>
           </TabsList>
+
           <TabsContent value="primary" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
               <PrimaryDetailsForm

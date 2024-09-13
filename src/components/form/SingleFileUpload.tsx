@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Upload, X } from 'lucide-react'
-import { validateFileSize, validateImageDimensions } from '@/helpers/form'
+import { validateFileSize } from '@/helpers/form'
 import { toast } from '@/components/ui/use-toast'
 
 type SingleFileUploadProps = {
@@ -17,8 +17,6 @@ type SingleFileUploadProps = {
   label: string
   description: string
   maxSizeMB?: number
-  maxWidth?: number
-  maxHeight?: number
   existingFile?: string | null
   isDisabled?: boolean
 }
@@ -27,9 +25,7 @@ const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
   name,
   label,
   description,
-  maxSizeMB = 1,
-  maxWidth = 1000,
-  maxHeight = 1000,
+  maxSizeMB = 5,
   existingFile = null,
   isDisabled = false,
 }) => {
@@ -37,10 +33,12 @@ const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
   const [previewURL, setPreviewURL] = useState<string | null>(existingFile)
 
   useEffect(() => {
-    if (existingFile) {
-      setValue(name, existingFile)
+    // Set the preview to the existing URL only if no new file has been selected
+    if (!previewURL && existingFile) {
+      setPreviewURL(existingFile) // Set the existing file URL as preview
+      setValue(name, existingFile) // Store the existing URL as the form value (initial state)
     }
-  }, [existingFile, setValue, name])
+  }, [existingFile, setValue, name, previewURL])
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -56,18 +54,9 @@ const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
         return
       }
 
-      if (!(await validateImageDimensions(file, maxWidth, maxHeight))) {
-        toast({
-          variant: 'destructive',
-          title: 'Invalid file dimensions',
-          description: `File ${file.name} exceeds the dimension limit of ${maxWidth}x${maxHeight}`,
-        })
-        return
-      }
-
-      // Store the file object in the form state
-      setPreviewURL(URL.createObjectURL(file))
-      setValue(name, file) // Set the file directly in the form state
+      // Set preview for the new file and store the file in form state
+      setPreviewURL(URL.createObjectURL(file)) // Set the new file preview
+      setValue(name, file) // Set the new file in the form state
       clearErrors(name)
     }
   }
@@ -87,13 +76,12 @@ const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
           <Controller
             name={name}
             control={control}
-            render={({ field }) => (
+            render={() => (
               <>
                 <Input
                   type="file"
                   onChange={(e) => {
-                    handleFileChange(e)
-                    field.onChange(e)
+                    handleFileChange(e) // Handle file change logic here
                   }}
                   className="hidden"
                   id={`file-upload-${name}`}
@@ -103,7 +91,7 @@ const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
                   {previewURL ? (
                     <div className="relative">
                       <img
-                        src={previewURL}
+                        src={previewURL} // Show the preview image, either from the URL or new file
                         alt="Preview"
                         className="object-contain w-full h-24 rounded-md"
                       />

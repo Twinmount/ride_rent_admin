@@ -85,12 +85,25 @@ export default function VehiclesFormUpdatePage() {
           onValueChange={handleTabChange}
           className="w-full"
         >
-          <TabsList className="bg-white flex-center gap-x-4">
-            <TabsTrigger value="primary">Primary Details</TabsTrigger>
-            <TabsTrigger disabled={isLoading} value="specifications">
+          <TabsList className="bg-white flex-center gap-x-2">
+            <TabsTrigger
+              value="primary"
+              className="h-9 max-sm:text-sm max-sm:px-2"
+            >
+              Primary Details
+            </TabsTrigger>
+            <TabsTrigger
+              disabled={isLoading}
+              value="specifications"
+              className="max-sm:px-2"
+            >
               Specifications
             </TabsTrigger>
-            <TabsTrigger value="features" disabled={isLoading}>
+            <TabsTrigger
+              value="features"
+              disabled={isLoading}
+              className="max-sm:px-2"
+            >
               Features
             </TabsTrigger>
           </TabsList>

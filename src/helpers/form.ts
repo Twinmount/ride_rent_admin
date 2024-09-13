@@ -7,6 +7,7 @@ import {
 } from '@/types/api-types/vehicleAPI-types'
 import { PrimaryFormType } from '@/types/formTypes'
 import { TabsTypes } from '@/types/types'
+import imageCompression from 'browser-image-compression'
 
 type SpecificationOption = { label: string; value: string }
 
@@ -93,6 +94,17 @@ export const validateFileSize = (file: File, maxSizeMB: number) => {
   return file.size <= maxSizeBytes
 }
 
+// component to display the image dimensions
+export const getImageDimensions = (file: File) => {
+  return new Promise<{ width: number; height: number }>((resolve) => {
+    const img = new Image()
+    img.onload = () => {
+      resolve({ width: img.width, height: img.height })
+    }
+    img.src = URL.createObjectURL(file)
+  })
+}
+
 // file upload image file dimension validator
 export const validateImageDimensions = (
   file: File,
@@ -108,6 +120,30 @@ export const validateImageDimensions = (
     img.onerror = () => resolve(false)
     img.src = URL.createObjectURL(file)
   })
+}
+
+// Compression logic for multiple files
+export async function compressFiles(files: File[]): Promise<File[]> {
+  const compressedFiles = await Promise.all(
+    files.map(async (file) => {
+      if (file.size > 2 * 1024 * 1024) {
+        // Compress only if larger than 2MB
+        try {
+          const compressedFile = await imageCompression(file, {
+            maxSizeMB: 2,
+            maxWidthOrHeight: 1920, // Adjust to your preferred dimensions
+            useWebWorker: true,
+          })
+          return compressedFile
+        } catch (error) {
+          console.error(`Failed to compress ${file.name}:`, error)
+          return file // If compression fails, return original file
+        }
+      }
+      return file // If file is smaller than 2MB, no compression needed
+    })
+  )
+  return compressedFiles
 }
 
 // phone number validation

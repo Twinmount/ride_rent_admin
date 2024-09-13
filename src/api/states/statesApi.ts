@@ -53,6 +53,7 @@ export const addState = async (values: StateType) => {
 // update state
 export const updateState = async (values: StateType, stateId: string) => {
   try {
+    console.log('updateState api values:', values)
     // Create a new FormData instance
     const formData = new FormData()
 

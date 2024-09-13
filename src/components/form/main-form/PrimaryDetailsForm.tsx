@@ -26,7 +26,7 @@ import { PhoneInput } from 'react-international-phone'
 import 'react-international-phone/style.css'
 import RentalDetailsFormField from '../RentalDetailsFormField'
 import FileUpload from '../FileUpload'
-import { validateRentalDetails } from '@/helpers/form'
+import { compressFiles, validateRentalDetails } from '@/helpers/form'
 import BrandsDropdown from '../BrandsDropdown'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -76,6 +76,7 @@ export default function PrimaryDetailsForm({
 
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
+    console.log('level one submit handler values : ', values)
     const rentalError = validateRentalDetails(values.rentalDetails)
     if (rentalError) {
       form.setError('rentalDetails', {
@@ -310,7 +311,7 @@ export default function PrimaryDetailsForm({
                 multiple={true}
                 existingFiles={initialValues.vehiclePhotos}
                 description="Add Vehicle Photos. Up to 8 photos can be added. Each photos can be upto 1MB"
-                maxSizeMB={1}
+                maxSizeMB={15}
               />
             )}
           />
@@ -464,7 +465,7 @@ export default function PrimaryDetailsForm({
             render={({ field }) => (
               <FormItem className="flex w-full mb-2 max-sm:flex-col">
                 <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
-                  Mobile <span className="mr-5 max-sm:hidden">:</span>
+                  Whatsapp/Mobile <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
                   <FormControl>
