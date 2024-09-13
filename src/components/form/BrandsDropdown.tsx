@@ -47,7 +47,7 @@ const BrandsDropdown = ({
   // Fetch brands by search term and category id
   const {
     data: brandData,
-    isLoading: isBrandsLoading,
+    isFetching: isBrandsLoading,
     refetch,
   } = useQuery({
     queryKey: ['brands', vehicleCategoryId, searchTerm],
@@ -59,7 +59,7 @@ const BrandsDropdown = ({
         vehicleCategoryId: vehicleCategoryId as string,
         search: searchTerm,
       }),
-    enabled: !!vehicleCategoryId && searchTerm.length >= 3,
+    enabled: !!vehicleCategoryId,
     staleTime: 0,
   })
 
@@ -70,12 +70,25 @@ const BrandsDropdown = ({
     }
   }, [specificBrandData])
 
-  const handleSearch = async (query: string) => {
-    setSearchTerm(query)
-    if (query.length >= 3) {
-      await refetch() // wait for refetch to complete
+  const debounce = <T extends any[]>(
+    callback: (...args: T) => void,
+    delay: number
+  ) => {
+    let timeoutId: NodeJS.Timeout
+    return (...args: T) => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => callback(...args), delay)
     }
   }
+
+  // Debounced handle search
+  const debouncedHandleSearch = React.useCallback(
+    debounce((query: string) => {
+      setSearchTerm(query)
+      refetch() // Trigger the refetch
+    }, 500), // 300ms delay
+    [refetch]
+  )
 
   const handleSelect = (currentValue: string) => {
     setSelectedValue(currentValue)
@@ -123,17 +136,17 @@ const BrandsDropdown = ({
         <Command shouldFilter={false}>
           <CommandInput
             placeholder={`Search ${placeholder}...`}
-            onValueChange={handleSearch}
+            onValueChange={debouncedHandleSearch}
           />
           <CommandList>
-            {searchTerm.length < 3 ? (
-              <CommandEmpty>
-                Please enter at least 3 letters to search brands.
-              </CommandEmpty>
+            {!searchTerm ? (
+              <CommandEmpty>Please search the brand.</CommandEmpty>
             ) : isBrandsLoading ? (
               <CommandEmpty>Searching for {searchTerm}...</CommandEmpty>
             ) : brandData?.result.list.length === 0 ? (
-              <CommandEmpty>No {placeholder} found.</CommandEmpty>
+              <CommandEmpty>
+                No {placeholder} found for &apos;{searchTerm}&apos;.
+              </CommandEmpty>
             ) : (
               <CommandGroup>
                 {brandData &&

@@ -9,7 +9,7 @@ export default function ManageLinksPage() {
   const { state } = useAdminContext()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['links'],
+    queryKey: ['links', state],
     queryFn: () =>
       fetchAllLinks({
         page: 1,

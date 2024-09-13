@@ -20,8 +20,6 @@ type FileUploadProps = {
   existingFiles?: (File | string)[]
   description: string
   maxSizeMB?: number
-  maxWidth?: number
-  maxHeight?: number
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({

@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Input } from './ui/input'
 
-function SearchComponent() {
+function SearchComponent({
+  placeholder = 'search brand..',
+  isBrandSearch = true,
+}: {
+  placeholder?: string
+  isBrandSearch?: boolean
+}) {
   const [searchValue, setSearchValue] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -52,13 +58,17 @@ function SearchComponent() {
   }, [searchValue])
 
   return (
-    <div className="flex flex-col justify-start w-full mt-1 mb-8 max-w-[500px] gap-y-2">
+    <div
+      className={`flex flex-col justify-start w-full mt-1  max-w-[500px] gap-y-2 ${
+        isBrandSearch ? 'mb-8' : ''
+      }`}
+    >
       <div className="flex items-center justify-start gap-x-1 ">
         <Input
           type="search"
           value={searchValue}
           onChange={handleInputChange}
-          placeholder="Search brands..."
+          placeholder={placeholder}
           className="bg-white w-full  h-[40px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-2xl p-regular-16 px-4 py-3 border focus-visible:ring-transparent"
         />
       </div>

@@ -10,7 +10,7 @@ export default function ManageCitiesPage() {
   const { state } = useAdminContext()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['cities'],
+    queryKey: ['cities', state],
     queryFn: () => fetchAllCities(state.stateId as string),
   })
 

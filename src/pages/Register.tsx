@@ -96,7 +96,7 @@ const Register = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex-1 bg-white shadow-lg p-4 pb-6 rounded-[1rem] w-full max-w-[500px] mx-auto"
+          className="flex-1 bg-white shadow-lg p-4 pb-6 rounded-[1rem] w-full max-w-[500px] max-sm:max-w-[95%] mx-auto"
         >
           <h3 className="mb-4 text-3xl font-bold text-center text-yellow">
             Admin Register
@@ -173,12 +173,9 @@ const Register = () => {
               Send OTP {form.formState.isSubmitting && <Spinner />}
             </Button>
           </div>
-          <div className="px-2 mt-3 flex-between">
-            <Link to={'/forgot-password'} className="text-yellow">
-              Forgot Password ?
-            </Link>
+          <div className="flex justify-end px-2 mt-3">
             <div>
-              New to Ride.Rent?{' '}
+              Existing admin?{' '}
               <Link to={'/login'} className="font-semibold text-yellow">
                 Login
               </Link>

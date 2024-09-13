@@ -15,7 +15,7 @@ export default function ManagePromotionsPage() {
     useState<PromotionType | null>(null)
 
   const { data, isLoading } = useQuery({
-    queryKey: ['promotions'],
+    queryKey: ['promotions', state],
     queryFn: () =>
       fetchAllPromotions({
         page: 1,

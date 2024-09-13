@@ -43,16 +43,16 @@ export default function CategoryDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="!h-10 text-white outline-none cursor-pointer w-36 !rounded-3xl bg-slate-900"
+        className="!h-9 text-white bg-slate-800 text-2xl outline-none cursor-pointer w-fit max-w-fit !rounded-lg hover:bg-slate-900 hover:text-yellow transition-colors"
         disabled={isLoading || categories.length === 0}
       >
-        <div className="flex items-center h-12 pl-4 pr-1 font-semibold tracking-wider rounded-lg whitespace-nowrap">
+        <div className="flex items-center pl-2 font-bold tracking-wider rounded-lg whitespace-nowrap">
           {isLoading
             ? 'Loading...'
             : categories.length > 0
             ? selectedCategory?.name || 'Select Category'
             : 'No Categories'}
-          <ChevronDown className="ml-auto" />
+          <ChevronDown className="relative ml-auto top-2" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="ml-8 w-44">

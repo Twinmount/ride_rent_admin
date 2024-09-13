@@ -32,6 +32,8 @@ export type PrimaryFormType = {
   commercialLicenses: string[] // Array of  URLs
   commercialLicenseExpireDate: Date
   isLease: boolean
+  isCryptoAccepted: boolean
+  isSpotDeliverySupported: boolean
   specification: 'UAE_SPEC' | 'USA_SPEC' | 'OTHERS'
   rentalDetails: {
     day: RentalDetailType
@@ -42,4 +44,5 @@ export type PrimaryFormType = {
   phoneNumber: string
   stateId: string
   cityIds: string[]
+  vehicleDescription: string
 }

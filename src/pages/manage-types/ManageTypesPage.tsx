@@ -71,22 +71,17 @@ export default function ManageTypesPage() {
   return (
     <section className="container h-auto min-h-screen pb-10">
       <div className="h-20 px-10 mb-6 flex-between">
-        <h1 className="text-2xl font-bold ">
-          Manage{' '}
-          <span className="text-yellow">
-            {selectedCategory ? selectedCategory.name : 'Vehicle'}
-          </span>{' '}
+        <div className="flex items-center text-2xl font-bold capitalize gap-x-2 whitespace-nowrap">
+          {/* vehicle category dropdown */}
+          <CategoryDropdown
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            categories={categories}
+            isLoading={isCategoryLoading}
+            type="type"
+          />
           Types
-        </h1>
-
-        {/* vehicle category dropdown */}
-        <CategoryDropdown
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          categories={categories}
-          isLoading={isCategoryLoading}
-          type="type"
-        />
+        </div>
       </div>
 
       {isVehicleTypeLoading ? (

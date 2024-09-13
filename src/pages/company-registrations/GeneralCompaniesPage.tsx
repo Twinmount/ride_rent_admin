@@ -10,6 +10,7 @@ import CompanyStatusModal from '@/components/CompanyStatusModal' // Modal for up
 import { toast } from '@/components/ui/use-toast'
 import { CompanyType } from '@/types/api-types/vehicleAPI-types'
 import { CompanyNavDropdown } from '@/components/CompanyNavDropdown'
+import SearchComponent from '@/components/Search'
 
 interface GeneralCompaniesPageProps {
   queryKey: string[]
@@ -114,6 +115,17 @@ export default function GeneralCompaniesPage({
             isLoading={isLoading}
           />
         </div>
+      </div>
+
+      {/* search component */}
+      <div className="mb-6">
+        <SearchComponent placeholder="Search company" isBrandSearch={false} />
+        <p className="ml-2 text-sm italic text-left text-gray-500">
+          <span className="font-semibold text-gray-600">
+            company name or agent id
+          </span>{' '}
+          can be used to search the company
+        </p>
       </div>
 
       <CompanyTable

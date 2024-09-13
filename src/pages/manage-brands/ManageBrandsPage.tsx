@@ -92,22 +92,18 @@ export default function ManageBrandsPage() {
   return (
     <section className="container h-auto min-h-screen pb-10">
       <div className="h-20 pl-2 pr-10 flex-between">
-        <h1 className="text-2xl font-bold capitalize whitespace-nowrap">
-          Manage{' '}
-          <span className="text-yellow">
-            {selectedCategory ? selectedCategory.name : 'Vehicle'}
-          </span>{' '}
+        <div className="flex items-center text-2xl font-bold capitalize gap-x-2 whitespace-nowrap">
+          <CategoryDropdown
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            categories={categories}
+            isLoading={isCategoryLoading}
+            type="brand"
+          />
           Brands
-        </h1>
+        </div>
 
         {/* vehicle category dropdown */}
-        <CategoryDropdown
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          categories={categories}
-          isLoading={isCategoryLoading}
-          type="brand"
-        />
       </div>
 
       {/* search component */}

@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { CompanyFormDefaultValues } from '@/constants'
 import { CompanyFormSchema } from '@/lib/validator'
-import { Pen, ShieldCheck } from 'lucide-react'
+import { Pen, ShieldCheck, Copy } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import SingleFileUpload from '../SingleFileUpload'
@@ -88,6 +88,15 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
     }
   }
 
+  const handleCopyAgentId = () => {
+    navigator.clipboard.writeText(initialValues.agentId || '')
+    toast({
+      title: 'Copied to clipboard',
+      description: 'Agent ID has been copied to your clipboard.',
+      className: 'bg-green-500 text-white',
+    })
+  }
+
   return (
     <Form {...form}>
       <form
@@ -103,6 +112,13 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             <div className="flex items-center w-full mt-4 text-lg font-semibold text-gray-500 cursor-default">
               {initialValues.agentId}{' '}
               <ShieldCheck className="ml-3 text-green-500" size={20} />
+              <Button
+                type="button"
+                onClick={handleCopyAgentId} // Call the copy handler
+                className="p-1 ml-8 text-gray-500 h-fit bg-slate-600 hover:bg-slate-900 hover:shadow-md"
+              >
+                <Copy className="w-5 h-5 text-white" />
+              </Button>
             </div>
           </div>
 
@@ -125,7 +141,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                     />
                   </FormControl>
                   <FormDescription className="mt-1 ml-1">
-                    Enter your company name
+                    Enter your company name.
                   </FormDescription>
                   <FormMessage />
                 </div>
@@ -141,7 +157,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
               <SingleFileUpload
                 name={field.name}
                 label="Company Logo"
-                description="Company logo can have a maximum size of 5MB"
+                description="Company logo can have a maximum size of 5MB."
                 existingFile={formData?.companyLogo}
                 maxSizeMB={5}
                 isDisabled={!isEditing}
@@ -157,9 +173,9 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
               <SingleFileUpload
                 name={field.name}
                 label="Commercial License"
-                description="Commercial License can have a maximum size of 5MB"
+                description="Commercial License can have a maximum size of 5MB."
                 existingFile={formData?.commercialLicense}
-                maxSizeMB={1}
+                maxSizeMB={5}
                 isDisabled={!isEditing}
               />
             )}
@@ -185,7 +201,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                     />
                   </FormControl>
                   <FormDescription className="mt-1 ml-1">
-                    Enter the expiry of your Commercial License/Trade License
+                    Enter the expiry of your Commercial License/Trade License.
                   </FormDescription>
                   <FormMessage />
                 </div>
@@ -206,7 +222,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 <div className="flex-col items-start w-full">
                   <FormControl>
                     <Input
-                      placeholder="1234-1234-1234"
+                      placeholder="eg: ABC12345"
                       {...field}
                       className="input-field"
                     />

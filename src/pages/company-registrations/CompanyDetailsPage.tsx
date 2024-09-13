@@ -34,7 +34,7 @@ export default function CompanyDetailsPage() {
       {data?.result.approvalStatus === 'APPROVED' && (
         <div className="mt-5 mb-10 ml-12 text-lg font-semibold text-blue-500 hover:underline">
           <Link to={`/listings/add/${data?.result.userId}`}>
-            Manually Add vehicles under this company?
+            Manually add new vehicle under this company?
           </Link>
         </div>
       )}

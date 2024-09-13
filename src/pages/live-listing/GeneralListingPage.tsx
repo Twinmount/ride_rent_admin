@@ -11,6 +11,7 @@ import { SingleVehicleType } from '@/types/api-types/vehicleAPI-types'
 import VehicleStatusModal from '@/components/VehicleStatusModal'
 import { toast } from '@/components/ui/use-toast'
 import { ListingsNavDropdown } from '@/components/ListingsNavDropdown'
+import SearchComponent from '@/components/Search'
 
 interface GeneralListingPageProps {
   queryKey: any[]
@@ -106,6 +107,17 @@ export default function GeneralListingPage({
             isLoading={isLoading}
           />
         </div>
+      </div>
+
+      {/* search component */}
+      <div className="mb-8">
+        <SearchComponent placeholder="Search vehicle" isBrandSearch={false} />
+        <p className="ml-2 text-sm italic text-left text-gray-500">
+          <span className="font-semibold text-gray-600">
+            vehicle model,vehicle id, company name or agent id
+          </span>{' '}
+          can be used to search the vehicle
+        </p>
       </div>
 
       <GeneralListingTable

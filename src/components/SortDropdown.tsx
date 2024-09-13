@@ -38,8 +38,8 @@ export function SortDropdown({
           value={sortOrder}
           onValueChange={(value) => setSortOrder(value as SortOrder)}
         >
-          <DropdownMenuRadioItem value="asc">Ascending</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="desc">Descending</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="ASC">Ascending</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="DESC">Descending</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>

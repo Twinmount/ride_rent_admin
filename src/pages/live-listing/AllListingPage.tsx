@@ -8,6 +8,7 @@ import Pagination from '@/components/Pagination'
 import { LimitDropdown } from '@/components/LimitDropdown'
 import { SortDropdown } from '@/components/SortDropdown'
 import { ListingsNavDropdown } from '@/components/ListingsNavDropdown'
+import SearchComponent from '@/components/Search'
 
 export default function AllListingPage() {
   const [page, setPage] = useState(1)
@@ -72,6 +73,17 @@ export default function AllListingPage() {
             isLoading={isLoading}
           />
         </div>
+      </div>
+
+      {/* search component */}
+      <div className="mb-8">
+        <SearchComponent placeholder="Search vehicle" isBrandSearch={false} />
+        <p className="ml-2 text-sm italic text-left text-gray-500">
+          <span className="font-semibold text-gray-600">
+            vehicle model,vehicle id, company name or agent id
+          </span>{' '}
+          can be used to search the vehicle
+        </p>
       </div>
 
       <AllListingTable

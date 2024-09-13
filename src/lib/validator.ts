@@ -172,7 +172,8 @@ export const PrimaryFormSchema = z.object({
   vehicleModel: z.string().min(1, 'Model is required'),
   vehicleRegistrationNumber: z
     .string()
-    .min(1, 'Vehicle registration number is required'),
+    .min(1, 'Vehicle registration number is required')
+    .max(15, 'Vehicle registration number cannot exceed 15 characters'),
   vehicleRegisteredYear: z.string().min(1, 'Registered Year is required'),
   vehiclePhotos: z
     .array(
@@ -203,6 +204,8 @@ export const PrimaryFormSchema = z.object({
     ),
   commercialLicenseExpireDate: z.date(),
   isLease: z.boolean().default(false),
+  isCryptoAccepted: z.boolean().default(false),
+  isSpotDeliverySupported: z.boolean().default(false),
   specification: z
     .enum(['USA_SPEC', 'UAE_SPEC', 'OTHERS'], {
       required_error: 'Specification is required',
@@ -218,6 +221,10 @@ export const PrimaryFormSchema = z.object({
   cityIds: z
     .array(z.string().min(1, 'City ID is required'))
     .min(1, 'At least one city must be selected'),
+  vehicleDescription: z
+    .string()
+    .min(10, 'Description must be at least 10 characters long')
+    .max(5000, 'Description cannot exceed 5000 characters'),
 })
 
 // login form schema
