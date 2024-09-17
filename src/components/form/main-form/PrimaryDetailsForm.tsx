@@ -666,7 +666,7 @@ export default function PrimaryDetailsForm({
             render={({ field }) => {
               const [isFocused, setIsFocused] = useState(false) // To manage focus state
               const [charCount, setCharCount] = useState(
-                field.value.length || 0
+                field.value?.length || 0
               ) // To track character count
 
               const handleFocus = () => setIsFocused(true)

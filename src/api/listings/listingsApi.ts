@@ -9,6 +9,7 @@ export const fetchAllVehicles = async (urlParams: {
   limit: number
   sortOrder: string
   approvalStatus?: VehicleStatusType
+  search?: string
 }): Promise<FetchAllVehiclesResponse> => {
   try {
     // generating query params
@@ -20,6 +21,10 @@ export const fetchAllVehicles = async (urlParams: {
 
     if (urlParams.approvalStatus) {
       queryParams.append('approvalStatus', urlParams.approvalStatus)
+    }
+
+    if (urlParams.search) {
+      queryParams.append('search', urlParams.search)
     }
 
     const slugWithParams = `${Slug.GET_ALL_VEHICLES}?${queryParams}`
@@ -47,6 +52,7 @@ export const fetchNewOrModifiedVehicles = async (urlParams: {
   isModified?: boolean
   userId?: string
   newRegistration?: boolean
+  search?: string
 }): Promise<FetchAllVehiclesResponse> => {
   try {
     // generating query params
@@ -73,6 +79,10 @@ export const fetchNewOrModifiedVehicles = async (urlParams: {
         'newRegistration',
         urlParams.newRegistration.toString()
       )
+    }
+
+    if (urlParams.search) {
+      queryParams.append('search', urlParams.search)
     }
 
     const slugWithParams = `${Slug.GET_NEW_OR_MODIFIED_VEHICLES}?${queryParams}`

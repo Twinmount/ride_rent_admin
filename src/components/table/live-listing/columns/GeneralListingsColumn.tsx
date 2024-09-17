@@ -11,8 +11,8 @@ export const GeneralListingColumns = (
   },
 
   {
-    accessorKey: 'vehicleId',
-    header: 'Vehicle ID',
+    accessorKey: 'vehicleCode',
+    header: 'Vehicle Code',
   },
   {
     accessorKey: 'company.companyName',

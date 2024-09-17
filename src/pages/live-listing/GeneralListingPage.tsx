@@ -12,6 +12,7 @@ import VehicleStatusModal from '@/components/VehicleStatusModal'
 import { toast } from '@/components/ui/use-toast'
 import { ListingsNavDropdown } from '@/components/ListingsNavDropdown'
 import SearchComponent from '@/components/Search'
+import { useSearchParams } from 'react-router-dom'
 
 interface GeneralListingPageProps {
   queryKey: any[]
@@ -35,8 +36,11 @@ export default function GeneralListingPage({
 
   const queryClient = useQueryClient()
 
+  const [searchParams] = useSearchParams()
+  const searchTerm = searchParams.get('search') || ''
+
   const { data, isLoading } = useQuery({
-    queryKey: [...queryKey, page, limit, sortOrder],
+    queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
     queryFn: () =>
       fetchNewOrModifiedVehicles({
         page,
@@ -45,6 +49,7 @@ export default function GeneralListingPage({
         isModified,
         approvalStatus,
         newRegistration,
+        search: searchTerm,
       }),
   })
 
@@ -95,7 +100,7 @@ export default function GeneralListingPage({
       <div className="my-2 mb-6 flex-between max-sm:flex-col">
         {/* navigation dropdown */}
         <ListingsNavDropdown />{' '}
-        <div className="flex-between w-fit gap-x-2">
+        <div className="flex-between w-fit gap-x-2 max-sm:mt-3">
           <SortDropdown
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
@@ -114,7 +119,8 @@ export default function GeneralListingPage({
         <SearchComponent placeholder="Search vehicle" isBrandSearch={false} />
         <p className="ml-2 text-sm italic text-left text-gray-500">
           <span className="font-semibold text-gray-600">
-            vehicle model,vehicle id, company name or agent id
+            vehicle model,vehicle registration number, vehicle code, registered
+            year or phone number
           </span>{' '}
           can be used to search the vehicle
         </p>

@@ -2,8 +2,9 @@ import { sidebarContent } from '@/constants'
 import { useAdminContext } from '@/context/AdminContext'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { X } from 'lucide-react'
-import NewUpdateSidebar from './NewUpdatesSidebar'
 import LogoutModal from '../modal/LogoutModal'
+import LiveListingsSidebar from './LiveListingsSidebarBox'
+import AgentsSidebarBox from './AgentsSidebarBox'
 
 const Sidebar = () => {
   const { isSidebarOpen, toggleSidebar, isSmallScreen } = useAdminContext()
@@ -56,8 +57,13 @@ const Sidebar = () => {
         }`}
       >
         {sidebarContent.map((item) => {
-          if (item.label === 'New Updates') {
-            return <NewUpdateSidebar key={item.link} /> // Render NewUpdateSidebar for "New Updates"
+          // Render custom components for "Live Listings" and "Agents"
+          if (item.label === 'Live Listings') {
+            return <LiveListingsSidebar key={item.link} />
+          }
+
+          if (item.label === 'Agents') {
+            return <AgentsSidebarBox key={item.link} />
           }
 
           const Icon = item.icon

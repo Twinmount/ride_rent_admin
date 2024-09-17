@@ -92,7 +92,7 @@ export default function SpecificationsForm({
 
       form.reset(formDefaultValues) // Reset form with mapped default values
     }
-  }, [data, form])
+  }, [data])
 
   // Custom validation logic: Ensures at least one option is selected for each specification
   const validateSpecifications = (values: SpecificationFormType) => {
@@ -220,8 +220,9 @@ export default function SpecificationsForm({
                       name: string
                       label: string
                       selected: boolean
-                    } => 'selected' in option && option.selected
+                    } => option && 'selected' in option && option.selected
                   )
+
                   return (
                     <FormItem className="flex w-full mb-2 max-sm:flex-col">
                       <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">

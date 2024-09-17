@@ -9,6 +9,7 @@ import {
   GetPrimaryFormResponse,
   GetSpecificationFormDataResponse,
   GetSpecificationFormFieldsResponse,
+  VehicleListingResponse,
 } from '@/types/api-types/vehicleAPI-types'
 
 // rental details sub type
@@ -528,3 +529,24 @@ export const toggleVehicleVisibility = async ({
     throw error
   }
 }
+
+// fetch listings count for vehicles
+export const getVehicleListingsCount =
+  async (): Promise<VehicleListingResponse> => {
+    try {
+      const url = `${Slug.GET_VEHICLE_LISTINGS_COUNT}`
+
+      const data = await API.get<VehicleListingResponse>({
+        slug: url,
+      })
+
+      if (!data) {
+        throw new Error('Failed to fetch vehicle listing count data')
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error fetching vehicle listing count data:', error)
+      throw error
+    }
+  }

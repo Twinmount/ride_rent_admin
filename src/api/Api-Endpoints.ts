@@ -53,13 +53,14 @@ export enum Slug {
   DELETE_PROMOTION = '/promotions',
   GET_ALL_PROMOTIONS = '/promotions/list',
 
-  // agent end points
+  // company end points
   POST_COMPANY = '/company',
   PUT_COMPANY = '/company/admin',
   PUT_COMPANY_STATUS = '/company/approve-or-reject',
   GET_COMPANY = '/company',
   DELETE_COMPANY = '/company',
   GET_ALL_COMPANY = '/company/list',
+  GET_COMPANY_LISTINGS_COUNT = '/company/dashboard/count',
 
   // vehicles end points
   POST_VEHICLE = '/vehicle',
@@ -71,6 +72,7 @@ export enum Slug {
   GET_NEW_OR_MODIFIED_VEHICLES = '/vehicle/all/modified',
   PUT_TOGGLE_VEHICLE_VISIBILITY = '/vehicle/toggle-visibility',
   GET_LEVELS_FILLED = '/vehicle/level-filled',
+  GET_VEHICLE_LISTINGS_COUNT = '/vehicle/dashboard/count',
 
   // vehicle primary form endPoints
   POST_PRIMARY_FORM = '/vehicle/level-one',

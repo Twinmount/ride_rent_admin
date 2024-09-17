@@ -97,6 +97,7 @@ export type SpecificationType = {
 // Vehicle Type
 export type SingleVehicleType = {
   vehicleId: string
+  vehicleCode: string
   tempId: string
   disabledBy: 'admin' | 'seller'
   vehicleRegistrationNumber: string
@@ -257,6 +258,9 @@ export type GetPrimaryForm = {
   vehicleRegisteredYear: string
   commercialLicenseExpireDate: string
   isLease: boolean
+  isCryptoAccepted: boolean
+  isSpotDeliverySupported: boolean
+  vehicleDescription: string
   vehiclePhotos: string[]
   commercialLicenses: string[]
 }
@@ -304,6 +308,21 @@ export interface GetSpecificationFormFieldsResponse {
     limit: number
     total: number
     totalNumberOfPages: number
+  }
+  status: string
+  statusCode: number
+}
+
+// vehicle listing count response
+export interface VehicleListingResponse {
+  result: {
+    all: number
+    newVehicle: number
+    updated: number
+    pending: number
+    rejected: number
+    approved: number
+    total: number
   }
   status: string
   statusCode: number

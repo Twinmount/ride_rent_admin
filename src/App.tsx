@@ -25,7 +25,9 @@ import { AdminProvider } from './context/AdminContext'
 
 // lazy loaded pages
 const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'))
-const AllListingPage = lazy(() => import('./pages/live-listing/AllListingPage'))
+const LiveListingPage = lazy(
+  () => import('./pages/live-listing/LiveListingPage')
+)
 
 const GeneralListingPage = lazy(
   () => import('./pages/live-listing/GeneralListingPage')
@@ -40,10 +42,10 @@ const VehiclesFormAddPage = lazy(
 // company registrations page
 
 const GeneralCompaniesPage = lazy(
-  () => import('./pages/company-registrations/GeneralCompaniesPage')
+  () => import('./pages/company/GeneralCompaniesPage')
 )
 const CompanyDetailsPage = lazy(
-  () => import('./pages/company-registrations/CompanyDetailsPage')
+  () => import('./pages/company/CompanyDetailsPage')
 )
 // vehicle categories page imports
 const ManageCategoriesPage = lazy(
@@ -125,11 +127,11 @@ const router = createBrowserRouter([
               // vehicle listing routes
               {
                 path: '/listings',
-                element: <Navigate to={'/listings/all'} />,
+                element: <Navigate to={'/listings/live'} />,
               },
               {
-                path: '/listings/all',
-                element: <AllListingPage />,
+                path: '/listings/live',
+                element: <LiveListingPage />,
               },
               {
                 path: '/listings/new',

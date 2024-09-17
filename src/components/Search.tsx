@@ -9,70 +9,56 @@ function SearchComponent({
   placeholder?: string
   isBrandSearch?: boolean
 }) {
-  const [searchValue, setSearchValue] = useState('')
-  const [error, setError] = useState<string | null>(null)
+  const [searchValue, setSearchValue] = useState('') // Update input value immediately
   const [searchParams, setSearchParams] = useSearchParams()
+  const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  ) // Store timeout ID
 
-  // Debounce function to delay search parameter update
-  const debounce = (callback: () => void, delay: number) => {
-    let timeoutId: NodeJS.Timeout
-    return () => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(callback, delay)
-    }
-  }
+  // Initialize search value from the URL if available when the component mounts
+  useEffect(() => {
+    const initialSearch = searchParams.get('search') || ''
+    setSearchValue(initialSearch) // Sync initial input value with URL
+  }, [searchParams])
 
+  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setSearchValue(value)
+    const value = e.target.value.trim()
+    setSearchValue(value) // Immediate input update
 
-    const regex = /^[a-zA-Z_]*$/
-    if (!regex.test(value)) {
-      setError('Search term contains invalid characters.')
-    } else {
-      setError(null)
-      if (!value) {
-        searchParams.delete('search')
-        setSearchParams(searchParams)
-      }
+    // Clear previous timeout if it exists
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout)
     }
-  }
 
-  // Debounced search parameter update
-  const debouncedUpdateSearchParams = debounce(() => {
-    const regex = /^[a-zA-Z_]*$/
-    if (regex.test(searchValue)) {
-      if (searchValue) {
-        setSearchParams({ search: searchValue })
+    // Set a new timeout
+    const timeoutId = setTimeout(() => {
+      if (value) {
+        setSearchParams({ search: value }) // Update URL with search value
       } else {
         searchParams.delete('search')
-        setSearchParams(searchParams)
+        setSearchParams(searchParams) // Remove search param if input is empty
       }
-    } else {
-      searchParams.delete('search')
-    }
-  }, 1000)
+    }, 700) // 1000ms debounce delay
 
-  useEffect(() => {
-    debouncedUpdateSearchParams()
-  }, [searchValue])
+    setDebounceTimeout(timeoutId) // Save the new timeout ID
+  }
 
   return (
     <div
-      className={`flex flex-col justify-start w-full mt-1  max-w-[500px] gap-y-2 ${
+      className={`flex flex-col justify-start w-full mt-1 max-w-[500px] gap-y-2 ${
         isBrandSearch ? 'mb-8' : ''
       }`}
     >
-      <div className="flex items-center justify-start gap-x-1 ">
+      <div className="flex items-center justify-start gap-x-1">
         <Input
           type="search"
           value={searchValue}
           onChange={handleInputChange}
           placeholder={placeholder}
-          className="bg-white w-full  h-[40px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-2xl p-regular-16 px-4 py-3 border focus-visible:ring-transparent"
+          className="bg-white w-full h-[40px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-2xl p-regular-16 px-4 py-3 border focus-visible:ring-transparent"
         />
       </div>
-      {error && <p className="ml-5 text-sm text-red-500">{error}</p>}
     </div>
   )
 }

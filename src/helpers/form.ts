@@ -249,6 +249,9 @@ export function mapGetPrimaryFormToPrimaryFormType(
     commercialLicenses: data.commercialLicenses,
     commercialLicenseExpireDate: new Date(data.commercialLicenseExpireDate), // Convert string to Date
     isLease: data.isLease,
+    isCryptoAccepted: data.isCryptoAccepted,
+    isSpotDeliverySupported: data.isSpotDeliverySupported,
+    vehicleDescription: data.vehicleDescription,
     specification: data.specification as 'UAE_SPEC' | 'USA_SPEC' | 'OTHERS',
     rentalDetails: data.rentalDetails,
     phoneNumber: formattedPhoneNumber, // Set the combined phone number

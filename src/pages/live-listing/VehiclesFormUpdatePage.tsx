@@ -1,9 +1,9 @@
 import { CircleArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import LazyLoader from '@/components/skelton/LazyLoader'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import FormSkelton from '@/components/skelton/FormSkelton'
 import { getLevelsFilled, getPrimaryDetailsFormData } from '@/api/vehicle'
 import { mapGetPrimaryFormToPrimaryFormType } from '@/helpers/form'
@@ -29,6 +29,8 @@ export default function VehiclesFormUpdatePage() {
   }>()
   const [activeTab, setActiveTab] = useState<TabsTypes>('primary')
 
+  const queryClient = useQueryClient()
+
   const handleTabChange = (value: string) => {
     setActiveTab(value as TabsTypes)
   }
@@ -36,6 +38,7 @@ export default function VehiclesFormUpdatePage() {
   const { data, isLoading } = useQuery({
     queryKey: ['primary-details-form', vehicleId],
     queryFn: () => getPrimaryDetailsFormData(vehicleId as string),
+    staleTime: 60000,
   })
 
   // Fetch levelsFilled only if the type is "Update"
@@ -61,9 +64,18 @@ export default function VehiclesFormUpdatePage() {
   const vehicleCategoryId = data?.result?.vehicleCategoryId
 
   // Store vehicleCategoryId in localStorage if levelsFilled < 3
-  if (levelsFilled < 3 && vehicleCategoryId) {
-    save(StorageKeys.CATEGORY_ID, vehicleCategoryId)
-  }
+  useEffect(() => {
+    if (levelsFilled < 3 && vehicleCategoryId) {
+      save(StorageKeys.CATEGORY_ID, vehicleCategoryId)
+    }
+  }, [levelsFilled, vehicleCategoryId])
+
+  useEffect(() => {
+    queryClient.prefetchQuery({
+      queryKey: ['getLevelsFilled', vehicleId],
+      queryFn: () => getLevelsFilled(vehicleId as string),
+    })
+  }, [vehicleId])
 
   return (
     <section className="container h-auto min-h-screen pb-10 bg-white">
@@ -93,7 +105,7 @@ export default function VehiclesFormUpdatePage() {
               Primary Details
             </TabsTrigger>
             <TabsTrigger
-              disabled={isLoading}
+              disabled={isLoading || isLevelsFetching}
               value="specifications"
               className="max-sm:px-2"
             >
@@ -101,7 +113,7 @@ export default function VehiclesFormUpdatePage() {
             </TabsTrigger>
             <TabsTrigger
               value="features"
-              disabled={isLoading}
+              disabled={isLoading || isLevelsFetching}
               className="max-sm:px-2"
             >
               Features

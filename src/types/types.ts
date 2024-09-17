@@ -130,3 +130,16 @@ export interface ApiError {
     }
   }
 }
+
+// vehicle listing count response
+export interface CompanyListingResponse {
+  result: {
+    all: number
+    pending: number
+    rejected: number
+    approved: number
+    total: number
+  }
+  status: string
+  statusCode: number
+}

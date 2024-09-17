@@ -38,7 +38,6 @@ export function load<T>(key: string): T | undefined {
     if (!storedValue) throw new Error('Value not found in storage')
     return JSON.parse(storedValue) as T
   } catch (error) {
-    console.error(`Error loading from storage using key "${key}":`, error)
     return undefined
   }
 }

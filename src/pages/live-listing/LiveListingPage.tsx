@@ -9,17 +9,26 @@ import { LimitDropdown } from '@/components/LimitDropdown'
 import { SortDropdown } from '@/components/SortDropdown'
 import { ListingsNavDropdown } from '@/components/ListingsNavDropdown'
 import SearchComponent from '@/components/Search'
+import { useSearchParams } from 'react-router-dom'
 
 export default function AllListingPage() {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10)
   const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC')
   const queryClient = useQueryClient()
+  const [searchParams] = useSearchParams()
+  const searchTerm = searchParams.get('search') || ''
 
   const { data, isLoading } = useQuery({
-    queryKey: ['vehicles listings', page, limit, sortOrder],
+    queryKey: ['vehicles listings', page, limit, sortOrder, searchTerm],
     queryFn: () =>
-      fetchAllVehicles({ page, limit, sortOrder, approvalStatus: 'APPROVED' }),
+      fetchAllVehicles({
+        page,
+        limit,
+        sortOrder,
+        approvalStatus: 'APPROVED',
+        search: searchTerm,
+      }),
   })
 
   const { mutateAsync: toggleVehicleStatus, isPending } = useMutation({
@@ -61,7 +70,7 @@ export default function AllListingPage() {
       <div className="my-2 mb-6 flex-between max-md:flex-col">
         {/* navigation dropdown */}
         <ListingsNavDropdown />{' '}
-        <div className="flex-between w-fit gap-x-2">
+        <div className="flex-between w-fit gap-x-2 max-sm:mt-3">
           <SortDropdown
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
@@ -80,7 +89,8 @@ export default function AllListingPage() {
         <SearchComponent placeholder="Search vehicle" isBrandSearch={false} />
         <p className="ml-2 text-sm italic text-left text-gray-500">
           <span className="font-semibold text-gray-600">
-            vehicle model,vehicle id, company name or agent id
+            vehicle model,vehicle registration number, vehicle code, registered
+            year or phone number
           </span>{' '}
           can be used to search the vehicle
         </p>
