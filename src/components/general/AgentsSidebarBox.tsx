@@ -1,5 +1,5 @@
 import { getCompanyListingsCount } from '@/api/company'
-import { BellPlus } from 'lucide-react'
+import { List } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAdminContext } from '@/context/AdminContext'
@@ -35,9 +35,11 @@ const AgentsSidebarBox = () => {
       role="button"
       tabIndex={0}
     >
-      <BellPlus className="text-xl" size={20} strokeWidth={3} />
+      <List className="text-xl" size={20} strokeWidth={3} />
       <span className="font-medium">Agents</span>
-      {!isActive && companyCounts.pending > 0 && <NotificationIndicator />}
+      {!isActive && !isLoading && companyCounts.pending > 0 && (
+        <NotificationIndicator />
+      )}
     </div>
   )
 }

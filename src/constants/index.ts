@@ -10,6 +10,7 @@ import {
 } from '@/types/types'
 import {
   CarFront,
+  FileSearch,
   LayoutDashboard,
   Link,
   List,
@@ -47,6 +48,7 @@ export const sidebarContent = [
     link: '/manage-links',
   },
   { label: 'Promotions', icon: Megaphone, link: '/manage-promotions' },
+  { label: 'Meta Data', icon: FileSearch, link: '/manage-meta-data' },
 ]
 
 // sample vehicle categories
@@ -137,6 +139,20 @@ export const LinkFormDefaultValues = {
 export const PromotionFormDefaultValue = {
   promotionImage: '',
   promotionLink: '',
+}
+
+export const HomeMetaFormDefaultValue = {
+  stateId: '',
+  metaTitle: '',
+  metaDescription: '',
+}
+
+export const ListingMetaFormDefaultValue = {
+  stateId: '',
+  categoryId: '',
+  typeId: '',
+  metaTitle: '',
+  metaDescription: '',
 }
 
 // navbar origin dropdown temporary value/s

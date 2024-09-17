@@ -1,5 +1,5 @@
 import { getVehicleListingsCount } from '@/api/vehicle'
-import { BellPlus } from 'lucide-react'
+import { List } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAdminContext } from '@/context/AdminContext'
@@ -36,9 +36,11 @@ const LiveListingsSidebar = () => {
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && handleClick()}
     >
-      <BellPlus className="text-xl" size={20} strokeWidth={3} />
+      <List className="text-xl" size={20} strokeWidth={3} />
       <span className="font-medium">Live Listings</span>
-      {!isActive && listingCounts.newVehicle > 0 && <NotificationIndicator />}
+      {!isActive && !isLoading && listingCounts.newVehicle > 0 && (
+        <NotificationIndicator />
+      )}
     </div>
   )
 }

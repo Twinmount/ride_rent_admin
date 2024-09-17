@@ -26,6 +26,7 @@ export interface GetAllCompanyType {
   newRegistration?: boolean
   edited?: boolean
   approvalStatus?: 'APPROVED' | 'PENDING' | 'REJECTED' | 'UNDER_REVIEW'
+  search?: string
 }
 
 // add company
@@ -178,6 +179,7 @@ export const getAllCompany = async ({
   newRegistration,
   edited,
   approvalStatus,
+  search,
 }: GetAllCompanyType): Promise<FetchCompaniesResponse> => {
   try {
     const params = new URLSearchParams()
@@ -185,6 +187,7 @@ export const getAllCompany = async ({
     if (page) params.append('page', page.toString())
     if (limit) params.append('limit', limit.toString())
     if (sortOrder) params.append('sortOrder', sortOrder)
+    if (search) params.append('search', search)
     if (newRegistration)
       params.append('newRegistration', newRegistration.toString())
     if (edited) params.append('edited', edited.toString())

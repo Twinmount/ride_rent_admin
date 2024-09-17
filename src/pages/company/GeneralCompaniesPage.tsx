@@ -11,6 +11,7 @@ import { toast } from '@/components/ui/use-toast'
 import { CompanyType } from '@/types/api-types/vehicleAPI-types'
 import { CompanyNavDropdown } from '@/components/CompanyNavDropdown'
 import SearchComponent from '@/components/Search'
+import { useSearchParams } from 'react-router-dom'
 
 interface GeneralCompaniesPageProps {
   queryKey: string[]
@@ -30,11 +31,13 @@ export default function GeneralCompaniesPage({
   const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
     null
   )
+  const [searchParams] = useSearchParams()
+  const searchTerm = searchParams.get('search') || ''
 
   const queryClient = useQueryClient()
 
   const { data, isLoading } = useQuery({
-    queryKey: [...queryKey, page, limit, sortOrder],
+    queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
     queryFn: () =>
       getAllCompany({
         page,
@@ -42,6 +45,7 @@ export default function GeneralCompaniesPage({
         sortOrder,
         approvalStatus,
         edited: isModified,
+        search: searchTerm.trim(),
       }),
   })
 

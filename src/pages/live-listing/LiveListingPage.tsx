@@ -27,7 +27,7 @@ export default function AllListingPage() {
         limit,
         sortOrder,
         approvalStatus: 'APPROVED',
-        search: searchTerm,
+        search: searchTerm.trim(),
       }),
   })
 

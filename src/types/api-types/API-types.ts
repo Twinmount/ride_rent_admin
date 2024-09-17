@@ -77,7 +77,7 @@ export interface FetchSpecificCityResponse {
   statusCode: number
 }
 
-// category type
+// individual category type
 export interface CategoryType {
   categoryId: string
   name: string
@@ -244,6 +244,66 @@ export interface FetchCompaniesResponse {
 //  interface for the company (by id)  API response
 export interface FetchSpecificCompanyResponse {
   result: companyType
+  status: string
+  statusCode: number
+}
+
+// single data type
+export interface HomeMetaListData {
+  metaDataId: string
+  stateId: string
+  state: string
+  metaTitle: string
+  metaDescription: string
+}
+
+export interface FetchSingleHomeMetaData {
+  result: HomeMetaListData
+  status: string
+  statusCode: number
+}
+
+//  fetch home all meta data
+export interface FetchHomeMetaListResponse {
+  result: {
+    list: HomeMetaListData[]
+    page: string
+    limit: string
+    total: number
+    totalNumberOfPages: number
+  }
+  status: string
+  statusCode: number
+}
+
+// single listing data type
+export interface ListingMetaListData {
+  metaDataId: string
+  stateId: string
+  state: string
+  category: string
+  type: string
+  categoryId: string
+  typeId: string
+  metaTitle: string
+  metaDescription: string
+}
+
+//  fetch listing all meta data
+export interface FetchListingMetaListResponse {
+  result: {
+    list: ListingMetaListData[]
+    page: string
+    limit: string
+    total: number
+    totalNumberOfPages: number
+  }
+  status: string
+  statusCode: number
+}
+
+export interface FetchSingleListingMetaData {
+  result: ListingMetaListData
   status: string
   statusCode: number
 }

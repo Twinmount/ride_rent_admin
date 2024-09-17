@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useAdminContext } from '@/context/AdminContext'
 import { Menu } from 'lucide-react'
 
-import StatesDropdown from '../StatesDropdown'
+import StatesDropdown from '../GeneralStatesDropdown'
 import { stateType } from '@/types/types'
 
 type NavbarProps = {

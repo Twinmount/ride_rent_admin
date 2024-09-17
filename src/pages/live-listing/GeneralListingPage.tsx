@@ -49,7 +49,7 @@ export default function GeneralListingPage({
         isModified,
         approvalStatus,
         newRegistration,
-        search: searchTerm,
+        search: searchTerm.trim(),
       }),
   })
 

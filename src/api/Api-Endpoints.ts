@@ -90,4 +90,15 @@ export enum Slug {
   POST_FEATURES_FORM = '/vehicle/level-three',
   GET_FEATURES_FORM_DATA = '/vehicle/level-three',
   PUT_FEATURES_FORM_DATA = '/vehicle/level-three',
+
+  // meta data endpoints
+  POST_ADMIN_HOME_META = '/metadata/homepage',
+  GET_ADMIN_HOME_META = '/metadata/admin/homepage',
+  PUT_ADMIN_HOME_META = '/metadata/homepage',
+  GET_ADMIN_HOME_META_ALL = '/metadata/admin/homepage/all',
+
+  POST_ADMIN_LISTING_META = '/metadata/listing',
+  GET_ADMIN_LISTING_META = '/metadata/admin/listing',
+  PUT_ADMIN_LISTING_META = '/metadata/listing',
+  GET_ADMIN_LISTING_META_ALL = '/metadata/admin/listing/all',
 }

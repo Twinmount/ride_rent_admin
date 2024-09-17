@@ -310,3 +310,29 @@ export const VehicleStatusFormSchema = z
       path: ['rejectionReason'], // Error message will be applied to the rejectionReason field
     }
   )
+
+export const HomeMetaFormSchema = z.object({
+  stateId: z.string().min(1, 'State is required'),
+  metaTitle: z
+    .string()
+    .min(1, 'Meta title is required')
+    .max(160, 'Meta title must be 160 characters or less'),
+  metaDescription: z
+    .string()
+    .min(1, 'Meta description is required')
+    .max(5000, 'Meta description must be 5000 characters or less'),
+})
+
+export const ListingMetaFormSchema = z.object({
+  stateId: z.string().min(1, 'State is required'),
+  categoryId: z.string().min(1, 'Vehicle Category is required'),
+  typeId: z.string().min(1, 'Vehicle type is required'),
+  metaTitle: z
+    .string()
+    .min(1, 'Meta title is required')
+    .max(160, 'Meta title must be 160 characters or less'),
+  metaDescription: z
+    .string()
+    .min(1, 'Meta description is required')
+    .max(5000, 'Meta description must be 5000 characters or less'),
+})

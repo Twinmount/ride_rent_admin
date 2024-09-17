@@ -103,6 +103,26 @@ const AddPromotionPage = lazy(
 const EditPromotionPage = lazy(
   () => import('./pages/manage-promotions/EditPromotionPage')
 )
+// meta data page routes
+const HomeMetaDataPage = lazy(
+  () => import('./pages/meta-data/home-meta/HomeMetaDataPage')
+)
+const AddHomeMetaPage = lazy(
+  () => import('./pages/meta-data/home-meta/AddHomeMetaPage')
+)
+const EditHomeMetaPage = lazy(
+  () => import('./pages/meta-data/home-meta/EditHomeMetaPage')
+)
+const ListingMetaDataPage = lazy(
+  () => import('./pages/meta-data/listing-meta/ListingMetaDataPage')
+)
+const AddListingMetaPage = lazy(
+  () => import('./pages/meta-data/listing-meta/AddListingMetaPage')
+)
+const EditListingMetaPage = lazy(
+  () => import('./pages/meta-data/listing-meta/EditListingMetaPage')
+)
+
 const router = createBrowserRouter([
   {
     element: <Outlet />,
@@ -321,6 +341,26 @@ const router = createBrowserRouter([
               {
                 path: '/manage-promotions/edit/:promotionId',
                 element: <EditPromotionPage />,
+              },
+
+              // meta data routes
+              { path: '/manage-meta-data', element: <HomeMetaDataPage /> },
+              { path: '/manage-meta-data/add', element: <AddHomeMetaPage /> },
+              {
+                path: '/manage-meta-data/edit/:metaDataId',
+                element: <EditHomeMetaPage />,
+              },
+              {
+                path: '/manage-meta-data/listing',
+                element: <ListingMetaDataPage />,
+              },
+              {
+                path: '/manage-meta-data/listing/add',
+                element: <AddListingMetaPage />,
+              },
+              {
+                path: '/manage-meta-data/listing/edit/:metaDataId',
+                element: <EditListingMetaPage />,
               },
             ],
           },

@@ -92,6 +92,20 @@ export type PromotionFormType = {
   promotionLink: string
 }
 
+export type HomeMetaFormType = {
+  stateId: string
+  metaTitle: string
+  metaDescription: string
+}
+
+export type ListingMetaFormType = {
+  stateId: string
+  categoryId: string
+  typeId: string
+  metaTitle: string
+  metaDescription: string
+}
+
 export type BrandType = {
   id: number | string
   label: string

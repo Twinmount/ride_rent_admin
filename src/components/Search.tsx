@@ -23,7 +23,7 @@ function SearchComponent({
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim()
+    const value = e.target.value
     setSearchValue(value) // Immediate input update
 
     // Clear previous timeout if it exists
