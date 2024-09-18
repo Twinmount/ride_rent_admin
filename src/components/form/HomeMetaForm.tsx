@@ -121,9 +121,9 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
                 <div className="flex-col items-start w-full">
                   <FormControl>
                     <Textarea
-                      placeholder="eg: 'https://example.com'"
+                      placeholder="Affordable car for rent in Dubai"
                       {...field}
-                      className="input-field"
+                      className="textarea rounded-xl h-28"
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -164,16 +164,7 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                   >
-                    <FormControl>
-                      <Textarea
-                        placeholder="Meta Description"
-                        {...field}
-                        className={`textarea rounded-2xl transition-all duration-300 ${
-                          isFocused ? 'h-96' : 'h-24'
-                        }`} // Dynamic height
-                        onChange={handleInputChange} // Handle change to track character count
-                      />
-                    </FormControl>
+                    <FormControl></FormControl>
                     <FormDescription className="w-full mt-1 ml-2 flex-between">
                       <span className="w-full max-w-[90%]">
                         Provide meta description.5000 characters max.

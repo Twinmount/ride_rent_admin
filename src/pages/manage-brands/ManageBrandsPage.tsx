@@ -61,7 +61,7 @@ export default function ManageBrandsPage() {
         limit: 20,
         sortOrder: 'ASC',
         vehicleCategoryId: vehicleCategoryId as string, // ensure this is non-null
-        search: searchParams.get('search') || '',
+        search: searchParams.get('search')?.trim() || '',
       }),
 
     enabled: !!vehicleCategoryId && !isCategoryLoading,

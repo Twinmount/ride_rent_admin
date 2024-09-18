@@ -62,7 +62,7 @@ export default function ManageLinksPage() {
           ))
         ) : (
           <p className="mt-20 text-xl font-semibold text-center text-gray-500">
-            No links found under state{' '}
+            No links found under{' '}
             <span className="italic font-bold"> {state.stateName}</span>
           </p>
         )}

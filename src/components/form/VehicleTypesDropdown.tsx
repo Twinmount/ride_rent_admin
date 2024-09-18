@@ -47,6 +47,8 @@ const VehicleTypesDropdown = ({
     if (data) {
       setVehicleTypes(data.result.list)
     }
+
+    console.log('vehicle types: ', data)
   }, [data])
 
   const getPlaceholderText = () => {

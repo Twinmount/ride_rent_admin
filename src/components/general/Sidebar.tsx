@@ -86,7 +86,7 @@ const Sidebar = () => {
               onKeyDown={(e) => e.key === 'Enter' && handleClick(item.link)}
             >
               <Icon className="text-xl" size={20} strokeWidth={3} />
-              <span className="font-medium">{item.label}</span>
+              <span className="w-full font-medium truncate">{item.label}</span>
             </div>
           )
         })}

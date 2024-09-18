@@ -9,9 +9,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Image, Trash2, Upload } from 'lucide-react'
+import { Download, Eye, Image, Trash2, Upload } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { validateFileSize } from '@/helpers/form'
+import ImagePreviewModal from '../modal/ImagePreviewModal'
+import { saveAs } from 'file-saver'
 
 type FileUploadProps = {
   name: string
@@ -32,10 +34,22 @@ const FileUpload: React.FC<FileUploadProps> = ({
 }) => {
   const { control, setValue, clearErrors } = useFormContext()
   const [files, setFiles] = useState<(File | string)[]>(existingFiles)
+  const [selectedImage, setSelectedImage] = useState<File | string | null>(null) // Track selected image
 
   useEffect(() => {
     setValue(name, files)
   }, [files, setValue, name])
+
+  useEffect(() => {
+    return () => {
+      files.forEach((file) => {
+        if (file instanceof File) {
+          URL.revokeObjectURL(URL.createObjectURL(file))
+        }
+      })
+    }
+  }, [files])
+
   const handleFilesChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -78,9 +92,22 @@ const FileUpload: React.FC<FileUploadProps> = ({
         return combinedFiles.slice(0, getMaxCount())
       })
     }
+
+    // Reset the file input to allow reselection of the same file
+    event.target.value = ''
   }
+
   const handleDeleteFile = (index: number) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index))
+    setFiles((prevFiles) => {
+      const fileToRemove = prevFiles[index]
+
+      // If the file is a File object, revoke the object URL to free up memory
+      if (fileToRemove instanceof File) {
+        URL.revokeObjectURL(URL.createObjectURL(fileToRemove))
+      }
+
+      return prevFiles.filter((_, i) => i !== index)
+    })
   }
 
   const isInputDisabled = () => {
@@ -98,84 +125,130 @@ const FileUpload: React.FC<FileUploadProps> = ({
     return 0
   }
 
-  return (
-    <FormItem className="flex w-full mb-2 max-sm:flex-col">
-      <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
-        {label} <span className="mr-5 max-sm:hidden">:</span>
-      </FormLabel>
-      <div className="flex-col items-start w-full">
-        <FormControl>
-          <div className="relative w-full">
-            <Controller
-              name={name}
-              control={control}
-              render={() => (
-                <>
-                  <Input
-                    type="file"
-                    accept={'image/*'}
-                    multiple={multiple}
-                    onChange={handleFilesChange}
-                    className="hidden"
-                    id={`file-upload-${name}`}
-                    disabled={isInputDisabled()}
-                  />
-                  <div className="grid grid-cols-4 gap-2 mt-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
-                    {files.map((file, index) => (
-                      <div
-                        key={index}
-                        className={`relative w-16 h-16 overflow-hidden rounded-lg`}
-                      >
-                        <img
-                          src={
-                            typeof file === 'string'
-                              ? file
-                              : URL.createObjectURL(file)
-                          }
-                          alt={`file-${index}`}
-                          className="object-cover w-full h-full"
-                        />
+  const handleDownload = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    e.preventDefault() // Prevent default anchor behavior
+    const url = e.currentTarget.href // Get the URL from the anchor's href
+    window.open(url, '_blank') // Open the image in a new tab
+  }
 
-                        <Button
-                          type="button"
-                          onClick={() => handleDeleteFile(index)}
-                          className="absolute top-0 right-0 w-6 h-6 p-1 text-red-500 bg-white rounded-full hover:bg-red-600 hover:text-white"
-                          aria-label={`delete file`}
+  return (
+    <>
+      <FormItem className="flex w-full mb-2 max-sm:flex-col">
+        <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+          {label} <span className="mr-5 max-sm:hidden">:</span>
+        </FormLabel>
+        <div className="flex-col items-start w-full">
+          <FormControl>
+            <div className="relative w-full">
+              <Controller
+                name={name}
+                control={control}
+                render={() => (
+                  <>
+                    <Input
+                      type="file"
+                      accept={'image/*'}
+                      multiple={multiple}
+                      onChange={handleFilesChange}
+                      className="hidden"
+                      id={`file-upload-${name}`}
+                      disabled={isInputDisabled()}
+                    />
+                    <div className="grid grid-cols-4 gap-2 mt-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
+                      {files.map((file, index) => (
+                        <div
+                          key={index}
+                          className={`relative w-16 h-16 overflow-hidden rounded-lg`}
                         >
-                          <Trash2 size={16} />
-                        </Button>
-                      </div>
-                    ))}
-                    {Array.from({ length: getMaxCount() - files.length }).map(
-                      (_, index) =>
-                        index === 0 ? (
-                          <label
-                            key={`placeholder-${index}`}
-                            htmlFor={`file-upload-${name}`}
-                            className="flex flex-col items-center justify-center w-16 h-16 border rounded-lg cursor-pointer bg-gray-50"
+                          <img
+                            src={
+                              typeof file === 'string'
+                                ? file
+                                : URL.createObjectURL(file)
+                            }
+                            alt={`file-${index}`}
+                            className="object-cover w-full h-full"
+                          />
+
+                          {/* Delete Button */}
+                          <Button
+                            type="button"
+                            onClick={() => handleDeleteFile(index)}
+                            className="absolute top-0 right-0 w-6 h-6 p-1 text-red-500 bg-white rounded-full hover:bg-red-600 hover:text-white"
+                            aria-label={`delete file`}
                           >
-                            <Upload size={24} className="text-yellow" />
-                            <span className="text-sm text-yellow">upload</span>
-                          </label>
-                        ) : (
-                          <div
-                            key={`placeholder-${index}`}
-                            className="flex items-center justify-center w-16 h-16 bg-gray-100 border rounded-lg"
+                            <Trash2 size={16} />
+                          </Button>
+
+                          {/* Preview Button */}
+                          <Button
+                            type="button"
+                            onClick={() => setSelectedImage(file)}
+                            className="absolute bottom-0 left-0 w-6 h-6 p-1 text-green-500 bg-white rounded-full hover:bg-green-600 hover:text-white"
+                            aria-label={`preview file`}
                           >
-                            <Image size={24} className="text-gray-300" />
-                          </div>
-                        )
-                    )}
-                  </div>
-                </>
-              )}
-            />
-          </div>
-        </FormControl>
-        <FormDescription className="ml-2">{description}</FormDescription>
-        <FormMessage />
-      </div>
-    </FormItem>
+                            <Eye size={16} />
+                          </Button>
+
+                          {/* Download Button (only for string files) */}
+                          {typeof file === 'string' && (
+                            <a
+                              href={file} // Add the file URL here
+                              onClick={(e) => handleDownload(e)} // Open the image in a new tab
+                              className="absolute bottom-0 right-0 w-6 h-6 p-1 text-blue-500 bg-white rounded-full hover:bg-blue-600 hover:text-white"
+                              aria-label={`open file in new tab`}
+                              target="_blank" // Optional: Ensure it's opened in a new tab by default
+                              rel="noopener noreferrer"
+                            >
+                              <Download size={16} />
+                            </a>
+                          )}
+                        </div>
+                      ))}
+
+                      {Array.from({ length: getMaxCount() - files.length }).map(
+                        (_, index) =>
+                          index === 0 ? (
+                            <label
+                              key={`placeholder-${index}`}
+                              htmlFor={`file-upload-${name}`}
+                              className="flex flex-col items-center justify-center w-16 h-16 border rounded-lg cursor-pointer bg-gray-50"
+                            >
+                              <Upload size={24} className="text-yellow" />
+                              <span className="text-sm text-yellow">
+                                upload
+                              </span>
+                            </label>
+                          ) : (
+                            <div
+                              key={`placeholder-${index}`}
+                              className="flex items-center justify-center w-16 h-16 bg-gray-100 border rounded-lg"
+                            >
+                              <Image size={24} className="text-gray-300" />
+                            </div>
+                          )
+                      )}
+                    </div>
+                  </>
+                )}
+              />
+            </div>
+          </FormControl>
+          <FormDescription className="ml-2">{description}</FormDescription>
+          <FormMessage />
+        </div>
+      </FormItem>
+
+      {/* Image Preview Modal */}
+      {selectedImage && (
+        <ImagePreviewModal
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+        />
+      )}
+    </>
   )
 }
 

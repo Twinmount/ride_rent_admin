@@ -31,14 +31,9 @@ export const sidebarContent = [
     link: '/registrations',
   },
   {
-    label: 'Categories',
-    icon: Tag,
-    link: '/manage-categories',
-  },
-  {
-    label: 'Types',
+    label: 'Categories & Types',
     icon: CarFront,
-    link: '/manage-types',
+    link: '/vehicle/manage-categories',
   },
   { label: 'Brands', icon: Star, link: '/manage-brands' },
   { label: 'Locations', icon: MapPin, link: '/locations' },
@@ -48,7 +43,7 @@ export const sidebarContent = [
     link: '/manage-links',
   },
   { label: 'Promotions', icon: Megaphone, link: '/manage-promotions' },
-  { label: 'Meta Data', icon: FileSearch, link: '/manage-meta-data' },
+  { label: 'Meta Data', icon: FileSearch, link: '/meta-data' },
 ]
 
 // sample vehicle categories
@@ -181,7 +176,7 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   phoneNumber: '',
   stateId: '',
   cityIds: [],
-  vehicleDescription: '',
+  description: '',
 }
 
 // login page default value

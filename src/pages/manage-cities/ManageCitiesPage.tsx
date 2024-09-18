@@ -23,7 +23,12 @@ export default function ManageCitiesPage() {
   return (
     <section className="container h-auto min-h-screen pb-10">
       {/* navigate between states and cities */}
-      <LocationNav />
+      <LocationNav
+        navItems={[
+          { label: 'States', to: '/locations/manage-states' },
+          { label: 'Cities', to: '/locations/manage-cities' },
+        ]}
+      />
       <h1 className="mt-6 mb-8 text-2xl font-bold text-center sm:text-left">
         Cities Under <span className="text-yellow">{state.stateName}</span>
       </h1>

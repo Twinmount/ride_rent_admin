@@ -221,7 +221,7 @@ export const PrimaryFormSchema = z.object({
   cityIds: z
     .array(z.string().min(1, 'City ID is required'))
     .min(1, 'At least one city must be selected'),
-  vehicleDescription: z
+  description: z
     .string()
     .min(10, 'Description must be at least 10 characters long')
     .max(5000, 'Description cannot exceed 5000 characters'),

@@ -31,7 +31,7 @@ export default function MetaCategoryDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="!h-8 text-white bg-slate-800 text-lg outline-none cursor-pointer w-fit max-w-fit !rounded-lg hover:bg-slate-900 hover:text-yellow transition-colors md:mr-16"
+        className="!h-8 text-white bg-slate-800 text-lg outline-none cursor-pointer mx-auto my-4 w-fit max-w-fit !rounded-lg hover:bg-slate-900 hover:text-yellow transition-colors md:mr-20"
         disabled={isLoading || categories.length === 0}
       >
         <div className="flex items-center pl-2 font-bold tracking-wider rounded-lg whitespace-nowrap">

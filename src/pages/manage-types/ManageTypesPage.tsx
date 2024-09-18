@@ -7,6 +7,7 @@ import { fetchAllVehicleTypes } from '@/api/vehicle-types'
 import { CategoryType } from '@/types/api-types/API-types'
 import GridSkelton from '@/components/skelton/GridSkelton'
 import { Plus } from 'lucide-react'
+import LocationNav from '@/components/LocationNav'
 
 export default function ManageTypesPage() {
   const navigate = useNavigate()
@@ -31,7 +32,9 @@ export default function ManageTypesPage() {
       const categories = categoryData?.result?.list || []
       if (!vehicleCategoryId && categories.length > 0) {
         const firstCategory = categories[0]
-        navigate(`/manage-types/${firstCategory.categoryId}`, { replace: true })
+        navigate(`/vehicle/manage-types/${firstCategory.categoryId}`, {
+          replace: true,
+        })
       }
     }
   }, [isSuccess, categoryData, vehicleCategoryId, navigate])
@@ -66,10 +69,15 @@ export default function ManageTypesPage() {
     }
   }, [vehicleCategoryId, categories])
 
-  const noTypeCategories = ['buses', 'buggies', 'vans', 'yachts']
-
   return (
     <section className="container h-auto min-h-screen pb-10">
+      <LocationNav
+        navItems={[
+          { label: 'Categories', to: '/vehicle/manage-categories' },
+          { label: 'Types', to: '/vehicle/manage-types' },
+        ]}
+      />
+
       <div className="h-20 px-10 mb-6 flex-between">
         <div className="flex items-center text-2xl font-bold capitalize gap-x-2 whitespace-nowrap">
           {/* vehicle category dropdown */}
@@ -88,17 +96,12 @@ export default function ManageTypesPage() {
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 place-items-center gap-y-4">
           <GridSkelton type="category" />
         </div>
-      ) : noTypeCategories.includes(selectedCategory?.value as string) ? (
-        <div className="text-2xl text-center mt-36">
-          No vehicle types for{' '}
-          <span className="italic font-semibold">{selectedCategory?.name}</span>
-        </div>
       ) : list && list.length > 0 ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 place-items-center gap-y-4">
           {list.map((data) => (
             <Link
               key={data.typeId}
-              to={`/manage-types/${vehicleCategoryId}/edit/${data.typeId}`}
+              to={`/vehicle/manage-types/${vehicleCategoryId}/edit/${data.typeId}`}
               className="flex flex-col w-full overflow-hidden text-xl font-semibold capitalize transition-all bg-white border rounded-lg shadow-md h-36 flex-center hover:text-yellow hover:border-yellow"
             >
               <div className="w-[90%] mx-auto h-[80%]">
@@ -125,7 +128,7 @@ export default function ManageTypesPage() {
       <button className="fixed z-30 overflow-hidden cursor-pointer w-fit h-fit rounded-xl right-10 bottom-10 shadow-xl  hover:scale-[1.02]  transition-all">
         <Link
           className="flex-center gap-x-1 px-3 py-2 text-white  shadow-xl hover:scale-[1.02]  transition-all bg-yellow flex-center"
-          to={`/manage-types/${selectedCategory?.categoryId}/add`}
+          to={`/vehicle/manage-types/${selectedCategory?.categoryId}/add`}
         >
           New Type <Plus />
         </Link>

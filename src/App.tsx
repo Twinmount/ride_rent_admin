@@ -247,33 +247,37 @@ const router = createBrowserRouter([
 
               // vehicle category route
               {
-                path: '/manage-categories/',
+                path: '/vehicle',
+                element: <Navigate to={'/vehicle/manage-categories'} />,
+              },
+              {
+                path: '/vehicle/manage-categories/',
                 element: <ManageCategoriesPage />,
               },
               {
-                path: '/manage-categories/add',
+                path: '/vehicle/manage-categories/add',
                 element: <AddCategoryPage />,
               },
               {
-                path: '/manage-categories/edit/:categoryId',
+                path: '/vehicle/manage-categories/edit/:categoryId',
                 element: <EditCategoryPage />,
               },
 
               //vehicle types routes
               {
-                path: '/manage-types',
+                path: '/vehicle/manage-types',
                 element: <ManageTypesPage />,
               },
               {
-                path: '/manage-types/:vehicleCategoryId',
+                path: '/vehicle/manage-types/:vehicleCategoryId',
                 element: <ManageTypesPage />,
               },
               {
-                path: '/manage-types/:vehicleCategoryId/add',
+                path: '/vehicle/manage-types/:vehicleCategoryId/add',
                 element: <AddTypePage />,
               },
               {
-                path: '/manage-types/:vehicleCategoryId/edit/:vehicleTypeId',
+                path: '/vehicle/manage-types/:vehicleCategoryId/edit/:vehicleTypeId',
                 element: <EditTypePage />,
               },
 
@@ -344,22 +348,26 @@ const router = createBrowserRouter([
               },
 
               // meta data routes
-              { path: '/manage-meta-data', element: <HomeMetaDataPage /> },
-              { path: '/manage-meta-data/add', element: <AddHomeMetaPage /> },
               {
-                path: '/manage-meta-data/edit/:metaDataId',
+                path: '/meta-data',
+                element: <Navigate to={'/meta-data/home'} />,
+              },
+              { path: '/meta-data/home', element: <HomeMetaDataPage /> },
+              { path: '/meta-data/home/add', element: <AddHomeMetaPage /> },
+              {
+                path: '/meta-data/home/edit/:metaDataId',
                 element: <EditHomeMetaPage />,
               },
               {
-                path: '/manage-meta-data/listing',
+                path: '/meta-data/listing',
                 element: <ListingMetaDataPage />,
               },
               {
-                path: '/manage-meta-data/listing/add',
+                path: '/meta-data/listing/add',
                 element: <AddListingMetaPage />,
               },
               {
-                path: '/manage-meta-data/listing/edit/:metaDataId',
+                path: '/meta-data/listing/edit/:metaDataId',
                 element: <EditListingMetaPage />,
               },
             ],

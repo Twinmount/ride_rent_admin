@@ -44,5 +44,5 @@ export type PrimaryFormType = {
   phoneNumber: string
   stateId: string
   cityIds: string[]
-  vehicleDescription: string
+  description: string
 }

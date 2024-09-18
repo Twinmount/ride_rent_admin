@@ -40,7 +40,8 @@ export default function SpecificationsForm({
   refetchLevels,
   isAddOrIncomplete,
 }: SpecificationFormProps) {
-  const { vehicleId, vehicleCategoryId } = useVehicleIdentifiers(type)
+  const { vehicleId, vehicleCategoryId, vehicleTypeId } =
+    useVehicleIdentifiers(type)
 
   const { userId } = useParams<{ userId: string }>()
 
@@ -58,6 +59,7 @@ export default function SpecificationsForm({
       if (isAddOrIncomplete) {
         const data = await getSpecificationFormFieldData({
           vehicleCategoryId: vehicleCategoryId as string,
+          vehicleTypeId: vehicleTypeId as string,
         })
         return {
           ...data,
@@ -81,16 +83,16 @@ export default function SpecificationsForm({
       const formDefaultValues: Record<string, string> = {}
 
       data.result.forEach((spec) => {
-        const selectedValue = spec.values.find(
-          (value) => hasSelected(value) && value.selected
-        )
+        const selectedValue = spec.values
+          .filter((value) => value !== null) // Filter out null values
+          .find((value) => hasSelected(value) && value.selected)
 
         if (selectedValue) {
-          formDefaultValues[spec.name] = selectedValue.name // Store the 'name' of the selected value
+          formDefaultValues[spec.name] = selectedValue.name
         }
       })
 
-      form.reset(formDefaultValues) // Reset form with mapped default values
+      form.reset(formDefaultValues)
     }
   }, [data])
 
@@ -100,7 +102,13 @@ export default function SpecificationsForm({
     const updatedErrors: Record<string, string> = {}
 
     data?.result.forEach((spec) => {
-      if (!values[spec.name] || values[spec.name]?.length === 0) {
+      const validValues = spec.values.filter((value) => value !== null) // Filter out null values
+
+      if (
+        !values[spec.name] ||
+        values[spec.name]?.length === 0 ||
+        !validValues.length
+      ) {
         updatedErrors[
           spec.name
         ] = `Please select at least one option for ${spec.name}`
@@ -213,15 +221,18 @@ export default function SpecificationsForm({
                 name={spec.name}
                 render={({ field }) => {
                   // selecting the default value for Update case.
-                  const selectedOption = spec.values.find(
-                    (
-                      option
-                    ): option is {
-                      name: string
-                      label: string
-                      selected: boolean
-                    } => option && 'selected' in option && option.selected
-                  )
+                  const selectedOption = spec.values
+                    .filter((option) => option !== null)
+                    .find(
+                      (
+                        option
+                      ): option is {
+                        name: string
+                        label: string
+                        selected: boolean
+                      } => option && 'selected' in option && option.selected
+                    )
+                  console.log('selected option :', selectedOption)
 
                   return (
                     <FormItem className="flex w-full mb-2 max-sm:flex-col">
@@ -234,10 +245,12 @@ export default function SpecificationsForm({
                           <SpecificationDropdown
                             onChangeHandler={field.onChange}
                             value={field.value || selectedOption?.name || ''}
-                            options={spec.values.map((value) => ({
-                              label: value.label,
-                              value: value.name,
-                            }))}
+                            options={spec.values
+                              .filter((value) => value !== null)
+                              .map((value) => ({
+                                label: value!.label, // Non-null assertion
+                                value: value!.name,
+                              }))}
                           />
                         </FormControl>
                         <FormMessage className="ml-2" />

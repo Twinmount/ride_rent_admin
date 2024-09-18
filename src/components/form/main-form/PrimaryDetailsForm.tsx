@@ -115,6 +115,8 @@ export default function PrimaryDetailsForm({
         if (type === 'Add') {
           save(StorageKeys.VEHICLE_ID, data.result.vehicleId)
           save(StorageKeys.CATEGORY_ID, data.result.vehicleCategory.categoryId)
+          save(StorageKeys.VEHICLE_TYPE_ID, data.result.vehicleType.typeId)
+
           if (onNextTab) onNextTab()
         }
       }
@@ -134,7 +136,7 @@ export default function PrimaryDetailsForm({
       } else {
         toast({
           variant: 'destructive',
-          title: `${type} Company failed`,
+          title: `${type} Vehicle failed`,
           description: 'Something went wrong',
         })
       }
@@ -662,7 +664,7 @@ export default function PrimaryDetailsForm({
           {/* vehicle description */}
           <FormField
             control={form.control}
-            name="vehicleDescription"
+            name="description"
             render={({ field }) => {
               const [isFocused, setIsFocused] = useState(false) // To manage focus state
               const [charCount, setCharCount] = useState(

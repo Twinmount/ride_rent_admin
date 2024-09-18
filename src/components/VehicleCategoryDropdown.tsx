@@ -33,7 +33,7 @@ export default function CategoryDropdown({
   const handleCategorySelect = (category: CategoryType) => {
     setSelectedCategory(category)
     if (type === 'type') {
-      navigate(`/manage-types/${category.categoryId}`)
+      navigate(`/vehicle/manage-types/${category.categoryId}`)
     } else if (type === 'brand') {
       navigate(`/manage-brands/${category.categoryId}`)
     }

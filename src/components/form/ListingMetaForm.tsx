@@ -180,9 +180,9 @@ export default function ListingMetaForm({
                 <div className="flex-col items-start w-full">
                   <FormControl>
                     <Textarea
-                      placeholder="Best Meta in the Home page"
+                      placeholder="Best Affordable vehicle in  Dubai"
                       {...field}
-                      className="input-field"
+                      className="textarea h-28 rounded-xl "
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -228,8 +228,8 @@ export default function ListingMetaForm({
                       <Textarea
                         placeholder="Meta Description"
                         {...field}
-                        className={`textarea rounded-2xl transition-all duration-300 ${
-                          isFocused ? 'h-96' : 'h-24'
+                        className={`textarea rounded-xl transition-all duration-300 ${
+                          isFocused ? 'h-96' : 'h-28'
                         }`} // Dynamic height
                         onChange={handleInputChange} // Handle change to track character count
                       />

@@ -62,11 +62,13 @@ export default function VehiclesFormUpdatePage() {
   const formData = data ? mapGetPrimaryFormToPrimaryFormType(data.result) : null
   const countryCode = data?.result?.countryCode || ''
   const vehicleCategoryId = data?.result?.vehicleCategoryId
+  const vehicleTypeId = data?.result?.vehicleTypeId
 
   // Store vehicleCategoryId in localStorage if levelsFilled < 3
   useEffect(() => {
-    if (levelsFilled < 3 && vehicleCategoryId) {
+    if (levelsFilled < 3 && vehicleCategoryId && vehicleTypeId) {
       save(StorageKeys.CATEGORY_ID, vehicleCategoryId)
+      save(StorageKeys.VEHICLE_TYPE_ID, vehicleTypeId)
     }
   }, [levelsFilled, vehicleCategoryId])
 
@@ -113,8 +115,10 @@ export default function VehiclesFormUpdatePage() {
             </TabsTrigger>
             <TabsTrigger
               value="features"
-              disabled={isLoading || isLevelsFetching}
-              className="max-sm:px-2"
+              disabled={
+                isLoading || isLevelsFetching || isAddOrIncompleteSpecifications
+              }
+              className={`max-sm:px-2`}
             >
               Features
             </TabsTrigger>

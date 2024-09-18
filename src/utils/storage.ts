@@ -30,6 +30,11 @@ export enum StorageKeys {
    * so that it can be used in the phase 2 and phase 3
    */
   CATEGORY_ID = 'categoryId',
+  /**
+   * Key for storing vehicle type id after the submission of primary phase form
+   * so that it can be used in the phase 2 and phase 3
+   */
+  VEHICLE_TYPE_ID = 'vehicleTypeId',
 }
 
 export function load<T>(key: string): T | undefined {

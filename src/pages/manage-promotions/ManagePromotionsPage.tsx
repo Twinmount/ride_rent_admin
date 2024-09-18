@@ -25,10 +25,6 @@ export default function ManagePromotionsPage() {
       }),
   })
 
-  useEffect(() => {
-    console.log(data)
-  }, [isLoading])
-
   // Destructure to get the 'list' array from 'data'
   const promotions = data?.result?.list || []
 
@@ -85,7 +81,7 @@ export default function ManagePromotionsPage() {
         </div>
       ) : (
         <p className="mt-20 text-xl font-semibold text-center text-gray-500">
-          No ads found under state
+          No ads found under
           <span className="italic font-bold"> {state.stateName}</span>
         </p>
       )}

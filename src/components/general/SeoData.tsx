@@ -40,7 +40,7 @@ export default function SeoData({ item, truncateText, link }: SeoDataProps) {
             <Type className="w-5 h-5 mr-2 text-gray-800" />
           </div>
           <p className="text-gray-800">
-            {isExpanded ? item.metaTitle : truncateText(item.metaTitle, 80)}{' '}
+            {isExpanded ? item.metaTitle : truncateText(item.metaTitle, 80)}
           </p>
         </div>
 
