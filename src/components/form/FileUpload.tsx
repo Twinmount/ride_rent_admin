@@ -9,11 +9,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Download, Eye, Image, Trash2, Upload } from 'lucide-react'
+import { Download, Eye, Trash2 } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { validateFileSize } from '@/helpers/form'
 import ImagePreviewModal from '../modal/ImagePreviewModal'
-import { saveAs } from 'file-saver'
+import ImagePlaceholder from '../ImagePlaceholder'
 
 type FileUploadProps = {
   name: string
@@ -209,26 +209,16 @@ const FileUpload: React.FC<FileUploadProps> = ({
                       ))}
 
                       {Array.from({ length: getMaxCount() - files.length }).map(
-                        (_, index) =>
-                          index === 0 ? (
-                            <label
-                              key={`placeholder-${index}`}
-                              htmlFor={`file-upload-${name}`}
-                              className="flex flex-col items-center justify-center w-16 h-16 border rounded-lg cursor-pointer bg-gray-50"
-                            >
-                              <Upload size={24} className="text-yellow" />
-                              <span className="text-sm text-yellow">
-                                upload
-                              </span>
-                            </label>
-                          ) : (
-                            <div
-                              key={`placeholder-${index}`}
-                              className="flex items-center justify-center w-16 h-16 bg-gray-100 border rounded-lg"
-                            >
-                              <Image size={24} className="text-gray-300" />
-                            </div>
-                          )
+                        (_, index) => (
+                          <ImagePlaceholder
+                            key={index}
+                            index={index}
+                            name={name}
+                            labelForVehiclePhotos="upload"
+                            labelForCommercialLicensesFront="front"
+                            labelForCommercialLicensesBack="back"
+                          />
+                        )
                       )}
                     </div>
                   </>

@@ -695,7 +695,7 @@ export default function PrimaryDetailsForm({
                       <Textarea
                         placeholder="Vehicle Description"
                         {...field}
-                        className={`textarea rounded-2xl transition-all duration-300 ${
+                        className={`textarea rounded-2xl transition-all duration-300 outline-none border-none focus:ring-0 ring-0 ${
                           isFocused ? 'h-96' : 'h-20'
                         }`} // Dynamic height
                         onChange={handleInputChange} // Handle change to track character count

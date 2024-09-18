@@ -33,12 +33,12 @@ export const sidebarContent = [
   {
     label: 'Categories & Types',
     icon: CarFront,
-    link: '/vehicle/manage-categories',
+    link: '/vehicle',
   },
   { label: 'Brands', icon: Star, link: '/manage-brands' },
   { label: 'Locations', icon: MapPin, link: '/locations' },
   {
-    label: 'Links ',
+    label: 'Quick Links ',
     icon: Link,
     link: '/manage-links',
   },

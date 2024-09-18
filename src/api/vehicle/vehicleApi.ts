@@ -44,7 +44,6 @@ type PrimaryFormType = {
   description: string
 }
 
-// register an agent
 export const addPrimaryDetailsForm = async (
   values: PrimaryFormType,
   countryCode: string,
@@ -129,7 +128,6 @@ export const addPrimaryDetailsForm = async (
   }
 }
 
-// Update an agent's primary details
 export const updatePrimaryDetailsForm = async (
   vehicleId: string,
   values: PrimaryFormType,
@@ -158,6 +156,12 @@ export const updatePrimaryDetailsForm = async (
       values.commercialLicenseExpireDate.toISOString()
     )
     formData.append('isLease', values.isLease.toString())
+    formData.append('isCryptoAccepted', values.isCryptoAccepted.toString())
+    formData.append(
+      'isSpotDeliverySupported',
+      values.isSpotDeliverySupported.toString()
+    )
+    formData.append('description', values.description)
     formData.append('specification', values.specification)
     formData.append('phoneNumber', phoneNumber)
     formData.append('stateId', values.stateId)

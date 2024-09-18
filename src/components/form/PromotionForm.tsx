@@ -157,6 +157,11 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
             navigateTo="/manage-promotions"
           ></DeleteModal>
         )}
+
+        <p className="p-0 m-0 -mt-3 text-xs text-center text-red-500">
+          Make sure appropriate state is selected before adding a promotion.
+          Currently adding promotion under {state.stateName}
+        </p>
       </form>
     </Form>
   )

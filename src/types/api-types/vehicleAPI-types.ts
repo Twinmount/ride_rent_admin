@@ -260,7 +260,7 @@ export type GetPrimaryForm = {
   isLease: boolean
   isCryptoAccepted: boolean
   isSpotDeliverySupported: boolean
-  vehicleDescription: string
+  description: string
   vehiclePhotos: string[]
   commercialLicenses: string[]
 }

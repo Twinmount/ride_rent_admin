@@ -189,11 +189,13 @@ export default function FeaturesForm({
                               onChangeHandler={field.onChange}
                               value={field.value || []}
                               placeholder={feature.name}
-                              options={feature.values.map((value) => ({
-                                label: value.label,
-                                name: value.name,
-                                selected: value.selected as boolean, // Pass `selected` prop here
-                              }))}
+                              options={feature.values
+                                .filter((value) => value !== null) // Filter out null values
+                                .map((value) => ({
+                                  label: value!.label,
+                                  name: value!.name,
+                                  selected: value!.selected as boolean,
+                                }))}
                             />
                           </FormControl>
                           <FormMessage className="ml-2" />

@@ -187,7 +187,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             name="expireDate"
             render={({ field }) => (
               <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                <FormLabel className="flex justify-between w-48 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-52 max-sm:w-fit lg:text-lg">
                   Expiry Date <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-fit">
@@ -196,7 +196,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                       selected={field.value}
                       onChange={(date: Date | null) => field.onChange(date)}
                       dateFormat="MM/dd/yyyy"
-                      wrapperClassName="datePicker text-base  "
+                      wrapperClassName="datePicker text-base -ml-4 "
                       readOnly={!isEditing}
                     />
                   </FormControl>

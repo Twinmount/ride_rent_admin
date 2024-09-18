@@ -90,7 +90,7 @@
   }
 
   .textarea {
-    @apply bg-gray-100 flex flex-1 placeholder:text-gray-500 p-regular-16 px-5 py-3 border-none focus-visible:ring-transparent !important;
+    @apply bg-gray-100 flex flex-1 placeholder:text-gray-500 focus-visible:ring-offset-0 p-regular-16 px-5 py-3 border-none focus-visible:ring-transparent !important;
   }
 
   .button {

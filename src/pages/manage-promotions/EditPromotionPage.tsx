@@ -28,7 +28,7 @@ export default function EditPromotionPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h1 className="text-center h3-bold sm:text-left">Update Link</h1>
+        <h1 className="text-center h3-bold sm:text-left">Update Promotion</h1>
       </div>
       {isLoading ? (
         <FormSkelton />

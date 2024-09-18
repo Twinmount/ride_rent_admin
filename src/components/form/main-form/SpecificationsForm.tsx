@@ -232,7 +232,6 @@ export default function SpecificationsForm({
                         selected: boolean
                       } => option && 'selected' in option && option.selected
                     )
-                  console.log('selected option :', selectedOption)
 
                   return (
                     <FormItem className="flex w-full mb-2 max-sm:flex-col">

@@ -70,6 +70,12 @@ const BrandsDropdown = ({
     }
   }, [specificBrandData])
 
+  React.useEffect(() => {
+    if (value) {
+      setSelectedValue(value)
+    }
+  }, [value])
+
   const debounce = <T extends any[]>(
     callback: (...args: T) => void,
     delay: number
@@ -96,22 +102,32 @@ const BrandsDropdown = ({
   }
 
   const selectedBrandName = React.useMemo(() => {
-    if (isSpecificBrandLoading) return 'Loading...'
+    // Prioritize loading states first
+    if (isSpecificBrandLoading || isBrandsLoading) return 'Loading...'
+
+    // Try to find the brand in the `brandData` list
     if (selectedValue && brandData?.result.list) {
       const brand = brandData.result.list.find(
         (brand) => brand.id === selectedValue
       )
-      return brand?.brandName || `Choose ${placeholder}`
+      if (brand) {
+        return brand.brandName
+      }
     }
+
+    // If `brandData` doesn't have the brand, fallback to `specificBrandData`
     if (specificBrandData?.result) {
       return specificBrandData.result.brandName
     }
+
+    // Default text if nothing is found or loaded yet
     return `Choose ${placeholder}`
   }, [
     selectedValue,
     brandData,
     specificBrandData,
     isSpecificBrandLoading,
+    isBrandsLoading,
     placeholder,
   ])
 

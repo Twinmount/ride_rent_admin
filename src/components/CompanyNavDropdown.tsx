@@ -13,6 +13,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ChevronDown, Loader2 } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
+import NotificationIndicator from './general/NotificationIndicator'
 
 export function CompanyNavDropdown() {
   const navigate = useNavigate()
@@ -42,16 +43,31 @@ export function CompanyNavDropdown() {
     return 'Live Companies'
   })()
 
+  const handleValueChange = (value: string) => {
+    switch (value) {
+      case 'New Registrations':
+        navigate('/registrations/new')
+        break
+      case 'Rejected Registrations':
+        navigate('/registrations/rejected')
+        break
+      case 'Live Companies':
+      default:
+        navigate('/registrations')
+    }
+  }
+
   return (
     <DropdownMenu onOpenChange={(isOpen) => setIsOpen(isOpen)}>
       <DropdownMenuTrigger asChild>
-        <Button className="text-2xl font-bold bg-transparent text-yellow hover:bg-transparent hover:text-yellow">
+        <Button className="relative text-2xl font-bold bg-transparent text-yellow hover:bg-transparent hover:text-yellow">
           {currentStatus}&nbsp;
           <ChevronDown
             size={20}
             strokeWidth={3}
             className="relative ml-1 top-1"
           />
+          {companyCounts.pending > 0 && !isOpen && <NotificationIndicator />}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-28">
@@ -59,20 +75,7 @@ export function CompanyNavDropdown() {
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup
           value={currentStatus}
-          onValueChange={(value) => {
-            setTimeout(() => {
-              switch (value) {
-                case 'New':
-                  navigate('/registrations/new')
-                  break
-                case 'Rejected':
-                  navigate('/registrations/rejected')
-                  break
-                default:
-                  navigate('/registrations')
-              }
-            }, 200) // Add a delay of 200 milliseconds
-          }}
+          onValueChange={handleValueChange}
         >
           <DropdownMenuRadioItem
             value="Live Companies"
@@ -95,6 +98,7 @@ export function CompanyNavDropdown() {
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             ) : null}
             New ({companyCounts.pending})
+            {companyCounts.pending > 0 && <NotificationIndicator />}
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="Rejected Registrations"

@@ -161,6 +161,11 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
             navigateTo="/manage-states"
           ></DeleteModal>
         )}
+
+        <p className="p-0 m-0 -mt-3 text-xs text-center text-red-500">
+          Make sure appropriate state is selected before adding a link.
+          Currently adding link under {state.stateName}
+        </p>
       </form>
     </Form>
   )

@@ -134,6 +134,10 @@ export default function CityForm({ type, formData }: CityFormProps) {
           {form.formState.isSubmitting ? 'Processing...' : `${type} City`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
+        <p className="p-0 m-0 -mt-3 text-xs text-center text-red-500">
+          Make sure appropriate state is selected before adding a city.
+          Currently adding city under {state.stateName}
+        </p>
       </form>
     </Form>
   )
