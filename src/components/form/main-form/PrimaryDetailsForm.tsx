@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -141,6 +141,18 @@ export default function PrimaryDetailsForm({
       console.error(error)
     }
   }
+
+  useEffect(() => {
+    // Check for validation errors and scroll to the top if errors are present
+    if (Object.keys(form.formState.errors).length > 0) {
+      toast({
+        variant: 'destructive',
+        title: `Validation Error`,
+        description: 'Please make sure values are provided',
+      })
+      window.scrollTo({ top: 65, behavior: 'smooth' }) // Scroll to the top of the page
+    }
+  }, [form.formState.errors])
 
   return (
     <Form {...form}>

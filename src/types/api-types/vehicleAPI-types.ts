@@ -276,6 +276,7 @@ export interface GetPrimaryFormResponse {
 export type SpecificationField = {
   id: string
   name: string
+  hoverInfo: string
   values: {
     name: string
     label: string
@@ -296,6 +297,7 @@ export interface GetSpecificationFormDataResponse {
 export type SpecificationFormData = {
   id: string
   name: string
+  hoverInfo: string
   values: { label: string; name: string; _id: string }[]
   vehicleCategoryId: string
 }

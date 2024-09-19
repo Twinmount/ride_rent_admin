@@ -7,6 +7,7 @@ const Dashboard: React.FC = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['dashboard-analytics'],
     queryFn: fetchAdminDashboard,
+    staleTime: 600000,
   })
 
   return (
