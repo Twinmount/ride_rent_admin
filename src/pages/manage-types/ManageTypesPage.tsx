@@ -68,6 +68,8 @@ export default function ManageTypesPage() {
     }
   }, [vehicleCategoryId, categories])
 
+  const baseAssetsUrl = import.meta.env.VITE_ASSETS_URL
+
   return (
     <section className="container h-auto min-h-screen pb-10">
       <LocationNav
@@ -105,7 +107,7 @@ export default function ManageTypesPage() {
             >
               <div className="w-[90%] mx-auto h-[80%]">
                 <img
-                  src={`/assets/icons/vehicle-types/${selectedCategory?.value}/${data.value}.webp`}
+                  src={`${baseAssetsUrl}/icons/vehicle-types/${selectedCategory?.value}/${data.value}.webp`}
                   alt={`${data.name} logo`}
                   className="object-contain w-full h-full"
                 />

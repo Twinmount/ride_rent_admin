@@ -14,6 +14,8 @@ export default function ManageCategoriesPage() {
   // Destructure the result from data
   const { list: categories = [] } = data?.result || {}
 
+  const baseAssetsUrl = import.meta.env.VITE_ASSETS_URL
+
   return (
     <section className="container h-auto min-h-screen pb-10">
       {/* navigate between states and cities */}
@@ -44,7 +46,7 @@ export default function ManageCategoriesPage() {
             >
               <div className="w-[70%] flex-center mx-auto h-[80%]">
                 <img
-                  src={`/assets/icons/vehicle-categories/${category.value}.png`}
+                  src={`${baseAssetsUrl}/icons/vehicle-categories/${category.value}.png`}
                   alt={`${category.name} logo`}
                   className="object-contain w-[70%] h-full"
                 />
