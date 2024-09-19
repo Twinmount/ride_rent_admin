@@ -75,7 +75,15 @@ export default function GeneralListingPage({
         })
 
         if (data) {
-          queryClient.invalidateQueries({ queryKey: ['vehicles'], exact: true })
+          queryClient.invalidateQueries({ queryKey: ['vehicles', 'listings'] })
+          queryClient.invalidateQueries({
+            queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
+            exact: true,
+          })
+          queryClient.invalidateQueries({
+            queryKey: ['vehicle-listing-count'],
+            exact: true,
+          })
           toast({
             title: 'Vehicle status updated successfully',
             className: 'bg-green-500 text-white',

@@ -19,7 +19,6 @@ import { ListingMetaFormSchema } from '@/lib/validator'
 import Spinner from '../general/Spinner'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '../ui/use-toast'
-import { useQueryClient } from '@tanstack/react-query'
 import { addListingMetaData, updateListingMetaData } from '@/api/meta-data'
 import { useState } from 'react'
 import { Textarea } from '../ui/textarea'
@@ -41,7 +40,6 @@ export default function ListingMetaForm({
 
   const navigate = useNavigate()
   const { metaDataId } = useParams<{ metaDataId: string }>()
-  const queryClient = useQueryClient()
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof ListingMetaFormSchema>>({
@@ -51,8 +49,6 @@ export default function ListingMetaForm({
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof ListingMetaFormSchema>) {
-    console.log('values from form :', values)
-
     try {
       let data
       if (type === 'Add') {
@@ -69,7 +65,7 @@ export default function ListingMetaForm({
         navigate('/manage-meta-data/listing')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} meta data failed`,

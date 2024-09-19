@@ -23,7 +23,6 @@ import Spinner from '@/components/general/Spinner'
 import { toast } from '@/components/ui/use-toast'
 import { Textarea } from './ui/textarea'
 import { useQueryClient } from '@tanstack/react-query'
-import { useLocation } from 'react-router-dom'
 import CompanyStatusDropdown from './CompanyStatusDropdown'
 
 // Define the form schema using Zod
@@ -77,11 +76,6 @@ export default function CompanyStatusModal({
   const [charCount, setCharCount] = useState<number>(0)
 
   const queryClient = useQueryClient()
-
-  const location = useLocation()
-
-  // Check if the current URL path is "/registrations/rejected'"
-  const isRejectedListings = location.pathname === '/registrations/rejected'
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -176,7 +170,7 @@ export default function CompanyStatusModal({
               />
 
               {/* Rejection Reason */}
-              {(status === 'REJECTED' || isRejectedListings) && (
+              {status === 'REJECTED' && (
                 <FormField
                   control={form.control}
                   name="rejectionReason"

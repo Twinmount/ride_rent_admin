@@ -307,3 +307,16 @@ export interface FetchSingleListingMetaData {
   status: string
   statusCode: number
 }
+
+export interface FetchDashboardAnalytics {
+  result: {
+    totalSellers: number
+    totalVehicles: number
+    totalBrands: number
+    totalCategories: number
+    totalVisits: number
+    allTimeVisits: number
+  }
+  status: string
+  statusCode: number
+}

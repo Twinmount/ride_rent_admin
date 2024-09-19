@@ -83,6 +83,10 @@ export default function GeneralCompaniesPage({
           queryClient.invalidateQueries({
             queryKey: [...queryKey, page, limit, sortOrder],
           })
+          queryClient.invalidateQueries({
+            queryKey: ['company-listing-count'],
+            exact: true,
+          })
           toast({
             title: 'Company status updated successfully',
             className: 'bg-green-500 text-white',

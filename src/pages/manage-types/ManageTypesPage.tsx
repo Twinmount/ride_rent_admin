@@ -65,7 +65,6 @@ export default function ManageTypesPage() {
         (category) => category.categoryId === vehicleCategoryId
       )
       setSelectedCategory(selected)
-      console.log(vehicleTypeData)
     }
   }, [vehicleCategoryId, categories])
 

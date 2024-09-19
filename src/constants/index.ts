@@ -17,7 +17,6 @@ import {
   MapPin,
   Megaphone,
   Star,
-  Tag,
   UserPlus,
 } from 'lucide-react'
 

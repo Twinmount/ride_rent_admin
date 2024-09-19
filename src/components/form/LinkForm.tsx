@@ -50,8 +50,6 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof LinkFormSchema>) {
-    // console.log('values from form :', values)
-
     try {
       let data
       if (type === 'Add') {
@@ -68,7 +66,7 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
         navigate('/manage-links')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} Link failed`,

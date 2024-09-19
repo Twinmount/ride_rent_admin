@@ -19,8 +19,6 @@ export default function ManageLinksPage() {
       }),
   })
 
-  // useEffect(() => console.log(data), [isLoading])
-
   // Destructure to get the 'list' array from 'data'
   const list = data?.result?.list || []
 

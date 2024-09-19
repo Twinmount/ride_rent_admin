@@ -14,10 +14,6 @@ export default function ManageCitiesPage() {
     queryFn: () => fetchAllCities(state.stateId as string),
   })
 
-  // useEffect(() => {
-  //   console.log(data)
-  // }, [isLoading])
-
   const cities = data?.result || []
 
   return (

@@ -55,8 +55,6 @@ export default function CompanyStatusForm({ formData }: CompanyStatusProps) {
   })
 
   async function onSubmit(values: z.infer<typeof CompanyStatusFormSchema>) {
-    console.log('company form values', values)
-
     try {
       const { approvalStatus, rejectionReason } = values
 
@@ -96,7 +94,7 @@ export default function CompanyStatusForm({ formData }: CompanyStatusProps) {
         navigate('/registrations')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `Status update failed`,

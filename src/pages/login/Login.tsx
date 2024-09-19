@@ -68,7 +68,7 @@ const LoginPage = () => {
         navigate('/')
       }
     } catch (error: any) {
-      console.log('error : ', error)
+      console.error('error : ', error)
       if (error.response && error.response.status === 400) {
         toast({
           variant: 'destructive',

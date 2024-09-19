@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { CircleArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import FormSkelton from '@/components/skelton/FormSkelton'
@@ -15,8 +14,6 @@ export default function EditCityPage() {
     queryKey: ['cities', cityId],
     queryFn: () => fetchCityById(cityId as string),
   })
-
-  useEffect(() => console.log(data), [isLoading])
 
   return (
     <section className="container min-h-screen pt-5 pb-32">

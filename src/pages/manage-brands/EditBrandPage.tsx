@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { CircleArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import FormSkelton from '@/components/skelton/FormSkelton'
@@ -17,8 +16,6 @@ export default function EditBrandPage() {
     queryKey: ['brands', brandId],
     queryFn: () => fetchBrandById(brandId as string),
   })
-
-  useEffect(() => console.log('brand data', brandData), [isLoading])
 
   return (
     <section className="container min-h-screen pt-5 pb-32">

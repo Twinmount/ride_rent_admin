@@ -43,8 +43,6 @@ export default function CategoryForm({ type, formData }: CategoryFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof CategoryFormSchema>) {
-    console.log('values from form :', values)
-
     try {
       let data
       if (type === 'Add') {
@@ -61,7 +59,7 @@ export default function CategoryForm({ type, formData }: CategoryFormProps) {
         navigate('/manage-categories')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} Category failed`,

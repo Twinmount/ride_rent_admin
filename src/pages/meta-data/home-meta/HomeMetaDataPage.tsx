@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchHomeMetaList } from '@/api/meta-data'
 
 import LazyLoader from '@/components/skelton/LazyLoader'
-import { MetaDataNavDropdown } from '@/components/MetaDataNavDropdown'
 import SeoData from '@/components/general/SeoData'
 import { Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'

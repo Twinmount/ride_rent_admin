@@ -16,8 +16,6 @@ export default function EditLocationPage() {
     queryFn: () => fetchStateById(stateId as string),
   })
 
-  // useEffect(() => console.log(data), [isLoading])
-
   return (
     <section className="container min-h-screen pt-5 pb-32">
       <div className="mb-5 ml-5 flex-center w-fit gap-x-4">

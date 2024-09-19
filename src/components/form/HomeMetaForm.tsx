@@ -20,7 +20,6 @@ import Spinner from '../general/Spinner'
 
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '../ui/use-toast'
-import { useQueryClient } from '@tanstack/react-query'
 import { addHomeMetaData, updateHomeMetaData } from '@/api/meta-data'
 
 import { useState } from 'react'
@@ -38,7 +37,6 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
 
   const navigate = useNavigate()
   const { metaDataId } = useParams<{ metaDataId: string }>()
-  const queryClient = useQueryClient()
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof HomeMetaFormSchema>>({
@@ -48,8 +46,6 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof HomeMetaFormSchema>) {
-    console.log('values from form :', values)
-
     try {
       let data
       if (type === 'Add') {
@@ -66,7 +62,7 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
         navigate('/manage-meta-data')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} meta data failed`,
@@ -164,7 +160,16 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                   >
-                    <FormControl></FormControl>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Meta Description"
+                        {...field}
+                        className={`textarea rounded-xl transition-all duration-300 ${
+                          isFocused ? 'h-96' : 'h-28'
+                        }`} // Dynamic height
+                        onChange={handleInputChange} // Handle change to track character count
+                      />
+                    </FormControl>
                     <FormDescription className="w-full mt-1 ml-2 flex-between">
                       <span className="w-full max-w-[90%]">
                         Provide meta description.5000 characters max.

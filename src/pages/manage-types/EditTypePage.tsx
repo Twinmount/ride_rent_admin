@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import VehicleTypeForm from '@/components/form/VehicleTypesForm'
 import { CircleArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -28,8 +27,6 @@ export default function UpdateTypesPage() {
     queryKey: ['vehicle-type', vehicleTypeId],
     queryFn: () => fetchVehicleTypeById(vehicleTypeId as string),
   })
-
-  useEffect(() => console.log(vehicleTypeData), [isLoading])
 
   return (
     <section className="container min-h-screen pt-5 pb-32">

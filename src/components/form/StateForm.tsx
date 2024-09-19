@@ -60,7 +60,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
         navigate('/locations/manage-states')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} Location failed`,

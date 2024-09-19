@@ -46,8 +46,6 @@ export default function CityForm({ type, formData }: CityFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof CityFormSchema>) {
-    console.log('values from form :', values)
-
     try {
       let data
       if (type === 'Add') {
@@ -64,7 +62,7 @@ export default function CityForm({ type, formData }: CityFormProps) {
         navigate('/locations/manage-cities')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} City failed`,

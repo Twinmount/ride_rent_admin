@@ -41,7 +41,6 @@ export function LimitDropdown({
           <DropdownMenuRadioItem value="15">15</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="20">20</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="30">30</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="50">50</DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>

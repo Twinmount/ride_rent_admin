@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchListingMetaList } from '@/api/meta-data'
 
 import LazyLoader from '@/components/skelton/LazyLoader'
-import { MetaDataNavDropdown } from '@/components/MetaDataNavDropdown'
 import SeoData from '@/components/general/SeoData'
 import { fetchAllCategories } from '@/api/vehicle-categories'
 import { CategoryType } from '@/types/api-types/vehicleAPI-types'

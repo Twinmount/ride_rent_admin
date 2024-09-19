@@ -14,10 +14,6 @@ export default function ManageStatesPage() {
     queryFn: fetchAllStates,
   })
 
-  // useEffect(() => {
-  //   console.log(data)
-  // }, [isLoading])
-
   return (
     <section className="container h-auto min-h-screen pb-10">
       {/* navigate between states and cities */}

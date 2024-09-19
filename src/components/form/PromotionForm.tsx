@@ -51,8 +51,6 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof PromotionFormSchema>) {
-    // console.log('values from form :', values)
-
     try {
       let data
       if (type === 'Add') {
@@ -69,7 +67,7 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
         navigate('/manage-promotions')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} promotion failed`,

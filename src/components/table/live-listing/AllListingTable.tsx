@@ -86,7 +86,7 @@ export function AllListingTable({
                       key={cell.id}
                       className={`${
                         cell.column.id !== 'isDisabled' && 'min-w-44'
-                      }`}
+                      } max-w-44`}
                     >
                       {cell.column.id === 'vehicleModel' ? (
                         <Link

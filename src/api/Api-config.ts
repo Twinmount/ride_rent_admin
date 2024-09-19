@@ -41,5 +41,5 @@ export interface ApiConfig {
 // Set the default API configuration using the BaseConfig values.
 export const DEFAULT_API_CONFIG: ApiConfig = {
   baseURL: Config.API_URL, // Set the base URL for the API.
-  timeout: 30000, // Set a default timeout for requests (e.g., 10 seconds).
+  timeout: 30000, // Set a default timeout for requests (e.g., 30 seconds).
 }

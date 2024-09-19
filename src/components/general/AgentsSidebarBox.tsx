@@ -1,4 +1,4 @@
-import { getCompanyListingsCount } from '@/api/company'
+import { getCompanyListingsCount } from '@/api/company/companyApi'
 import { List } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { useLocation, useNavigate } from 'react-router-dom'

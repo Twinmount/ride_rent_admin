@@ -85,11 +85,11 @@ export function CompanyTable<TData extends CompanyType, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className=" !max-w-44">
                       {cell.column.id === 'companyName' ? (
                         <Link
                           to={`/registrations/view/${row.original.companyId}`}
-                          className="font-semibold text-blue-600 hover:underline"
+                          className="font-semibold text-blue-600 hover:underline "
                         >
                           {cell.getValue() as string}
                         </Link>

@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { CircleArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import FormSkelton from '@/components/skelton/FormSkelton'

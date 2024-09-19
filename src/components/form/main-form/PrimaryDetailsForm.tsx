@@ -77,8 +77,6 @@ export default function PrimaryDetailsForm({
 
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
-    console.log('level one submit handler values : ', values)
-
     const rentalError = validateRentalDetails(values.rentalDetails)
     if (rentalError) {
       form.setError('rentalDetails', {
@@ -140,7 +138,7 @@ export default function PrimaryDetailsForm({
           description: 'Something went wrong',
         })
       }
-      console.log(error)
+      console.error(error)
     }
   }
 

@@ -27,6 +27,7 @@ import { updateCompany } from '@/api/company'
 import Spinner from '@/components/general/Spinner'
 import { useState } from 'react'
 import { CompanyType } from '@/types/api-types/vehicleAPI-types'
+import { useQueryClient } from '@tanstack/react-query'
 
 type CompanyFormProps = {
   type: 'Update'
@@ -37,6 +38,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
   const navigate = useNavigate()
   const { companyId } = useParams<{ companyId: string }>()
   const [isEditing, setIsEditing] = useState(false)
+
+  const queryClient = useQueryClient()
 
   const initialValues =
     formData && type === 'Update'
@@ -64,8 +67,6 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
   }
 
   async function onSubmit(values: z.infer<typeof CompanyFormSchema>) {
-    console.log('company form values', values)
-
     try {
       const data = await updateCompany(values, companyId as string)
 
@@ -77,13 +78,16 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
         navigate('/registrations')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} Company failed`,
         description: 'Something went wrong',
       })
     } finally {
+      queryClient.invalidateQueries({
+        queryKey: ['companies'],
+      })
       setIsEditing(false)
     }
   }
@@ -225,6 +229,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                       placeholder="eg: ABC12345"
                       {...field}
                       className="input-field"
+                      readOnly={!isEditing}
                     />
                   </FormControl>
                   <FormDescription className="mt-1 ml-1">

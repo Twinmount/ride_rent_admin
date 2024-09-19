@@ -50,8 +50,6 @@ export default function VehicleTypeForm({
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof VehicleTypeFormSchema>) {
-    console.log('values', values)
-
     try {
       let data
       if (type === 'Add') {
@@ -72,7 +70,7 @@ export default function VehicleTypeForm({
         }
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} Vehicle type failed`,

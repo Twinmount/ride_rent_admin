@@ -38,8 +38,6 @@ const VehicleCategoryDropdown = ({
     queryFn: () => fetchAllCategories({ page: 1, limit: 20, sortOrder: 'ASC' }),
   })
 
-  useEffect(() => console.log(categoryData), [isCategoryLoading])
-
   useEffect(() => {
     if (isSuccess && categoryData) {
       setCategories(categoryData.result.list)

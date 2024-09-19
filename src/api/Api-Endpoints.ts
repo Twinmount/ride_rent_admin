@@ -101,4 +101,6 @@ export enum Slug {
   GET_ADMIN_LISTING_META = '/metadata/admin/listing',
   PUT_ADMIN_LISTING_META = '/metadata/listing',
   GET_ADMIN_LISTING_META_ALL = '/metadata/admin/listing/all',
+
+  GET_ADMIN_DASHBOARD = '/vehicle/admin/analytics',
 }

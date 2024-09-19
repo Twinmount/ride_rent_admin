@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -24,7 +24,6 @@ import Spinner from '@/components/general/Spinner'
 import { toast } from '@/components/ui/use-toast'
 import { Textarea } from './ui/textarea'
 import { useQueryClient } from '@tanstack/react-query'
-import { useLocation } from 'react-router-dom'
 
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -59,11 +58,6 @@ export default function VehicleStatusModal({
 
   const queryClient = useQueryClient()
 
-  const location = useLocation()
-
-  // Check if the current URL path is "/listings/rejected"
-  const isRejectedListings = location.pathname === '/listings/rejected'
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -71,6 +65,8 @@ export default function VehicleStatusModal({
       rejectionReason,
     },
   })
+
+  useEffect(() => setStatus(currentStatus), [])
 
   const handleFormSubmit = async (values: {
     approvalStatus: string
@@ -148,7 +144,7 @@ export default function VehicleStatusModal({
               />
 
               {/* Rejection Reason */}
-              {(status === 'REJECTED' || isRejectedListings) && (
+              {status === 'REJECTED' && (
                 <FormField
                   control={form.control}
                   name="rejectionReason"

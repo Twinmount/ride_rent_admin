@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAdminContext } from '@/context/AdminContext'
 import AdsSkelton from '@/components/skelton/AdsSkelton'
 import PromotionPreviewModal from '@/components/modal/PromotionPreviewModal'

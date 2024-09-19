@@ -1,5 +1,4 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CompanyType } from '@/types/api-types/vehicleAPI-types'
 
@@ -12,17 +11,7 @@ export const companyColumns = (
 ): ColumnDef<CompanyType>[] => [
   {
     accessorKey: 'companyName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Company Name
-          <ArrowUpDown className="w-4 h-4 ml-2" />
-        </Button>
-      )
-    },
+    header: 'Company Name',
   },
   {
     accessorKey: 'agentId',

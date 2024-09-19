@@ -82,7 +82,7 @@ export function GeneralListingTable({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="min-w-40 max-w-44">
                       {cell.column.id === 'vehicleModel' ? (
                         <Link
                           to={`/listings/edit/${row.original.vehicleId}/${row.original.company.companyId}/${row.original.company.userId}`}

@@ -49,8 +49,6 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof BrandFormSchema>) {
-    console.log('values from form :', values)
-
     try {
       let data
       if (type === 'Add') {
@@ -67,7 +65,7 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
         navigate('/manage-brands')
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast({
         variant: 'destructive',
         title: `${type} Brand failed`,
