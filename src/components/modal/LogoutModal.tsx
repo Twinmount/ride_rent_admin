@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button' // Assuming you have a Button component
+import { Button } from '@/components/ui/button'
 import { LogOut } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { clear } from '@/utils/storage'
@@ -29,7 +29,7 @@ export default function LogoutModal() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         tabIndex={-1}
-        className="w-full gap-2 mt-2 font-semibold text-white  bg-gray-900 border border-red-300 rounded-lg hover:bg-red-500 hover:text-white transition-colors h-9 flex-center"
+        className="w-full gap-2 mt-2 font-semibold text-white transition-colors bg-gray-900 border border-red-300 rounded-lg hover:bg-red-500 hover:text-white h-9 flex-center"
       >
         Logout <LogOut size={17} />
       </DialogTrigger>

@@ -12,6 +12,14 @@ export type stateType = {
   stateValue: string
 }
 
+export type NavbarStateType = {
+  stateName: string
+  stateValue: string
+  stateId: string
+  newVehicles: number
+  updatedVehicles: number
+}
+
 // admin context  type
 export type AdminContextType = {
   isSidebarOpen: boolean

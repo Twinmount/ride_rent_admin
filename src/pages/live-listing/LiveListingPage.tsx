@@ -10,6 +10,7 @@ import { SortDropdown } from '@/components/SortDropdown'
 import { ListingsNavDropdown } from '@/components/ListingsNavDropdown'
 import SearchComponent from '@/components/Search'
 import { useSearchParams } from 'react-router-dom'
+import { useAdminContext } from '@/context/AdminContext'
 
 export default function AllListingPage() {
   const [page, setPage] = useState(1)
@@ -19,8 +20,10 @@ export default function AllListingPage() {
   const [searchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
 
+  const { state } = useAdminContext()
+
   const { data, isLoading } = useQuery({
-    queryKey: ['vehicles listings', page, limit, sortOrder, searchTerm],
+    queryKey: ['vehicles listings', page, limit, sortOrder, searchTerm, state],
     queryFn: () =>
       fetchAllVehicles({
         page,
@@ -28,6 +31,7 @@ export default function AllListingPage() {
         sortOrder,
         approvalStatus: 'APPROVED',
         search: searchTerm.trim(),
+        stateId: state.stateId as string,
       }),
   })
 

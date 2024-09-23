@@ -240,7 +240,10 @@ export const OTPFormSchema = z.object({
 
 // Company Form Schema
 export const CompanyFormSchema = z.object({
-  companyName: z.string().min(1, 'Company name is required'),
+  companyName: z
+    .string()
+    .min(1, 'Company name is required')
+    .max(50, 'Maximum 50 characters allowed'),
   companyLogo: z
     .union([
       z.instanceof(File), // For when a file is selected

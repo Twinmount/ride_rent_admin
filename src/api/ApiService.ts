@@ -249,7 +249,6 @@ export class ApiService {
 }
 
 // Export a singleton instance of the ApiService.
-
 export const API = ApiService.getInstance(DEFAULT_API_CONFIG)
 
 export type API_Request_Status = 'SUCCESS' | 'NOT_SUCCESS'

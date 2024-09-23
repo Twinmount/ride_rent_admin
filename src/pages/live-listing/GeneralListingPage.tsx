@@ -13,6 +13,7 @@ import { toast } from '@/components/ui/use-toast'
 import { ListingsNavDropdown } from '@/components/ListingsNavDropdown'
 import SearchComponent from '@/components/Search'
 import { useSearchParams } from 'react-router-dom'
+import { useAdminContext } from '@/context/AdminContext'
 
 interface GeneralListingPageProps {
   queryKey: any[]
@@ -34,13 +35,15 @@ export default function GeneralListingPage({
   const [selectedVehicle, setSelectedVehicle] =
     useState<SingleVehicleType | null>(null)
 
+  const { state } = useAdminContext()
+
   const queryClient = useQueryClient()
 
   const [searchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''
 
   const { data, isLoading } = useQuery({
-    queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
+    queryKey: [...queryKey, page, limit, sortOrder, searchTerm, state],
     queryFn: () =>
       fetchNewOrModifiedVehicles({
         page,
@@ -50,6 +53,7 @@ export default function GeneralListingPage({
         approvalStatus,
         newRegistration,
         search: searchTerm.trim(),
+        stateId: state.stateId as string,
       }),
   })
 

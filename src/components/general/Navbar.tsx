@@ -3,10 +3,11 @@ import { useAdminContext } from '@/context/AdminContext'
 import { Menu } from 'lucide-react'
 
 import StatesDropdown from '../GeneralStatesDropdown'
-import { stateType } from '@/types/types'
+import { NavbarStateType } from '@/types/types'
+import ExcelDataDownloadModal from '../modal/ExcelDataDownloadModal'
 
 type NavbarProps = {
-  options: stateType[]
+  options: NavbarStateType[]
   isLoading: boolean
 }
 const Navbar = ({ options, isLoading }: NavbarProps) => {

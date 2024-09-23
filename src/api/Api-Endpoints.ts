@@ -103,4 +103,8 @@ export enum Slug {
   GET_ADMIN_LISTING_META_ALL = '/metadata/admin/listing/all',
 
   GET_ADMIN_DASHBOARD = '/vehicle/admin/analytics',
+
+  // excel data download endpoints
+  GET_DOWNLOAD_VEHICLE_DATA = '/vehicle/download/excel',
+  GET_DOWNLOAD_COMPANY_DATA = '/company/download/excel',
 }

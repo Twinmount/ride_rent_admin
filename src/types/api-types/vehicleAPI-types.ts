@@ -209,11 +209,17 @@ export interface FeaturesFormResponse {
   statusCode: number
 }
 
+export type EachFeatureValue = {
+  name: string
+  label: string
+  _id: string
+  selected: boolean
+}
 // Type for a single feature field
 export type FeatureField = {
   id: string
   name: string
-  values: { name: string; label: string; _id: string; selected: boolean }[] // Add `_id` field
+  values: EachFeatureValue[] // Add `_id` field
   vehicleCategoryId: string
   vehicleId: string | null
 }

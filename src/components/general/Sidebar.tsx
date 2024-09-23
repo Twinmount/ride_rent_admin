@@ -5,6 +5,7 @@ import { X } from 'lucide-react'
 import LogoutModal from '../modal/LogoutModal'
 import LiveListingsSidebar from './LiveListingsSidebarBox'
 import AgentsSidebarBox from './AgentsSidebarBox'
+import ExcelDataDownloadModal from '../modal/ExcelDataDownloadModal'
 
 const Sidebar = () => {
   const { isSidebarOpen, toggleSidebar, isSmallScreen } = useAdminContext()
@@ -92,7 +93,8 @@ const Sidebar = () => {
         })}
       </div>
       <div className="absolute w-[92%] ml-[0.4rem] bottom-0 pb-3 bg-white z-10 pt-2">
-        {/* <OrgSelect /> */}
+        {/* <download data /> */}
+        <ExcelDataDownloadModal />
 
         {/* logout modal */}
         <LogoutModal />

@@ -10,6 +10,7 @@ export const fetchAllVehicles = async (urlParams: {
   sortOrder: string
   approvalStatus?: VehicleStatusType
   search?: string
+  stateId: string
 }): Promise<FetchAllVehiclesResponse> => {
   try {
     // generating query params
@@ -17,6 +18,7 @@ export const fetchAllVehicles = async (urlParams: {
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
+      stateId: urlParams.stateId,
     })
 
     if (urlParams.approvalStatus) {
@@ -53,6 +55,7 @@ export const fetchNewOrModifiedVehicles = async (urlParams: {
   userId?: string
   newRegistration?: boolean
   search?: string
+  stateId: string
 }): Promise<FetchAllVehiclesResponse> => {
   try {
     // generating query params
@@ -60,6 +63,7 @@ export const fetchNewOrModifiedVehicles = async (urlParams: {
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
+      stateId: urlParams.stateId,
     })
 
     if (urlParams.approvalStatus) {

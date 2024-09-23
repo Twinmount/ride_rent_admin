@@ -128,3 +128,14 @@
 .react-datepicker__time-list-item--selected {
   background-color: #624cf5 !important;
 }
+
+/* features form accordion component styling */
+.szh-accordion__item-content {
+  transition: height 0.25s cubic-bezier(0, 0, 0, 1);
+}
+
+.szh-accordion__item,
+szh-accordion__item-heading,
+szh-accordion__item-btn {
+  width: 100%;
+}

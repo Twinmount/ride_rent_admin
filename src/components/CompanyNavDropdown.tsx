@@ -14,15 +14,18 @@ import { ChevronDown, Loader2 } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import NotificationIndicator from './general/NotificationIndicator'
+import { useAdminContext } from '@/context/AdminContext'
 
 export function CompanyNavDropdown() {
   const navigate = useNavigate()
   const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
 
+  const { state } = useAdminContext()
+
   const { data, isLoading } = useQuery({
     queryKey: ['company-listing-count'],
-    queryFn: () => getCompanyListingsCount(),
+    queryFn: () => getCompanyListingsCount(state.stateId as string),
   })
 
   // Destructure data from API response

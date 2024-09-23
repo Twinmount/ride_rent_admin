@@ -177,7 +177,13 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
               <SingleFileUpload
                 name={field.name}
                 label="Commercial License"
-                description="Commercial License can have a maximum size of 5MB."
+                description={
+                  <>
+                    Please upload a <strong>PHOTO</strong> or a{' '}
+                    <strong>SCREENSHOT</strong> of your commercial license,
+                    maximum file size 5MB.
+                  </>
+                }
                 existingFile={formData?.commercialLicense}
                 maxSizeMB={5}
                 isDisabled={!isEditing}
@@ -226,17 +232,16 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 <div className="flex-col items-start w-full">
                   <FormControl>
                     <Input
-                      placeholder="eg: ABC12345"
+                      placeholder="Enter company registration number"
                       {...field}
                       className="input-field"
                       readOnly={!isEditing}
                     />
                   </FormControl>
                   <FormDescription className="mt-1 ml-1">
-                    Enter your company registration number (e.g., ABC12345). The
-                    number should be a combination of letters and numbers,
-                    without any spaces or special characters, up to 15
-                    characters.
+                    Enter your company registration number. The number should be
+                    a combination of letters and numbers, without any spaces or
+                    special characters, up to 15 characters.
                   </FormDescription>
                   <FormMessage />
                 </div>

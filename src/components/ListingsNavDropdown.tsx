@@ -14,6 +14,7 @@ import { ChevronDown, Loader2 } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import NotificationIndicator from './general/NotificationIndicator'
 import { useState } from 'react'
+import { useAdminContext } from '@/context/AdminContext'
 
 type ListingStatus = 'Live' | 'New' | 'Updated' | 'Pending' | 'Rejected'
 
@@ -22,9 +23,12 @@ export function ListingsNavDropdown() {
   const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
 
+  const { state } = useAdminContext()
+
   const { data, isLoading } = useQuery({
     queryKey: ['vehicle-listing-count'],
-    queryFn: () => getVehicleListingsCount(),
+    queryFn: () => getVehicleListingsCount(state.stateId as string),
+    staleTime: 5 * (60 * 1000), //5 minutes,
   })
 
   // Destructure data from API response
