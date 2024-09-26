@@ -335,3 +335,16 @@ export interface VehicleListingResponse {
   status: string
   statusCode: number
 }
+
+// all vehicle listing count response
+export interface AllVehicleListingResponse {
+  result: {
+    stateName: string
+    stateValue: string
+    stateId: string
+    newVehicles: number
+    updatedVehicles: number
+  }[]
+  status: string
+  statusCode: number
+}

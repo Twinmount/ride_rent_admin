@@ -4,33 +4,36 @@ import MainWrapper from '@/components/general/MainWrapper'
 import { useAdminContext } from '@/context/AdminContext'
 import { Outlet } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { fetchAllStates } from '@/api/states'
 import { useEffect } from 'react'
-import { stateType } from '@/types/types'
 import StatesLoadingSkelton from '@/components/skelton/StatesLoader'
 import ScrollToTop from '@/helpers/ScrollToTop'
+import { getAllVehicleListingCount } from '@/api/vehicle'
 
 export default function Layout() {
   const { state, setState } = useAdminContext()
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['states'],
-    queryFn: fetchAllStates,
+    queryKey: ['states-with-listing-count'],
+    queryFn: getAllVehicleListingCount,
+    staleTime: 5 * 60 * 1000,
   })
 
-  // Extract the result array from the FetchStatesResponse
-  const options = data?.result.map((state: stateType) => ({
-    stateId: state.stateId,
-    stateName: state.stateName,
-    stateValue: state.stateValue,
-  })) as stateType[]
+  const options = data?.result || []
 
-  // setting the default location
+  // Find Dubai state and set as default if state is not set
   useEffect(() => {
-    if (options?.length && !state.stateId) {
-      setState(options[0])
+    if (!isLoading && options?.length && !state.stateId) {
+      const dubaiState = options.find(
+        (state) => state.stateValue.toLowerCase() === 'dubai'
+      )
+      if (dubaiState) {
+        const { stateId, stateName, stateValue } = dubaiState
+        setState({ stateId, stateName, stateValue })
+      } else {
+        setState(options[0])
+      }
     }
-  }, [options, state, setState, isLoading])
+  }, [options, state.stateId, setState, isLoading])
 
   if (isError) {
     return (

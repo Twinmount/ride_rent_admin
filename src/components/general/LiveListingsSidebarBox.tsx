@@ -1,4 +1,4 @@
-import { getVehicleListingsCount } from '@/api/vehicle'
+import { getVehicleListingsCountByState } from '@/api/vehicle'
 import { List } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -10,12 +10,16 @@ const LiveListingsSidebar = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
+  const { state } = useAdminContext()
+
   const { data, isLoading } = useQuery({
-    queryKey: ['vehicle-listing-count'],
-    queryFn: getVehicleListingsCount,
+    queryKey: ['vehicle-listing-count-by-state', state.stateId],
+    queryFn: () => getVehicleListingsCountByState(state.stateId),
+    staleTime: 5 * 60 * 1000,
+    enabled: !!state.stateId && typeof state.stateId === 'string',
   })
 
-  const listingCounts = data?.result || { newVehicle: 0 }
+  const listingCounts = data?.result || { newVehicle: 0, updated: 0 }
 
   const handleClick = () => {
     navigate('/listings')
@@ -23,6 +27,9 @@ const LiveListingsSidebar = () => {
   }
 
   const isActive = location.pathname.startsWith('/listings')
+
+  const inNotificationEnable =
+    (!isLoading && listingCounts.newVehicle > 0) || listingCounts.updated > 0
 
   return (
     <div
@@ -38,8 +45,8 @@ const LiveListingsSidebar = () => {
     >
       <List className="text-xl" size={20} strokeWidth={3} />
       <span className="font-medium">Live Listings</span>
-      {!isActive && !isLoading && listingCounts.newVehicle > 0 && (
-        <NotificationIndicator />
+      {inNotificationEnable && (
+        <NotificationIndicator dotColor={isActive ? 'white' : 'yellow'} />
       )}
     </div>
   )

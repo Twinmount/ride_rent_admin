@@ -47,7 +47,7 @@ const MultiSelectDropdown = ({
       updatedOptions = [...selectedOptions, optionName]
     }
     setSelectedOptions(updatedOptions)
-    onChangeHandler(updatedOptions) // Update form value
+    onChangeHandler(updatedOptions)
   }
 
   return (

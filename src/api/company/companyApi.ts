@@ -210,23 +210,22 @@ export const getAllCompany = async ({
 }
 
 // fetch listings count for vehicles
-export const getCompanyListingsCount = async (
-  stateId: string
-): Promise<CompanyListingResponse> => {
-  try {
-    const url = `${Slug.GET_COMPANY_LISTINGS_COUNT}/stateId=${stateId}`
+export const getCompanyListingsCount =
+  async (): Promise<CompanyListingResponse> => {
+    try {
+      const url = `${Slug.GET_COMPANY_LISTINGS_COUNT}`
 
-    const data = await API.get<CompanyListingResponse>({
-      slug: url,
-    })
+      const data = await API.get<CompanyListingResponse>({
+        slug: url,
+      })
 
-    if (!data) {
-      throw new Error('Failed to fetch company listing count data')
+      if (!data) {
+        throw new Error('Failed to fetch company listing count data')
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error fetching company listing count data:', error)
+      throw error
     }
-
-    return data
-  } catch (error) {
-    console.error('Error fetching company listing count data:', error)
-    throw error
   }
-}

@@ -2,6 +2,7 @@ import { API } from '../ApiService'
 import { Slug } from '../Api-Endpoints'
 import {
   AddPrimaryFormResponse,
+  AllVehicleListingResponse,
   FeaturesFormResponse,
   FetchAllVehiclesResponse,
   GetFeaturesFormDataResponse,
@@ -550,23 +551,44 @@ export const toggleVehicleVisibility = async ({
 }
 
 // fetch listings count for vehicles
-export const getVehicleListingsCount = async (
+export const getVehicleListingsCountByState = async (
   stateId: string
 ): Promise<VehicleListingResponse> => {
   try {
-    const url = `${Slug.GET_VEHICLE_LISTINGS_COUNT}/stateId=${stateId}`
+    const url = `${Slug.GET_VEHICLE_LISTINGS_COUNT_BY_STATE}?stateId=${stateId}`
 
     const data = await API.get<VehicleListingResponse>({
       slug: url,
     })
 
     if (!data) {
-      throw new Error('Failed to fetch vehicle listing count data')
+      throw new Error('Failed to fetch vehicle listing count per state data')
     }
 
     return data
   } catch (error) {
-    console.error('Error fetching vehicle listing count data:', error)
+    console.error('Error fetching vehicle listing count per state data:', error)
     throw error
   }
 }
+
+// fetch listings count for vehicles per state
+export const getAllVehicleListingCount =
+  async (): Promise<AllVehicleListingResponse> => {
+    try {
+      const url = `${Slug.GET_ALL_VEHICLE_LISTINGS_COUNT}`
+
+      const data = await API.get<AllVehicleListingResponse>({
+        slug: url,
+      })
+
+      if (!data) {
+        throw new Error('Failed to fetch all vehicle listing count data')
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error fetching all vehicle listing count data:', error)
+      throw error
+    }
+  }

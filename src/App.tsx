@@ -135,11 +135,11 @@ const router = createBrowserRouter([
       { path: '/verify-otp', element: <VerifyOTP /> },
 
       {
-        element: <Layout />,
+        element: <ProtectedRoute />,
 
         children: [
           {
-            element: <ProtectedRoute />,
+            element: <Layout />,
             children: [
               // dashboard route
               { path: '/', element: <Dashboard /> },

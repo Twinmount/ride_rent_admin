@@ -1,4 +1,4 @@
-import { getVehicleListingsCount } from '@/api/vehicle'
+import { getVehicleListingsCountByState } from '@/api/vehicle'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -26,9 +26,10 @@ export function ListingsNavDropdown() {
   const { state } = useAdminContext()
 
   const { data, isLoading } = useQuery({
-    queryKey: ['vehicle-listing-count'],
-    queryFn: () => getVehicleListingsCount(state.stateId as string),
-    staleTime: 5 * (60 * 1000), //5 minutes,
+    queryKey: ['vehicle-listing-count-by-state', state.stateId],
+    queryFn: () => getVehicleListingsCountByState(state.stateId as string),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled: !!state.stateId && typeof state.stateId === 'string',
   })
 
   // Destructure data from API response

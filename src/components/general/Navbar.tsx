@@ -4,7 +4,6 @@ import { Menu } from 'lucide-react'
 
 import StatesDropdown from '../GeneralStatesDropdown'
 import { NavbarStateType } from '@/types/types'
-import ExcelDataDownloadModal from '../modal/ExcelDataDownloadModal'
 
 type NavbarProps = {
   options: NavbarStateType[]

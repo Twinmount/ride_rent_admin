@@ -7,7 +7,7 @@ export type orgType = {
 
 // admin context  state type
 export type stateType = {
-  stateId?: string
+  stateId: string
   stateName: string
   stateValue: string
 }

@@ -72,7 +72,8 @@ export enum Slug {
   GET_NEW_OR_MODIFIED_VEHICLES = '/vehicle/all/modified',
   PUT_TOGGLE_VEHICLE_VISIBILITY = '/vehicle/toggle-visibility',
   GET_LEVELS_FILLED = '/vehicle/level-filled',
-  GET_VEHICLE_LISTINGS_COUNT = '/vehicle/dashboard/count',
+  GET_VEHICLE_LISTINGS_COUNT_BY_STATE = '/vehicle/dashboard/count',
+  GET_ALL_VEHICLE_LISTINGS_COUNT = '/vehicle/dashboard/count/state',
 
   // vehicle primary form endPoints
   POST_PRIMARY_FORM = '/vehicle/level-one',

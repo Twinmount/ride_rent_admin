@@ -125,9 +125,6 @@ export class ApiService {
       (error: AxiosError) => {
         if (error.response && error.response.status === 401) {
           console.log('apiService 401 error: ', error.response)
-          remove(StorageKeys.ACCESS_TOKEN)
-          remove(StorageKeys.REFRESH_TOKEN)
-          window.location.href = '/login'
         }
         return Promise.reject(error)
       }
