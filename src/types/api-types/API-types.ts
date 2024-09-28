@@ -320,3 +320,31 @@ export interface FetchDashboardAnalytics {
   status: string
   statusCode: number
 }
+
+// api response types for single file upload
+export interface SingleFileUploadResponse {
+  result: {
+    message: string
+    fileName: string
+    path: string
+  }
+  status: string
+  statusCode: number
+}
+
+export interface GetSingleImageResponse {
+  status: string
+  statusCode: number
+  result: {
+    url: string
+  }
+}
+
+export interface DeleteSingleImageResponse {
+  status: string
+  statusCode: number
+  result: {
+    message: string
+    fileFullPath: string
+  }
+}

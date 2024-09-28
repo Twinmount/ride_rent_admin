@@ -25,7 +25,7 @@ import { Label } from '@/components/ui/label'
 import { PhoneInput } from 'react-international-phone'
 import 'react-international-phone/style.css'
 import RentalDetailsFormField from '../RentalDetailsFormField'
-import FileUpload from '../FileUpload'
+import MultipleFileUpload from '../MultipleFileUpload'
 import { validateRentalDetails } from '@/helpers/form'
 import BrandsDropdown from '../BrandsDropdown'
 import DatePicker from 'react-datepicker'
@@ -323,7 +323,7 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="vehiclePhotos"
             render={() => (
-              <FileUpload
+              <MultipleFileUpload
                 name="vehiclePhotos"
                 label="Vehicle Photos"
                 multiple={true}
@@ -339,7 +339,7 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="commercialLicenses"
             render={() => (
-              <FileUpload
+              <MultipleFileUpload
                 name="commercialLicenses"
                 label="Registration Card / Mulkia"
                 multiple={true}
@@ -474,7 +474,10 @@ export default function PrimaryDetailsForm({
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    Enter the <span className="font-semibold text-green-400">Whatsapp</span>{' '}
+                    Enter the{' '}
+                    <span className="font-semibold text-green-400">
+                      Whatsapp
+                    </span>{' '}
                     mobile number. This number will receive the direct booking
                     details.
                   </FormDescription>

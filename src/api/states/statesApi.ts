@@ -8,38 +8,18 @@ import {
 export interface StateType {
   stateName: string
   stateValue: string
-  subHeading: string
-  metaTitle: string
-  metaDescription: string
-  stateImage: File | string
+  stateImage: string
 }
 
 // add state
 export const addState = async (values: StateType) => {
   try {
-    // Create a new FormData instance
-    const formData = new FormData()
-
-    // Append all the fields to the FormData object
-    formData.append('stateName', values.stateName)
-    formData.append('stateValue', values.stateValue)
-    formData.append('subHeading', values.subHeading)
-    formData.append('metaTitle', values.metaTitle)
-    formData.append('metaDescription', values.metaDescription)
-
-    // Append the file to FormData if it exists
-    if (values.stateImage) {
-      formData.append('stateImage', values.stateImage)
-    }
-
-    // Send the FormData object using the API post method
     const data = await API.post({
       slug: Slug.ADD_STATE,
-      body: formData, // Passing formData instead of JSON object
-      axiosConfig: {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Ensure the correct content type is set
-        },
+      body: {
+        stateName: values.stateName,
+        stateValue: values.stateValue,
+        stateImage: values.stateImage,
       },
     })
 
@@ -53,31 +33,14 @@ export const addState = async (values: StateType) => {
 // update state
 export const updateState = async (values: StateType, stateId: string) => {
   try {
-    console.log('updateState api values:', values)
-    // Create a new FormData instance
-    const formData = new FormData()
-
-    // Append all the fields to the FormData object
-    formData.append('stateId', stateId)
-    formData.append('stateName', values.stateName)
-    formData.append('stateValue', values.stateValue)
-    formData.append('subHeading', values.subHeading)
-    formData.append('metaTitle', values.metaTitle)
-    formData.append('metaDescription', values.metaDescription)
-
-    // Check if the stateImage is a File (new image) or a string (existing URL)
-    if (values.stateImage instanceof File) {
-      formData.append('stateImage', values.stateImage)
-    }
-
     // Send the FormData object using the API put method
     const data = await API.put({
       slug: Slug.PUT_STATE, // Use the correct slug
-      body: formData,
-      axiosConfig: {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      body: {
+        stateId: stateId,
+        stateName: values.stateName,
+        stateValue: values.stateValue,
+        stateImage: values.stateImage, // String URL of the uploaded image
       },
     })
 

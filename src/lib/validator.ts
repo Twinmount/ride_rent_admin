@@ -70,25 +70,7 @@ export const StateFormSchema = z.object({
       /^[a-z-]+$/,
       'State value should only contain lowercase letters and hyphens'
     ),
-
-  subHeading: z.string().min(1, 'State page subheading required'),
-  // Define logo as a union type of File and string
-  stateImage: z
-    .union([
-      z.instanceof(File), // For when a file is selected
-      z.string(), // For when a URL from backend is used
-    ])
-    .refine((value) => {
-      // Ensure value is either a File or a non-empty string (URL)
-      if (value instanceof File) {
-        return true
-      } else if (typeof value === 'string') {
-        return value.trim().length > 0
-      }
-      return false
-    }, 'Logo must be either a valid File or a non-empty URL'),
-  metaTitle: z.string().min(1, 'Meta title is required'),
-  metaDescription: z.string().min(1, 'Meta description is required'),
+  stateImage: z.string().min(1, 'State image is required'),
 })
 
 // City Form Schema

@@ -69,14 +69,10 @@ export type BrandFormType = {
 }
 
 export type StateFormType = {
-  countryId?: string
-  stateId: string
+  stateId?: string
   stateName: string
   stateValue: string
-  subHeading: string
-  metaTitle: string
-  metaDescription: string
-  stateImage: any
+  stateImage: string
 }
 
 export type CategoryFormType = {

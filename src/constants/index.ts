@@ -103,14 +103,10 @@ export const BrandFormDefaultValues: BrandFormType = {
 
 // State form default values
 export const StateFormDefaultValues: StateFormType = {
-  countryId: '',
   stateId: '',
   stateName: '',
   stateValue: '',
-  subHeading: '',
   stateImage: '',
-  metaTitle: '',
-  metaDescription: '',
 }
 export const CityFormDefaultValues: CityFormType = {
   cityName: '',

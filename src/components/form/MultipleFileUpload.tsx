@@ -15,7 +15,7 @@ import { validateFileSize } from '@/helpers/form'
 import ImagePreviewModal from '../modal/ImagePreviewModal'
 import ImagePlaceholder from '../ImagePlaceholder'
 
-type FileUploadProps = {
+type MultipleFileUploadProps = {
   name: string
   label: string
   multiple?: boolean
@@ -24,7 +24,7 @@ type FileUploadProps = {
   maxSizeMB?: number
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({
+const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   name,
   label,
   multiple = false,
@@ -242,4 +242,4 @@ const FileUpload: React.FC<FileUploadProps> = ({
   )
 }
 
-export default FileUpload
+export default MultipleFileUpload

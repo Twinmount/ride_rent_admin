@@ -30,7 +30,7 @@ export default function ImagePreviewModal({
         </DialogTitle>
         <DialogDescription aria-label="Preview of the selected image" />
         <DialogHeader className="w-full max-w-full overflow-hidden">
-          <div className="w-full h-auto max-h-[400px] rounded-lg flex-center overflow-hidden">
+          <div className="w-full h-auto max-h-[400px] min-h-44 rounded-lg flex-center overflow-hidden">
             {typeof selectedImage === 'string' ? (
               <img
                 src={selectedImage}

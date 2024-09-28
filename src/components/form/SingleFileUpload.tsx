@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+
 import { useFormContext, Controller } from 'react-hook-form'
 import {
   FormControl,
@@ -8,84 +9,117 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Download, Eye, Upload, X } from 'lucide-react'
-import { validateFileSize } from '@/helpers/form'
+import { Upload, Eye, Download, Trash2 } from 'lucide-react' // Added Download icon
 import { toast } from '@/components/ui/use-toast'
 import ImagePreviewModal from '../modal/ImagePreviewModal'
+import { uploadSingleFile, getSingleImage } from '@/api/file-upload'
+import { GcsFilePaths } from '@/constants/enum'
+import { Skeleton } from '../ui/skeleton'
+import Spinner from '../general/Spinner'
+import useImageUpload from '@/hooks/useImageUpload'
+import useBeforeUnload from '@/hooks/useBeforeUnload'
+import { useNavigate } from 'react-router-dom'
 
 type SingleFileUploadProps = {
   name: string
   label: string
   description: React.ReactNode
-  maxSizeMB?: number
   existingFile?: string | null
   isDisabled?: boolean
+  maxSizeMB?: number
+  isDownloadable?: boolean
 }
 
-const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
+const SingleFileUpload = ({
   name,
   label,
   description,
-  maxSizeMB = 5,
   existingFile = null,
   isDisabled = false,
-}) => {
+  maxSizeMB = 5,
+  isDownloadable = false,
+}: SingleFileUploadProps) => {
   const { control, setValue, clearErrors } = useFormContext()
+  const navigate = useNavigate()
   const [previewURL, setPreviewURL] = useState<string | null>(existingFile)
-  const [selectedImage, setSelectedImage] = useState<string | null>(null) // To track the image for modal preview
-  const [isDeleted, setIsDeleted] = useState(false) // Track if the file is deleted
+  const [isLoading, setIsLoading] = useState(false)
+  const [previewImage, setPreviewImage] = useState<string | null>(null)
+
+  // Use the custom image upload hook for managing localStorage
+  const { addImage, trackDeletedImage, cleanUpUnsubmittedImages } =
+    useImageUpload(name)
+
+  // BeforeUnload Hook: Trigger cleanup when the user navigates away
+  useBeforeUnload(
+    'You have unsaved changes, are you sure you want to leave?',
+    cleanUpUnsubmittedImages
+  )
 
   useEffect(() => {
-    // Set the preview to the existing URL only if no new file has been selected and the file has not been deleted
-    if (!previewURL && existingFile && !isDeleted) {
-      setPreviewURL(existingFile) // Set the existing file URL as preview
-      setValue(name, existingFile) // Store the existing URL as the form value (initial state)
+    if (!previewURL && existingFile) {
+      setPreviewURL(existingFile)
+      setValue(name, existingFile)
     }
-  }, [existingFile, setValue, name, previewURL, isDeleted])
+  }, [existingFile, setValue, name, previewURL])
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0]
     if (file) {
-      if (!validateFileSize(file, maxSizeMB)) {
+      const fileSizeMB = file.size / (1024 * 1024)
+      if (fileSizeMB > maxSizeMB) {
         toast({
           variant: 'destructive',
-          title: 'Invalid file size',
-          description: `File ${file.name} exceeds the size limit of ${maxSizeMB}MB`,
+          title: `Image size exceeds ${maxSizeMB} MB`,
         })
         return
       }
 
-      // Set preview for the new file and store the file in form state
-      setPreviewURL(URL.createObjectURL(file)) // Set the new file preview
-      setValue(name, file) // Set the new file in the form state
-      clearErrors(name)
+      setIsLoading(true)
+      try {
+        const uploadResponse = await uploadSingleFile(GcsFilePaths.IMAGE, file)
+        const uploadedFilePath = uploadResponse.result.path
 
-      // Reset the input to allow re-uploading the same file after deletion
-      event.target.value = ''
+        addImage(uploadedFilePath) // Track image in localStorage
+
+        setValue(name, uploadedFilePath)
+
+        const imageResponse = await getSingleImage(uploadedFilePath)
+        const imageURL = imageResponse.result.url
+
+        setPreviewURL(imageURL)
+        clearErrors(name)
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'File upload failed',
+          description: 'Please try again.',
+        })
+      } finally {
+        setIsLoading(false)
+      }
     }
   }
 
   const handleDeleteImage = () => {
     if (previewURL) {
-      // If the preview is a blob, revoke the object URL to free up memory
-      if (previewURL.startsWith('blob:')) {
-        URL.revokeObjectURL(previewURL)
-      }
-      // Clear the preview and form state
+      trackDeletedImage(previewURL) // Track deleted image
       setPreviewURL(null)
       setValue(name, null)
-      setIsDeleted(true) // Set the deletion flag to prevent re-setting the file
     }
   }
 
-  const handleDownload = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
-    e.preventDefault() // Prevent default anchor behavior
-    const url = e.currentTarget.href // Get the URL from the anchor's href
-    window.open(url, '_blank') // Open the image in a new tab
+  const handlePreviewImage = () => {
+    if (previewURL) {
+      setPreviewImage(previewURL) // Set selected image for preview modal
+    }
+  }
+
+  const handleDownloadImage = () => {
+    if (previewURL) {
+      window.open(previewURL, '_blank') // Open the image in a new tab
+    }
   }
 
   return (
@@ -103,78 +137,71 @@ const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
                 <>
                   <Input
                     type="file"
-                    onChange={(e) => handleFileChange(e)} // Handle file change logic here
+                    onChange={handleFileChange}
                     className="hidden"
                     id={`file-upload-${name}`}
-                    disabled={isDisabled}
+                    disabled={isDisabled || isLoading}
                   />
                   <div className="flex items-center gap-4 mt-2">
-                    {previewURL ? (
+                    {isLoading ? (
+                      <div className="relative flex items-center justify-center w-24 h-24 cursor-wait">
+                        <Skeleton className="w-full h-full bg-gray-300 rounded-xl" />
+                        <div className="absolute z-10">
+                          <Spinner color="text-yellow" />
+                        </div>
+                      </div>
+                    ) : previewURL ? (
                       <div className="relative w-24 group/box">
                         <img
-                          src={previewURL} // Show the preview image, either from the URL or new file
+                          src={previewURL}
                           alt="Preview"
                           className="object-cover w-full h-24 rounded-md"
                         />
-                        <div className="absolute top-0 bottom-0 left-0 right-0 space-x-2 ">
+                        <div className="absolute top-0 bottom-0 left-0 right-0 space-x-2">
                           {!isDisabled && (
-                            <button
-                              type="button"
-                              className="absolute p-1 bg-white rounded-full shadow-md h-fit right-1 top-1"
-                              onClick={handleDeleteImage}
-                              disabled={isDisabled}
-                            >
-                              <X className="w-5 h-5 text-red-600" />
-                            </button>
-                          )}
-
-                          <div className="absolute left-0 right-0 flex items-center justify-around bottom-1 h-fit">
-                            {/* Preview Button */}
-                            {typeof previewURL === 'string' && (
+                            <>
                               <button
                                 type="button"
-                                className="hidden p-1 bg-white rounded-full shadow-md h-fit group-hover/box:block"
-                                onClick={() => setSelectedImage(previewURL)}
+                                className="absolute p-1 bg-white rounded-full shadow-md h-fit right-1 top-1"
+                                onClick={handleDeleteImage}
+                                disabled={isDisabled || isLoading}
                               >
-                                <Eye className="w-5 h-5 text-green-500" />
+                                <Trash2 className="w-5 h-5 text-red-600" />
                               </button>
-                            )}
 
-                            {/* Download Button (only for string files) */}
-                            {typeof previewURL === 'string' && (
-                              <a
-                                href={previewURL} // Add the file URL here
-                                onClick={(e) => handleDownload(e)} // Open the image in a new tab
-                                className="hidden p-1 bg-white rounded-full shadow-md h-fit group-hover/box:block"
-                                target="_blank" // Optional: Ensure it's opened in a new tab by default
-                                rel="noopener noreferrer"
-                                aria-label="download file"
+                              {/* Eye Icon for previewing the image */}
+                              <button
+                                type="button"
+                                className="absolute p-1 bg-white rounded-full shadow-md h-fit left-1 bottom-1"
+                                onClick={handlePreviewImage}
+                                disabled={isLoading}
                               >
-                                <Download className="w-5 h-5 text-blue-500" />
-                              </a>
-                            )}
-                          </div>
+                                <Eye className="w-5 h-5 text-blue-600" />
+                              </button>
+
+                              {/* Download button if isDownloadable is true */}
+                              {isDownloadable && (
+                                <button
+                                  type="button"
+                                  className="absolute p-1 bg-white rounded-full shadow-md h-fit right-1 bottom-1"
+                                  onClick={handleDownloadImage}
+                                  disabled={isLoading}
+                                >
+                                  <Download className="w-5 h-5 text-green-600" />
+                                </button>
+                              )}
+                            </>
+                          )}
                         </div>
                       </div>
                     ) : (
                       <label
                         htmlFor={`file-upload-${name}`}
-                        className="w-full cursor-pointer"
+                        className="w-24 cursor-pointer"
                       >
-                        <div className="flex items-center justify-center w-full h-16 gap-2 border rounded-lg bg-gray-50">
-                          <span
-                            className={`text-lg ${
-                              isDisabled ? 'opacity-40' : 'text-yellow'
-                            }`}
-                          >
-                            Upload
-                          </span>
-                          <Upload
-                            size={24}
-                            className={`${
-                              isDisabled ? 'opacity-30' : 'text-yellow'
-                            }`}
-                          />
+                        <div className="flex flex-col items-center justify-center w-24 h-24 border rounded-lg cursor-pointer bg-gray-50">
+                          <Upload size={24} className="text-yellow" />
+                          <span className="text-sm text-yellow">Upload</span>
                         </div>
                       </label>
                     )}
@@ -188,10 +215,11 @@ const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
         </div>
       </FormItem>
 
-      {selectedImage && (
+      {/* Image Preview Modal */}
+      {previewImage && (
         <ImagePreviewModal
-          selectedImage={selectedImage}
-          setSelectedImage={setSelectedImage}
+          selectedImage={previewImage}
+          setSelectedImage={setPreviewImage}
         />
       )}
     </>

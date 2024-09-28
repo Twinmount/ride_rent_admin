@@ -17,7 +17,6 @@ import { Button } from '@/components/ui/button'
 import { StateFormType } from '@/types/types'
 import { StateFormSchema } from '@/lib/validator'
 import { StateFormDefaultValues } from '@/constants'
-import { Textarea } from '../ui/textarea'
 import Spinner from '../general/Spinner'
 import SingleFileUpload from './SingleFileUpload'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -44,6 +43,10 @@ export default function StateForm({ type, formData }: StateFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof StateFormSchema>) {
+    console.log('state form values :', values)
+
+    return
+
     try {
       let data
       if (type === 'Add') {
@@ -57,6 +60,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
           title: `${type} State successfully`,
           className: 'bg-yellow text-white',
         })
+
         navigate('/locations/manage-states')
       }
     } catch (error) {
@@ -133,90 +137,15 @@ export default function StateForm({ type, formData }: StateFormProps) {
 
           <FormField
             control={form.control}
-            name="subHeading"
-            render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
-                  State Subheading<span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="flex-col items-start w-full">
-                  <FormControl>
-                    <Input
-                      placeholder="Page Sub Heading"
-                      {...field}
-                      className="input-field"
-                    />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Add the subheading for the state
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="stateImage"
             render={({ field }) => (
               <SingleFileUpload
                 name={field.name}
                 label="State Image"
-                description="Upload a image with a maximum file size of 1mb."
-                existingFile={formData?.stateImage}
-                maxSizeMB={1}
+                description="Upload an image with a maximum file size of 1mb."
+                isDownloadable
+                existingFile={formData?.stateImage || null}
               />
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="metaTitle"
-            render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
-                  Page Meta Title <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="flex-col items-start w-full">
-                  <FormControl>
-                    <Input
-                      placeholder="Meta Tag"
-                      {...field}
-                      className="input-field"
-                    />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Meta title for the page
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="metaDescription"
-            render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
-                  Page Meta Description{' '}
-                  <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="flex-col items-start w-full">
-                  <FormControl>
-                    <Textarea
-                      placeholder="Meta Description"
-                      {...field}
-                      className="textarea rounded-2xl"
-                    />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Meta description for the page
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
             )}
           />
         </div>
