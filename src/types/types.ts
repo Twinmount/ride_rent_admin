@@ -61,10 +61,7 @@ export type VehicleTypeFormType = {
 export type BrandFormType = {
   brandName: string
   brandValue: string
-  subHeading: string
   vehicleCategoryId: string
-  metaTitle: string
-  metaDescription: string
   brandLogo: string
 }
 
@@ -92,7 +89,7 @@ export type LinkFormType = {
 }
 
 export type PromotionFormType = {
-  promotionImage: any
+  promotionImage: string
   promotionLink: string
 }
 

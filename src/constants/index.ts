@@ -92,11 +92,8 @@ export const VehicleTypeFormDefaultValues: VehicleTypeFormType = {
 
 // Vehicle type form default values
 export const BrandFormDefaultValues: BrandFormType = {
-  metaTitle: '',
-  metaDescription: '',
   brandName: '',
   brandValue: '',
-  subHeading: '',
   vehicleCategoryId: '',
   brandLogo: '',
 }

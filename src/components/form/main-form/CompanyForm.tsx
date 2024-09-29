@@ -28,6 +28,7 @@ import Spinner from '@/components/general/Spinner'
 import { useState } from 'react'
 import { CompanyType } from '@/types/api-types/vehicleAPI-types'
 import { useQueryClient } from '@tanstack/react-query'
+import { GcsFilePaths } from '@/constants/enum'
 
 type CompanyFormProps = {
   type: 'Update'
@@ -38,6 +39,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
   const navigate = useNavigate()
   const { companyId } = useParams<{ companyId: string }>()
   const [isEditing, setIsEditing] = useState(false)
+  const [isFileUploading, setIsFileUploading] = useState(false)
 
   const queryClient = useQueryClient()
 
@@ -67,6 +69,17 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
   }
 
   async function onSubmit(values: z.infer<typeof CompanyFormSchema>) {
+    if (isFileUploading) {
+      toast({
+        title: 'File Upload in Progress',
+        description:
+          'Please wait until the file upload completes before submitting the form.',
+        duration: 3000,
+        className: 'bg-orange',
+      })
+      return
+    }
+
     try {
       const data = await updateCompany(values, companyId as string)
 
@@ -86,7 +99,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
       })
     } finally {
       queryClient.invalidateQueries({
-        queryKey: ['companies'],
+        queryKey: ['company-details-page', { exact: true }],
       })
       setIsEditing(false)
     }
@@ -165,6 +178,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 existingFile={formData?.companyLogo}
                 maxSizeMB={5}
                 isDisabled={!isEditing}
+                setIsFileUploading={setIsFileUploading}
+                bucketFilePath={GcsFilePaths.LOGOS}
               />
             )}
           />
@@ -187,6 +202,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 existingFile={formData?.commercialLicense}
                 maxSizeMB={5}
                 isDisabled={!isEditing}
+                setIsFileUploading={setIsFileUploading}
+                bucketFilePath={GcsFilePaths.DOCUMENTS}
               />
             )}
           />

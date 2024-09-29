@@ -27,6 +27,8 @@ import { deleteLink } from '@/api/links'
 import DeleteModal from '../modal/DeleteModal'
 import SingleFileUpload from './SingleFileUpload'
 import { addPromotion, updatePromotion } from '@/api/promotions'
+import { useState } from 'react'
+import { GcsFilePaths } from '@/constants/enum'
 
 type PromotionFormProps = {
   type: 'Add' | 'Update'
@@ -34,6 +36,7 @@ type PromotionFormProps = {
 }
 
 export default function PromotionForm({ type, formData }: PromotionFormProps) {
+  const [isFileUploading, setIsFileUploading] = useState(false)
   const { state } = useAdminContext()
 
   const initialValues =
@@ -51,6 +54,17 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof PromotionFormSchema>) {
+    if (isFileUploading) {
+      toast({
+        title: 'File Upload in Progress',
+        description:
+          'Please wait until the file upload completes before submitting the form.',
+        duration: 3000,
+        className: 'bg-orange',
+      })
+      return
+    }
+
     try {
       let data
       if (type === 'Add') {
@@ -104,6 +118,8 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
                 description="Upload a image with a maximum file size of 3MB"
                 existingFile={formData?.promotionImage}
                 maxSizeMB={3}
+                setIsFileUploading={setIsFileUploading}
+                bucketFilePath={GcsFilePaths.IMAGE}
               />
             )}
           />
@@ -113,19 +129,24 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
             control={form.control}
             name="promotionLink"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Link</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="eg: 'https://example.com'"
-                    {...field}
-                    className="input-field"
-                  />
-                </FormControl>
-                <FormDescription className="ml-2">
-                  Provide the link associated with the promotion
-                </FormDescription>
-                <FormMessage className="ml-2" />
+              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
+                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+                  Link <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <Input
+                      placeholder="eg: 'https://example.com'"
+                      {...field}
+                      className="input-field"
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Provide the link associated with the promotion
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
               </FormItem>
             )}
           />

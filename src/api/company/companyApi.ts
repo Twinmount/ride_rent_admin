@@ -8,8 +8,8 @@ import {
 
 export interface CompanyType {
   companyName?: string
-  companyLogo?: File | string
-  commercialLicense?: File | string
+  companyLogo?: string
+  commercialLicense?: string
   expireDate?: Date
   regNumber?: string
 }
@@ -29,42 +29,27 @@ export interface GetAllCompanyType {
   search?: string
 }
 
-// add company
+export interface CompanyType {
+  companyName?: string
+  companyLogo?: string
+  commercialLicense?: string
+  expireDate?: Date
+  regNumber?: string
+}
+
 export const addCompany = async (values: CompanyType, userId: string) => {
   try {
-    // Create a new FormData instance
-    const formData = new FormData()
-
-    // Append all the fields to the FormData object
-    formData.append('userId', userId)
-
-    if (values.companyName) {
-      formData.append('companyName', values.companyName)
-    }
-
-    if (values.expireDate) {
-      formData.append('expireDate', values.expireDate.toISOString())
-    }
-
-    if (values.regNumber) {
-      formData.append('regNumber', values.regNumber)
-    }
-
-    if (values.companyLogo && values.companyLogo instanceof File) {
-      formData.append('companyLogo', values.companyLogo)
-    }
-
-    if (values.commercialLicense && values.commercialLicense instanceof File) {
-      formData.append('commercialLicense', values.commercialLicense)
-    }
-    // Send the FormData object using the API post method
     const data = await API.post({
       slug: Slug.POST_COMPANY,
-      body: formData, // Passing formData instead of JSON object
-      axiosConfig: {
-        headers: {
-          'Content-Type': 'multipart/form-data', // Ensure the correct content type is set
-        },
+      body: {
+        userId: userId,
+        companyName: values.companyName,
+        expireDate: values.expireDate
+          ? values.expireDate.toISOString()
+          : undefined,
+        regNumber: values.regNumber,
+        companyLogo: values.companyLogo, // Assuming this is a URL or string
+        commercialLicense: values.commercialLicense, // Assuming this is a URL or string
       },
     })
 
@@ -75,50 +60,25 @@ export const addCompany = async (values: CompanyType, userId: string) => {
   }
 }
 
-// update company
 export const updateCompany = async (values: CompanyType, companyId: string) => {
   try {
-    // Create a new FormData instance
-    const formData = new FormData()
-
-    // Always append the companyId
-    formData.append('companyId', companyId)
-
-    // Conditionally append other fields if they are provided
-    if (values.companyName) {
-      formData.append('companyName', values.companyName)
-    }
-
-    if (values.expireDate) {
-      formData.append('expireDate', values.expireDate.toISOString())
-    }
-
-    if (values.regNumber) {
-      formData.append('regNumber', values.regNumber)
-    }
-
-    if (values.companyLogo && values.companyLogo instanceof File) {
-      formData.append('companyLogo', values.companyLogo)
-    }
-
-    if (values.commercialLicense && values.commercialLicense instanceof File) {
-      formData.append('commercialLicense', values.commercialLicense)
-    }
-
-    // Send the FormData object using the API put method
     const data = await API.put({
-      slug: Slug.PUT_COMPANY, // Use the correct slug
-      body: formData,
-      axiosConfig: {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      slug: Slug.PUT_COMPANY,
+      body: {
+        companyId: companyId,
+        companyName: values.companyName,
+        expireDate: values.expireDate
+          ? values.expireDate.toISOString()
+          : undefined,
+        regNumber: values.regNumber,
+        companyLogo: values.companyLogo, // Assuming this is a URL or string
+        commercialLicense: values.commercialLicense, // Assuming this is a URL or string
       },
     })
 
     return data
   } catch (error) {
-    console.error('Error updating state:', error)
+    console.error('Error updating company:', error)
     throw error
   }
 }

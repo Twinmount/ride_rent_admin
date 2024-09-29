@@ -9,7 +9,7 @@ export enum Slug {
   POST_SINGLE_FILE = '/file/upload/single',
   GET_SINGLE_FILE = '/file',
   DELETE_SINGLE_FILE = '/file',
-  POST_MULTIPLE_FILE = '/file/upload/multiple',
+  POST_MULTIPLE_FILES = '/file/upload/multiple',
 
   // States Endpoints
   ADD_STATE = '/states',

@@ -17,13 +17,14 @@ import { Button } from '@/components/ui/button'
 import { BrandFormType } from '@/types/types'
 import { BrandFormSchema } from '@/lib/validator'
 import { BrandFormDefaultValues } from '@/constants'
-import { Textarea } from '../ui/textarea'
 import Spinner from '../general/Spinner'
 import { addBrand, updateBrand } from '@/api/brands'
 import { toast } from '../ui/use-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import SingleFileUpload from './SingleFileUpload'
 import VehicleCategoryDropdown from './VehicleCategoryDropdown'
+import { useState } from 'react'
+import { GcsFilePaths } from '@/constants/enum'
 
 type BrandFormProps = {
   type: 'Add' | 'Update'
@@ -31,6 +32,8 @@ type BrandFormProps = {
 }
 
 export default function BrandForm({ type, formData }: BrandFormProps) {
+  const [isFileUploading, setIsFileUploading] = useState(false)
+
   const initialValues =
     formData && type === 'Update' ? formData : BrandFormDefaultValues
 
@@ -49,6 +52,20 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof BrandFormSchema>) {
+    if (isFileUploading) {
+      toast({
+        title: 'File Upload in Progress',
+        description:
+          'Please wait until the file upload completes before submitting the form.',
+        duration: 3000,
+        className: 'bg-orange',
+      })
+      return
+    }
+
+    console.log('brand values : ', values)
+
+    return
     try {
       let data
       if (type === 'Add') {
@@ -80,25 +97,30 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
       >
-        <div className="flex flex-col gap-5 r ">
+        <div className="flex flex-col gap-5">
           {/* type title */}
           <FormField
             control={form.control}
             name="brandName"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Brand Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="eg: 'Land Rover'"
-                    {...field}
-                    className={`input-field`}
-                  />
-                </FormControl>
-                <FormDescription className="ml-2">
-                  Add your Brand Name
-                </FormDescription>
-                <FormMessage className="ml-2" />
+              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
+                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+                  Brand Name <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <Input
+                      placeholder="eg: 'Land Rover'"
+                      {...field}
+                      className={`input-field`}
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Add your Brand Name
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
               </FormItem>
             )}
           />
@@ -108,20 +130,25 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
             control={form.control}
             name="brandValue"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Brand Value</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="eg: 'land-rover'"
-                    {...field}
-                    className="input-field"
-                  />
-                </FormControl>
-                <FormDescription className="ml-2">
-                  This value will be used for API interaction. Eg: for "Land
-                  Rover", value will be "land-rover"
-                </FormDescription>
-                <FormMessage className="ml-2" />
+              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
+                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+                  Brand Value <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <Input
+                      placeholder="eg: 'land-rover'"
+                      {...field}
+                      className="input-field"
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    This value will be used for API interaction. Eg: for "Land
+                    Rover", value will be "land-rover"
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
               </FormItem>
             )}
           />
@@ -130,97 +157,41 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
             control={form.control}
             name="vehicleCategoryId"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Vehicle Category</FormLabel>
-                <FormControl>
-                  <VehicleCategoryDropdown
-                    onChangeHandler={field.onChange}
-                    value={field.value}
-                    placeholder=" category"
-                  />
-                </FormControl>
-                <FormDescription className="ml-2">
-                  Category of the vehicle
-                </FormDescription>
-                <FormMessage />
+              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
+                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+                  Vehicle Category <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <VehicleCategoryDropdown
+                      onChangeHandler={field.onChange}
+                      value={field.value}
+                      placeholder=" category"
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Category of the vehicle
+                  </FormDescription>
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
 
           <FormField
             control={form.control}
-            name="subHeading"
+            name="brandLogo"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Brand Subheading</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Page Sub Heading"
-                    {...field}
-                    className="input-field"
-                  />
-                </FormControl>
-                <FormDescription className="ml-2">
-                  Add the subheading for the brand
-                </FormDescription>
-                <FormMessage className="ml-2" />
-              </FormItem>
-            )}
-          />
-          <div className="flex max-sm:flex-col gap-x-10">
-            <FormField
-              control={form.control}
-              name="brandLogo"
-              render={({ field }) => (
-                <SingleFileUpload
-                  name={field.name}
-                  label="Brand Logo"
-                  description="Upload a image with a maximum file size of 300KB. The image should have dimensions not exceeding 500x500 pixels"
-                  existingFile={formData?.brandLogo}
-                  maxSizeMB={0.3}
-                />
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="metaTitle"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="ml-2 ">Page Meta Title </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Meta Tag"
-                    {...field}
-                    className="input-field"
-                  />
-                </FormControl>
-                <FormDescription className="ml-2">
-                  Meta title for the page
-                </FormDescription>
-                <FormMessage className="ml-2" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="metaDescription"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="ml-2 ">Page Meta Description </FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Meta Description"
-                    {...field}
-                    className="textarea rounded-2xl"
-                  />
-                </FormControl>
-                <FormDescription className="ml-2">
-                  Meta description for the page
-                </FormDescription>
-                <FormMessage className="ml-2" />
-              </FormItem>
+              <SingleFileUpload
+                name={field.name}
+                label="Brand Logo"
+                description="Upload a image with a maximum file size of 300KB. The image should have dimensions not exceeding 500x500 pixels"
+                existingFile={formData?.brandLogo}
+                maxSizeMB={1}
+                setIsFileUploading={setIsFileUploading}
+                bucketFilePath={GcsFilePaths.LOGOS}
+              />
             )}
           />
         </div>

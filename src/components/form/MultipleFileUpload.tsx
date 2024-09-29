@@ -8,67 +8,91 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Download, Eye, Trash2 } from 'lucide-react'
+import { Download, Eye, Trash2, MoreVertical, Upload } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { validateFileSize } from '@/helpers/form'
 import ImagePreviewModal from '../modal/ImagePreviewModal'
+import { uploadMultipleFiles } from '@/api/file-upload' // Ensure this path is correct
+import { GcsFilePaths } from '@/constants/enum'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu'
+import PreviewImageComponent from './PreviewImageComponent'
+import { Progress } from '../ui/progress'
 import ImagePlaceholder from '../ImagePlaceholder'
 
 type MultipleFileUploadProps = {
   name: string
   label: string
   multiple?: boolean
-  existingFiles?: (File | string)[]
+  existingFiles?: string[] // Only paths are needed
   description: string
   maxSizeMB?: number
+  setIsFileUploading?: (isUploading: boolean) => void
+  bucketFilePath: GcsFilePaths
+}
+
+export interface MultipleFileUploadResponse {
+  result: {
+    message: string
+    fileName: string
+    path: string[] // Array of paths
+  }
+  status: string
+  statusCode: number
 }
 
 const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   name,
   label,
-  multiple = false,
+  multiple = true,
   existingFiles = [],
   description,
   maxSizeMB = 15,
+  setIsFileUploading,
+  bucketFilePath,
 }) => {
   const { control, setValue, clearErrors } = useFormContext()
-  const [files, setFiles] = useState<(File | string)[]>(existingFiles)
-  const [selectedImage, setSelectedImage] = useState<File | string | null>(null) // Track selected image
+  const [files, setFiles] = useState<string[]>(existingFiles) // Only store paths
+  const [selectedImage, setSelectedImage] = useState<string | null>(null) // Track selected image for preview
+  const [progress, setProgress] = useState<number>(0)
 
+  // Determine maximum number of files based on the field name
+  const getMaxCount = () => {
+    if (name === 'vehiclePhotos') return 8
+    if (name === 'commercialLicenses') return 2
+    return 0
+  }
+
+  const maxCount = getMaxCount()
+
+  // Sync files state with form value
   useEffect(() => {
     setValue(name, files)
   }, [files, setValue, name])
 
-  useEffect(() => {
-    return () => {
-      files.forEach((file) => {
-        if (file instanceof File) {
-          URL.revokeObjectURL(URL.createObjectURL(file))
-        }
-      })
-    }
-  }, [files])
-
+  // Handle file selection and upload
   const handleFilesChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    let selectedFiles = Array.from(event.target.files || [])
-    const newFiles: (File | string)[] = []
+    const selectedFiles = Array.from(event.target.files || [])
+    const validFiles: File[] = []
 
-    // Determine the remaining upload capacity based on the current files
-    const remainingLimit = getMaxCount() - files.length
-
-    // If selected files exceed the remaining limit, slice the array to fit the limit
+    // Check remaining capacity
+    const remainingLimit = maxCount - files.length
     if (selectedFiles.length > remainingLimit) {
-      selectedFiles = selectedFiles.slice(0, remainingLimit)
       toast({
         variant: 'destructive',
         title: 'File limit exceeded',
-        description: `You can only upload a maximum of ${getMaxCount()} files.`,
+        description: `You can only upload a maximum of ${maxCount} files.`,
       })
+      selectedFiles.splice(remainingLimit) // Limit the files
     }
 
+    // Validate file sizes
     for (const file of selectedFiles) {
       if (!validateFileSize(file, maxSizeMB)) {
         toast({
@@ -78,59 +102,73 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
         })
         continue
       }
-
-      newFiles.push(file)
+      validFiles.push(file)
     }
 
-    // Update the state with the newly added files
-    if (newFiles.length > 0) {
+    if (validFiles.length === 0) return
+
+    // Set uploading state
+    if (setIsFileUploading) setIsFileUploading(true)
+
+    try {
+      // Upload files
+      const uploadResponse = await uploadMultipleFiles(
+        bucketFilePath,
+        validFiles,
+        (progressEvent) => {
+          if (progressEvent.total) {
+            const uploadProgress =
+              (progressEvent.loaded / progressEvent.total) * 100
+            setProgress(uploadProgress)
+          }
+        }
+      )
+
+      // Extract paths from response
+      const uploadedPaths = uploadResponse.result.paths
+
+      // Update form state with new paths
+      setFiles((prevFiles) => [...prevFiles, ...uploadedPaths])
       clearErrors(name)
-      setFiles((prevFiles) => {
-        // Combine the new files with the previously selected ones
-        const combinedFiles = [...prevFiles, ...newFiles]
-        // Ensure we don't exceed the maximum count
-        return combinedFiles.slice(0, getMaxCount())
-      })
-    }
 
-    // Reset the file input to allow reselection of the same file
-    event.target.value = ''
+      toast({
+        title: 'Files uploaded successfully',
+        description: `${uploadedPaths.length} file(s) uploaded.`,
+        className: 'bg-green-500 text-white',
+      })
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'File upload failed',
+        description: 'Please try again.',
+      })
+      console.error('Error uploading multiple files:', error)
+    } finally {
+      // Reset uploading state and progress
+      if (setIsFileUploading) setIsFileUploading(false)
+      setProgress(0)
+      event.target.value = '' // Reset the input
+    }
   }
 
-  const handleDeleteFile = (index: number) => {
-    setFiles((prevFiles) => {
-      const fileToRemove = prevFiles[index]
-
-      // If the file is a File object, revoke the object URL to free up memory
-      if (fileToRemove instanceof File) {
-        URL.revokeObjectURL(URL.createObjectURL(fileToRemove))
-      }
-
-      return prevFiles.filter((_, i) => i !== index)
+  // Handle file deletion
+  const handleDeleteFile = (filePath: string) => {
+    setFiles((prevFiles) => prevFiles.filter((path) => path !== filePath))
+    toast({
+      title: 'File deleted',
+      description: 'The selected file has been removed.',
+      className: 'bg-red-500 text-white',
     })
   }
 
-  const isInputDisabled = () => {
-    if (name === 'vehiclePhotos') {
-      return files.length >= 8
-    } else if (name === 'commercialLicenses') {
-      return files.length >= 2
-    }
-    return false
+  // Handle image preview
+  const handlePreviewImage = (filePath: string) => {
+    setSelectedImage(filePath)
   }
 
-  const getMaxCount = () => {
-    if (name === 'vehiclePhotos') return 8
-    if (name === 'commercialLicenses') return 2
-    return 0
-  }
-
-  const handleDownload = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-  ) => {
-    e.preventDefault() // Prevent default anchor behavior
-    const url = e.currentTarget.href // Get the URL from the anchor's href
-    window.open(url, '_blank') // Open the image in a new tab
+  // Handle image download
+  const handleDownloadImage = (filePath: string) => {
+    window.open(filePath, '_blank')
   }
 
   return (
@@ -141,74 +179,58 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
         </FormLabel>
         <div className="flex-col items-start w-full">
           <FormControl>
-            <div className="relative w-full">
-              <Controller
-                name={name}
-                control={control}
-                render={() => (
-                  <>
-                    <Input
-                      type="file"
-                      accept={'image/*'}
-                      multiple={multiple}
-                      onChange={handleFilesChange}
-                      className="hidden"
-                      id={`file-upload-${name}`}
-                      disabled={isInputDisabled()}
-                    />
-                    <div className="grid grid-cols-4 gap-2 mt-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
-                      {files.map((file, index) => (
+            <Controller
+              name={name}
+              control={control}
+              render={() => (
+                <>
+                  {/* Display uploaded files */}
+                  {files.length > 0 && (
+                    <div className="grid grid-cols-4 gap-2 mt-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
+                      {files.map((filePath, index) => (
                         <div
                           key={index}
-                          className={`relative w-16 h-16 overflow-hidden rounded-lg`}
+                          className="relative w-16 h-16 overflow-hidden rounded-lg"
                         >
-                          <img
-                            src={
-                              typeof file === 'string'
-                                ? file
-                                : URL.createObjectURL(file)
-                            }
-                            alt={`file-${index}`}
-                            className="object-cover w-full h-full"
-                          />
+                          <PreviewImageComponent imagePath={filePath} />
+                          {/* Dropdown Menu */}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button className="absolute p-1 bg-white rounded-full shadow-md h-fit right-1 top-1">
+                                <MoreVertical className="w-5 h-5 text-gray-600" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-28">
+                              {/* Delete */}
+                              <DropdownMenuItem
+                                onClick={() => handleDeleteFile(filePath)}
+                              >
+                                <Trash2 className="w-5 h-5 mr-2 text-red-600" />
+                                Delete
+                              </DropdownMenuItem>
 
-                          {/* Delete Button */}
-                          <Button
-                            type="button"
-                            onClick={() => handleDeleteFile(index)}
-                            className="absolute top-0 right-0 w-6 h-6 p-1 text-red-500 bg-white rounded-full hover:bg-red-600 hover:text-white"
-                            aria-label={`delete file`}
-                          >
-                            <Trash2 size={16} />
-                          </Button>
+                              {/* Preview */}
+                              <DropdownMenuItem
+                                onClick={() => handlePreviewImage(filePath)}
+                              >
+                                <Eye className="w-5 h-5 mr-2 text-blue-600" />
+                                Preview
+                              </DropdownMenuItem>
 
-                          {/* Preview Button */}
-                          <Button
-                            type="button"
-                            onClick={() => setSelectedImage(file)}
-                            className="absolute bottom-0 left-0 w-6 h-6 p-1 text-green-500 bg-white rounded-full hover:bg-green-600 hover:text-white"
-                            aria-label={`preview file`}
-                          >
-                            <Eye size={16} />
-                          </Button>
-
-                          {/* Download Button (only for string files) */}
-                          {typeof file === 'string' && (
-                            <a
-                              href={file} // Add the file URL here
-                              onClick={(e) => handleDownload(e)} // Open the image in a new tab
-                              className="absolute bottom-0 right-0 w-6 h-6 p-1 text-blue-500 bg-white rounded-full hover:bg-blue-600 hover:text-white"
-                              aria-label={`open file in new tab`}
-                              target="_blank" // Optional: Ensure it's opened in a new tab by default
-                              rel="noopener noreferrer"
-                            >
-                              <Download size={16} />
-                            </a>
-                          )}
+                              {/* Download */}
+                              <DropdownMenuItem
+                                onClick={() => handleDownloadImage(filePath)}
+                              >
+                                <Download className="w-5 h-5 mr-2 text-green-600" />
+                                Download
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       ))}
 
-                      {Array.from({ length: getMaxCount() - files.length }).map(
+                      {/* Render placeholders if needed */}
+                      {Array.from({ length: maxCount - files.length }).map(
                         (_, index) => (
                           <ImagePlaceholder
                             key={index}
@@ -217,14 +239,15 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                             labelForVehiclePhotos="upload"
                             labelForCommercialLicensesFront="front"
                             labelForCommercialLicensesBack="back"
+                            onFileChange={handleFilesChange}
                           />
                         )
                       )}
                     </div>
-                  </>
-                )}
-              />
-            </div>
+                  )}
+                </>
+              )}
+            />
           </FormControl>
           <FormDescription className="ml-2">{description}</FormDescription>
           <FormMessage />

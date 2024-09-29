@@ -42,6 +42,7 @@ import { useParams } from 'react-router-dom'
 import { useLoadingMessages } from '@/hooks/useLoadingMessage'
 import { ApiError } from '@/types/types'
 import { Textarea } from '@/components/ui/textarea'
+import { GcsFilePaths } from '@/constants/enum'
 
 type PrimaryFormProps = {
   type: 'Add' | 'Update'
@@ -57,6 +58,7 @@ export default function PrimaryDetailsForm({
   initialCountryCode,
 }: PrimaryFormProps) {
   const [countryCode, setCountryCode] = useState<string>('')
+  const [isFileUploading, setIsFileUploading] = useState(false)
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string
@@ -84,6 +86,17 @@ export default function PrimaryDetailsForm({
         message: rentalError,
       })
       form.setFocus('rentalDetails')
+      return
+    }
+
+    if (isFileUploading) {
+      toast({
+        title: 'File Upload in Progress',
+        description:
+          'Please wait until the file upload completes before submitting the form.',
+        duration: 3000,
+        className: 'bg-orange',
+      })
       return
     }
 
@@ -327,9 +340,11 @@ export default function PrimaryDetailsForm({
                 name="vehiclePhotos"
                 label="Vehicle Photos"
                 multiple={true}
-                existingFiles={initialValues.vehiclePhotos}
+                existingFiles={initialValues.vehiclePhotos || []}
                 description="Add Vehicle Photos. Up to 8 photos can be added."
                 maxSizeMB={30}
+                setIsFileUploading={setIsFileUploading}
+                bucketFilePath={GcsFilePaths.IMAGE_VEHICLES}
               />
             )}
           />
@@ -343,8 +358,11 @@ export default function PrimaryDetailsForm({
                 name="commercialLicenses"
                 label="Registration Card / Mulkia"
                 multiple={true}
-                existingFiles={initialValues.commercialLicenses}
+                existingFiles={initialValues.commercialLicenses || []}
                 description="Upload images of the Registration Card/Mulkia, both front and back."
+                maxSizeMB={15}
+                setIsFileUploading={setIsFileUploading}
+                bucketFilePath={GcsFilePaths.COMMERCIAL_LICENSES}
               />
             )}
           />

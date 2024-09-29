@@ -22,6 +22,8 @@ import SingleFileUpload from './SingleFileUpload'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '../ui/use-toast'
 import { addState, updateState } from '@/api/states'
+import { useState } from 'react'
+import { GcsFilePaths } from '@/constants/enum'
 
 type StateFormProps = {
   type: 'Add' | 'Update'
@@ -29,6 +31,8 @@ type StateFormProps = {
 }
 
 export default function StateForm({ type, formData }: StateFormProps) {
+  const [isFileUploading, setIsFileUploading] = useState(false)
+
   const initialValues =
     formData && type === 'Update' ? formData : StateFormDefaultValues
 
@@ -44,8 +48,16 @@ export default function StateForm({ type, formData }: StateFormProps) {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof StateFormSchema>) {
     console.log('state form values :', values)
-
-    return
+    if (isFileUploading) {
+      toast({
+        title: 'File Upload in Progress',
+        description:
+          'Please wait until the file upload completes before submitting the form.',
+        duration: 3000,
+        className: 'bg-orange',
+      })
+      return
+    }
 
     try {
       let data
@@ -145,6 +157,8 @@ export default function StateForm({ type, formData }: StateFormProps) {
                 description="Upload an image with a maximum file size of 1mb."
                 isDownloadable
                 existingFile={formData?.stateImage || null}
+                setIsFileUploading={setIsFileUploading}
+                bucketFilePath={GcsFilePaths.IMAGE}
               />
             )}
           />
@@ -157,7 +171,11 @@ export default function StateForm({ type, formData }: StateFormProps) {
           disabled={form.formState.isSubmitting}
           className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
         >
-          {form.formState.isSubmitting ? 'Processing...' : `${type} State`}
+          {isFileUploading
+            ? 'Uploading...'
+            : form.formState.isSubmitting
+            ? 'Processing...'
+            : `${type} State`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
       </form>

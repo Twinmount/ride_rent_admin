@@ -34,24 +34,8 @@ export const BrandFormSchema = z.object({
       /^[a-z-]+$/,
       'Brand value should only contain lowercase letters and hyphens'
     ),
-  subHeading: z.string().min(1, 'Title subheading required'),
+  brandLogo: z.string().min(1, 'Brand logo is required'),
   vehicleCategoryId: z.string().min(1, 'Category is required'),
-  brandLogo: z
-    .union([
-      z.instanceof(File), // For when a file is selected
-      z.string(), // For when a URL from backend is used
-    ])
-    .refine((value) => {
-      // Ensure value is either a File or a non-empty string (URL)
-      if (value instanceof File) {
-        return true
-      } else if (typeof value === 'string') {
-        return value.trim().length > 0
-      }
-      return false
-    }, 'Logo must be either a valid File or a non-empty URL'),
-  metaTitle: z.string().min(1, 'Meta title is required'),
-  metaDescription: z.string().min(1, 'Meta description is required'),
 })
 
 // State Form Schema
@@ -119,20 +103,7 @@ export const LinkFormSchema = z.object({
 
 // Ads Form Schema
 export const PromotionFormSchema = z.object({
-  promotionImage: z
-    .union([
-      z.instanceof(File), // For when a file is selected
-      z.string(), // For when a URL from backend is used
-    ])
-    .refine((value) => {
-      // Ensure value is either a File or a non-empty string (URL)
-      if (value instanceof File) {
-        return true
-      } else if (typeof value === 'string') {
-        return value.trim().length > 0
-      }
-      return false
-    }, 'Image must be either a valid File or a non-empty URL'),
+  promotionImage: z.string().min(1, 'Promotion image is required'),
   promotionLink: z
     .string()
     .min(1, 'Link is required')
@@ -226,34 +197,8 @@ export const CompanyFormSchema = z.object({
     .string()
     .min(1, 'Company name is required')
     .max(50, 'Maximum 50 characters allowed'),
-  companyLogo: z
-    .union([
-      z.instanceof(File), // For when a file is selected
-      z.string(), // For when a URL from backend is used
-    ])
-    .refine((value) => {
-      // Ensure value is either a File or a non-empty string (URL)
-      if (value instanceof File) {
-        return true
-      } else if (typeof value === 'string') {
-        return value.trim().length > 0
-      }
-      return false
-    }, 'Logo must be either a valid File or a non-empty URL'),
-  commercialLicense: z
-    .union([
-      z.instanceof(File), // For when a file is selected
-      z.string(), // For when a URL from backend is used
-    ])
-    .refine((value) => {
-      // Ensure value is either a File or a non-empty string (URL)
-      if (value instanceof File) {
-        return true
-      } else if (typeof value === 'string') {
-        return value.trim().length > 0
-      }
-      return false
-    }, 'Logo must be either a valid File or a non-empty URL'),
+  companyLogo: z.string().min(1, 'Company logo is required'),
+  commercialLicense: z.string().min(1, 'Commercial License is required'),
   expireDate: z.date(),
   regNumber: z.string().min(1, 'Registration number is required'),
 })
