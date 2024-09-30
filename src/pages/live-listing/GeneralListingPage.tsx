@@ -31,7 +31,7 @@ export default function GeneralListingPage({
 }: GeneralListingPageProps) {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10)
-  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC')
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC')
   const [selectedVehicle, setSelectedVehicle] =
     useState<SingleVehicleType | null>(null)
 

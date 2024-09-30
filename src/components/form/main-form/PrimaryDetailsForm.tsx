@@ -100,6 +100,8 @@ export default function PrimaryDetailsForm({
       return
     }
 
+    console.log('level one values :', values)
+
     // Append other form data
     try {
       let data
@@ -118,6 +120,7 @@ export default function PrimaryDetailsForm({
       }
 
       if (data) {
+        console.log('data recieved from api : ', data)
         toast({
           title: `Vehicle ${type.toLowerCase()}ed successfully`,
           className: 'bg-yellow text-white',
@@ -339,12 +342,17 @@ export default function PrimaryDetailsForm({
               <MultipleFileUpload
                 name="vehiclePhotos"
                 label="Vehicle Photos"
-                multiple={true}
                 existingFiles={initialValues.vehiclePhotos || []}
                 description="Add Vehicle Photos. Up to 8 photos can be added."
                 maxSizeMB={30}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.IMAGE_VEHICLES}
+                isFileUploading={isFileUploading}
+                downloadFileName={
+                  formData?.vehicleModel
+                    ? ` ${formData.vehicleModel}`
+                    : 'vehicle-image'
+                }
               />
             )}
           />
@@ -357,12 +365,17 @@ export default function PrimaryDetailsForm({
               <MultipleFileUpload
                 name="commercialLicenses"
                 label="Registration Card / Mulkia"
-                multiple={true}
                 existingFiles={initialValues.commercialLicenses || []}
                 description="Upload images of the Registration Card/Mulkia, both front and back."
                 maxSizeMB={15}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.COMMERCIAL_LICENSES}
+                isFileUploading={isFileUploading}
+                downloadFileName={
+                  formData?.vehicleModel
+                    ? `[commercial-license] - ${formData.vehicleModel}`
+                    : '[commercial-license]'
+                }
               />
             )}
           />

@@ -7,12 +7,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Download, Eye, Trash2, MoreVertical, Upload } from 'lucide-react'
+import { Download, Eye, Trash2, MoreVertical } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
-import { validateFileSize } from '@/helpers/form'
+import { downloadFileFromStream, validateFileSize } from '@/helpers/form'
 import ImagePreviewModal from '../modal/ImagePreviewModal'
-import { uploadMultipleFiles } from '@/api/file-upload' // Ensure this path is correct
+import { uploadMultipleFiles } from '@/api/file-upload'
 import { GcsFilePaths } from '@/constants/enum'
 import {
   DropdownMenu,
@@ -21,46 +20,37 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
 import PreviewImageComponent from './PreviewImageComponent'
-import { Progress } from '../ui/progress'
 import ImagePlaceholder from '../ImagePlaceholder'
 
 type MultipleFileUploadProps = {
   name: string
   label: string
-  multiple?: boolean
-  existingFiles?: string[] // Only paths are needed
+  existingFiles?: string[]
   description: string
   maxSizeMB?: number
+  isFileUploading?: boolean
   setIsFileUploading?: (isUploading: boolean) => void
   bucketFilePath: GcsFilePaths
-}
-
-export interface MultipleFileUploadResponse {
-  result: {
-    message: string
-    fileName: string
-    path: string[] // Array of paths
-  }
-  status: string
-  statusCode: number
+  downloadFileName?: string
 }
 
 const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   name,
   label,
-  multiple = true,
   existingFiles = [],
   description,
   maxSizeMB = 15,
+  isFileUploading,
   setIsFileUploading,
   bucketFilePath,
+  downloadFileName,
 }) => {
   const { control, setValue, clearErrors } = useFormContext()
-  const [files, setFiles] = useState<string[]>(existingFiles) // Only store paths
-  const [selectedImage, setSelectedImage] = useState<string | null>(null) // Track selected image for preview
-  const [progress, setProgress] = useState<number>(0)
+  const [files, setFiles] = useState<string[]>(existingFiles)
+  const [previewImage, setPreviewImage] = useState<string | null>(null)
+  const [uploadingCount, setUploadingCount] = useState(0)
 
-  // Determine maximum number of files based on the field name
+  // Get max file count based on name
   const getMaxCount = () => {
     if (name === 'vehiclePhotos') return 8
     if (name === 'commercialLicenses') return 2
@@ -72,6 +62,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   // Sync files state with form value
   useEffect(() => {
     setValue(name, files)
+    console.log('files state : ', files)
   }, [files, setValue, name])
 
   // Handle file selection and upload
@@ -81,15 +72,14 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
     const selectedFiles = Array.from(event.target.files || [])
     const validFiles: File[] = []
 
-    // Check remaining capacity
-    const remainingLimit = maxCount - files.length
+    const remainingLimit = maxCount - files.length - uploadingCount
     if (selectedFiles.length > remainingLimit) {
       toast({
         variant: 'destructive',
         title: 'File limit exceeded',
         description: `You can only upload a maximum of ${maxCount} files.`,
       })
-      selectedFiles.splice(remainingLimit) // Limit the files
+      selectedFiles.splice(remainingLimit)
     }
 
     // Validate file sizes
@@ -107,35 +97,23 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
 
     if (validFiles.length === 0) return
 
-    // Set uploading state
     if (setIsFileUploading) setIsFileUploading(true)
 
+    // Increment uploading count by the number of files being uploaded
+    setUploadingCount((prev) => prev + validFiles.length)
+
     try {
-      // Upload files
+      // Upload all files at once
       const uploadResponse = await uploadMultipleFiles(
         bucketFilePath,
-        validFiles,
-        (progressEvent) => {
-          if (progressEvent.total) {
-            const uploadProgress =
-              (progressEvent.loaded / progressEvent.total) * 100
-            setProgress(uploadProgress)
-          }
-        }
+        validFiles
       )
 
-      // Extract paths from response
       const uploadedPaths = uploadResponse.result.paths
 
-      // Update form state with new paths
+      // Update the form state with new paths
       setFiles((prevFiles) => [...prevFiles, ...uploadedPaths])
       clearErrors(name)
-
-      toast({
-        title: 'Files uploaded successfully',
-        description: `${uploadedPaths.length} file(s) uploaded.`,
-        className: 'bg-green-500 text-white',
-      })
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -144,31 +122,33 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
       })
       console.error('Error uploading multiple files:', error)
     } finally {
-      // Reset uploading state and progress
+      setUploadingCount((prev) => prev - validFiles.length) // Decrement count after all files are uploaded
       if (setIsFileUploading) setIsFileUploading(false)
-      setProgress(0)
       event.target.value = '' // Reset the input
     }
   }
 
-  // Handle file deletion
   const handleDeleteFile = (filePath: string) => {
     setFiles((prevFiles) => prevFiles.filter((path) => path !== filePath))
-    toast({
-      title: 'File deleted',
-      description: 'The selected file has been removed.',
-      className: 'bg-red-500 text-white',
-    })
   }
 
-  // Handle image preview
   const handlePreviewImage = (filePath: string) => {
-    setSelectedImage(filePath)
+    setPreviewImage(filePath)
   }
 
-  // Handle image download
-  const handleDownloadImage = (filePath: string) => {
-    window.open(filePath, '_blank')
+  // Handle image download using the helper function
+  const handleDownloadImage = async (filePath: string, index: number) => {
+    try {
+      const fileName = downloadFileName || label
+      await downloadFileFromStream(filePath, index + 1 + ' - ' + fileName)
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Download failed',
+        description: 'Unable to download the image. Please try again.',
+      })
+      console.error('Error downloading image:', error)
+    }
   }
 
   return (
@@ -184,81 +164,75 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
               control={control}
               render={() => (
                 <>
-                  {/* Display uploaded files */}
-                  {files.length > 0 && (
-                    <div className="grid grid-cols-4 gap-2 mt-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
-                      {files.map((filePath, index) => (
+                  {/* Uploaded files preview */}
+
+                  <div className="grid grid-cols-4 gap-2 mt-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
+                    {files.length > 0 &&
+                      files.map((filePath, index) => (
                         <div
                           key={index}
-                          className="relative w-16 h-16 overflow-hidden rounded-lg"
+                          className="relative w-16 h-16 overflow-hidden rounded-lg "
                         >
                           <PreviewImageComponent imagePath={filePath} />
-                          {/* Dropdown Menu */}
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <button className="absolute p-1 bg-white rounded-full shadow-md h-fit right-1 top-1">
+                              <button className="absolute p-1 bg-white border-none rounded-full shadow-md outline-none h-fit right-1 top-1 ring-0">
                                 <MoreVertical className="w-5 h-5 text-gray-600" />
                               </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-28">
-                              {/* Delete */}
-                              <DropdownMenuItem
-                                onClick={() => handleDeleteFile(filePath)}
-                              >
-                                <Trash2 className="w-5 h-5 mr-2 text-red-600" />
-                                Delete
-                              </DropdownMenuItem>
-
-                              {/* Preview */}
                               <DropdownMenuItem
                                 onClick={() => handlePreviewImage(filePath)}
                               >
                                 <Eye className="w-5 h-5 mr-2 text-blue-600" />
                                 Preview
                               </DropdownMenuItem>
-
-                              {/* Download */}
                               <DropdownMenuItem
-                                onClick={() => handleDownloadImage(filePath)}
+                                onClick={() =>
+                                  handleDownloadImage(filePath, index)
+                                }
                               >
                                 <Download className="w-5 h-5 mr-2 text-green-600" />
                                 Download
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDeleteFile(filePath)}
+                              >
+                                <Trash2 className="w-5 h-5 mr-2 text-red-600" />
+                                Delete
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
                       ))}
-
-                      {/* Render placeholders if needed */}
-                      {Array.from({ length: maxCount - files.length }).map(
-                        (_, index) => (
-                          <ImagePlaceholder
-                            key={index}
-                            index={index}
-                            name={name}
-                            labelForVehiclePhotos="upload"
-                            labelForCommercialLicensesFront="front"
-                            labelForCommercialLicensesBack="back"
-                            onFileChange={handleFilesChange}
-                          />
-                        )
-                      )}
-                    </div>
-                  )}
+                    {/* Placeholders for additional uploads */}
+                    {Array.from({ length: maxCount - files.length }).map(
+                      (_, index) => (
+                        <ImagePlaceholder
+                          key={index}
+                          index={index}
+                          name={name}
+                          isUploading={isFileUploading}
+                          uploadingCount={uploadingCount}
+                          onFileChange={handleFilesChange}
+                        />
+                      )
+                    )}
+                  </div>
                 </>
               )}
             />
           </FormControl>
-          <FormDescription className="ml-2">{description}</FormDescription>
+          <FormDescription className="mt-1 ml-2">{description}</FormDescription>
           <FormMessage />
         </div>
       </FormItem>
 
       {/* Image Preview Modal */}
-      {selectedImage && (
+      {previewImage && (
         <ImagePreviewModal
-          selectedImage={selectedImage}
-          setSelectedImage={setSelectedImage}
+          imagePath={previewImage}
+          setSelectedImage={setPreviewImage} // Close modal function
         />
       )}
     </>

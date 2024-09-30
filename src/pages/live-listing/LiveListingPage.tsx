@@ -15,7 +15,7 @@ import { useAdminContext } from '@/context/AdminContext'
 export default function AllListingPage() {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10)
-  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('ASC')
+  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC')
   const queryClient = useQueryClient()
   const [searchParams] = useSearchParams()
   const searchTerm = searchParams.get('search') || ''

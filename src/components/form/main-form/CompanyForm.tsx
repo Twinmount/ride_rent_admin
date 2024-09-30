@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { CompanyFormDefaultValues } from '@/constants'
 import { CompanyFormSchema } from '@/lib/validator'
-import { Pen, ShieldCheck, Copy } from 'lucide-react'
+import { ShieldCheck, Copy } from 'lucide-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import SingleFileUpload from '../SingleFileUpload'
@@ -38,7 +38,6 @@ type CompanyFormProps = {
 export default function CompanyForm({ type, formData }: CompanyFormProps) {
   const navigate = useNavigate()
   const { companyId } = useParams<{ companyId: string }>()
-  const [isEditing, setIsEditing] = useState(false)
   const [isFileUploading, setIsFileUploading] = useState(false)
 
   const queryClient = useQueryClient()
@@ -58,15 +57,6 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
     resolver: zodResolver(CompanyFormSchema),
     defaultValues: initialValues,
   })
-
-  const handleEdit = () => {
-    setIsEditing(true)
-  }
-
-  const handleCancel = () => {
-    setIsEditing(false)
-    form.reset(initialValues)
-  }
 
   async function onSubmit(values: z.infer<typeof CompanyFormSchema>) {
     if (isFileUploading) {
@@ -101,7 +91,6 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
       queryClient.invalidateQueries({
         queryKey: ['company-details-page', { exact: true }],
       })
-      setIsEditing(false)
     }
   }
 
@@ -154,7 +143,6 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                       placeholder="Company Name"
                       {...field}
                       className="input-field"
-                      readOnly={!isEditing}
                     />
                   </FormControl>
                   <FormDescription className="mt-1 ml-1">
@@ -177,9 +165,14 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 description="Company logo can have a maximum size of 5MB."
                 existingFile={formData?.companyLogo}
                 maxSizeMB={5}
-                isDisabled={!isEditing}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.LOGOS}
+                isDownloadable={true}
+                downloadFileName={
+                  formData?.companyName
+                    ? `[${formData.companyName}] - company-logo`
+                    : 'company-logo'
+                }
               />
             )}
           />
@@ -201,9 +194,14 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 }
                 existingFile={formData?.commercialLicense}
                 maxSizeMB={5}
-                isDisabled={!isEditing}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.DOCUMENTS}
+                isDownloadable={true}
+                downloadFileName={
+                  formData?.companyName
+                    ? `[${formData.companyName}] - commercial-license`
+                    : 'commercial-license'
+                }
               />
             )}
           />
@@ -224,7 +222,6 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                       onChange={(date: Date | null) => field.onChange(date)}
                       dateFormat="MM/dd/yyyy"
                       wrapperClassName="datePicker text-base -ml-4 "
-                      readOnly={!isEditing}
                     />
                   </FormControl>
                   <FormDescription className="mt-1 ml-1">
@@ -252,7 +249,6 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                       placeholder="Enter company registration number"
                       {...field}
                       className="input-field"
-                      readOnly={!isEditing}
                     />
                   </FormControl>
                   <FormDescription className="mt-1 ml-1">
@@ -268,35 +264,15 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
         </div>
 
         {/* submit */}
-        {isEditing ? (
-          <div className="w-full h-12 gap-3 flex-center">
-            <Button
-              variant="outline"
-              className="w-full h-full text-lg font-semibold text-white bg-red-500 hover:bg-red-500 hover:text-white hover:shadow-lg"
-              disabled={form.formState.isSubmitting}
-              onClick={handleCancel}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              size="lg"
-              disabled={form.formState.isSubmitting}
-              className="w-full h-full text-lg font-semibold text-white flex-center bg-yellow hover:bg-yellow hover:text-white hover:shadow-lg"
-            >
-              Update
-              {form.formState.isSubmitting && <Spinner />}
-            </Button>
-          </div>
-        ) : (
-          <Button
-            variant="outline"
-            className="h-12 gap-2 text-lg font-semibold text-white bg-yellow hover:bg-yellow hover:text-white hover:shadow-lg rounded-xl flex-center"
-            onClick={handleEdit}
-          >
-            Edit <Pen />
-          </Button>
-        )}
+        <Button
+          type="submit"
+          size="lg"
+          disabled={form.formState.isSubmitting}
+          className="w-full h-12 text-lg font-semibold text-white flex-center bg-yellow hover:bg-yellow hover:text-white hover:shadow-lg"
+        >
+          Update
+          {form.formState.isSubmitting && <Spinner />}
+        </Button>
       </form>
     </Form>
   )

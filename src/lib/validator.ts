@@ -129,32 +129,11 @@ export const PrimaryFormSchema = z.object({
     .max(15, 'Vehicle registration number cannot exceed 15 characters'),
   vehicleRegisteredYear: z.string().min(1, 'Registered Year is required'),
   vehiclePhotos: z
-    .array(
-      z.union([
-        z.instanceof(File), // For newly uploaded files
-        z.string().url('Photo must be a valid URL'), // For existing URLs
-      ])
-    )
-    .max(8, 'You can upload up to 8 photos only')
-    .min(1, 'At least one photo is required')
-    .refine(
-      (arr) =>
-        arr.every((item) => item instanceof File || typeof item === 'string'),
-      'Each photo must be either a file or a URL'
-    ),
+    .array(z.string().min(1, 'vehicle photo is required'))
+    .min(1, 'At least one vehicle photo is required'),
   commercialLicenses: z
-    .array(
-      z.union([
-        z.instanceof(File), // For newly uploaded files
-        z.string().url('Commercial License (Mulkia) card must be a valid URL'), // For existing URLs
-      ])
-    )
-    .length(2, 'Mulkia/ Registration card (front and back) images are required')
-    .refine(
-      (arr) =>
-        arr.every((item) => item instanceof File || typeof item === 'string'),
-      'Commercial License (Mulkia) must be either a file or a URL'
-    ),
+    .array(z.string().min(1, 'Commercial license photo is required'))
+    .length(2, 'Exactly two commercial license images are required'),
   commercialLicenseExpireDate: z.date(),
   isLease: z.boolean().default(false),
   isCryptoAccepted: z.boolean().default(false),
