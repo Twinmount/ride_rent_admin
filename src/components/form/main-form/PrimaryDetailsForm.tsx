@@ -39,7 +39,6 @@ import { toast } from '@/components/ui/use-toast'
 import { addPrimaryDetailsForm, updatePrimaryDetailsForm } from '@/api/vehicle'
 import Spinner from '@/components/general/Spinner'
 import { useParams } from 'react-router-dom'
-import { useLoadingMessages } from '@/hooks/useLoadingMessage'
 import { ApiError } from '@/types/types'
 import { Textarea } from '@/components/ui/textarea'
 import { GcsFilePaths } from '@/constants/enum'
@@ -64,9 +63,6 @@ export default function PrimaryDetailsForm({
     vehicleId: string
     userId: string
   }>()
-
-  // Call the useLoadingMessages hook to manage loading messages
-  const message = useLoadingMessages()
 
   const initialValues =
     formData && type === 'Update' ? formData : PrimaryFormDefaultValues
@@ -100,8 +96,6 @@ export default function PrimaryDetailsForm({
       return
     }
 
-    console.log('level one values :', values)
-
     // Append other form data
     try {
       let data
@@ -120,7 +114,6 @@ export default function PrimaryDetailsForm({
       }
 
       if (data) {
-        console.log('data recieved from api : ', data)
         toast({
           title: `Vehicle ${type.toLowerCase()}ed successfully`,
           className: 'bg-yellow text-white',
@@ -366,7 +359,14 @@ export default function PrimaryDetailsForm({
                 name="commercialLicenses"
                 label="Registration Card / Mulkia"
                 existingFiles={initialValues.commercialLicenses || []}
-                description="Upload images of the Registration Card/Mulkia, both front and back."
+                description={
+                  <>
+                    Upload{' '}
+                    <span className="font-semibold text-yellow">front</span> &{' '}
+                    <span className="font-semibold text-yellow">back</span>{' '}
+                    images of the Registration Card / Mulkia
+                  </>
+                }
                 maxSizeMB={15}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.COMMERCIAL_LICENSES}
@@ -769,12 +769,6 @@ export default function PrimaryDetailsForm({
           {type === 'Add' ? 'Add Vehicle' : 'Update Vehicle'}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
-
-        {form.formState.isSubmitting && (
-          <div className="-mt-5 italic text-center text-gray-600">
-            <p>{message}</p>
-          </div>
-        )}
       </form>
     </Form>
   )

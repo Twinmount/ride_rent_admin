@@ -26,7 +26,7 @@ type MultipleFileUploadProps = {
   name: string
   label: string
   existingFiles?: string[]
-  description: string
+  description: React.ReactNode
   maxSizeMB?: number
   isFileUploading?: boolean
   setIsFileUploading?: (isUploading: boolean) => void
@@ -62,7 +62,6 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   // Sync files state with form value
   useEffect(() => {
     setValue(name, files)
-    console.log('files state : ', files)
   }, [files, setValue, name])
 
   // Handle file selection and upload
@@ -176,7 +175,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                           <PreviewImageComponent imagePath={filePath} />
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <button className="absolute p-1 bg-white border-none rounded-full shadow-md outline-none h-fit right-1 top-1 ring-0">
+                              <button className="absolute p-1 bg-white border rounded-full shadow-md outline-none h-fit right-1 top-1 ring-0">
                                 <MoreVertical className="w-5 h-5 text-gray-600" />
                               </button>
                             </DropdownMenuTrigger>

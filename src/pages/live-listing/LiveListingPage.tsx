@@ -47,7 +47,15 @@ export default function AllListingPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['vehicles listings', page, limit, sortOrder],
+        queryKey: [
+          'vehicles listings',
+          page,
+          limit,
+          sortOrder,
+          searchTerm,
+          state,
+        ],
+        exact: true,
       })
       toast({
         title: 'Vehicle status updated',

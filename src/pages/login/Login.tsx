@@ -60,8 +60,6 @@ const LoginPage = () => {
         body: requestBody,
       })
 
-      console.log(' data recieved after login :', data)
-
       if (data) {
         clear()
         save(StorageKeys.ACCESS_TOKEN, data.result.token)

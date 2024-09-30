@@ -47,7 +47,6 @@ export default function StateForm({ type, formData }: StateFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof StateFormSchema>) {
-    console.log('state form values :', values)
     if (isFileUploading) {
       toast({
         title: 'File Upload in Progress',

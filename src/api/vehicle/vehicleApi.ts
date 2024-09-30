@@ -219,10 +219,7 @@ export const getSpecificationFormFieldData = async ({
   vehicleCategoryId,
   vehicleTypeId,
 }: GetSpecificationFormDataParams): Promise<GetSpecificationFormFieldsResponse> => {
-  console.log(
-    'get specification form field api called, here is the vehicleCategoryId',
-    vehicleCategoryId
-  )
+
   try {
     const url = `${Slug.GET_SPEC_FORM_FIELD_LIST}?vehicleCategoryId=${vehicleCategoryId}&vehicleTypeId=${vehicleTypeId}&page=${page}&limit=${limit}&sortOrder=${sortOrder}`
 
@@ -245,10 +242,7 @@ export const getSpecificationFormFieldData = async ({
 export const getSpecificationFormData = async (
   vehicleId: string
 ): Promise<GetSpecificationFormDataResponse> => {
-  console.log(
-    'get specification form data api called, here is the vehicleId: ',
-    vehicleId
-  )
+
   try {
     const url = `${Slug.GET_SPEC_FORM_DATA}?vehicleId=${vehicleId}`
 
@@ -397,7 +391,6 @@ type AddFeaturesRequestBody = {
 
 // Add features
 export const addFeatures = async (requestBody: AddFeaturesRequestBody) => {
-  console.log('add features api function called,request body:', requestBody)
   try {
     const data = await API.post({
       slug: Slug.POST_FEATURES_FORM, // Adjust the slug to match your API endpoint
@@ -421,7 +414,7 @@ type UpdateFeaturesRequestBody = {
 export const updateFeatures = async (
   requestBody: UpdateFeaturesRequestBody
 ) => {
-  console.log('update features api function called,request body:', requestBody)
+
   try {
     const data = await API.put({
       slug: Slug.PUT_FEATURES_FORM_DATA,

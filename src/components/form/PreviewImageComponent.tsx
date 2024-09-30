@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Skeleton } from '../ui/skeleton'
 import { toast } from '../ui/use-toast'
-import Spinner from '../general/Spinner'
 
 type PreviewImageComponentProps = {
   imagePath: string
@@ -66,11 +65,13 @@ const PreviewImageComponent: React.FC<PreviewImageComponentProps> = ({
           <Skeleton className="w-full h-full bg-gray-400 !cursor-wait rounded-xl" />
         </div>
       ) : imageSrc ? (
-        <img
-          src={imageSrc as string}
-          alt="Preview"
-          className="object-cover w-full h-24 rounded-md"
-        />
+        <div className="w-full h-24 overflow-hidden border rounded-md">
+          <img
+            src={imageSrc as string}
+            alt="Preview"
+            className="object-cover w-full h-full rounded-md "
+          />
+        </div>
       ) : null}
     </>
   )

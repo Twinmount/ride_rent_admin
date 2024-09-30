@@ -63,9 +63,6 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
       return
     }
 
-    console.log('brand values : ', values)
-
-    return
     try {
       let data
       if (type === 'Add') {
@@ -186,7 +183,7 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
               <SingleFileUpload
                 name={field.name}
                 label="Brand Logo"
-                description="Upload a image with a maximum file size of 300KB. The image should have dimensions not exceeding 500x500 pixels"
+                description="Upload a brand logo with a maximum file size of 1MB. "
                 existingFile={formData?.brandLogo}
                 maxSizeMB={1}
                 setIsFileUploading={setIsFileUploading}

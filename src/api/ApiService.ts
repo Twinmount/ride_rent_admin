@@ -7,7 +7,7 @@ import axios, {
 } from 'axios'
 import { ApiConfig, DEFAULT_API_CONFIG } from './Api-config'
 import { Slug } from './Api-Endpoints'
-import { StorageKeys, load, remove } from '@/utils/storage'
+import { StorageKeys, load } from '@/utils/storage'
 
 /**
  * Represents the response structure of an API request.
@@ -124,7 +124,7 @@ export class ApiService {
       },
       (error: AxiosError) => {
         if (error.response && error.response.status === 401) {
-          console.log('apiService 401 error: ', error.response)
+          console.error('apiService 401 error: ', error.response)
         }
         return Promise.reject(error)
       }

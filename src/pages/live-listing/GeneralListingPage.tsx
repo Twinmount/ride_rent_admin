@@ -70,6 +70,22 @@ export default function GeneralListingPage({
     approvalStatus: string
     rejectionReason?: string
   }) => {
+    if (values.approvalStatus === 'PENDING') {
+      toast({
+        variant: 'destructive',
+        title: 'Invalid Status Change',
+        description: 'Cannot change status back to PENDING.',
+      })
+      return
+    }
+    if (values.approvalStatus === 'UNDER_REVIEW') {
+      toast({
+        variant: 'destructive',
+        title: 'Invalid Status Change',
+        description: 'Cannot change status back to UNDER REVIEW.',
+      })
+      return
+    }
     if (selectedVehicle) {
       try {
         const data = await updateVehicleStatus({
@@ -81,13 +97,14 @@ export default function GeneralListingPage({
         if (data) {
           queryClient.invalidateQueries({ queryKey: ['vehicles', 'listings'] })
           queryClient.invalidateQueries({
-            queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
+            queryKey: [...queryKey, page, limit, sortOrder, searchTerm, state],
             exact: true,
           })
           queryClient.invalidateQueries({
             queryKey: ['vehicle-listing-count'],
             exact: true,
           })
+
           toast({
             title: 'Vehicle status updated successfully',
             className: 'bg-green-500 text-white',

@@ -37,8 +37,6 @@ export const addBrand = async (
 // update brand
 export const updateBrand = async (values: BrandType, brandId: string) => {
   try {
-    console.log('values from updateBrand', values)
-
     const data = await API.put({
       slug: `${Slug.PUT_BRAND}`,
       body: {

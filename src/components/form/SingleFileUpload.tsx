@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
 import {
   FormControl,
@@ -183,7 +183,7 @@ const SingleFileUpload = ({
                                 asChild
                                 className="border-none outline-none ring-0"
                               >
-                                <button className="absolute p-1 bg-white border-none rounded-full shadow-md outline-none h-fit right-1 top-1 ring-0">
+                                <button className="absolute p-1 bg-white border rounded-full shadow-md outline-none h-fit right-1 top-1 ring-0">
                                   <MoreVertical className="w-5 h-5 text-gray-600" />
                                 </button>
                               </DropdownMenuTrigger>
