@@ -27,14 +27,10 @@ const Sidebar = () => {
         <Link to={'/'} className="p-0 text-sm text-right text-gray-600">
           <figure className="ml-2">
             <img
-              src={'/assets/logo/header/header_logo.webp'}
+              src={'/assets/logo/header/admin.webp'}
               className="w-32"
               alt="Ride Rent Logo"
             />
-            <figcaption className="text-[0.6rem]">
-              Quick way to get a{' '}
-              <span className="italic font-bold text-black">Ride On Rent</span>
-            </figcaption>
           </figure>
         </Link>
 

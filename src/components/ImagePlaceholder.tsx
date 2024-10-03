@@ -9,8 +9,6 @@ type ImagePlaceholderProps = {
   onFileChange?: (event: React.ChangeEvent<HTMLInputElement>) => void // Add onFileChange prop for upload
   isUploading?: boolean // New prop to indicate if the placeholder is showing an upload progress
   labelForVehiclePhotos?: string
-  labelForCommercialLicensesFront?: string
-  labelForCommercialLicensesBack?: string
   uploadingCount: number // Keep track of how many images are uploading
 }
 
@@ -20,8 +18,6 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
   onFileChange,
   isUploading = false, // Default to false if not provided
   labelForVehiclePhotos = 'upload',
-  labelForCommercialLicensesFront = 'front',
-  labelForCommercialLicensesBack = 'back',
   uploadingCount, // This tracks how many images are currently uploading
 }) => {
   // If the current index is less than the number of images being uploaded, show spinner
@@ -45,45 +41,6 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
     } else {
       onFileChange && onFileChange(event)
     }
-  }
-
-  // For commercialLicenses, show 'front' and 'back' for the two placeholders
-  if (name === 'commercialLicenses') {
-    const labelText =
-      index === 0
-        ? labelForCommercialLicensesFront
-        : labelForCommercialLicensesBack
-
-    return (
-      <label
-        key={`placeholder-${index}`}
-        htmlFor={`file-upload-${name}`}
-        className={`relative flex flex-col items-center justify-center w-16 h-16 border rounded-lg  bg-gray-5 ${
-          isUploading ? 'cursor-default' : 'cursor-pointer'
-        }`}
-      >
-        <input
-          type="file"
-          accept="image/*"
-          id={`file-upload-${name}`}
-          className="hidden"
-          multiple={true}
-          onChange={handleInputChange}
-          disabled={isUploading}
-        />
-        <Upload
-          size={24}
-          className={` ${isUploading ? 'text-gray-300' : 'text-yellow'}`}
-        />
-        <span
-          className={`text-sm  ${
-            isUploading ? 'text-gray-300' : 'text-yellow'
-          }`}
-        >
-          {labelText}
-        </span>
-      </label>
-    )
   }
 
   // For vehiclePhotos, the first available placeholder after uploading should act as the file upload input

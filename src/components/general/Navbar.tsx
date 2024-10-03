@@ -35,16 +35,10 @@ const Navbar = ({ options, isLoading }: NavbarProps) => {
             >
               <figure className="m-0 max-sm:hidden">
                 <img
-                  src={'/assets/logo/header/header_logo.webp'}
+                  src={'/assets/logo/header/admin.webp'}
                   className="w-32"
                   alt="Ride Rent Logo"
                 />
-                <figcaption className="text-[0.6rem]">
-                  Quick way to get a{' '}
-                  <span className="italic font-bold text-black">
-                    Ride On Rent
-                  </span>
-                </figcaption>
               </figure>
             </Link>
           </div>
