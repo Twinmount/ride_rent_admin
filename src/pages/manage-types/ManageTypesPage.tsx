@@ -7,9 +7,11 @@ import { fetchAllVehicleTypes } from '@/api/vehicle-types'
 import { CategoryType } from '@/types/api-types/API-types'
 import GridSkelton from '@/components/skelton/GridSkelton'
 import { Plus } from 'lucide-react'
-import LocationNav from '@/components/LocationNav'
+import NavigationTab from '@/components/NavigationTab'
+import Pagination from '@/components/Pagination'
 
 export default function ManageTypesPage() {
+  const [page, setPage] = useState(1)
   const navigate = useNavigate()
   const { vehicleCategoryId } = useParams<{ vehicleCategoryId: string }>()
   const [selectedCategory, setSelectedCategory] = useState<
@@ -47,7 +49,7 @@ export default function ManageTypesPage() {
     queryKey: ['vehicle-types', vehicleCategoryId],
     queryFn: () =>
       fetchAllVehicleTypes({
-        page: 1,
+        page,
         limit: 20,
         sortOrder: 'ASC',
         vehicleCategoryId: vehicleCategoryId || '',
@@ -56,7 +58,7 @@ export default function ManageTypesPage() {
   })
 
   // destructuring list from vehicleTypeData
-  const { list } = vehicleTypeData?.result || {}
+  const list = vehicleTypeData?.result.list || []
 
   // setting selected category
   useEffect(() => {
@@ -72,7 +74,7 @@ export default function ManageTypesPage() {
 
   return (
     <section className="container h-auto min-h-screen pb-10">
-      <LocationNav
+      <NavigationTab
         navItems={[
           { label: 'Categories', to: '/vehicle/manage-categories' },
           { label: 'Types', to: '/vehicle/manage-types' },
@@ -134,6 +136,16 @@ export default function ManageTypesPage() {
           New Type <Plus />
         </Link>
       </button>
+
+      {list.length > 0 && (
+        <div className="mt-auto">
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPages={categoryData?.result.totalNumberOfPages || 1}
+          />
+        </div>
+      )}
     </section>
   )
 }

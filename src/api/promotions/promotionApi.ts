@@ -66,7 +66,7 @@ export const fetchPromotionById = async (
 
     return data
   } catch (error) {
-    console.error('Error fetching State:', error)
+    console.error('Error fetching promotions:', error)
     throw error
   }
 }
@@ -104,15 +104,15 @@ export const fetchAllPromotions = async (urlParams: {
 }
 
 // delete specific promotion  by ID
-export const deletePromotion = async (stateId: string) => {
+export const deletePromotion = async (promotionId: string) => {
   try {
     const data = await API.delete({
-      slug: `${Slug.DELETE_PROMOTION}?stateId=${stateId}`,
+      slug: `${Slug.DELETE_PROMOTION}?promotionId=${promotionId}`,
     })
 
     return data
   } catch (error) {
-    console.error('Error deleting States:', error)
+    console.error('Error deleting promotion:', error)
     throw error
   }
 }

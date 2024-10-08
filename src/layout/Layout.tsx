@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import StatesLoadingSkelton from '@/components/skelton/StatesLoader'
 import ScrollToTop from '@/helpers/ScrollToTop'
 import { getAllVehicleListingCount } from '@/api/vehicle'
+import { MantineProvider } from '@mantine/core'
 
 export default function Layout() {
   const { state, setState } = useAdminContext()
@@ -45,7 +46,7 @@ export default function Layout() {
   }
 
   return (
-    <>
+    <MantineProvider>
       <Navbar options={options} isLoading={isLoading} />
       <Sidebar />
       <ScrollToTop />
@@ -58,6 +59,6 @@ export default function Layout() {
           <Outlet />
         )}
       </MainWrapper>
-    </>
+    </MantineProvider>
   )
 }

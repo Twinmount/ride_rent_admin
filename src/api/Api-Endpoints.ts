@@ -114,4 +114,18 @@ export enum Slug {
   // excel data download endpoints
   GET_DOWNLOAD_VEHICLE_DATA = '/vehicle/download/excel',
   GET_DOWNLOAD_COMPANY_DATA = '/company/download/excel',
+
+  // Blogs Endpoints
+  ADD_BLOG = '/blogs',
+  GET_BLOG = '/blogs',
+  PUT_BLOG = '/blogs',
+  DELETE_BLOG = '/blogs',
+  GET_ALL_BLOGS = '/blogs/list',
+
+  // Blog Promotions Endpoints
+  ADD_BLOG_PROMOTION = '/blogs-promotions',
+  GET_BLOG_PROMOTION = '/blogs-promotions',
+  PUT_BLOG_PROMOTION = '/blogs-promotions',
+  DELETE_BLOG_PROMOTION = '/blogs-promotions',
+  GET_ALL_BLOG_PROMOTIONS = '/blogs-promotions/list',
 }

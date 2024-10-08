@@ -3,12 +3,15 @@ import { Plus } from 'lucide-react'
 import GridSkelton from '@/components/skelton/GridSkelton'
 import { useQuery } from '@tanstack/react-query'
 import { fetchAllCategories } from '@/api/vehicle-categories'
-import LocationNav from '@/components/LocationNav'
+import NavigationTab from '@/components/NavigationTab'
+import { useState } from 'react'
+import Pagination from '@/components/Pagination'
 
 export default function ManageCategoriesPage() {
+  const [page, setPage] = useState(1)
   const { data, isLoading } = useQuery({
     queryKey: ['categories'],
-    queryFn: () => fetchAllCategories({ page: 1, limit: 20, sortOrder: 'ASC' }),
+    queryFn: () => fetchAllCategories({ page, limit: 20, sortOrder: 'ASC' }),
   })
 
   // Destructure the result from data
@@ -19,7 +22,7 @@ export default function ManageCategoriesPage() {
   return (
     <section className="container h-auto min-h-screen pb-10">
       {/* navigate between states and cities */}
-      <LocationNav
+      <NavigationTab
         navItems={[
           { label: 'Categories', to: '/vehicle/manage-categories' },
           { label: 'Types', to: '/vehicle/manage-types' },
@@ -68,6 +71,16 @@ export default function ManageCategoriesPage() {
           New Category <Plus />
         </Link>
       </button>
+
+      {categories.length > 0 && (
+        <div className="mt-auto">
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPages={data?.result.totalNumberOfPages || 1}
+          />
+        </div>
+      )}
     </section>
   )
 }

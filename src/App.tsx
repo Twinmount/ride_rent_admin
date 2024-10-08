@@ -11,6 +11,10 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 
+// core styles are required for all packages
+import '@mantine/core/styles.css'
+import '@mantine/tiptap/styles.css'
+
 import Layout from './layout/Layout'
 import ErrorPage from './pages/ErrorPage'
 
@@ -88,20 +92,35 @@ const EditCityPage = lazy(() => import('./pages/manage-cities/EditCityPage'))
 
 //  links page import
 const ManageLinksPage = lazy(
-  () => import('./pages/manage-links/ManageLinksPage')
+  () => import('./pages/quick-links/ManageLinksPage')
 )
-const AddLinkPage = lazy(() => import('./pages/manage-links/AddLinkPage'))
-const EditLinkPage = lazy(() => import('./pages/manage-links/EditLinkPage'))
+const AddLinkPage = lazy(() => import('./pages/quick-links/AddLinkPage'))
+const EditLinkPage = lazy(() => import('./pages/quick-links/EditLinkPage'))
 
 // ads page import
 const ManagePromotionsPage = lazy(
-  () => import('./pages/manage-promotions/ManagePromotionsPage')
+  () => import('./pages/promotions/main-promotions/ManagePromotionsPage')
 )
 const AddPromotionPage = lazy(
-  () => import('./pages/manage-promotions/AddPromotionPage')
+  () => import('./pages/promotions/main-promotions/AddPromotionPage')
 )
 const EditPromotionPage = lazy(
-  () => import('./pages/manage-promotions/EditPromotionPage')
+  () => import('./pages/promotions/main-promotions/EditPromotionPage')
+)
+// blogs promotions page import
+const ManageBlogsPage = lazy(() => import('./pages/blogs/ManageBlogsPage'))
+const AddBlogPage = lazy(() => import('./pages/blogs/AddBlogPage'))
+const EditBlogPage = lazy(() => import('./pages/blogs/EditBlogPage'))
+
+// blogs page import
+const ManageBlogsPromotionsPage = lazy(
+  () => import('./pages/promotions/blog-promotions/ManageBlogsPromotionsPage')
+)
+const AddBlogPromotionsPage = lazy(
+  () => import('./pages/promotions/blog-promotions/AddBlogsPromotionPage')
+)
+const EditBlogPromotionsPage = lazy(
+  () => import('./pages/promotions/blog-promotions/EditBlogsPromotionPage')
 )
 // meta data page routes
 const HomeMetaDataPage = lazy(
@@ -153,6 +172,7 @@ const router = createBrowserRouter([
                 path: '/listings/live',
                 element: <LiveListingPage />,
               },
+
               {
                 path: '/listings/new',
                 element: (
@@ -331,20 +351,62 @@ const router = createBrowserRouter([
                 element: <EditCityPage />,
               },
 
-              // links route
-              { path: '/manage-links', element: <ManageLinksPage /> },
-              { path: '/manage-links/add', element: <AddLinkPage /> },
+              // quick links route
               {
-                path: '/manage-links/edit/:linkId',
+                path: '/marketing',
+                element: <Navigate to={'/marketing/quick-links'} />,
+              },
+              { path: '/marketing/quick-links', element: <ManageLinksPage /> },
+              { path: '/marketing/quick-links/add', element: <AddLinkPage /> },
+              {
+                path: '/marketing/quick-links/edit/:linkId',
                 element: <EditLinkPage />,
               },
 
               // promotions route
-              { path: '/manage-promotions', element: <ManagePromotionsPage /> },
-              { path: '/manage-promotions/add', element: <AddPromotionPage /> },
               {
-                path: '/manage-promotions/edit/:promotionId',
+                path: '/marketing/promotions',
+                element: <ManagePromotionsPage />,
+              },
+              {
+                path: '/marketing/promotions/add',
+                element: <AddPromotionPage />,
+              },
+              {
+                path: '/marketing/promotions/edit/:promotionId',
                 element: <EditPromotionPage />,
+              },
+
+              // blogs routes
+              {
+                path: '/happenings',
+                element: <Navigate to={'/happenings/blogs'} />,
+              },
+              {
+                path: '/happenings/blogs',
+                element: <ManageBlogsPage />,
+              },
+              {
+                path: '/happenings/blogs/add',
+                element: <AddBlogPage />,
+              },
+              {
+                path: '/happenings/blogs/edit/:blogId',
+                element: <EditBlogPage />,
+              },
+
+              // blog promotions
+              {
+                path: '/happenings/promotions',
+                element: <ManageBlogsPromotionsPage />,
+              },
+              {
+                path: '/happenings/promotions/add',
+                element: <AddBlogPromotionsPage />,
+              },
+              {
+                path: '/happenings/promotions/edit/:promotionId',
+                element: <EditBlogPromotionsPage />,
               },
 
               // meta data routes

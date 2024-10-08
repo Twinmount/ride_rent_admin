@@ -4,20 +4,25 @@ import { Link } from 'react-router-dom'
 import StateSkelton from '@/components/skelton/StateSkelton'
 import { useQuery } from '@tanstack/react-query'
 import { fetchAllStates } from '@/api/states'
-import LocationNav from '@/components/LocationNav'
+import NavigationTab from '@/components/NavigationTab'
+import Pagination from '@/components/Pagination'
+import { useState } from 'react'
 
 export default function ManageStatesPage() {
   const { org } = useAdminContext()
+  const [page, setPage] = useState(1)
 
   const { data, isLoading } = useQuery({
     queryKey: ['states'],
     queryFn: fetchAllStates,
   })
 
+  const statesResult = data?.result || []
+
   return (
     <section className="container h-auto min-h-screen pb-10">
       {/* navigate between states and cities */}
-      <LocationNav
+      <NavigationTab
         navItems={[
           { label: 'States', to: '/locations/manage-states' },
           { label: 'Cities', to: '/locations/manage-cities' },
@@ -31,7 +36,7 @@ export default function ManageStatesPage() {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           <StateSkelton />
         </div>
-      ) : data?.result && data.result.length > 0 ? (
+      ) : statesResult.length > 0 ? (
         <div className="grid grid-cols-2 gap-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {data?.result.map((data) => (
             <Link
@@ -68,6 +73,12 @@ export default function ManageStatesPage() {
           New Location <Plus />
         </Link>
       </button>
+
+      {statesResult.length > 0 && (
+        <div className="mt-auto">
+          <Pagination page={page} setPage={setPage} totalPages={1} />
+        </div>
+      )}
     </section>
   )
 }

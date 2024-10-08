@@ -63,7 +63,7 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
           title: `${type} Link successfully`,
           className: 'bg-yellow text-white',
         })
-        navigate('/manage-links')
+        navigate('/quick-links')
       }
     } catch (error) {
       console.error(error)
@@ -156,7 +156,7 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
             confirmText="Delete"
             cancelText="Cancel"
             isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/manage-states"
+            navigateTo="/marketing/quick-links"
           ></DeleteModal>
         )}
 

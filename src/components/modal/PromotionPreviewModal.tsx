@@ -31,7 +31,7 @@ export default function PromotionPreviewModal({
         }
       }}
     >
-      <DialogContent className="max-w-[700px] w-full max-sm:w-[95%] mx-auto !rounded-3xl">
+      <DialogContent className="max-w-[700px] w-full max-sm:w-[95%] min-h-96 mx-auto !rounded-3xl">
         <DialogTitle className="text-lg font-semibold text-center">
           Promotion Preview
         </DialogTitle>

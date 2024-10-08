@@ -5,11 +5,11 @@ type NavItem = {
   to: string
 }
 
-type LocationNavProps = {
+type NavigationTabProps = {
   navItems: NavItem[]
 }
 
-export default function LocationNav({ navItems }: LocationNavProps) {
+export default function NavigationTab({ navItems }: NavigationTabProps) {
   return (
     <div className="w-full h-10 mx-auto my-4 overflow-hidden bg-white shadow gap-x-2 rounded-3xl flex-between max-w-64">
       {navItems.map((item) => (

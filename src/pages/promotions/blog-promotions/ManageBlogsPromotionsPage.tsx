@@ -1,27 +1,27 @@
 import { useState } from 'react'
-import { useAdminContext } from '@/context/AdminContext'
 import AdsSkelton from '@/components/skelton/AdsSkelton'
 import PromotionPreviewModal from '@/components/modal/PromotionPreviewModal'
-import { fetchAllPromotions } from '@/api/promotions'
 import { useQuery } from '@tanstack/react-query'
 import { Eye, FilePenLine, Plus } from 'lucide-react'
 
 import { Link } from 'react-router-dom'
 import { PromotionType } from '@/types/api-types/API-types'
+import { fetchAllBlogPromotions } from '@/api/blogs'
+import Pagination from '@/components/Pagination'
+import NavigationTab from '@/components/NavigationTab'
 
-export default function ManagePromotionsPage() {
-  const { state } = useAdminContext()
+export default function ManageBlogPromotionsPage() {
+  const [page, setPage] = useState(1)
   const [selectedPromotion, setSelectedPromotion] =
     useState<PromotionType | null>(null)
 
   const { data, isLoading } = useQuery({
-    queryKey: ['promotions', state],
+    queryKey: ['blog-promotions'],
     queryFn: () =>
-      fetchAllPromotions({
-        page: 1,
-        limit: 20,
-        sortOrder: 'ASC',
-        stateId: state.stateId as string,
+      fetchAllBlogPromotions({
+        page,
+        limit: 10,
+        sortOrder: 'DESC',
       }),
   })
 
@@ -30,9 +30,15 @@ export default function ManagePromotionsPage() {
 
   return (
     <section className="container h-auto min-h-screen pb-10">
+      {/* navigate between blogs and blog promotions */}
+      <NavigationTab
+        navItems={[
+          { label: 'Blogs', to: '/happenings/blogs' },
+          { label: 'Promotions', to: '/happenings/promotions' },
+        ]}
+      />
       <h1 className="mt-6 mb-8 text-2xl font-bold text-center sm:text-left">
-        Currently Published Ads In{' '}
-        <span className="text-yellow">{state.stateName}</span>
+        Live Blog Promotions
       </h1>
 
       {isLoading ? (
@@ -59,7 +65,7 @@ export default function ManagePromotionsPage() {
                   <Eye size={25} />
                 </div>
                 <Link
-                  to={`/manage-promotions/edit/${data.promotionId}`}
+                  to={`/happenings/promotions/edit/${data.promotionId}`}
                   className="text-white flex-center gap-x-1 hover:text-yellow group/edit"
                 >
                   <FilePenLine size={23} />{' '}
@@ -81,19 +87,28 @@ export default function ManagePromotionsPage() {
         </div>
       ) : (
         <p className="mt-20 text-xl font-semibold text-center text-gray-500">
-          No ads found under
-          <span className="italic font-bold"> {state.stateName}</span>
+          No Blog Promotions Found!
         </p>
       )}
 
       <button className="fixed z-30 overflow-hidden cursor-pointer w-fit h-fit rounded-xl right-10 bottom-10 shadow-xl  hover:scale-[1.02]  transition-all ">
         <Link
           className="px-3 py-2 text-white flex-center gap-x-1 bg-yellow"
-          to={`/manage-promotions/add`}
+          to={`/happenings/promotions/add`}
         >
-          New Promotion <Plus />
+          New Blog Promotion <Plus />
         </Link>
       </button>
+
+      {promotions.length > 0 && (
+        <div className="mt-auto">
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPages={data?.result.totalNumberOfPages || 1}
+          />
+        </div>
+      )}
 
       {/* Render the modal once, passing the selected ad image */}
       {selectedPromotion && (

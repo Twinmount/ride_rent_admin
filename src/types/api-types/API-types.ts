@@ -91,6 +91,7 @@ export interface FetchCategoriesResponse {
     list: CategoryType[] // Array of categories
     page: number // Current page number
     total: number // Total number of categories
+    totalNumberOfPages: number
   }
   statusCode: number
 }
@@ -120,6 +121,7 @@ export interface FetchTypesResponse {
     list: VehicleTypeType[] // Array of vehicle types
     page: number // Current page number
     total: number // Total number of categories
+    totalNumberOfPages: number
   }
   statusCode: number
 }
@@ -175,6 +177,7 @@ export interface FetchLinksResponse {
     page: string
     limit: string
     total: number
+    totalNumberOfPages: number
   }
   status: string
   statusCode: number
@@ -201,6 +204,7 @@ export interface FetchPromotionsResponse {
     page: string
     limit: string
     total: number
+    totalNumberOfPages: number
   }
   status: string
   statusCode: number

@@ -93,6 +93,11 @@ export type PromotionFormType = {
   promotionLink: string
 }
 
+export type BlogPromotionFormType = {
+  promotionImage: string
+  promotionLink: string
+}
+
 export type HomeMetaFormType = {
   stateId: string
   metaTitle: string
@@ -158,3 +163,25 @@ export interface CompanyListingResponse {
   status: string
   statusCode: number
 }
+
+// blog
+
+export type BlogFormType = {
+  blogTitle: string
+  blogDescription: string
+  blogImage: string
+  blogCategory: string
+  authorName: string
+  metaTitle: string
+  metaDescription: string
+  blogContent: string
+  updatedAt?: string
+}
+export type CategoryType =
+  | 'all'
+  | 'design'
+  | 'engineering'
+  | 'automotive'
+  | 'news'
+  | 'travel'
+  | 'travel'

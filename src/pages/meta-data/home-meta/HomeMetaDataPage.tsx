@@ -7,7 +7,7 @@ import { Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Pagination from '@/components/Pagination'
 import { useState } from 'react'
-import LocationNav from '@/components/LocationNav'
+import LocationNav from '@/components/NavigationTab'
 
 export default function HomeMetaData() {
   const [page, setPage] = useState(1)

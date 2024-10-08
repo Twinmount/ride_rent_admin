@@ -1,5 +1,6 @@
 import { PrimaryFormType } from '@/types/formTypes'
 import {
+  BlogFormType,
   BrandFormType,
   CategoryFormType,
   CityFormType,
@@ -11,8 +12,8 @@ import {
 import {
   CarFront,
   FileSearch,
+  FileText,
   LayoutDashboard,
-  Link,
   List,
   MapPin,
   Megaphone,
@@ -36,53 +37,12 @@ export const sidebarContent = [
   },
   { label: 'Brands', icon: Star, link: '/manage-brands' },
   { label: 'Locations', icon: MapPin, link: '/locations' },
-  {
-    label: 'Quick Links ',
-    icon: Link,
-    link: '/manage-links',
-  },
-  { label: 'Promotions', icon: Megaphone, link: '/manage-promotions' },
+  { label: 'Links & Promotions', icon: Megaphone, link: '/marketing' },
+  { label: 'Blogs', icon: FileText, link: '/happenings' },
   { label: 'Meta Data', icon: FileSearch, link: '/meta-data' },
 ]
 
-// sample vehicle categories
-export const VehicleGeneralCategories = [
-  {
-    id: 1,
-    label: 'Car',
-    value: 'car',
-  },
-  {
-    id: 2,
-    label: 'Sports Car',
-    value: 'sports_car',
-  },
-  {
-    id: 3,
-    label: 'Cycle',
-    value: 'cycle',
-  },
-  {
-    id: 4,
-    label: 'Motorcycle',
-    value: 'motorcycle',
-  },
-  {
-    id: 5,
-    label: 'Sports Bike',
-    value: 'sports_bike',
-  },
-  {
-    id: 6,
-    label: 'Leisure Boat',
-    value: 'leisure_boat',
-  },
-  {
-    id: 7,
-    label: 'Charter',
-    value: 'charter',
-  },
-]
+
 
 // Vehicle type form default values
 export const VehicleTypeFormDefaultValues: VehicleTypeFormType = {
@@ -124,6 +84,12 @@ export const LinkFormDefaultValues = {
 
 // ads form default values
 export const PromotionFormDefaultValue = {
+  promotionImage: '',
+  promotionLink: '',
+}
+
+// blog promotion form default values
+export const BlogPromotionFormDefaultValue = {
   promotionImage: '',
   promotionLink: '',
 }
@@ -190,4 +156,16 @@ export const CompanyFormDefaultValues: CompanyFormType = {
 export const CompanyStatusFormDefaultValues: CompanyStatusFormType = {
   approvalStatus: 'PENDING',
   rejectionReason: '',
+}
+
+// Blog form default values
+export const BlogFormDefaultValues: BlogFormType = {
+  blogTitle: '',
+  blogDescription: '',
+  blogImage: '',
+  blogCategory: '',
+  authorName: '',
+  metaTitle: '',
+  metaDescription: '',
+  blogContent: '',
 }

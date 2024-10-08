@@ -14,50 +14,49 @@ import {
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { PromotionFormType } from '@/types/types'
-import { PromotionFormDefaultValue } from '@/constants'
-import { PromotionFormSchema } from '@/lib/validator'
+import { BlogPromotionFormType } from '@/types/types'
+import { BlogPromotionFormDefaultValue } from '@/constants'
+import { BlogPromotionFormSchema } from '@/lib/validator'
 import Spinner from '../general/Spinner'
-
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '../ui/use-toast'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useAdminContext } from '@/context/AdminContext'
-
 import DeleteModal from '../modal/DeleteModal'
 import SingleFileUpload from './SingleFileUpload'
-import {
-  addPromotion,
-  deletePromotion,
-  updatePromotion,
-} from '@/api/promotions'
 import { useState } from 'react'
 import { GcsFilePaths } from '@/constants/enum'
+import {
+  addBlogPromotion,
+  deleteBlogPromotion,
+  updateBlogPromotion,
+} from '@/api/blogs'
 
-type PromotionFormProps = {
+type BlogPromotionFormProps = {
   type: 'Add' | 'Update'
-  formData?: PromotionFormType | null
+  formData?: BlogPromotionFormType | null
 }
 
-export default function PromotionForm({ type, formData }: PromotionFormProps) {
+export default function BlogPromotionForm({
+  type,
+  formData,
+}: BlogPromotionFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false)
-  const { state } = useAdminContext()
 
   const initialValues =
-    formData && type === 'Update' ? formData : PromotionFormDefaultValue
+    formData && type === 'Update' ? formData : BlogPromotionFormDefaultValue
 
   const navigate = useNavigate()
   const { promotionId } = useParams<{ promotionId: string }>()
   const queryClient = useQueryClient()
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof PromotionFormSchema>>({
-    resolver: zodResolver(PromotionFormSchema),
+  const form = useForm<z.infer<typeof BlogPromotionFormSchema>>({
+    resolver: zodResolver(BlogPromotionFormSchema),
     defaultValues: initialValues,
   })
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof PromotionFormSchema>) {
+  async function onSubmit(values: z.infer<typeof BlogPromotionFormSchema>) {
     if (isFileUploading) {
       toast({
         title: 'File Upload in Progress',
@@ -72,9 +71,9 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
     try {
       let data
       if (type === 'Add') {
-        data = await addPromotion(values, state.stateId as string)
+        data = await addBlogPromotion(values)
       } else if (type === 'Update') {
-        data = await updatePromotion(values, promotionId as string)
+        data = await updateBlogPromotion(values, promotionId as string)
       }
 
       if (data) {
@@ -82,7 +81,7 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
           title: `${type} Promotion successfully`,
           className: 'bg-yellow text-white',
         })
-        navigate('/marketing/promotions')
+        navigate('/blogs/promotions')
       }
     } catch (error) {
       console.error(error)
@@ -95,10 +94,10 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
   }
 
   const { mutateAsync: deletePromotionMutation, isPending } = useMutation({
-    mutationFn: () => deletePromotion(promotionId as string),
+    mutationFn: () => deleteBlogPromotion(promotionId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['promotions', state],
+        queryKey: ['blog-promotions'],
         exact: true,
       })
     },
@@ -134,8 +133,8 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
             name="promotionLink"
             render={({ field }) => (
               <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
-                  Link <span className="mr-5 max-sm:hidden">:</span>
+                <FormLabel className="flex justify-between w-64 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+                  Promotion Link <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
                 <div className="flex-col items-start w-full">
@@ -147,7 +146,7 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    Provide the link associated with the promotion
+                    Provide the link associated with this blog promotion
                   </FormDescription>
                   <FormMessage className="ml-2" />
                 </div>
@@ -177,13 +176,12 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
             confirmText="Delete"
             cancelText="Cancel"
             isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/marketing/promotions"
+            navigateTo="/blogs/promotions"
           ></DeleteModal>
         )}
 
         <p className="p-0 m-0 -mt-3 text-xs text-center text-red-500">
-          Make sure appropriate state is selected before adding a promotion.
-          Currently adding promotion under {state.stateName}
+          Note that blog promotions are global, not state specific.
         </p>
       </form>
     </Form>

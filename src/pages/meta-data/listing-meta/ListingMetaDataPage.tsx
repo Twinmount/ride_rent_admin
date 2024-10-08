@@ -11,7 +11,7 @@ import { useAdminContext } from '@/context/AdminContext'
 import { Link } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import Pagination from '@/components/Pagination'
-import LocationNav from '@/components/LocationNav'
+import LocationNav from '@/components/NavigationTab'
 
 export default function ListingMetaDataPage() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(

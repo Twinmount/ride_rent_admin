@@ -110,6 +110,15 @@ export const PromotionFormSchema = z.object({
     .url('Link must be a valid URL'),
 })
 
+// blog promotion form schema
+export const BlogPromotionFormSchema = z.object({
+  promotionImage: z.string().min(1, 'Promotion image is required'),
+  promotionLink: z
+    .string()
+    .min(1, 'Link is required')
+    .url('Link must be a valid URL'),
+})
+
 // RentalDetailType Schema
 const RentalDetailTypeSchema = z.object({
   enabled: z.boolean().optional(),
@@ -244,4 +253,43 @@ export const ListingMetaFormSchema = z.object({
     .string()
     .min(1, 'Meta description is required')
     .max(5000, 'Meta description must be 5000 characters or less'),
+})
+
+// blog form schema
+export const BlogFormSchema = z.object({
+  blogTitle: z
+    .string()
+    .min(3, 'Blog title should be at least 3 characters long')
+    .max(60, 'Blog title should not exceed 60 characters'),
+
+  blogDescription: z
+    .string()
+    .min(10, 'Blog description should be at least 10 characters long')
+    .max(120, 'Blog description should not exceed 100 characters'),
+
+  blogImage: z.string().min(1, 'Blog image is required'),
+  blogCategory: z
+    .string()
+    .min(3, 'Blog category should be at least 3 characters long')
+    .max(50, 'Blog category should not exceed 50 characters'),
+
+  authorName: z
+    .string()
+    .min(3, 'Blog author should be at least 3 characters long')
+    .max(30, 'Blog title should not exceed 30 characters'),
+
+  metaTitle: z
+    .string()
+    .min(3, 'Meta title should be at least 3 characters long')
+    .max(60, 'Meta title should not exceed 60 characters'),
+
+  metaDescription: z
+    .string()
+    .min(10, 'Meta description should be at least 10 characters long')
+    .max(160, 'Meta description should not exceed 160 characters'),
+
+  blogContent: z
+    .string()
+    .min(20, 'Blog content should be at least 20 characters long') // Define minimal content for meaningful entries
+    .max(5000, 'Blog content should not exceed 5000 characters'),
 })

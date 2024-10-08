@@ -3,7 +3,7 @@ import { Plus } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { fetchAllCities } from '@/api/cities'
-import LocationNav from '@/components/LocationNav'
+import NavigationTab from '@/components/NavigationTab'
 import GridSkelton from '@/components/skelton/GridSkelton'
 
 export default function ManageCitiesPage() {
@@ -19,7 +19,7 @@ export default function ManageCitiesPage() {
   return (
     <section className="container h-auto min-h-screen pb-10">
       {/* navigate between states and cities */}
-      <LocationNav
+      <NavigationTab
         navItems={[
           { label: 'States', to: '/locations/manage-states' },
           { label: 'Cities', to: '/locations/manage-cities' },

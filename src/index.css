@@ -85,6 +85,10 @@
     @apply bg-gray-100 h-[54px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-2xl p-regular-16 px-4 py-3 border-none focus-visible:ring-transparent !important;
   }
 
+  .blog-input-field {
+    @apply bg-gray-100 h-[54px] placeholder:text-gray-500 rounded-xl p-regular-16 px-4 py-3 ring-1 ring-slate-300 focus-visible:ring-offset-1 !important;
+  }
+
   .admin-input-field {
     @apply bg-white h-[44px] w-full max-w-[300px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-2xl p-regular-16 px-4 py-3 border focus-visible:ring-transparent !important;
   }
