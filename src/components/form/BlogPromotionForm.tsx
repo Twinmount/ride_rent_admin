@@ -22,7 +22,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from '../ui/use-toast'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import DeleteModal from '../modal/DeleteModal'
-import SingleFileUpload from './SingleFileUpload'
 import { useState } from 'react'
 import { GcsFilePaths } from '@/constants/enum'
 import {

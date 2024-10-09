@@ -2,7 +2,6 @@ import { CircleArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import FormSkelton from '@/components/skelton/FormSkelton'
 import { useQuery } from '@tanstack/react-query'
-import { fetchPromotionById } from '@/api/promotions'
 import BlogPromotionForm from '@/components/form/BlogPromotionForm'
 import { fetchBlogPromotionById } from '@/api/blogs'
 
