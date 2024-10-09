@@ -30,6 +30,8 @@ import {
   deleteBlogPromotion,
   updateBlogPromotion,
 } from '@/api/blogs'
+import { deleteMultipleFiles } from '@/helpers/form'
+import PromotionFileUpload from './PromotionsFileUpload'
 
 type BlogPromotionFormProps = {
   type: 'Add' | 'Update'
@@ -41,6 +43,7 @@ export default function BlogPromotionForm({
   formData,
 }: BlogPromotionFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false)
+  const [deletedImages, setDeletedImages] = useState<string[]>([])
 
   const initialValues =
     formData && type === 'Update' ? formData : BlogPromotionFormDefaultValue
@@ -77,11 +80,19 @@ export default function BlogPromotionForm({
       }
 
       if (data) {
+        // actually delete the images from the db, if any
+        await deleteMultipleFiles(deletedImages)
+      }
+
+      if (data) {
         toast({
           title: `${type} Promotion successfully`,
           className: 'bg-yellow text-white',
         })
-        navigate('/blogs/promotions')
+        navigate('/happenings/promotions')
+        queryClient.invalidateQueries({
+          queryKey: ['blogs'],
+        })
       }
     } catch (error) {
       console.error(error)
@@ -115,14 +126,15 @@ export default function BlogPromotionForm({
             control={form.control}
             name="promotionImage"
             render={({ field }) => (
-              <SingleFileUpload
+              <PromotionFileUpload
                 name={field.name}
                 label="Promotion Image"
-                description="Upload a image with a maximum file size of 3MB"
+                description="Upload an image or GIF with a maximum file size of 5MB. Vertical (portrait) aspect ratio is preferred"
                 existingFile={formData?.promotionImage}
-                maxSizeMB={3}
+                maxSizeMB={5}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.IMAGE}
+                setDeletedImages={setDeletedImages}
               />
             )}
           />

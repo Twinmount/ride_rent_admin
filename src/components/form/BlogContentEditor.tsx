@@ -38,20 +38,19 @@ export default function BlogContentEditor({
 
   return (
     <FormItem className="flex flex-col w-full mb-2 max-sm:flex-col">
-      <FormLabel className="flex justify-between mt-4 ml-2 text-base w-52 max-sm:w-fit lg:text-lg">
+      <FormLabel className="w-full mt-4 ml-2 text-lg !font-bold text-left lg:text-xl">
         Body Of The Blog
-        <span className="mr-5 max-sm:hidden">:</span>
       </FormLabel>
       <FormDescription className="w-full ml-2">
         Make sure appropriate page structure is maintained here as it will be
         directly reflected in the Frontend UI. And also, note that, <br />
         &#8226; use{' '}
         <span className="px-1 font-semibold rounded-md bg-slate-300">
-          ctrl+shift+c
+          ctrl+shift+v
         </span>{' '}
         or{' '}
         <span className="px-1 font-semibold rounded-md bg-slate-300">
-          cmd+shift+c
+          cmd+shift+v
         </span>{' '}
         to paste a copied text <br />
       </FormDescription>

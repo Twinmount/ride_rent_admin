@@ -24,6 +24,7 @@ import { toast } from '../ui/use-toast'
 import { addState, updateState } from '@/api/states'
 import { useState } from 'react'
 import { GcsFilePaths } from '@/constants/enum'
+import { deleteMultipleFiles } from '@/helpers/form'
 
 type StateFormProps = {
   type: 'Add' | 'Update'
@@ -32,6 +33,7 @@ type StateFormProps = {
 
 export default function StateForm({ type, formData }: StateFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false)
+  const [deletedImages, setDeletedImages] = useState<string[]>([])
 
   const initialValues =
     formData && type === 'Update' ? formData : StateFormDefaultValues
@@ -64,6 +66,11 @@ export default function StateForm({ type, formData }: StateFormProps) {
         data = await addState(values)
       } else if (type === 'Update') {
         data = await updateState(values, stateId as string)
+      }
+
+      if (data) {
+        // actually delete the images from the db, if any
+        await deleteMultipleFiles(deletedImages)
       }
 
       if (data) {
@@ -158,6 +165,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
                 existingFile={formData?.stateImage || null}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.IMAGE}
+                setDeletedImages={setDeletedImages}
               />
             )}
           />

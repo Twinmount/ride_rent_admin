@@ -29,6 +29,7 @@ import { useState } from 'react'
 import { CompanyType } from '@/types/api-types/vehicleAPI-types'
 import { useQueryClient } from '@tanstack/react-query'
 import { GcsFilePaths } from '@/constants/enum'
+import { deleteMultipleFiles } from '@/helpers/form'
 
 type CompanyFormProps = {
   type: 'Update'
@@ -39,6 +40,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
   const navigate = useNavigate()
   const { companyId } = useParams<{ companyId: string }>()
   const [isFileUploading, setIsFileUploading] = useState(false)
+  const [deletedImages, setDeletedImages] = useState<string[]>([])
 
   const queryClient = useQueryClient()
 
@@ -72,6 +74,12 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
 
     try {
       const data = await updateCompany(values, companyId as string)
+
+      if (data) {
+        // actually delete the images from the db, if any
+        console.log('deleted images state : ', deletedImages)
+        await deleteMultipleFiles(deletedImages)
+      }
 
       if (data) {
         toast({
@@ -173,6 +181,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                     ? `[${formData.companyName}] - company-logo`
                     : 'company-logo'
                 }
+                setDeletedImages={setDeletedImages}
               />
             )}
           />
@@ -202,6 +211,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                     ? `[${formData.companyName}] - commercial-license`
                     : 'commercial-license'
                 }
+                setDeletedImages={setDeletedImages}
               />
             )}
           />

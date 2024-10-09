@@ -25,6 +25,7 @@ import SingleFileUpload from './SingleFileUpload'
 import VehicleCategoryDropdown from './VehicleCategoryDropdown'
 import { useState } from 'react'
 import { GcsFilePaths } from '@/constants/enum'
+import { deleteMultipleFiles } from '@/helpers/form'
 
 type BrandFormProps = {
   type: 'Add' | 'Update'
@@ -33,6 +34,7 @@ type BrandFormProps = {
 
 export default function BrandForm({ type, formData }: BrandFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false)
+  const [deletedImages, setDeletedImages] = useState<string[]>([])
 
   const initialValues =
     formData && type === 'Update' ? formData : BrandFormDefaultValues
@@ -69,6 +71,11 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
         data = await addBrand(values, vehicleCategoryId as string)
       } else if (type === 'Update') {
         data = await updateBrand(values, brandId as string)
+      }
+
+      if (data) {
+        // actually delete the images from the db, if any
+        await deleteMultipleFiles(deletedImages)
       }
 
       if (data) {
@@ -188,6 +195,7 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
                 maxSizeMB={1}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.LOGOS}
+                setDeletedImages={setDeletedImages}
               />
             )}
           />

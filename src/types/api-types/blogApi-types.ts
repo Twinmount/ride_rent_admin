@@ -5,6 +5,7 @@ export interface BlogType {
   blogDescription: string
   blogContent: string
   blogImage: string
+  blogImagePath: string
   blogCategory: string
   authorName: string
   metaTitle: string

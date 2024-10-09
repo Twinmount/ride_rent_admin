@@ -28,6 +28,7 @@ import BlogCategoriesDropdown from '../BlogCategoryDropdown'
 import { Textarea } from '@/components/ui/textarea'
 import BlogContentEditor from '../BlogContentEditor'
 import { useQueryClient } from '@tanstack/react-query'
+import { deleteMultipleFiles } from '@/helpers/form'
 
 type StateFormProps = {
   type: 'Add' | 'Update'
@@ -36,6 +37,7 @@ type StateFormProps = {
 
 export default function BlogForm({ type, formData }: StateFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false)
+  const [deletedImages, setDeletedImages] = useState<string[]>([])
 
   const initialValues =
     formData && type === 'Update' ? formData : BlogFormDefaultValues
@@ -70,6 +72,11 @@ export default function BlogForm({ type, formData }: StateFormProps) {
         data = await addBlog(values)
       } else if (type === 'Update') {
         data = await updateBlog(values, blogId as string)
+      }
+
+      if (data) {
+        // actually delete the images from the db, if any
+        await deleteMultipleFiles(deletedImages)
       }
 
       if (data) {
@@ -223,9 +230,10 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                 label="Blog Banner"
                 description="Upload an image with a maximum file size of 1mb."
                 isDownloadable
-                existingFile={formData?.blogImage || null}
+                existingFile={formData?.blogImagePath || null}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.IMAGE}
+                setDeletedImages={setDeletedImages}
               />
             )}
           />
@@ -372,6 +380,8 @@ export default function BlogForm({ type, formData }: StateFormProps) {
             )
           }}
         />
+
+        <hr className="my-3 border" />
 
         {/* blog content text editor */}
         <FormField

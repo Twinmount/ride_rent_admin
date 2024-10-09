@@ -25,7 +25,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAdminContext } from '@/context/AdminContext'
 
 import DeleteModal from '../modal/DeleteModal'
-import SingleFileUpload from './SingleFileUpload'
 import {
   addPromotion,
   deletePromotion,
@@ -33,6 +32,8 @@ import {
 } from '@/api/promotions'
 import { useState } from 'react'
 import { GcsFilePaths } from '@/constants/enum'
+import { deleteMultipleFiles } from '@/helpers/form'
+import PromotionFileUpload from './PromotionsFileUpload'
 
 type PromotionFormProps = {
   type: 'Add' | 'Update'
@@ -41,6 +42,8 @@ type PromotionFormProps = {
 
 export default function PromotionForm({ type, formData }: PromotionFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false)
+  const [deletedImages, setDeletedImages] = useState<string[]>([])
+
   const { state } = useAdminContext()
 
   const initialValues =
@@ -75,6 +78,11 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
         data = await addPromotion(values, state.stateId as string)
       } else if (type === 'Update') {
         data = await updatePromotion(values, promotionId as string)
+      }
+
+      if (data) {
+        console.log('deleted Images api function called : ', deletedImages)
+        await deleteMultipleFiles(deletedImages) // Call
       }
 
       if (data) {
@@ -116,14 +124,15 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
             control={form.control}
             name="promotionImage"
             render={({ field }) => (
-              <SingleFileUpload
+              <PromotionFileUpload
                 name={field.name}
                 label="Promotion Image"
-                description="Upload a image with a maximum file size of 3MB"
+                description="Upload an image or GIF with a maximum file size of 5MB. Vertical (portrait) aspect ratio is preferred"
                 existingFile={formData?.promotionImage}
-                maxSizeMB={3}
+                maxSizeMB={5}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.IMAGE}
+                setDeletedImages={setDeletedImages}
               />
             )}
           />

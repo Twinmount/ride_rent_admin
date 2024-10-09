@@ -42,8 +42,6 @@ export const sidebarContent = [
   { label: 'Meta Data', icon: FileSearch, link: '/meta-data' },
 ]
 
-
-
 // Vehicle type form default values
 export const VehicleTypeFormDefaultValues: VehicleTypeFormType = {
   name: '',
@@ -163,9 +161,20 @@ export const BlogFormDefaultValues: BlogFormType = {
   blogTitle: '',
   blogDescription: '',
   blogImage: '',
+  blogImagePath: '',
   blogCategory: '',
   authorName: '',
   metaTitle: '',
   metaDescription: '',
   blogContent: '',
 }
+
+// tags array
+export const categoryTags = [
+  { label: 'All', value: 'all' },
+  { label: 'Design', value: 'design' },
+  { label: 'Engineering', value: 'engineering' },
+  { label: 'Automotive', value: 'automotive' },
+  { label: 'News', value: 'news' },
+  { label: 'Travel', value: 'travel' },
+]

@@ -23,7 +23,7 @@ import PreviewImageComponent from './PreviewImageComponent'
 import { Progress } from '../ui/progress'
 import { downloadFileFromStream } from '@/helpers/form'
 
-type SingleFileUploadProps = {
+type PromotionFileUploadProps = {
   name: string
   label: string
   description: React.ReactNode
@@ -37,19 +37,19 @@ type SingleFileUploadProps = {
   setDeletedImages: (deletedPaths: (prev: string[]) => string[]) => void
 }
 
-const SingleFileUpload = ({
+const PromotionFileUpload = ({
   name,
   label,
   description,
   existingFile = null,
   isDisabled = false,
-  maxSizeMB = 5,
+  maxSizeMB = 10, // Assuming the max size for GIFs and images is 10MB
   isDownloadable = false,
   setIsFileUploading,
   bucketFilePath,
   downloadFileName,
   setDeletedImages,
-}: SingleFileUploadProps) => {
+}: PromotionFileUploadProps) => {
   const { control, setValue, clearErrors } = useFormContext()
   const [isUploading, setIsUploading] = useState(false)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
@@ -71,18 +71,44 @@ const SingleFileUpload = ({
     }
   }, [existingFile, setValue, name])
 
-  // Handle file upload and setting values
+  // Handle file upload and setting values (allow images + GIF)
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0]
     if (file) {
       const fileSizeMB = file.size / (1024 * 1024)
+      const fileExtension = file.name.split('.').pop()?.toLowerCase()
+
+      // Allow only images and GIF files
+      if (
+        !['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(fileExtension || '')
+      ) {
+        toast({
+          variant: 'destructive',
+          title: 'Invalid file type',
+          description: 'Only PNG, JPG, JPEG, WEBP and GIF formats are allowed.',
+        })
+        const fileInput = document.getElementById(
+          `file-upload-${name}`
+        ) as HTMLInputElement
+        if (fileInput) {
+          fileInput.value = '' // Clear the file input field
+        }
+        return
+      }
+
       if (fileSizeMB > maxSizeMB) {
         toast({
           variant: 'destructive',
-          title: `Image size exceeds ${maxSizeMB} MB`,
+          title: `File size exceeds ${maxSizeMB} MB`,
         })
+        const fileInput = document.getElementById(
+          `file-upload-${name}`
+        ) as HTMLInputElement
+        if (fileInput) {
+          fileInput.value = '' // Clear the file input field
+        }
         return
       }
 
@@ -103,7 +129,6 @@ const SingleFileUpload = ({
 
         setValue(name, uploadedFilePath)
         setImagePath(uploadedFilePath) // Set the new image path
-
         clearErrors(name)
       } catch (error) {
         toast({
@@ -125,7 +150,6 @@ const SingleFileUpload = ({
       setDeletedImages((prev) => [...prev, imagePath])
     }
 
-    //  clear the input field memory
     const fileInput = document.getElementById(
       `file-upload-${name}`
     ) as HTMLInputElement
@@ -159,6 +183,7 @@ const SingleFileUpload = ({
       }
     }
   }
+
   return (
     <>
       <FormItem className="flex w-full mb-2 max-sm:flex-col">
@@ -178,11 +203,11 @@ const SingleFileUpload = ({
                     className="hidden"
                     id={`file-upload-${name}`}
                     disabled={isDisabled || isUploading}
+                    accept=".png,.jpg,.jpeg,.gif, .webp" // Accept GIF and image formats
                   />
                   <div className="flex items-center gap-4 mt-2">
                     {imagePath ? (
                       <div className="relative w-24 group/box">
-                        {/* Use PreviewImageComponent to handle image fetching */}
                         <PreviewImageComponent imagePath={imagePath} />
                         <div className="absolute top-0 bottom-0 left-0 right-0 space-x-2">
                           {!isDisabled && (
@@ -238,12 +263,8 @@ const SingleFileUpload = ({
                           <Upload size={24} className="text-yellow" />
                           <span className="text-sm text-yellow">Upload</span>
                         </div>
-
-                        {/* progress bar */}
                         {isUploading && (
                           <div className="absolute w-[99%] mx-auto mt-2 bottom-1">
-                            {/* progress bar */}
-
                             <div className="w-full mt-2">
                               <Progress value={progress} className="w-[95%] " />
                             </div>
@@ -265,11 +286,11 @@ const SingleFileUpload = ({
       {previewImage && (
         <ImagePreviewModal
           imagePath={previewImage}
-          setSelectedImage={setPreviewImage} // Close modal function
+          setSelectedImage={setPreviewImage}
         />
       )}
     </>
   )
 }
 
-export default SingleFileUpload
+export default PromotionFileUpload

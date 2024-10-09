@@ -170,6 +170,7 @@ export type BlogFormType = {
   blogTitle: string
   blogDescription: string
   blogImage: string
+  blogImagePath: string
   blogCategory: string
   authorName: string
   metaTitle: string

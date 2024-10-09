@@ -26,7 +26,7 @@ import { PhoneInput } from 'react-international-phone'
 import 'react-international-phone/style.css'
 import RentalDetailsFormField from '../RentalDetailsFormField'
 import MultipleFileUpload from '../MultipleFileUpload'
-import { validateRentalDetails } from '@/helpers/form'
+import { deleteMultipleFiles, validateRentalDetails } from '@/helpers/form'
 import BrandsDropdown from '../BrandsDropdown'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -58,6 +58,7 @@ export default function PrimaryDetailsForm({
 }: PrimaryFormProps) {
   const [countryCode, setCountryCode] = useState<string>('')
   const [isFileUploading, setIsFileUploading] = useState(false)
+  const [deletedFiles, setDeletedFiles] = useState<string[]>([])
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string
@@ -111,6 +112,12 @@ export default function PrimaryDetailsForm({
           values as PrimaryFormType,
           initialCountryCode as string
         )
+      }
+
+      if (data) {
+        // actually delete the images from the db, if any
+        console.log('deleted multiple files', deletedFiles)
+        await deleteMultipleFiles(deletedFiles)
       }
 
       if (data) {
@@ -346,6 +353,7 @@ export default function PrimaryDetailsForm({
                     ? ` ${formData.vehicleModel}`
                     : 'vehicle-image'
                 }
+                setDeletedFiles={setDeletedFiles}
               />
             )}
           />
@@ -375,6 +383,7 @@ export default function PrimaryDetailsForm({
                     ? `[commercial-license] - ${formData.vehicleModel}`
                     : '[commercial-license]'
                 }
+                setDeletedFiles={setDeletedFiles}
               />
             )}
           />
