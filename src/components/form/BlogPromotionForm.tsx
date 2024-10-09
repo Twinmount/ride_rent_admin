@@ -177,7 +177,7 @@ export default function BlogPromotionForm({
           {form.formState.isSubmitting && <Spinner />}
         </Button>
 
-        {/* delete link */}
+        {/* delete modal */}
         {type === 'Update' && (
           <DeleteModal
             onDelete={deletePromotionMutation}
@@ -187,7 +187,7 @@ export default function BlogPromotionForm({
             confirmText="Delete"
             cancelText="Cancel"
             isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/blogs/promotions"
+            navigateTo="/happenings/promotions"
           ></DeleteModal>
         )}
 

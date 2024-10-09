@@ -23,12 +23,13 @@ import { GcsFilePaths } from '@/constants/enum'
 import Spinner from '@/components/general/Spinner'
 import { toast } from '@/components/ui/use-toast'
 import SingleFileUpload from '../SingleFileUpload'
-import { addBlog, updateBlog } from '@/api/blogs'
+import { addBlog, deleteBlogById, updateBlog } from '@/api/blogs'
 import BlogCategoriesDropdown from '../BlogCategoryDropdown'
 import { Textarea } from '@/components/ui/textarea'
 import BlogContentEditor from '../BlogContentEditor'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteMultipleFiles } from '@/helpers/form'
+import DeleteModal from '@/components/modal/DeleteModal'
 
 type StateFormProps = {
   type: 'Add' | 'Update'
@@ -92,7 +93,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           queryKey: ['blogs'],
           exact: true,
         })
-        navigate('/blogs')
+        navigate('/happenings/blogs')
       }
     } catch (error) {
       console.error(error)
@@ -103,6 +104,17 @@ export default function BlogForm({ type, formData }: StateFormProps) {
       })
     }
   }
+
+  // delete mutation
+  const { mutateAsync: deletePromotionMutation, isPending } = useMutation({
+    mutationFn: () => deleteBlogById(blogId as string),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['blogs'],
+        exact: true,
+      })
+    },
+  })
 
   return (
     <Form {...form}>
@@ -409,6 +421,20 @@ export default function BlogForm({ type, formData }: StateFormProps) {
             : `${type} Blog`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
+
+        {/* delete modal */}
+        {type === 'Update' && (
+          <DeleteModal
+            onDelete={deletePromotionMutation}
+            label="Delete Blog"
+            title="Delete Blog?"
+            description="Are you sure you want to delete this Blog? This cannot be undone"
+            confirmText="Delete"
+            cancelText="Cancel"
+            isLoading={isPending || form.formState.isSubmitting}
+            navigateTo="/happenings/blogs"
+          ></DeleteModal>
+        )}
       </form>
     </Form>
   )

@@ -107,10 +107,10 @@ export const fetchAllBlogs = async (
 }
 
 // delete specific state by ID
-export const deleteBlog = async (stateId: string) => {
+export const deleteBlogById = async (blogId: string) => {
   try {
     const data = await API.delete({
-      slug: `${Slug.DELETE_STATE}?stateId=${stateId}`,
+      slug: `${Slug.DELETE_BLOG}?blogId=${blogId}`,
     })
     return data
   } catch (error) {
