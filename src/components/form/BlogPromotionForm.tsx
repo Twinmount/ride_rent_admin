@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import {
   Form,
@@ -10,96 +10,96 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { BlogPromotionFormType } from '@/types/types'
-import { BlogPromotionFormDefaultValue } from '@/constants'
-import { BlogPromotionFormSchema } from '@/lib/validator'
-import Spinner from '../general/Spinner'
-import { useNavigate, useParams } from 'react-router-dom'
-import { toast } from '../ui/use-toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import DeleteModal from '../modal/DeleteModal'
-import { useState } from 'react'
-import { GcsFilePaths } from '@/constants/enum'
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { BlogPromotionFormType } from "@/types/types";
+import { BlogPromotionFormDefaultValue } from "@/constants";
+import { BlogPromotionFormSchema } from "@/lib/validator";
+import Spinner from "../general/Spinner";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "../ui/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import DeleteModal from "../modal/DeleteModal";
+import { useState } from "react";
+import { GcsFilePaths } from "@/constants/enum";
 import {
   addBlogPromotion,
   deleteBlogPromotion,
   updateBlogPromotion,
-} from '@/api/blogs'
-import { deleteMultipleFiles } from '@/helpers/form'
-import PromotionFileUpload from './PromotionsFileUpload'
+} from "@/api/blogs";
+import { deleteMultipleFiles } from "@/helpers/form";
+import PromotionFileUpload from "./PromotionsFileUpload";
 
 type BlogPromotionFormProps = {
-  type: 'Add' | 'Update'
-  formData?: BlogPromotionFormType | null
-}
+  type: "Add" | "Update";
+  formData?: BlogPromotionFormType | null;
+};
 
 export default function BlogPromotionForm({
   type,
   formData,
 }: BlogPromotionFormProps) {
-  const [isFileUploading, setIsFileUploading] = useState(false)
-  const [deletedImages, setDeletedImages] = useState<string[]>([])
+  const [isFileUploading, setIsFileUploading] = useState(false);
+  const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
   const initialValues =
-    formData && type === 'Update' ? formData : BlogPromotionFormDefaultValue
+    formData && type === "Update" ? formData : BlogPromotionFormDefaultValue;
 
-  const navigate = useNavigate()
-  const { promotionId } = useParams<{ promotionId: string }>()
-  const queryClient = useQueryClient()
+  const navigate = useNavigate();
+  const { promotionId } = useParams<{ promotionId: string }>();
+  const queryClient = useQueryClient();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof BlogPromotionFormSchema>>({
     resolver: zodResolver(BlogPromotionFormSchema),
     defaultValues: initialValues,
-  })
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof BlogPromotionFormSchema>) {
     if (isFileUploading) {
       toast({
-        title: 'File Upload in Progress',
+        title: "File Upload in Progress",
         description:
-          'Please wait until the file upload completes before submitting the form.',
+          "Please wait until the file upload completes before submitting the form.",
         duration: 3000,
-        className: 'bg-orange',
-      })
-      return
+        className: "bg-orange",
+      });
+      return;
     }
 
     try {
-      let data
-      if (type === 'Add') {
-        data = await addBlogPromotion(values)
-      } else if (type === 'Update') {
-        data = await updateBlogPromotion(values, promotionId as string)
+      let data;
+      if (type === "Add") {
+        data = await addBlogPromotion(values);
+      } else if (type === "Update") {
+        data = await updateBlogPromotion(values, promotionId as string);
       }
 
       if (data) {
         // actually delete the images from the db, if any
-        await deleteMultipleFiles(deletedImages)
+        await deleteMultipleFiles(deletedImages);
       }
 
       if (data) {
         toast({
           title: `${type} Promotion successfully`,
-          className: 'bg-yellow text-white',
-        })
-        navigate('/happenings/promotions')
+          className: "bg-yellow text-white",
+        });
+        navigate("/happenings/promotions");
         queryClient.invalidateQueries({
-          queryKey: ['blogs'],
-        })
+          queryKey: ["blogs"],
+        });
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
-        variant: 'destructive',
+        variant: "destructive",
         title: `${type} promotion failed`,
-        description: 'Something went wrong',
-      })
+        description: "Something went wrong",
+      });
     }
   }
 
@@ -107,11 +107,11 @@ export default function BlogPromotionForm({
     mutationFn: () => deleteBlogPromotion(promotionId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['blog-promotions'],
+        queryKey: ["blog-promotions"],
         exact: true,
-      })
+      });
     },
-  })
+  });
 
   return (
     <Form {...form}>
@@ -119,7 +119,7 @@ export default function BlogPromotionForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
       >
-        <div className="flex flex-col gap-5 ">
+        <div className="flex flex-col gap-5">
           {/* type title */}
           <FormField
             control={form.control}
@@ -143,8 +143,8 @@ export default function BlogPromotionForm({
             control={form.control}
             name="promotionLink"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between w-64 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base max-sm:w-fit lg:text-lg">
                   Promotion Link <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
@@ -173,12 +173,12 @@ export default function BlogPromotionForm({
           disabled={form.formState.isSubmitting}
           className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
         >
-          {form.formState.isSubmitting ? 'Processing...' : `${type} Promotion`}
+          {form.formState.isSubmitting ? "Processing..." : `${type} Promotion`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
 
         {/* delete modal */}
-        {type === 'Update' && (
+        {type === "Update" && (
           <DeleteModal
             onDelete={deletePromotionMutation}
             label="Delete"
@@ -196,5 +196,5 @@ export default function BlogPromotionForm({
         </p>
       </form>
     </Form>
-  )
+  );
 }

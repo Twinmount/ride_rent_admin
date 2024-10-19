@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import {
   Form,
@@ -10,68 +10,68 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { LinkFormType } from '@/types/types'
-import { LinkFormDefaultValues } from '@/constants'
-import { LinkFormSchema } from '@/lib/validator'
-import Spinner from '../general/Spinner'
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { LinkFormType } from "@/types/types";
+import { LinkFormDefaultValues } from "@/constants";
+import { LinkFormSchema } from "@/lib/validator";
+import Spinner from "../general/Spinner";
 
-import { useNavigate, useParams } from 'react-router-dom'
-import { toast } from '../ui/use-toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useAdminContext } from '@/context/AdminContext'
-import { addLink, deleteLink, updateLink } from '@/api/links'
-import DeleteModal from '../modal/DeleteModal'
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "../ui/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAdminContext } from "@/context/AdminContext";
+import { addLink, deleteLink, updateLink } from "@/api/links";
+import DeleteModal from "../modal/DeleteModal";
 
 type LinkFormProps = {
-  type: 'Add' | 'Update'
-  formData?: LinkFormType | null
-}
+  type: "Add" | "Update";
+  formData?: LinkFormType | null;
+};
 
 export default function LinkForm({ type, formData }: LinkFormProps) {
   const initialValues =
-    formData && type === 'Update' ? formData : LinkFormDefaultValues
+    formData && type === "Update" ? formData : LinkFormDefaultValues;
 
-  const navigate = useNavigate()
-  const { linkId } = useParams<{ linkId: string }>()
+  const navigate = useNavigate();
+  const { linkId } = useParams<{ linkId: string }>();
 
-  const { state } = useAdminContext()
+  const { state } = useAdminContext();
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof LinkFormSchema>>({
     resolver: zodResolver(LinkFormSchema),
     defaultValues: initialValues,
-  })
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof LinkFormSchema>) {
     try {
-      let data
-      if (type === 'Add') {
-        data = await addLink(values, state.stateId as string)
-      } else if (type === 'Update') {
-        data = await updateLink(values, linkId as string)
+      let data;
+      if (type === "Add") {
+        data = await addLink(values, state.stateId as string);
+      } else if (type === "Update") {
+        data = await updateLink(values, linkId as string);
       }
 
       if (data) {
         toast({
           title: `${type} Link successfully`,
-          className: 'bg-yellow text-white',
-        })
-        navigate('/quick-links')
+          className: "bg-yellow text-white",
+        });
+        navigate("/marketing/quick-links");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
-        variant: 'destructive',
+        variant: "destructive",
         title: `${type} Link failed`,
-        description: 'Something went wrong',
-      })
+        description: "Something went wrong",
+      });
     }
   }
 
@@ -79,11 +79,11 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
     mutationFn: () => deleteLink(linkId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['links', linkId],
+        queryKey: ["links", linkId],
         exact: true,
-      })
+      });
     },
-  })
+  });
 
   return (
     <Form {...form}>
@@ -91,14 +91,14 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
       >
-        <div className="flex flex-col gap-5 ">
+        <div className="flex flex-col gap-5">
           {/* type title */}
           <FormField
             control={form.control}
             name="label"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Label</FormLabel>
+              <FormItem className="mb-2 w-full">
+                <FormLabel className="ml-2">Label</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg: 'Browse Luxury Vehicles for Rent in Abu Dhabi'"
@@ -117,8 +117,8 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
             control={form.control}
             name="link"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Link</FormLabel>
+              <FormItem className="mb-2 w-full">
+                <FormLabel className="ml-2">Link</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg: 'airport_pickup'"
@@ -142,12 +142,12 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
           disabled={form.formState.isSubmitting}
           className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
         >
-          {form.formState.isSubmitting ? 'Processing...' : `${type} Link`}
+          {form.formState.isSubmitting ? "Processing..." : `${type} Link`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
 
         {/* delete link */}
-        {type === 'Update' && (
+        {type === "Update" && (
           <DeleteModal
             onDelete={deleteLinkMutation}
             label="Delete"
@@ -166,5 +166,5 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
         </p>
       </form>
     </Form>
-  )
+  );
 }
