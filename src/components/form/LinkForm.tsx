@@ -61,7 +61,7 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
       if (data) {
         toast({
           title: `${type} Link successfully`,
-          className: "bg-yellow text-white",
+          className: "bg-yellow text-white bottom-20",
         });
         navigate("/marketing/quick-links");
       }
