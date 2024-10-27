@@ -1,26 +1,29 @@
-import { useState } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { SortDropdown } from '@/components/SortDropdown'
-import { LimitDropdown } from '@/components/LimitDropdown'
-import Pagination from '@/components/Pagination'
-import { fetchNewOrModifiedVehicles, updateVehicleStatus } from '@/api/listings'
-import { GeneralListingTable } from '@/components/table/live-listing/GeneralListingTable'
-import { VehicleStatusType } from '@/types/formTypes'
-import { GeneralListingColumns } from '@/components/table/live-listing/columns/GeneralListingsColumn'
-import { SingleVehicleType } from '@/types/api-types/vehicleAPI-types'
-import VehicleStatusModal from '@/components/VehicleStatusModal'
-import { toast } from '@/components/ui/use-toast'
-import { ListingsNavDropdown } from '@/components/ListingsNavDropdown'
-import SearchComponent from '@/components/Search'
-import { useSearchParams } from 'react-router-dom'
-import { useAdminContext } from '@/context/AdminContext'
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { SortDropdown } from "@/components/SortDropdown";
+import { LimitDropdown } from "@/components/LimitDropdown";
+import Pagination from "@/components/Pagination";
+import {
+  fetchNewOrModifiedVehicles,
+  updateVehicleStatus,
+} from "@/api/listings";
+import { GeneralListingTable } from "@/components/table/live-listing/GeneralListingTable";
+import { VehicleStatusType } from "@/types/formTypes";
+import { GeneralListingColumns } from "@/components/table/live-listing/columns/GeneralListingsColumn";
+import { SingleVehicleType } from "@/types/api-types/vehicleAPI-types";
+import VehicleStatusModal from "@/components/VehicleStatusModal";
+import { toast } from "@/components/ui/use-toast";
+import { ListingsNavDropdown } from "@/components/ListingsNavDropdown";
+import SearchComponent from "@/components/Search";
+import { useSearchParams } from "react-router-dom";
+import { useAdminContext } from "@/context/AdminContext";
 
 interface GeneralListingPageProps {
-  queryKey: any[]
-  approvalStatus: VehicleStatusType
-  isModified?: boolean
-  title: string
-  newRegistration?: boolean
+  queryKey: any[];
+  approvalStatus: VehicleStatusType;
+  isModified?: boolean;
+  title: string;
+  newRegistration?: boolean;
 }
 
 export default function GeneralListingPage({
@@ -29,18 +32,18 @@ export default function GeneralListingPage({
   isModified = false,
   newRegistration,
 }: GeneralListingPageProps) {
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10)
-  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC')
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10);
+  const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
   const [selectedVehicle, setSelectedVehicle] =
-    useState<SingleVehicleType | null>(null)
+    useState<SingleVehicleType | null>(null);
 
-  const { state } = useAdminContext()
+  const { state } = useAdminContext();
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
-  const [searchParams] = useSearchParams()
-  const searchTerm = searchParams.get('search') || ''
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("search") || "";
 
   const { data, isLoading } = useQuery({
     queryKey: [...queryKey, page, limit, sortOrder, searchTerm, state],
@@ -55,36 +58,37 @@ export default function GeneralListingPage({
         search: searchTerm.trim(),
         stateId: state.stateId as string,
       }),
-  })
+    staleTime: 10 * 1000,
+  });
 
   const handleOpenModal = (vehicle: SingleVehicleType) => {
-    setSelectedVehicle(vehicle)
-  }
+    setSelectedVehicle(vehicle);
+  };
 
   const handleCloseModal = () => {
-    setSelectedVehicle(null)
-  }
+    setSelectedVehicle(null);
+  };
 
   // Handler for submitting the form in the modal
   const handleSubmitModal = async (values: {
-    approvalStatus: string
-    rejectionReason?: string
+    approvalStatus: string;
+    rejectionReason?: string;
   }) => {
-    if (values.approvalStatus === 'PENDING') {
+    if (values.approvalStatus === "PENDING") {
       toast({
-        variant: 'destructive',
-        title: 'Invalid Status Change',
-        description: 'Cannot change status back to PENDING.',
-      })
-      return
+        variant: "destructive",
+        title: "Invalid Status Change",
+        description: "Cannot change status back to PENDING.",
+      });
+      return;
     }
-    if (values.approvalStatus === 'UNDER_REVIEW') {
+    if (values.approvalStatus === "UNDER_REVIEW") {
       toast({
-        variant: 'destructive',
-        title: 'Invalid Status Change',
-        description: 'Cannot change status back to UNDER REVIEW.',
-      })
-      return
+        variant: "destructive",
+        title: "Invalid Status Change",
+        description: "Cannot change status back to UNDER REVIEW.",
+      });
+      return;
     }
     if (selectedVehicle) {
       try {
@@ -92,44 +96,44 @@ export default function GeneralListingPage({
           vehicleId: selectedVehicle.vehicleId,
           approvalStatus: values.approvalStatus,
           rejectionReason: values.rejectionReason,
-        })
+        });
 
         if (data) {
-          queryClient.invalidateQueries({ queryKey: ['vehicles', 'listings'] })
+          queryClient.invalidateQueries({ queryKey: ["vehicles", "listings"] });
           queryClient.invalidateQueries({
             queryKey: [...queryKey, page, limit, sortOrder, searchTerm, state],
             exact: true,
-          })
+          });
           queryClient.invalidateQueries({
-            queryKey: ['vehicle-listing-count'],
+            queryKey: ["vehicle-listing-count"],
             exact: true,
-          })
+          });
 
           toast({
-            title: 'Vehicle status updated successfully',
-            className: 'bg-green-500 text-white',
-          })
+            title: "Vehicle status updated successfully",
+            className: "bg-green-500 text-white",
+          });
         }
 
-        handleCloseModal()
+        handleCloseModal();
       } catch (error) {
-        console.error('Failed to update vehicle status:', error)
+        console.error("Failed to update vehicle status:", error);
         toast({
-          variant: 'destructive',
-          title: 'Failed to update status',
+          variant: "destructive",
+          title: "Failed to update status",
           description:
-            'Something went wrong while updating the vehicle status.',
-        })
+            "Something went wrong while updating the vehicle status.",
+        });
       }
     }
-  }
+  };
 
   return (
-    <section className="container min-h-screen py-5 mx-auto md:py-7">
+    <section className="container py-5 mx-auto min-h-screen md:py-7">
       <div className="my-2 mb-6 flex-between max-sm:flex-col">
         {/* navigation dropdown */}
-        <ListingsNavDropdown />{' '}
-        <div className="flex-between w-fit gap-x-2 max-sm:mt-3">
+        <ListingsNavDropdown />{" "}
+        <div className="gap-x-2 flex-between w-fit max-sm:mt-3">
           <SortDropdown
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
@@ -150,7 +154,7 @@ export default function GeneralListingPage({
           <span className="font-semibold text-gray-600">
             vehicle model,vehicle registration number, vehicle code, registered
             year or phone number
-          </span>{' '}
+          </span>{" "}
           can be used to search the vehicle
         </p>
       </div>
@@ -171,7 +175,7 @@ export default function GeneralListingPage({
 
       {selectedVehicle && (
         <VehicleStatusModal
-          rejectionReason={selectedVehicle.rejectionReason || ''}
+          rejectionReason={selectedVehicle.rejectionReason || ""}
           vehicleModel={selectedVehicle.vehicleModel}
           currentStatus={selectedVehicle.approvalStatus}
           isOpen={!!selectedVehicle}
@@ -180,5 +184,5 @@ export default function GeneralListingPage({
         />
       )}
     </section>
-  )
+  );
 }

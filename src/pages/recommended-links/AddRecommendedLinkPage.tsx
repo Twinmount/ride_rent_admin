@@ -1,4 +1,4 @@
-import LinkForm from "@/components/form/LinkForm";
+import RecommendedLinkForm from "@/components/form/RecommendedLinkForm";
 
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,7 @@ export default function AddRecommendedLinkPage() {
           Add New Recommended Link
         </h3>
       </div>
-      <LinkForm type="Add" />
+      <RecommendedLinkForm type="Add" />
     </section>
   );
 }

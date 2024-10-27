@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -10,85 +10,85 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { LoginPageDefaultValues } from '@/constants'
-import { LoginFormSchema } from '@/lib/validator'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+} from "@/components/ui/form";
+import { LoginPageDefaultValues } from "@/constants";
+import { LoginFormSchema } from "@/lib/validator";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 // phone input
-import { PhoneInput } from 'react-international-phone'
-import 'react-international-phone/style.css'
-import Spinner from '@/components/general/Spinner'
-import { API } from '@/api/ApiService'
-import { Slug } from '@/api/Api-Endpoints'
-import { toast } from '@/components/ui/use-toast'
-import { clear, save, StorageKeys } from '@/utils/storage'
-import { LoginResponse } from '@/types/api-types/API-types'
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
+import Spinner from "@/components/general/Spinner";
+import { API } from "@/api/ApiService";
+import { Slug } from "@/api/Api-Endpoints";
+import { toast } from "@/components/ui/use-toast";
+import { clear, save, StorageKeys } from "@/utils/storage";
+import { LoginResponse } from "@/types/api-types/API-types";
 
 const LoginPage = () => {
   // State to store the country code separately
-  const [countryCode, setCountryCode] = useState('')
-  const navigate = useNavigate()
+  const [countryCode, setCountryCode] = useState("");
+  const navigate = useNavigate();
 
-  const initialValues = LoginPageDefaultValues
+  const initialValues = LoginPageDefaultValues;
 
   // for phone validation
 
   const form = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: initialValues,
-  })
+  });
 
   // Define a submit handler
   async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
     try {
       // Extract the phone number part without the country code
       const phoneNumber = values.phoneNumber
-        .replace(`+${countryCode}`, '')
-        .trim()
+        .replace(`+${countryCode}`, "")
+        .trim();
 
       // Construct the final request body to send to the backend
       const requestBody = {
         countryCode,
         phoneNumber,
         password: values.password,
-      }
+      };
 
       const data = await API.post<LoginResponse>({
         slug: Slug.LOGIN,
         body: requestBody,
-      })
+      });
 
       if (data) {
-        clear()
-        save(StorageKeys.ACCESS_TOKEN, data.result.token)
-        save(StorageKeys.REFRESH_TOKEN, data.result.refreshToken)
+        clear();
+        save(StorageKeys.ACCESS_TOKEN, data.result.token);
+        save(StorageKeys.REFRESH_TOKEN, data.result.refreshToken);
 
-        navigate('/')
+        navigate("/");
       }
     } catch (error: any) {
-      console.error('error : ', error)
+      console.error("error : ", error);
       if (error.response && error.response.status === 400) {
         toast({
-          variant: 'destructive',
-          title: 'Login Failed!',
-          description: 'Invalid mobile number or password',
-        })
-        form.setError('phoneNumber', {
-          type: 'manual',
-          message: '',
-        })
-        form.setError('password', {
-          type: 'manual',
-          message: '',
-        })
+          variant: "destructive",
+          title: "Login Failed!",
+          description: "Invalid mobile number or password",
+        });
+        form.setError("phoneNumber", {
+          type: "manual",
+          message: "",
+        });
+        form.setError("password", {
+          type: "manual",
+          message: "",
+        });
       } else {
         toast({
-          variant: 'destructive',
-          title: 'Login Failed',
-          description: 'something went wrong :(',
-        })
+          variant: "destructive",
+          title: "Login Failed",
+          description: "something went wrong :(",
+        });
       }
     }
   }
@@ -109,8 +109,8 @@ const LoginPage = () => {
               control={form.control}
               name="phoneNumber"
               render={({ field }) => (
-                <FormItem className="flex flex-col w-full mb-2">
-                  <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+                <FormItem className="flex flex-col mb-2 w-full">
+                  <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                     Mobile
                   </FormLabel>
                   <div className="flex-col items-start w-full">
@@ -119,22 +119,22 @@ const LoginPage = () => {
                         defaultCountry="ae"
                         value={field.value}
                         onChange={(value, country) => {
-                          field.onChange(value)
+                          field.onChange(value);
 
                           // Set the country code in state
-                          setCountryCode(country.country.dialCode)
+                          setCountryCode(country.country.dialCode);
                         }}
                         className="flex items-center"
                         inputClassName="input-field !w-full !text-base"
-                        placeholder="whatsapp number"
+                        placeholder="WhatsApp number"
                         countrySelectorStyleProps={{
                           className:
-                            'bg-white !border-none outline-none !rounded-xl  mr-1 !text-lg',
+                            "bg-white !border-none outline-none !rounded-xl  mr-1 !text-lg",
                           style: {
-                            border: 'none ',
+                            border: "none ",
                           },
                           buttonClassName:
-                            '!border-none outline-none !h-[52px] !w-[50px] !rounded-xl bg-gray-100',
+                            "!border-none outline-none !h-[52px] !w-[50px] !rounded-xl bg-gray-100",
                         }}
                       />
                     </FormControl>
@@ -149,8 +149,8 @@ const LoginPage = () => {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem className="flex flex-col w-full mb-2 ">
-                  <FormLabel className="flex justify-between ml-2 text-base w-72 lg:text-lg">
+                <FormItem className="flex flex-col mb-2 w-full">
+                  <FormLabel className="flex justify-between ml-2 w-72 text-base lg:text-lg">
                     Password
                   </FormLabel>
                   <div className="flex-col items-start w-full">
@@ -179,8 +179,8 @@ const LoginPage = () => {
           </div>
           <div className="flex justify-end px-2 mt-3">
             <div>
-              New admin?{' '}
-              <Link to={'/register'} className="font-semibold text-yellow">
+              New admin?{" "}
+              <Link to={"/register"} className="font-semibold text-yellow">
                 Register
               </Link>
             </div>
@@ -188,7 +188,7 @@ const LoginPage = () => {
         </form>
       </Form>
     </section>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

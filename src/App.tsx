@@ -466,6 +466,11 @@ const router = createBrowserRouter([
 ]);
 
 const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60000,
+    },
+  },
   queryCache: new QueryCache({
     onError: (error) => {
       toast({

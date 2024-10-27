@@ -121,13 +121,13 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
                 <FormLabel className="ml-2">Link</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="eg: 'airport_pickup'"
+                    placeholder="eg: 'https://example.com'"
                     {...field}
                     className="input-field"
                   />
                 </FormControl>
                 <FormDescription className="ml-2">
-                  Link should be in the following format
+                  Link should be a proper url
                 </FormDescription>
                 <FormMessage className="ml-2" />
               </FormItem>

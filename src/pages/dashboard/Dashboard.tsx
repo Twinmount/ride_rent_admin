@@ -1,18 +1,18 @@
-import React from 'react'
-import { Users, Car, Box, Tag, Eye } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
-import { fetchAdminDashboard } from '@/api/dashboard'
+import React from "react";
+import { Users, Car, Box, Tag, Eye } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAdminDashboard } from "@/api/dashboard";
 
 const Dashboard: React.FC = () => {
   const { data, isLoading } = useQuery({
-    queryKey: ['dashboard-analytics'],
+    queryKey: ["dashboard-analytics"],
     queryFn: fetchAdminDashboard,
-    staleTime: 600000,
-  })
+    staleTime: 10000,
+  });
 
   return (
-    <section className="relative h-auto min-h-screen p-6 py-10 bg-gray-50">
-      <div className="max-w-5xl mx-auto">
+    <section className="relative p-6 py-10 h-auto min-h-screen bg-gray-50">
+      <div className="mx-auto max-w-5xl">
         <h2 className="mb-6 text-2xl font-bold">Admin Dashboard</h2>
 
         <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-2 lg:grid-cols-3">
@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

@@ -23,8 +23,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAdminContext } from "@/context/AdminContext";
-import { addLink, deleteLink, updateLink } from "@/api/links";
 import DeleteModal from "../modal/DeleteModal";
+import {
+  addRecommendedLink,
+  deleteRecommendedLink,
+  updateRecommendedLink,
+} from "@/api/recommended-links";
 
 type RecommendedLinkFormProps = {
   type: "Add" | "Update";
@@ -56,9 +60,9 @@ export default function RecommendedLinkForm({
     try {
       let data;
       if (type === "Add") {
-        data = await addLink(values, state.stateId as string);
+        data = await addRecommendedLink(values, state.stateId as string);
       } else if (type === "Update") {
-        data = await updateLink(values, linkId as string);
+        data = await updateRecommendedLink(values, linkId as string);
       }
 
       if (data) {
@@ -66,7 +70,7 @@ export default function RecommendedLinkForm({
           title: `${type} Link successfully`,
           className: "bg-yellow text-white bottom-20",
         });
-        navigate("/marketing/quick-links");
+        navigate("/marketing/recommended-links");
       }
     } catch (error) {
       console.error(error);
@@ -75,14 +79,23 @@ export default function RecommendedLinkForm({
         title: `${type} Link failed`,
         description: "Something went wrong",
       });
+    } finally {
+      queryClient.invalidateQueries({
+        queryKey: ["recommended-links", linkId],
+        exact: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["recommended-links", state],
+        exact: true,
+      });
     }
   }
 
   const { mutateAsync: deleteLinkMutation, isPending } = useMutation({
-    mutationFn: () => deleteLink(linkId as string),
+    mutationFn: () => deleteRecommendedLink(linkId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["links", linkId],
+        queryKey: ["recommended-links", state],
         exact: true,
       });
     },
@@ -124,13 +137,13 @@ export default function RecommendedLinkForm({
                 <FormLabel className="ml-2">Link</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="eg: 'airport_pickup'"
+                    placeholder="eg: 'https://example.com'"
                     {...field}
                     className="input-field"
                   />
                 </FormControl>
                 <FormDescription className="ml-2">
-                  Link should be in the following format
+                  Link should be a proper url.
                 </FormDescription>
                 <FormMessage className="ml-2" />
               </FormItem>
@@ -145,7 +158,9 @@ export default function RecommendedLinkForm({
           disabled={form.formState.isSubmitting}
           className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
         >
-          {form.formState.isSubmitting ? "Processing..." : `${type} Link`}
+          {form.formState.isSubmitting
+            ? "Processing..."
+            : `${type} Recommended Link`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
 
@@ -159,7 +174,7 @@ export default function RecommendedLinkForm({
             confirmText="Delete"
             cancelText="Cancel"
             isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/marketing/quick-links"
+            navigateTo="/marketing/recommended-links"
           ></DeleteModal>
         )}
 

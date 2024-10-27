@@ -515,7 +515,7 @@ export default function PrimaryDetailsForm({
                   <FormDescription className="ml-2">
                     Enter the{" "}
                     <span className="font-semibold text-green-400">
-                      Whatsapp
+                      WhatsApp
                     </span>{" "}
                     mobile number. This number will receive the direct booking
                     details.

@@ -50,7 +50,7 @@ export const updateRecommendedLink = async (
 
     return data;
   } catch (error) {
-    console.error("Error updating links:", error);
+    console.error("Error updating recommended links:", error);
     throw error;
   }
 };

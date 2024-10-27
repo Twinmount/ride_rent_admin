@@ -21,6 +21,7 @@ export default function ManageRecommendedLinksPage() {
         sortOrder: "DESC",
         stateId: state.stateId as string,
       }),
+    staleTime: 30000,
   });
 
   // Destructure to get the 'list' array from 'data'
@@ -82,7 +83,7 @@ export default function ManageRecommendedLinksPage() {
       <button className="fixed z-30 overflow-hidden cursor-pointer w-fit h-fit rounded-xl right-10 bottom-10 shadow-xl  hover:scale-[1.02]  transition-all ">
         <Link
           className="gap-x-1 px-3 py-2 text-white flex-center bg-yellow"
-          to={`/marketing/quick-links/add`}
+          to={`/marketing/recommended-links/add`}
         >
           New Recommended Link <Plus />
         </Link>

@@ -3,8 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import { useQuery } from "@tanstack/react-query";
 
-import LinkForm from "@/components/form/LinkForm";
 import { fetchRecommendedLinkById } from "@/api/recommended-links";
+import RecommendedLinkForm from "@/components/form/RecommendedLinkForm";
 
 export default function EditRecommendedLinkPage() {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ export default function EditRecommendedLinkPage() {
       {isLoading ? (
         <FormSkelton />
       ) : (
-        <LinkForm type="Update" formData={linkData} />
+        <RecommendedLinkForm type="Update" formData={linkData} />
       )}
     </section>
   );
