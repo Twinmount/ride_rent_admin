@@ -26,9 +26,6 @@ import ProtectedRoute from "./layout/ProtectedRoutes";
 
 import { toast } from "./components/ui/use-toast";
 import { AdminProvider } from "./context/AdminContext";
-import ManageRecommendedLinksPage from "./pages/recommended-links/ManageRecommendedLinksPage";
-import AddRecommendedLinkPage from "./pages/recommended-links/AddRecommendedLinkPage";
-import EditRecommendedLinkPage from "./pages/recommended-links/EditRecommendedLinkPage";
 
 // lazy loaded pages
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"));
@@ -99,6 +96,17 @@ const ManageLinksPage = lazy(
 );
 const AddLinkPage = lazy(() => import("./pages/quick-links/AddLinkPage"));
 const EditLinkPage = lazy(() => import("./pages/quick-links/EditLinkPage"));
+
+// recommended links pages
+const ManageRecommendedLinksPage = lazy(
+  () => import("./pages/recommended-links/ManageRecommendedLinksPage")
+);
+const AddRecommendedLinkPage = lazy(
+  () => import("./pages/recommended-links/AddRecommendedLinkPage")
+);
+const EditRecommendedLinkPage = lazy(
+  () => import("./pages/recommended-links/EditRecommendedLinkPage")
+);
 
 // ads page import
 const ManagePromotionsPage = lazy(
