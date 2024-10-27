@@ -11,7 +11,7 @@ export interface LinkType {
 }
 
 // add link
-export const addLink = async (values: LinkType, stateId: string) => {
+export const addRecommendedLink = async (values: LinkType, stateId: string) => {
   try {
     const requestBody = {
       ...values,
@@ -20,19 +20,22 @@ export const addLink = async (values: LinkType, stateId: string) => {
 
     // Send the FormData object using the API post method
     const data = await API.post({
-      slug: Slug.ADD_LINK,
+      slug: Slug.ADD_RECOMMENDED_LINK,
       body: requestBody,
     });
 
     return data;
   } catch (error) {
-    console.error("Error adding links:", error);
+    console.error("Error adding recommended links:", error);
     throw error;
   }
 };
 
 // update link
-export const updateLink = async (values: LinkType, linkId: string) => {
+export const updateRecommendedLink = async (
+  values: LinkType,
+  linkId: string
+) => {
   try {
     const requestBody = {
       ...values,
@@ -41,7 +44,7 @@ export const updateLink = async (values: LinkType, linkId: string) => {
 
     // Send the FormData object using the API put method
     const data = await API.put({
-      slug: Slug.PUT_LINK,
+      slug: Slug.PUT_RECOMMENDED_LINK,
       body: requestBody,
     });
 
@@ -53,27 +56,27 @@ export const updateLink = async (values: LinkType, linkId: string) => {
 };
 
 // fetch specific Link by ID
-export const fetchLinkById = async (
+export const fetchRecommendedLinkById = async (
   linkId: string
 ): Promise<FetchSpecificLinkResponse> => {
   try {
     const data = await API.get<FetchSpecificLinkResponse>({
-      slug: `${Slug.GET_LINK}?linkId=${linkId}`,
+      slug: `${Slug.GET_RECOMMENDED_LINK}?linkId=${linkId}`,
     });
 
     if (!data) {
-      throw new Error("Failed to fetch link data");
+      throw new Error("Failed to fetch recommended link data");
     }
 
     return data;
   } catch (error) {
-    console.error("Error fetching link:", error);
+    console.error("Error fetching recommended link:", error);
     throw error;
   }
 };
 
 // fetch all Links
-export const fetchAllLinks = async (urlParams: {
+export const fetchAllRecommendedLinks = async (urlParams: {
   page: number;
   limit: number;
   sortOrder: string;
@@ -87,32 +90,32 @@ export const fetchAllLinks = async (urlParams: {
       stateId: urlParams.stateId,
     }).toString();
 
-    const slugWithParams = `${Slug.GET_ALL_LINKS}?${queryParams}`;
+    const slugWithParams = `${Slug.GET_ALL_RECOMMENDED_LINKS}?${queryParams}`;
 
     const data = await API.get<FetchLinksResponse>({
       slug: slugWithParams,
     });
 
     if (!data) {
-      throw new Error("Failed to fetch link data");
+      throw new Error("Failed to fetch recommended link data");
     }
 
     return data;
   } catch (error) {
-    console.error("Error fetching links:", error);
+    console.error("Error fetching recommended links:", error);
     throw error;
   }
 };
 
 // delete specific link by ID
-export const deleteLink = async (linkId: string) => {
+export const deleteRecommendedLink = async (linkId: string) => {
   try {
     const data = await API.delete({
-      slug: `${Slug.DELETE_LINK}?linkId=${linkId}`,
+      slug: `${Slug.DELETE_RECOMMENDED_LINK}?linkId=${linkId}`,
     });
     return data;
   } catch (error) {
-    console.error("Error deleting link:", error);
+    console.error("Error deleting Recommended link:", error);
     throw error;
   }
 };

@@ -77,7 +77,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
 
       if (data) {
         // actually delete the images from the db, if any
-        console.log('deleted images state : ', deletedImages)
+      
         await deleteMultipleFiles(deletedImages)
       }
 
@@ -117,13 +117,13 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-5 max-w-[800px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8 border-t shadow-md"
       >
-        <div className="flex flex-col w-full gap-5 p-3 mx-auto rounded-3xl">
+        <div className="flex flex-col gap-5 p-3 mx-auto w-full rounded-3xl">
           {/* agent id */}
-          <div className="flex w-full mb-2 max-sm:flex-col">
-            <div className="flex justify-between mt-4 ml-2 text-base font-semibold max-sm:w-fit w-72 lg:text-lg">
+          <div className="flex mb-2 w-full max-sm:flex-col">
+            <div className="flex justify-between mt-4 ml-2 w-72 text-base font-semibold max-sm:w-fit lg:text-lg">
               Your Agent Id <span className="mr-5 max-sm:hidden">:</span>
             </div>
-            <div className="flex items-center w-full mt-4 text-lg font-semibold text-gray-500 cursor-default">
+            <div className="flex items-center mt-4 w-full text-lg font-semibold text-gray-500 cursor-default">
               {initialValues.agentId}{' '}
               <ShieldCheck className="ml-3 text-green-500" size={20} />
               <Button
@@ -141,8 +141,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             control={form.control}
             name="companyName"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base max-sm:w-fit w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
                   Company Name <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -221,8 +221,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             control={form.control}
             name="expireDate"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-52 max-sm:w-fit lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base max-sm:w-fit lg:text-lg">
                   Expiry Date <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-fit">
@@ -248,8 +248,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             control={form.control}
             name="regNumber"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base max-sm:w-fit w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
                   Registration Number{' '}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>

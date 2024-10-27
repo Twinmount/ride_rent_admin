@@ -1,4 +1,4 @@
-import { PrimaryFormType } from '@/types/formTypes'
+import { PrimaryFormType } from "@/types/formTypes";
 import {
   BlogFormType,
   BrandFormType,
@@ -8,7 +8,7 @@ import {
   CompanyStatusFormType,
   StateFormType,
   VehicleTypeFormType,
-} from '@/types/types'
+} from "@/types/types";
 import {
   CarFront,
   FileSearch,
@@ -19,162 +19,168 @@ import {
   Megaphone,
   Star,
   UserPlus,
-} from 'lucide-react'
+} from "lucide-react";
 
 // sidebar content
 export const sidebarContent = [
-  { label: 'Dashboard', icon: LayoutDashboard, link: '/' },
-  { label: 'Live Listings', icon: List, link: '/listings' },
+  { label: "Dashboard", icon: LayoutDashboard, link: "/" },
+  { label: "Live Listings", icon: List, link: "/listings" },
   {
-    label: 'Agents',
+    label: "Agents",
     icon: UserPlus,
-    link: '/registrations',
+    link: "/registrations",
   },
   {
-    label: 'Categories & Types',
+    label: "Categories & Types",
     icon: CarFront,
-    link: '/vehicle',
+    link: "/vehicle",
   },
-  { label: 'Brands', icon: Star, link: '/manage-brands' },
-  { label: 'Locations', icon: MapPin, link: '/locations' },
-  { label: 'Links & Promotions', icon: Megaphone, link: '/marketing' },
-  { label: 'Blogs', icon: FileText, link: '/happenings' },
-  { label: 'Meta Data', icon: FileSearch, link: '/meta-data' },
-]
+  { label: "Brands", icon: Star, link: "/manage-brands" },
+  { label: "Locations", icon: MapPin, link: "/locations" },
+  { label: "Links & Promotions", icon: Megaphone, link: "/marketing" },
+  { label: "Blogs", icon: FileText, link: "/happenings" },
+  { label: "Meta Data", icon: FileSearch, link: "/meta-data" },
+];
 
 // Vehicle type form default values
 export const VehicleTypeFormDefaultValues: VehicleTypeFormType = {
-  name: '',
-  value: '',
-}
+  name: "",
+  value: "",
+};
 
 // Vehicle type form default values
 export const BrandFormDefaultValues: BrandFormType = {
-  brandName: '',
-  brandValue: '',
-  vehicleCategoryId: '',
-  brandLogo: '',
-}
+  brandName: "",
+  brandValue: "",
+  vehicleCategoryId: "",
+  brandLogo: "",
+};
 
 // State form default values
 export const StateFormDefaultValues: StateFormType = {
-  stateId: '',
-  stateName: '',
-  stateValue: '',
-  stateImage: '',
-}
+  stateId: "",
+  stateName: "",
+  stateValue: "",
+  stateImage: "",
+};
 export const CityFormDefaultValues: CityFormType = {
-  cityName: '',
-  cityValue: '',
-}
+  cityName: "",
+  cityValue: "",
+};
 
 // Vehicle Category form default values
 export const CategoryFormDefaultValues: CategoryFormType = {
-  name: '',
-  value: '',
-}
+  name: "",
+  value: "",
+};
 
 // Link form default values
 export const LinkFormDefaultValues = {
-  label: '',
-  link: 'https://ride.rent/',
-}
+  label: "",
+  link: "",
+};
+
+// Link form default values
+export const RecommendedLinkFormDefaultValues = {
+  label: "",
+  link: "",
+};
 
 // ads form default values
 export const PromotionFormDefaultValue = {
-  promotionImage: '',
-  promotionLink: '',
-}
+  promotionImage: "",
+  promotionLink: "",
+};
 
 // blog promotion form default values
 export const BlogPromotionFormDefaultValue = {
-  promotionImage: '',
-  promotionLink: '',
-}
+  promotionImage: "",
+  promotionLink: "",
+};
 
 export const HomeMetaFormDefaultValue = {
-  stateId: '',
-  metaTitle: '',
-  metaDescription: '',
-}
+  stateId: "",
+  metaTitle: "",
+  metaDescription: "",
+};
 
 export const ListingMetaFormDefaultValue = {
-  stateId: '',
-  categoryId: '',
-  typeId: '',
-  metaTitle: '',
-  metaDescription: '',
-}
+  stateId: "",
+  categoryId: "",
+  typeId: "",
+  metaTitle: "",
+  metaDescription: "",
+};
 
 // navbar origin dropdown temporary value/s
-export const orgs = [{ id: '1', label: 'UAE', value: 'uae' }]
+export const orgs = [{ id: "1", label: "UAE", value: "uae" }];
 
 // primary details form default values
 export const PrimaryFormDefaultValues: PrimaryFormType = {
-  vehicleCategoryId: '',
-  vehicleTypeId: '', //'luxury' for example
-  vehicleBrandId: '',
-  vehicleModel: '',
+  vehicleCategoryId: "",
+  vehicleTypeId: "", //'luxury' for example
+  vehicleBrandId: "",
+  vehicleModel: "",
   vehiclePhotos: [], //upto 8 photos of the vehicle
-  vehicleRegistrationNumber: '',
-  vehicleRegisteredYear: '',
+  vehicleRegistrationNumber: "",
+  vehicleRegisteredYear: "",
   commercialLicenses: [],
   commercialLicenseExpireDate: new Date(),
   isLease: false,
   isCryptoAccepted: false,
   isSpotDeliverySupported: false,
-  specification: 'UAE_SPEC',
+  specification: "UAE_SPEC",
   rentalDetails: {
-    day: { enabled: false, rentInAED: '', mileageLimit: '' },
-    week: { enabled: false, rentInAED: '', mileageLimit: '' },
-    month: { enabled: false, rentInAED: '', mileageLimit: '' },
+    day: { enabled: false, rentInAED: "", mileageLimit: "" },
+    week: { enabled: false, rentInAED: "", mileageLimit: "" },
+    month: { enabled: false, rentInAED: "", mileageLimit: "" },
   },
-  phoneNumber: '',
-  stateId: '',
+  phoneNumber: "",
+  stateId: "",
   cityIds: [],
-  description: '',
-}
+  description: "",
+};
 
 // login page default value
 export const LoginPageDefaultValues = {
-  phoneNumber: '',
-  password: '',
-}
+  phoneNumber: "",
+  password: "",
+};
 
 // Company registration phase 2 form default values
 export const CompanyFormDefaultValues: CompanyFormType = {
-  companyName: '',
-  companyLogo: '',
-  commercialLicense: '',
+  companyName: "",
+  companyLogo: "",
+  commercialLicense: "",
   expireDate: new Date(),
-  regNumber: '',
-}
+  regNumber: "",
+};
 
 // Company registration phase 2 form default values
 export const CompanyStatusFormDefaultValues: CompanyStatusFormType = {
-  approvalStatus: 'PENDING',
-  rejectionReason: '',
-}
+  approvalStatus: "PENDING",
+  rejectionReason: "",
+};
 
 // Blog form default values
 export const BlogFormDefaultValues: BlogFormType = {
-  blogTitle: '',
-  blogDescription: '',
-  blogImage: '',
-  blogImagePath: '',
-  blogCategory: '',
-  authorName: '',
-  metaTitle: '',
-  metaDescription: '',
-  blogContent: '',
-}
+  blogTitle: "",
+  blogDescription: "",
+  blogImage: "",
+  blogImagePath: "",
+  blogCategory: "",
+  authorName: "",
+  metaTitle: "",
+  metaDescription: "",
+  blogContent: "",
+};
 
 // tags array
 export const categoryTags = [
-  { label: 'All', value: 'all' },
-  { label: 'Design', value: 'design' },
-  { label: 'Engineering', value: 'engineering' },
-  { label: 'Automotive', value: 'automotive' },
-  { label: 'News', value: 'news' },
-  { label: 'Travel', value: 'travel' },
-]
+  { label: "All", value: "all" },
+  { label: "Design", value: "design" },
+  { label: "Engineering", value: "engineering" },
+  { label: "Automotive", value: "automotive" },
+  { label: "News", value: "news" },
+  { label: "Travel", value: "travel" },
+];

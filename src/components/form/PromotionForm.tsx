@@ -81,7 +81,7 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
       }
 
       if (data) {
-        console.log('deleted Images api function called : ', deletedImages)
+      
         await deleteMultipleFiles(deletedImages) // Call
       }
 
@@ -118,7 +118,7 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
       >
-        <div className="flex flex-col gap-5 ">
+        <div className="flex flex-col gap-5">
           {/* type title */}
           <FormField
             control={form.control}
@@ -142,8 +142,8 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
             control={form.control}
             name="promotionLink"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-56 text-base max-sm:w-fit lg:text-lg">
                   Link <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 

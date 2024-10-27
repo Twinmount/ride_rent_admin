@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import {
   Form,
@@ -11,44 +11,44 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { PrimaryFormDefaultValues } from '@/constants'
-import { PrimaryFormSchema } from '@/lib/validator'
-import { PrimaryFormType } from '@/types/formTypes'
-import YearPicker from '../YearPicker'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
-import { PhoneInput } from 'react-international-phone'
-import 'react-international-phone/style.css'
-import RentalDetailsFormField from '../RentalDetailsFormField'
-import MultipleFileUpload from '../MultipleFileUpload'
-import { deleteMultipleFiles, validateRentalDetails } from '@/helpers/form'
-import BrandsDropdown from '../BrandsDropdown'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import CitiesDropdown from '../CitiesDropdown'
-import CategoryDropdown from '../CategoryDropdown'
-import VehicleTypesDropdown from '../VehicleTypesDropdown'
-import StatesDropdown from '../StatesDropdown'
-import { save, StorageKeys } from '@/utils/storage'
-import { toast } from '@/components/ui/use-toast'
-import { addPrimaryDetailsForm, updatePrimaryDetailsForm } from '@/api/vehicle'
-import Spinner from '@/components/general/Spinner'
-import { useParams } from 'react-router-dom'
-import { ApiError } from '@/types/types'
-import { Textarea } from '@/components/ui/textarea'
-import { GcsFilePaths } from '@/constants/enum'
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { PrimaryFormDefaultValues } from "@/constants";
+import { PrimaryFormSchema } from "@/lib/validator";
+import { PrimaryFormType } from "@/types/formTypes";
+import YearPicker from "../YearPicker";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
+import RentalDetailsFormField from "../RentalDetailsFormField";
+import MultipleFileUpload from "../MultipleFileUpload";
+import { deleteMultipleFiles, validateRentalDetails } from "@/helpers/form";
+import BrandsDropdown from "../BrandsDropdown";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import CitiesDropdown from "../CitiesDropdown";
+import CategoryDropdown from "../CategoryDropdown";
+import VehicleTypesDropdown from "../VehicleTypesDropdown";
+import StatesDropdown from "../StatesDropdown";
+import { save, StorageKeys } from "@/utils/storage";
+import { toast } from "@/components/ui/use-toast";
+import { addPrimaryDetailsForm, updatePrimaryDetailsForm } from "@/api/vehicle";
+import Spinner from "@/components/general/Spinner";
+import { useParams } from "react-router-dom";
+import { ApiError } from "@/types/types";
+import { Textarea } from "@/components/ui/textarea";
+import { GcsFilePaths } from "@/constants/enum";
 
 type PrimaryFormProps = {
-  type: 'Add' | 'Update'
-  formData?: PrimaryFormType | null
-  onNextTab?: () => void
-  initialCountryCode?: string
-}
+  type: "Add" | "Update";
+  formData?: PrimaryFormType | null;
+  onNextTab?: () => void;
+  initialCountryCode?: string;
+};
 
 export default function PrimaryDetailsForm({
   type,
@@ -56,105 +56,105 @@ export default function PrimaryDetailsForm({
   formData,
   initialCountryCode,
 }: PrimaryFormProps) {
-  const [countryCode, setCountryCode] = useState<string>('')
-  const [isFileUploading, setIsFileUploading] = useState(false)
-  const [deletedFiles, setDeletedFiles] = useState<string[]>([])
+  const [countryCode, setCountryCode] = useState<string>("");
+  const [isFileUploading, setIsFileUploading] = useState(false);
+  const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
 
   const { vehicleId, userId } = useParams<{
-    vehicleId: string
-    userId: string
-  }>()
+    vehicleId: string;
+    userId: string;
+  }>();
 
   const initialValues =
-    formData && type === 'Update' ? formData : PrimaryFormDefaultValues
+    formData && type === "Update" ? formData : PrimaryFormDefaultValues;
 
   // Define your form.
   const form = useForm<z.infer<typeof PrimaryFormSchema>>({
     resolver: zodResolver(PrimaryFormSchema),
     defaultValues: initialValues as PrimaryFormType,
-  })
+  });
 
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
-    const rentalError = validateRentalDetails(values.rentalDetails)
+    const rentalError = validateRentalDetails(values.rentalDetails);
     if (rentalError) {
-      form.setError('rentalDetails', {
-        type: 'manual',
+      form.setError("rentalDetails", {
+        type: "manual",
         message: rentalError,
-      })
-      form.setFocus('rentalDetails')
-      return
+      });
+      form.setFocus("rentalDetails");
+      return;
     }
 
     if (isFileUploading) {
       toast({
-        title: 'File Upload in Progress',
+        title: "File Upload in Progress",
         description:
-          'Please wait until the file upload completes before submitting the form.',
+          "Please wait until the file upload completes before submitting the form.",
         duration: 3000,
-        className: 'bg-orange',
-      })
-      return
+        className: "bg-orange",
+      });
+      return;
     }
 
     // Append other form data
     try {
-      let data
-      if (type === 'Add') {
+      let data;
+      if (type === "Add") {
         data = await addPrimaryDetailsForm(
           values as PrimaryFormType,
           countryCode,
           userId as string
-        )
-      } else if (type === 'Update') {
+        );
+      } else if (type === "Update") {
         data = await updatePrimaryDetailsForm(
           vehicleId as string,
           values as PrimaryFormType,
           initialCountryCode as string
-        )
+        );
       }
 
       if (data) {
         // actually delete the images from the db, if any
-        console.log('deleted multiple files', deletedFiles)
-        await deleteMultipleFiles(deletedFiles)
+
+        await deleteMultipleFiles(deletedFiles);
       }
 
       if (data) {
         toast({
           title: `Vehicle ${type.toLowerCase()}ed successfully`,
-          className: 'bg-yellow text-white',
-        })
+          className: "bg-yellow text-white",
+        });
 
-        if (type === 'Add') {
-          save(StorageKeys.VEHICLE_ID, data.result.vehicleId)
-          save(StorageKeys.CATEGORY_ID, data.result.vehicleCategory.categoryId)
-          save(StorageKeys.VEHICLE_TYPE_ID, data.result.vehicleType.typeId)
+        if (type === "Add") {
+          save(StorageKeys.VEHICLE_ID, data.result.vehicleId);
+          save(StorageKeys.CATEGORY_ID, data.result.vehicleCategory.categoryId);
+          save(StorageKeys.VEHICLE_TYPE_ID, data.result.vehicleType.typeId);
 
-          if (onNextTab) onNextTab()
+          if (onNextTab) onNextTab();
         }
       }
     } catch (error) {
-      const apiError = error as ApiError
+      const apiError = error as ApiError;
 
       if (
         apiError.response?.data?.error?.message ===
-        'We already have a vehicle registered with this registration number'
+        "We already have a vehicle registered with this registration number"
       ) {
-        form.setError('vehicleRegistrationNumber', {
-          type: 'manual',
+        form.setError("vehicleRegistrationNumber", {
+          type: "manual",
           message:
-            'This registration number is already registered. Please use a different one.',
-        })
-        form.setFocus('vehicleRegistrationNumber')
+            "This registration number is already registered. Please use a different one.",
+        });
+        form.setFocus("vehicleRegistrationNumber");
       } else {
         toast({
-          variant: 'destructive',
+          variant: "destructive",
           title: `${type} Vehicle failed`,
-          description: 'Something went wrong',
-        })
+          description: "Something went wrong",
+        });
       }
-      console.error(error)
+      console.error(error);
     }
   }
 
@@ -162,13 +162,13 @@ export default function PrimaryDetailsForm({
     // Check for validation errors and scroll to the top if errors are present
     if (Object.keys(form.formState.errors).length > 0) {
       toast({
-        variant: 'destructive',
+        variant: "destructive",
         title: `Validation Error`,
-        description: 'Please make sure values are provided',
-      })
-      window.scrollTo({ top: 65, behavior: 'smooth' }) // Scroll to the top of the page
+        description: "Please make sure values are provided",
+      });
+      window.scrollTo({ top: 65, behavior: "smooth" }); // Scroll to the top of the page
     }
-  }, [form.formState.errors])
+  }, [form.formState.errors]);
 
   return (
     <Form {...form}>
@@ -182,8 +182,8 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="vehicleCategoryId"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base max-sm:w-fit w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
                   Vehicle Category <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
@@ -191,9 +191,9 @@ export default function PrimaryDetailsForm({
                   <FormControl>
                     <CategoryDropdown
                       onChangeHandler={(value) => {
-                        field.onChange(value)
-                        form.setValue('vehicleTypeId', '')
-                        form.setValue('vehicleBrandId', '')
+                        field.onChange(value);
+                        form.setValue("vehicleTypeId", "");
+                        form.setValue("vehicleBrandId", "");
                       }}
                       value={initialValues.vehicleCategoryId}
                     />
@@ -212,18 +212,18 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="vehicleTypeId"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Vehicle Type <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
                 <div className="flex-col items-start w-full">
                   <FormControl>
                     <VehicleTypesDropdown
-                      vehicleCategoryId={form.watch('vehicleCategoryId')}
+                      vehicleCategoryId={form.watch("vehicleCategoryId")}
                       value={field.value}
                       onChangeHandler={field.onChange}
-                      isDisabled={!form.watch('vehicleCategoryId')}
+                      isDisabled={!form.watch("vehicleCategoryId")}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -240,17 +240,17 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="vehicleBrandId"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Brand Name <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
                   <FormControl>
                     <BrandsDropdown
-                      vehicleCategoryId={form.watch('vehicleCategoryId')}
+                      vehicleCategoryId={form.watch("vehicleCategoryId")}
                       value={field.value}
                       onChangeHandler={field.onChange}
-                      isDisabled={!form.watch('vehicleCategoryId')}
+                      isDisabled={!form.watch("vehicleCategoryId")}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -266,8 +266,8 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="vehicleModel"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Model Name <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -293,9 +293,9 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="vehicleRegistrationNumber"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
-                  Registration Number{' '}
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                  Registration Number{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -310,14 +310,14 @@ export default function PrimaryDetailsForm({
                         if (
                           !/[a-zA-Z0-9]/.test(e.key) &&
                           ![
-                            'Backspace',
-                            'Delete',
-                            'ArrowLeft',
-                            'ArrowRight',
-                            'Tab', // To allow tabbing between fields
+                            "Backspace",
+                            "Delete",
+                            "ArrowLeft",
+                            "ArrowRight",
+                            "Tab", // To allow tabbing between fields
                           ].includes(e.key)
                         ) {
-                          e.preventDefault()
+                          e.preventDefault();
                         }
                       }}
                     />
@@ -351,7 +351,7 @@ export default function PrimaryDetailsForm({
                 downloadFileName={
                   formData?.vehicleModel
                     ? ` ${formData.vehicleModel}`
-                    : 'vehicle-image'
+                    : "vehicle-image"
                 }
                 setDeletedFiles={setDeletedFiles}
               />
@@ -369,7 +369,7 @@ export default function PrimaryDetailsForm({
                 existingFiles={initialValues.commercialLicenses || []}
                 description={
                   <>
-                    Upload <span className="font-bold text-yellow">front</span>{' '}
+                    Upload <span className="font-bold text-yellow">front</span>{" "}
                     & <span className="font-bold text-yellow">back</span> images
                     of the Registration Card / Mulkia
                   </>
@@ -381,7 +381,7 @@ export default function PrimaryDetailsForm({
                 downloadFileName={
                   formData?.vehicleModel
                     ? `[commercial-license] - ${formData.vehicleModel}`
-                    : '[commercial-license]'
+                    : "[commercial-license]"
                 }
                 setDeletedFiles={setDeletedFiles}
               />
@@ -393,9 +393,9 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="commercialLicenseExpireDate"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
-                  Registration Card / Mulkia Expiry Date{' '}
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                  Registration Card / Mulkia Expiry Date{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -421,8 +421,8 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="vehicleRegisteredYear"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Registered Year <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -447,16 +447,16 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="specification"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Specification <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full ">
+                <div className="flex-col items-start w-full">
                   <FormControl className="mt-2">
                     <RadioGroup
                       value={field.value}
                       onValueChange={field.onChange}
-                      className="flex items-center gap-x-5"
+                      className="flex gap-x-5 items-center"
                       defaultValue="UAE_SPEC"
                     >
                       <div className="flex items-center space-x-2">
@@ -486,8 +486,8 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="phoneNumber"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Whatsapp/Mobile <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -496,27 +496,27 @@ export default function PrimaryDetailsForm({
                       defaultCountry="ae"
                       value={field.value}
                       onChange={(value, country) => {
-                        field.onChange(value)
-                        setCountryCode(country.country.dialCode)
+                        field.onChange(value);
+                        setCountryCode(country.country.dialCode);
                       }}
                       className="flex items-center"
                       inputClassName="input-field !w-full !text-base"
                       countrySelectorStyleProps={{
                         className:
-                          'bg-white !border-none outline-none !rounded-xl  mr-1',
+                          "bg-white !border-none outline-none !rounded-xl  mr-1",
                         style: {
-                          border: 'none ',
+                          border: "none ",
                         },
                         buttonClassName:
-                          '!border-none outline-none !h-[52px] !w-[50px] !rounded-xl !bg-gray-100',
+                          "!border-none outline-none !h-[52px] !w-[50px] !rounded-xl !bg-gray-100",
                       }}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    Enter the{' '}
+                    Enter the{" "}
                     <span className="font-semibold text-green-400">
                       Whatsapp
-                    </span>{' '}
+                    </span>{" "}
                     mobile number. This number will receive the direct booking
                     details.
                   </FormDescription>
@@ -532,8 +532,8 @@ export default function PrimaryDetailsForm({
             name="rentalDetails"
             render={() => {
               return (
-                <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                  <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+                <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                  <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                     Rental Details <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
                   <div className="flex-col items-start w-full">
@@ -547,7 +547,7 @@ export default function PrimaryDetailsForm({
                     <FormMessage className="ml-2" />
                   </div>
                 </FormItem>
-              )
+              );
             }}
           />
 
@@ -556,16 +556,16 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="stateId"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Location <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
                   <FormControl>
                     <StatesDropdown
                       onChangeHandler={(value) => {
-                        field.onChange(value)
-                        form.setValue('cityIds', []) //
+                        field.onChange(value);
+                        form.setValue("cityIds", []); //
                       }}
                       value={initialValues.stateId}
                       placeholder="location"
@@ -584,15 +584,15 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="cityIds"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-52 min-w-52 lg:text-lg">
-                  Cities / Serving Areas{' '}
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base min-w-52 lg:text-lg">
+                  Cities / Serving Areas{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
                   <FormControl>
                     <CitiesDropdown
-                      stateId={form.watch('stateId')}
+                      stateId={form.watch("stateId")}
                       value={field.value}
                       onChangeHandler={field.onChange}
                       placeholder="cities"
@@ -612,8 +612,8 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="isLease"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Lease? <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -646,8 +646,8 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="isCryptoAccepted"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Crypto? <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -682,8 +682,8 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="isSpotDeliverySupported"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
                   Spot delivery? <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -718,23 +718,23 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="description"
             render={({ field }) => {
-              const [isFocused, setIsFocused] = useState(false) // To manage focus state
+              const [isFocused, setIsFocused] = useState(false); // To manage focus state
               const [charCount, setCharCount] = useState(
                 field.value?.length || 0
-              ) // To track character count
+              ); // To track character count
 
-              const handleFocus = () => setIsFocused(true)
-              const handleBlur = () => setIsFocused(false)
+              const handleFocus = () => setIsFocused(true);
+              const handleBlur = () => setIsFocused(false);
               const handleInputChange = (
                 e: React.ChangeEvent<HTMLTextAreaElement>
               ) => {
-                setCharCount(e.target.value.length)
-                field.onChange(e)
-              }
+                setCharCount(e.target.value.length);
+                field.onChange(e);
+              };
 
               return (
-                <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 text-base h-fit w-52 min-w-52 lg:text-lg">
+                <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                  <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base h-fit min-w-52 lg:text-lg">
                     Vehicle Description
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
@@ -748,21 +748,21 @@ export default function PrimaryDetailsForm({
                         placeholder="Vehicle Description"
                         {...field}
                         className={`textarea rounded-2xl transition-all duration-300 outline-none border-none focus:ring-0 ring-0 ${
-                          isFocused ? 'h-96' : 'h-20'
+                          isFocused ? "h-96" : "h-20"
                         }`} // Dynamic height
                         onChange={handleInputChange} // Handle change to track character count
                       />
                     </FormControl>
-                    <FormDescription className="w-full ml-2 flex-between">
+                    <FormDescription className="ml-2 w-full flex-between">
                       <span className="w-full max-w-[90%]">
                         Provide vehicle description.5000 characters max.
-                      </span>{' '}
+                      </span>{" "}
                       <span className="ml-auto"> {`${charCount}/5000`}</span>
                     </FormDescription>
                     <FormMessage className="ml-2" />
                   </div>
                 </FormItem>
-              )
+              );
             }}
           />
         </div>
@@ -774,10 +774,10 @@ export default function PrimaryDetailsForm({
           disabled={form.formState.isSubmitting}
           className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-darkYellow"
         >
-          {type === 'Add' ? 'Add Vehicle' : 'Update Vehicle'}
+          {type === "Add" ? "Add Vehicle" : "Update Vehicle"}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
       </form>
     </Form>
-  )
+  );
 }

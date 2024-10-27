@@ -3,19 +3,19 @@ import LinkSkelton from "@/components/skelton/LinksSkelton";
 import { FilePenLine, Link as LinkIcon, Navigation, Plus } from "lucide-react";
 import { useAdminContext } from "@/context/AdminContext";
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllLinks } from "@/api/links";
 import NavigationTab from "@/components/NavigationTab";
 import { useState } from "react";
 import Pagination from "@/components/Pagination";
+import { fetchAllRecommendedLinks } from "@/api/recommended-links";
 
-export default function ManageLinksPage() {
+export default function ManageRecommendedLinksPage() {
   const { state } = useAdminContext();
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["links", state],
+    queryKey: ["recommended-links", state],
     queryFn: () =>
-      fetchAllLinks({
+      fetchAllRecommendedLinks({
         page,
         limit: 10,
         sortOrder: "DESC",
@@ -37,8 +37,8 @@ export default function ManageLinksPage() {
         ]}
       />
 
-      <h1 className="mt-6 mb-8 text-2xl font-bold text-center sm:text-left">
-        Currently Active Links In{" "}
+      <h1 className="mt-6 mb-8 text-xl font-bold text-center md:text-2xl sm:text-left">
+        Currently Active Recommended Links In{" "}
         <span className="text-yellow">{state.stateName}</span>
       </h1>
       <div className="flex flex-col gap-3 max-w-[800px]">
@@ -65,7 +65,7 @@ export default function ManageLinksPage() {
                 </Link>
               </div>
               <div className="mr-3">
-                <Link to={`/marketing/quick-links/edit/${data.linkId}`}>
+                <Link to={`/marketing/recommended-links/edit/${data.linkId}`}>
                   <FilePenLine className="hover:text-yellow" />
                 </Link>
               </div>
@@ -73,7 +73,7 @@ export default function ManageLinksPage() {
           ))
         ) : (
           <p className="mt-20 text-xl font-semibold text-center text-gray-500">
-            No links found under{" "}
+            No Recommended links found under{" "}
             <span className="italic font-bold"> {state.stateName}</span>
           </p>
         )}
@@ -84,7 +84,7 @@ export default function ManageLinksPage() {
           className="gap-x-1 px-3 py-2 text-white flex-center bg-yellow"
           to={`/marketing/quick-links/add`}
         >
-          New Link <Plus />
+          New Recommended Link <Plus />
         </Link>
       </button>
 
