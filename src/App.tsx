@@ -26,6 +26,7 @@ import ProtectedRoute from "./layout/ProtectedRoutes";
 
 import { toast } from "./components/ui/use-toast";
 import { AdminProvider } from "./context/AdminContext";
+import RouteErrorBoundary from "./layout/RouteErrorBoundary";
 
 // lazy loaded pages
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"));
@@ -486,7 +487,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AdminProvider>
-        <RouterProvider router={router} />
+        <RouteErrorBoundary>
+          <RouterProvider router={router} />
+        </RouteErrorBoundary>
       </AdminProvider>
     </QueryClientProvider>
   );
