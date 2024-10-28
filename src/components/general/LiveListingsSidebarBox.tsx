@@ -15,7 +15,7 @@ const LiveListingsSidebar = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["vehicle-listing-count-by-state", state.stateId],
     queryFn: () => getVehicleListingsCountByState(state.stateId),
-    staleTime: 60 * 1000,
+    staleTime: 0,
     enabled: !!state.stateId && typeof state.stateId === "string",
   });
 
@@ -27,6 +27,8 @@ const LiveListingsSidebar = () => {
   };
 
   const isActive = location.pathname.startsWith("/listings");
+
+  console.log(listingCounts);
 
   const inNotificationEnable =
     (!isLoading && listingCounts.newVehicle > 0) || listingCounts.updated > 0;

@@ -41,13 +41,6 @@ const Register = () => {
   });
 
   async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-    // if (!isPhoneValid(values.phoneNumber)) {
-    //   form.setError('phoneNumber', {
-    //     type: 'manual',
-    //     message: 'Provide valid phone number',
-    //   })
-    //   return
-    // }
     try {
       const phoneNumber = values.phoneNumber
         .replace(`+${countryCode}`, "")

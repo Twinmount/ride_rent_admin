@@ -13,7 +13,7 @@ const AgentsSidebarBox = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["company-listing-count"],
     queryFn: getCompanyListingsCount,
-    staleTime: 60 * 1000,
+    staleTime: 0,
   });
 
   const companyCounts = data?.result || { pending: 0 };

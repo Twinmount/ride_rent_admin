@@ -25,9 +25,10 @@ import { Slug } from "@/api/Api-Endpoints";
 import { toast } from "@/components/ui/use-toast";
 import { clear, save, StorageKeys } from "@/utils/storage";
 import { LoginResponse } from "@/types/api-types/API-types";
+import { Eye, EyeOff } from "lucide-react";
 
 const LoginPage = () => {
-  // State to store the country code separately
+  const [isView, setIsView] = useState(false);
   const [countryCode, setCountryCode] = useState("");
   const navigate = useNavigate();
 
@@ -155,12 +156,28 @@ const LoginPage = () => {
                   </FormLabel>
                   <div className="flex-col items-start w-full">
                     <FormControl>
-                      <Input
-                        placeholder="Password"
-                        {...field}
-                        className={`input-field !text-lg`}
-                        type="password"
-                      />
+                      <div className="relative">
+                        <Input
+                          type={isView ? "text" : "password"}
+                          id="password"
+                          className={`input-field !text-lg`}
+                          placeholder="password"
+                          {...field}
+                        />
+                        {isView ? (
+                          <Eye
+                            className="absolute top-4 right-4 z-10 text-gray-500 cursor-pointer"
+                            onClick={() => {
+                              setIsView(!isView);
+                            }}
+                          />
+                        ) : (
+                          <EyeOff
+                            className="absolute top-4 right-4 z-10 text-gray-500 cursor-pointer"
+                            onClick={() => setIsView(!isView)}
+                          />
+                        )}
+                      </div>
                     </FormControl>
                     <FormMessage className="ml-2" />
                   </div>
