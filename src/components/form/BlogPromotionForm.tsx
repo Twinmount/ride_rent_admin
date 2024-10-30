@@ -30,7 +30,7 @@ import {
   updateBlogPromotion,
 } from "@/api/blogs";
 import { deleteMultipleFiles } from "@/helpers/form";
-import PromotionFileUpload from "./PromotionsFileUpload";
+import PromotionFileUpload from "./file-uploads/PromotionsFileUpload";
 
 type BlogPromotionFormProps = {
   type: "Add" | "Update";

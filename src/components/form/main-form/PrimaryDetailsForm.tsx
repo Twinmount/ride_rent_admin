@@ -25,14 +25,19 @@ import { Label } from "@/components/ui/label";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import RentalDetailsFormField from "../RentalDetailsFormField";
-import MultipleFileUpload from "../MultipleFileUpload";
-import { deleteMultipleFiles, validateRentalDetails } from "@/helpers/form";
-import BrandsDropdown from "../BrandsDropdown";
+import MultipleFileUpload from "../file-uploads/MultipleFileUpload";
+import {
+  deleteMultipleFiles,
+  validateHourlyRentals,
+  validateRentalDetails,
+  validateSecurityDeposit,
+} from "@/helpers/form";
+import BrandsDropdown from "../dropdowns/BrandsDropdown";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import CitiesDropdown from "../CitiesDropdown";
-import CategoryDropdown from "../CategoryDropdown";
-import VehicleTypesDropdown from "../VehicleTypesDropdown";
+import CitiesDropdown from "../dropdowns/CitiesDropdown";
+import CategoryDropdown from "../dropdowns/CategoryDropdown";
+import VehicleTypesDropdown from "../dropdowns/VehicleTypesDropdown";
 import StatesDropdown from "../StatesDropdown";
 import { save, StorageKeys } from "@/utils/storage";
 import { toast } from "@/components/ui/use-toast";
@@ -42,6 +47,9 @@ import { useParams } from "react-router-dom";
 import { ApiError } from "@/types/types";
 import { Textarea } from "@/components/ui/textarea";
 import { GcsFilePaths } from "@/constants/enum";
+import ServicesDropdown from "../dropdowns/ServicesDropdown";
+import SecurityDepositField from "../SecurityDepositField";
+import HourlyRentalsField from "../HourlyRentalsField";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -57,8 +65,10 @@ export default function PrimaryDetailsForm({
   initialCountryCode,
 }: PrimaryFormProps) {
   const [countryCode, setCountryCode] = useState<string>("");
-  const [isFileUploading, setIsFileUploading] = useState(false);
+  const [isPhotosUploading, setIsPhotosUploading] = useState(false);
+  const [isLicenseUploading, setIsLicenseUploading] = useState(false);
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
+  const [isCarsCategory, setIsCarsCategory] = useState(false);
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string;
@@ -86,7 +96,31 @@ export default function PrimaryDetailsForm({
       return;
     }
 
-    if (isFileUploading) {
+    const securityDepositError = validateSecurityDeposit(
+      values.securityDeposit
+    );
+
+    if (securityDepositError) {
+      form.setError("securityDeposit", {
+        type: "manual",
+        message: securityDepositError,
+      });
+      form.setFocus("securityDeposit");
+      return;
+    }
+
+    const hourlyRentalsError = validateHourlyRentals(values.hourlyRentals);
+
+    if (hourlyRentalsError) {
+      form.setError("hourlyRentals", {
+        type: "manual",
+        message: hourlyRentalsError,
+      });
+      form.setFocus("hourlyRentals");
+      return;
+    }
+
+    if (isPhotosUploading || isLicenseUploading) {
       toast({
         title: "File Upload in Progress",
         description:
@@ -96,6 +130,9 @@ export default function PrimaryDetailsForm({
       });
       return;
     }
+
+    console.log(values);
+    return;
 
     // Append other form data
     try {
@@ -116,7 +153,6 @@ export default function PrimaryDetailsForm({
 
       if (data) {
         // actually delete the images from the db, if any
-
         await deleteMultipleFiles(deletedFiles);
       }
 
@@ -196,6 +232,7 @@ export default function PrimaryDetailsForm({
                         form.setValue("vehicleBrandId", "");
                       }}
                       value={initialValues.vehicleCategoryId}
+                      setIsCarsCategory={setIsCarsCategory}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -234,6 +271,41 @@ export default function PrimaryDetailsForm({
               </FormItem>
             )}
           />
+
+          {/* services dropdown */}
+          {isCarsCategory && (
+            <FormField
+              control={form.control}
+              name="services"
+              render={({ field }) => (
+                <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                  <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                    <div>
+                      Services Offered <br />
+                      <span>&#40;optional&#41;</span>
+                    </div>
+
+                    <span className="mr-5 max-sm:hidden">:</span>
+                  </FormLabel>
+                  <div className="flex-col items-start w-full">
+                    <FormControl>
+                      <ServicesDropdown
+                        value={field.value || []}
+                        onChangeHandler={field.onChange}
+                        vehicleTypeId={form.watch("vehicleTypeId")}
+                        isDisabled={!form.watch("vehicleTypeId")}
+                      />
+                    </FormControl>
+                    <FormDescription className="ml-2">
+                      &#40;optional&#41; Select additional services for this
+                      vehicle if available
+                    </FormDescription>
+                    <FormMessage className="ml-2" />
+                  </div>
+                </FormItem>
+              )}
+            />
+          )}
 
           {/* brand name */}
           <FormField
@@ -345,9 +417,9 @@ export default function PrimaryDetailsForm({
                 existingFiles={initialValues.vehiclePhotos || []}
                 description="Add Vehicle Photos. Up to 8 photos can be added."
                 maxSizeMB={30}
-                setIsFileUploading={setIsFileUploading}
+                setIsFileUploading={setIsPhotosUploading}
                 bucketFilePath={GcsFilePaths.IMAGE_VEHICLES}
-                isFileUploading={isFileUploading}
+                isFileUploading={isPhotosUploading}
                 downloadFileName={
                   formData?.vehicleModel
                     ? ` ${formData.vehicleModel}`
@@ -375,9 +447,9 @@ export default function PrimaryDetailsForm({
                   </>
                 }
                 maxSizeMB={15}
-                setIsFileUploading={setIsFileUploading}
+                setIsFileUploading={setIsLicenseUploading}
                 bucketFilePath={GcsFilePaths.COMMERCIAL_LICENSES}
-                isFileUploading={isFileUploading}
+                isFileUploading={isLicenseUploading}
                 downloadFileName={
                   formData?.vehicleModel
                     ? `[commercial-license] - ${formData.vehicleModel}`
@@ -551,6 +623,28 @@ export default function PrimaryDetailsForm({
             }}
           />
 
+          {/* hourly rentals */}
+          <FormField
+            control={form.control}
+            name="hourlyRentals"
+            render={() => (
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                  Hourly Rentals <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <HourlyRentalsField />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Enable if this vehicle is available for hourly rentals.
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            )}
+          />
+
           {/* Location(state) */}
           <FormField
             control={form.control}
@@ -641,6 +735,30 @@ export default function PrimaryDetailsForm({
               </FormItem>
             )}
           />
+
+          {/* security deposit */}
+          <FormField
+            control={form.control}
+            name="securityDeposit"
+            render={() => (
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                  Security Deposit <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <SecurityDepositField />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Specify if a security deposit is required and provide the
+                    amount if applicable.
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            )}
+          />
+
           {/* crypto details */}
           <FormField
             control={form.control}
@@ -670,6 +788,62 @@ export default function PrimaryDetailsForm({
                   <FormDescription className="mt-1 ml-2">
                     Select this option if your company accepts payments via
                     cryptocurrency.
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Payment Modes */}
+          <FormField
+            control={form.control}
+            name="paymentModes"
+            render={() => (
+              <FormItem className="flex mb-2 w-full max-sm:flex-col max-sm:gap-y-2">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                  Payment Modes <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <div className="flex gap-x-5 items-center">
+                      {/* Credit/Debit Cards Checkbox */}
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          checked={form.watch("paymentModes.creditDebitCards")}
+                          onCheckedChange={(checked) =>
+                            form.setValue(
+                              "paymentModes.creditDebitCards",
+                              checked as boolean
+                            )
+                          }
+                          className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                          id="creditDebitCards"
+                        />
+                        <Label htmlFor="creditDebitCards">
+                          Credit/Debit Cards
+                        </Label>
+                      </div>
+
+                      {/* Tabby Checkbox */}
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          checked={form.watch("paymentModes.tabby")}
+                          onCheckedChange={(checked) =>
+                            form.setValue(
+                              "paymentModes.tabby",
+                              checked as boolean
+                            )
+                          }
+                          className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                          id="tabby"
+                        />
+                        <Label htmlFor="tabby">Tabby</Label>
+                      </div>
+                    </div>
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Select payment modes available.
                   </FormDescription>
                   <FormMessage className="ml-2" />
                 </div>

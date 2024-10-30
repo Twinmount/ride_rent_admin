@@ -12,37 +12,13 @@ import {
   GetSpecificationFormFieldsResponse,
   VehicleListingResponse,
 } from "@/types/api-types/vehicleAPI-types";
+import { PrimaryFormType } from "@/types/formTypes";
 
 // rental details sub type
 export type RentalDetailType = {
   enabled: boolean;
   rentInAED?: string;
   mileageLimit?: string;
-};
-
-type PrimaryFormType = {
-  vehicleCategoryId: string;
-  vehicleTypeId: string;
-  vehicleBrandId: string;
-  vehicleModel: string;
-  vehiclePhotos: string[]; // Array of files or URLs
-  vehicleRegistrationNumber: string;
-  vehicleRegisteredYear: string;
-  commercialLicenses: string[]; // Array of files or URLs
-  commercialLicenseExpireDate: Date;
-  isLease: boolean;
-  isCryptoAccepted: boolean;
-  isSpotDeliverySupported: boolean;
-  specification: "UAE_SPEC" | "USA_SPEC" | "OTHERS";
-  rentalDetails: {
-    day: RentalDetailType;
-    week: RentalDetailType;
-    month: RentalDetailType;
-  };
-  phoneNumber: string;
-  stateId: string;
-  cityIds: string[];
-  description: string;
 };
 
 export const addPrimaryDetailsForm = async (
@@ -79,6 +55,8 @@ export const addPrimaryDetailsForm = async (
       rentalDetails: JSON.stringify(values.rentalDetails),
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
+      services: values.services,
+      securityDeposit: values.securityDeposit,
     };
 
     // Send the request as a JSON object
@@ -138,6 +116,8 @@ export const updatePrimaryDetailsForm = async (
       rentalDetails: JSON.stringify(values.rentalDetails),
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
+      services: values.services,
+      securityDeposit: values.securityDeposit,
     };
 
     // Send the request as a JSON object

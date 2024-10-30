@@ -175,6 +175,24 @@ export const PrimaryFormSchema = z.object({
     .string()
     .min(10, "Description must be at least 10 characters long")
     .max(5000, "Description cannot exceed 5000 characters"),
+  services: z.array(z.string()).optional(),
+  securityDeposit: z.object({
+    enabled: z.boolean().default(false),
+    amountInAED: z.string().optional().default(""),
+  }),
+  paymentModes: z.object({
+    creditDebitCards: z.boolean().default(false).optional(),
+    tabby: z.boolean().default(false).optional(),
+  }),
+  hourlyRentals: z.object({
+    enabled: z.boolean().default(false),
+    hourlyRentals: z.object({
+      enabled: z.boolean().default(false),
+      minBookingHours: z.string().optional(),
+      rentInAED: z.string().optional().default(""),
+      mileageLimit: z.string().optional().default(""),
+    }),
+  }),
 });
 
 // login form schema

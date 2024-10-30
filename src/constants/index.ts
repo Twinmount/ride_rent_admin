@@ -119,6 +119,7 @@ export const orgs = [{ id: "1", label: "UAE", value: "uae" }];
 export const PrimaryFormDefaultValues: PrimaryFormType = {
   vehicleCategoryId: "",
   vehicleTypeId: "", //'luxury' for example
+
   vehicleBrandId: "",
   vehicleModel: "",
   vehiclePhotos: [], //upto 8 photos of the vehicle
@@ -127,6 +128,7 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   commercialLicenses: [],
   commercialLicenseExpireDate: new Date(),
   isLease: false,
+
   isCryptoAccepted: false,
   isSpotDeliverySupported: false,
   specification: "UAE_SPEC",
@@ -139,6 +141,21 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   stateId: "",
   cityIds: [],
   description: "",
+  services: [],
+  securityDeposit: {
+    enabled: false,
+    amountInAED: "",
+  },
+  paymentModes: {
+    creditDebitCards: false,
+    tabby: false,
+  },
+  hourlyRentals: {
+    enabled: false,
+    minBookingHours: "",
+    rentInAED: "",
+    mileageLimit: "",
+  },
 };
 
 // login page default value

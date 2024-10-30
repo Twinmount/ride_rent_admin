@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import {
   Form,
@@ -10,95 +10,94 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { PromotionFormType } from '@/types/types'
-import { PromotionFormDefaultValue } from '@/constants'
-import { PromotionFormSchema } from '@/lib/validator'
-import Spinner from '../general/Spinner'
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { PromotionFormType } from "@/types/types";
+import { PromotionFormDefaultValue } from "@/constants";
+import { PromotionFormSchema } from "@/lib/validator";
+import Spinner from "../general/Spinner";
 
-import { useNavigate, useParams } from 'react-router-dom'
-import { toast } from '../ui/use-toast'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useAdminContext } from '@/context/AdminContext'
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "../ui/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAdminContext } from "@/context/AdminContext";
 
-import DeleteModal from '../modal/DeleteModal'
+import DeleteModal from "../modal/DeleteModal";
 import {
   addPromotion,
   deletePromotion,
   updatePromotion,
-} from '@/api/promotions'
-import { useState } from 'react'
-import { GcsFilePaths } from '@/constants/enum'
-import { deleteMultipleFiles } from '@/helpers/form'
-import PromotionFileUpload from './PromotionsFileUpload'
+} from "@/api/promotions";
+import { useState } from "react";
+import { GcsFilePaths } from "@/constants/enum";
+import { deleteMultipleFiles } from "@/helpers/form";
+import PromotionFileUpload from "./file-uploads/PromotionsFileUpload";
 
 type PromotionFormProps = {
-  type: 'Add' | 'Update'
-  formData?: PromotionFormType | null
-}
+  type: "Add" | "Update";
+  formData?: PromotionFormType | null;
+};
 
 export default function PromotionForm({ type, formData }: PromotionFormProps) {
-  const [isFileUploading, setIsFileUploading] = useState(false)
-  const [deletedImages, setDeletedImages] = useState<string[]>([])
+  const [isFileUploading, setIsFileUploading] = useState(false);
+  const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
-  const { state } = useAdminContext()
+  const { state } = useAdminContext();
 
   const initialValues =
-    formData && type === 'Update' ? formData : PromotionFormDefaultValue
+    formData && type === "Update" ? formData : PromotionFormDefaultValue;
 
-  const navigate = useNavigate()
-  const { promotionId } = useParams<{ promotionId: string }>()
-  const queryClient = useQueryClient()
+  const navigate = useNavigate();
+  const { promotionId } = useParams<{ promotionId: string }>();
+  const queryClient = useQueryClient();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof PromotionFormSchema>>({
     resolver: zodResolver(PromotionFormSchema),
     defaultValues: initialValues,
-  })
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof PromotionFormSchema>) {
     if (isFileUploading) {
       toast({
-        title: 'File Upload in Progress',
+        title: "File Upload in Progress",
         description:
-          'Please wait until the file upload completes before submitting the form.',
+          "Please wait until the file upload completes before submitting the form.",
         duration: 3000,
-        className: 'bg-orange',
-      })
-      return
+        className: "bg-orange",
+      });
+      return;
     }
 
     try {
-      let data
-      if (type === 'Add') {
-        data = await addPromotion(values, state.stateId as string)
-      } else if (type === 'Update') {
-        data = await updatePromotion(values, promotionId as string)
+      let data;
+      if (type === "Add") {
+        data = await addPromotion(values, state.stateId as string);
+      } else if (type === "Update") {
+        data = await updatePromotion(values, promotionId as string);
       }
 
       if (data) {
-      
-        await deleteMultipleFiles(deletedImages) // Call
+        await deleteMultipleFiles(deletedImages); // Call
       }
 
       if (data) {
         toast({
           title: `${type} Promotion successfully`,
-          className: 'bg-yellow text-white',
-        })
-        navigate('/marketing/promotions')
+          className: "bg-yellow text-white",
+        });
+        navigate("/marketing/promotions");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
-        variant: 'destructive',
+        variant: "destructive",
         title: `${type} promotion failed`,
-        description: 'Something went wrong',
-      })
+        description: "Something went wrong",
+      });
     }
   }
 
@@ -106,11 +105,11 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
     mutationFn: () => deletePromotion(promotionId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['promotions', state],
+        queryKey: ["promotions", state],
         exact: true,
-      })
+      });
     },
-  })
+  });
 
   return (
     <Form {...form}>
@@ -172,12 +171,12 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
           disabled={form.formState.isSubmitting}
           className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
         >
-          {form.formState.isSubmitting ? 'Processing...' : `${type} Promotion`}
+          {form.formState.isSubmitting ? "Processing..." : `${type} Promotion`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
 
         {/* delete link */}
-        {type === 'Update' && (
+        {type === "Update" && (
           <DeleteModal
             onDelete={deletePromotionMutation}
             label="Delete"
@@ -196,5 +195,5 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
         </p>
       </form>
     </Form>
-  )
+  );
 }

@@ -1,18 +1,18 @@
-import { useFormContext, Controller } from 'react-hook-form'
-import { Input } from '@/components/ui/input'
-import { Checkbox } from '@/components/ui/checkbox'
-import { FormDescription } from '../ui/form'
+import { useFormContext, Controller } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { FormDescription } from "../ui/form";
 
 const RentalDetailField = ({
   period,
 }: {
-  period: 'day' | 'week' | 'month'
+  period: "day" | "week" | "month";
 }) => {
-  const { control, watch } = useFormContext()
-  const isEnabled = watch(`rentalDetails.${period}.enabled`)
+  const { control, watch } = useFormContext();
+  const isEnabled = watch(`rentalDetails.${period}.enabled`);
 
   return (
-    <div className="p-2 mb-2 border-b rounded-lg shadow ">
+    <div className="p-2 mb-2 rounded-lg border-b shadow">
       <Controller
         name={`rentalDetails.${period}.enabled`}
         control={control}
@@ -42,7 +42,7 @@ const RentalDetailField = ({
               <div className="flex items-center mt-2">
                 <label
                   htmlFor={`rentalDetails-${period}-rentInAED`}
-                  className="block mr-1 text-sm font-medium w-28"
+                  className="block mr-1 mb-5 w-28 text-sm font-medium"
                 >
                   Rent in AED
                 </label>
@@ -58,13 +58,13 @@ const RentalDetailField = ({
                       if (
                         !/^\d*$/.test(e.key) &&
                         ![
-                          'Backspace',
-                          'Delete',
-                          'ArrowLeft',
-                          'ArrowRight',
+                          "Backspace",
+                          "Delete",
+                          "ArrowLeft",
+                          "ArrowRight",
                         ].includes(e.key)
                       ) {
-                        e.preventDefault()
+                        e.preventDefault();
                       }
                     }}
                   />
@@ -82,7 +82,7 @@ const RentalDetailField = ({
               <div className="flex items-center mt-2">
                 <label
                   htmlFor={`rentalDetails-${period}-mileageLimit`}
-                  className="block text-sm font-medium w-28"
+                  className="block mb-6 w-28 text-sm font-medium"
                 >
                   Mileage Limit
                 </label>
@@ -98,18 +98,18 @@ const RentalDetailField = ({
                       if (
                         !/^\d*$/.test(e.key) &&
                         ![
-                          'Backspace',
-                          'Delete',
-                          'ArrowLeft',
-                          'ArrowRight',
+                          "Backspace",
+                          "Delete",
+                          "ArrowLeft",
+                          "ArrowRight",
                         ].includes(e.key)
                       ) {
-                        e.preventDefault()
+                        e.preventDefault();
                       }
                     }}
                   />
                   <FormDescription>
-                    {`Mileage of the vehicle per ${period} `}
+                    {`Mileage of the vehicle per ${period} (KM)`}
                   </FormDescription>
                 </div>
               </div>
@@ -118,8 +118,8 @@ const RentalDetailField = ({
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
 const RentalDetailsFormField = () => {
   return (
@@ -128,7 +128,7 @@ const RentalDetailsFormField = () => {
       <RentalDetailField period="week" />
       <RentalDetailField period="month" />
     </div>
-  )
-}
+  );
+};
 
-export default RentalDetailsFormField
+export default RentalDetailsFormField;

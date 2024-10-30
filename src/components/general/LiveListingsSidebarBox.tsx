@@ -28,8 +28,6 @@ const LiveListingsSidebar = () => {
 
   const isActive = location.pathname.startsWith("/listings");
 
-  console.log(listingCounts);
-
   const inNotificationEnable =
     (!isLoading && listingCounts.newVehicle > 0) || listingCounts.updated > 0;
 

@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import {
   Form,
@@ -10,88 +10,88 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { BrandFormType } from '@/types/types'
-import { BrandFormSchema } from '@/lib/validator'
-import { BrandFormDefaultValues } from '@/constants'
-import Spinner from '../general/Spinner'
-import { addBrand, updateBrand } from '@/api/brands'
-import { toast } from '../ui/use-toast'
-import { useNavigate, useParams } from 'react-router-dom'
-import SingleFileUpload from './SingleFileUpload'
-import VehicleCategoryDropdown from './VehicleCategoryDropdown'
-import { useState } from 'react'
-import { GcsFilePaths } from '@/constants/enum'
-import { deleteMultipleFiles } from '@/helpers/form'
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { BrandFormType } from "@/types/types";
+import { BrandFormSchema } from "@/lib/validator";
+import { BrandFormDefaultValues } from "@/constants";
+import Spinner from "../general/Spinner";
+import { addBrand, updateBrand } from "@/api/brands";
+import { toast } from "../ui/use-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import VehicleCategoryDropdown from "./VehicleCategoryDropdown";
+import { useState } from "react";
+import { GcsFilePaths } from "@/constants/enum";
+import { deleteMultipleFiles } from "@/helpers/form";
+import SingleFileUpload from "./file-uploads/SingleFileUpload";
 
 type BrandFormProps = {
-  type: 'Add' | 'Update'
-  formData?: BrandFormType | null
-}
+  type: "Add" | "Update";
+  formData?: BrandFormType | null;
+};
 
 export default function BrandForm({ type, formData }: BrandFormProps) {
-  const [isFileUploading, setIsFileUploading] = useState(false)
-  const [deletedImages, setDeletedImages] = useState<string[]>([])
+  const [isFileUploading, setIsFileUploading] = useState(false);
+  const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
   const initialValues =
-    formData && type === 'Update' ? formData : BrandFormDefaultValues
+    formData && type === "Update" ? formData : BrandFormDefaultValues;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { vehicleCategoryId, brandId } = useParams<{
-    vehicleCategoryId: string
-    brandId: string
-  }>()
+    vehicleCategoryId: string;
+    brandId: string;
+  }>();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof BrandFormSchema>>({
     resolver: zodResolver(BrandFormSchema),
     defaultValues: initialValues,
-  })
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof BrandFormSchema>) {
     if (isFileUploading) {
       toast({
-        title: 'File Upload in Progress',
+        title: "File Upload in Progress",
         description:
-          'Please wait until the file upload completes before submitting the form.',
+          "Please wait until the file upload completes before submitting the form.",
         duration: 3000,
-        className: 'bg-orange',
-      })
-      return
+        className: "bg-orange",
+      });
+      return;
     }
 
     try {
-      let data
-      if (type === 'Add') {
-        data = await addBrand(values, vehicleCategoryId as string)
-      } else if (type === 'Update') {
-        data = await updateBrand(values, brandId as string)
+      let data;
+      if (type === "Add") {
+        data = await addBrand(values, vehicleCategoryId as string);
+      } else if (type === "Update") {
+        data = await updateBrand(values, brandId as string);
       }
 
       if (data) {
         // actually delete the images from the db, if any
-        await deleteMultipleFiles(deletedImages)
+        await deleteMultipleFiles(deletedImages);
       }
 
       if (data) {
         toast({
           title: `${type} Brand successfully`,
-          className: 'bg-yellow text-white',
-        })
-        navigate('/manage-brands')
+          className: "bg-yellow text-white",
+        });
+        navigate("/manage-brands");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
-        variant: 'destructive',
+        variant: "destructive",
         title: `${type} Brand failed`,
-        description: 'Something went wrong',
-      })
+        description: "Something went wrong",
+      });
     }
   }
 
@@ -107,8 +107,8 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
             control={form.control}
             name="brandName"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-56 text-base max-sm:w-fit lg:text-lg">
                   Brand Name <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
@@ -134,8 +134,8 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
             control={form.control}
             name="brandValue"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-56 text-base max-sm:w-fit lg:text-lg">
                   Brand Value <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
@@ -161,8 +161,8 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
             control={form.control}
             name="vehicleCategoryId"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between w-56 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-56 text-base max-sm:w-fit lg:text-lg">
                   Vehicle Category <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
@@ -208,10 +208,10 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
           disabled={form.formState.isSubmitting}
           className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
         >
-          {form.formState.isSubmitting ? 'Submitting...' : `${type} Brand `}{' '}
+          {form.formState.isSubmitting ? "Submitting..." : `${type} Brand `}{" "}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
       </form>
     </Form>
-  )
+  );
 }
