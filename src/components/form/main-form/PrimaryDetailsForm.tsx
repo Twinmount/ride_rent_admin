@@ -28,7 +28,6 @@ import RentalDetailsFormField from "../RentalDetailsFormField";
 import MultipleFileUpload from "../file-uploads/MultipleFileUpload";
 import {
   deleteMultipleFiles,
-  validateHourlyRentals,
   validateRentalDetails,
   validateSecurityDeposit,
 } from "@/helpers/form";
@@ -47,9 +46,8 @@ import { useParams } from "react-router-dom";
 import { ApiError } from "@/types/types";
 import { Textarea } from "@/components/ui/textarea";
 import { GcsFilePaths } from "@/constants/enum";
-import ServicesDropdown from "../dropdowns/ServicesDropdown";
+import AdditionalTypesDropdown from "../dropdowns/AdditionalTypesDropdown";
 import SecurityDepositField from "../SecurityDepositField";
-import HourlyRentalsField from "../HourlyRentalsField";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -109,16 +107,16 @@ export default function PrimaryDetailsForm({
       return;
     }
 
-    const hourlyRentalsError = validateHourlyRentals(values.hourlyRentals);
+    // const hourlyRentalsError = validateHourlyRentals(values.hourlyRentals);
 
-    if (hourlyRentalsError) {
-      form.setError("hourlyRentals", {
-        type: "manual",
-        message: hourlyRentalsError,
-      });
-      form.setFocus("hourlyRentals");
-      return;
-    }
+    // if (hourlyRentalsError) {
+    //   form.setError("hourlyRentals", {
+    //     type: "manual",
+    //     message: hourlyRentalsError,
+    //   });
+    //   form.setFocus("hourlyRentals");
+    //   return;
+    // }
 
     if (isPhotosUploading || isLicenseUploading) {
       toast({
@@ -131,8 +129,8 @@ export default function PrimaryDetailsForm({
       return;
     }
 
-    console.log(values);
-    return;
+    // console.log("values : ", values);
+    // return;
 
     // Append other form data
     try {
@@ -276,7 +274,7 @@ export default function PrimaryDetailsForm({
           {isCarsCategory && (
             <FormField
               control={form.control}
-              name="services"
+              name="additionalTypes"
               render={({ field }) => (
                 <FormItem className="flex mb-2 w-full max-sm:flex-col">
                   <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
@@ -289,7 +287,7 @@ export default function PrimaryDetailsForm({
                   </FormLabel>
                   <div className="flex-col items-start w-full">
                     <FormControl>
-                      <ServicesDropdown
+                      <AdditionalTypesDropdown
                         value={field.value || []}
                         onChangeHandler={field.onChange}
                         vehicleTypeId={form.watch("vehicleTypeId")}
@@ -623,28 +621,6 @@ export default function PrimaryDetailsForm({
             }}
           />
 
-          {/* hourly rentals */}
-          <FormField
-            control={form.control}
-            name="hourlyRentals"
-            render={() => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
-                  Hourly Rentals <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="flex-col items-start w-full">
-                  <FormControl>
-                    <HourlyRentalsField />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Enable if this vehicle is available for hourly rentals.
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
-
           {/* Location(state) */}
           <FormField
             control={form.control}
@@ -759,97 +735,110 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* crypto details */}
-          <FormField
-            control={form.control}
-            name="isCryptoAccepted"
-            render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
-                  Crypto? <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="flex-col items-start w-full">
-                  <FormControl>
-                    <div className="flex items-center mt-3 space-x-2">
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
-                        id="isCryptoAccepted"
-                      />
-                      <label
-                        htmlFor="isCryptoAccepted"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Accept cryptocurrency payments?
-                      </label>
+          {/* payment details */}
+          <div className="flex mb-2 w-full max-sm:flex-col max-sm:space-y-1">
+            <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              Payment Info <span className="mr-5 max-sm:hidden">:</span>
+            </FormLabel>
+            <div className="p-2 w-full rounded-lg border-b shadow">
+              <FormField
+                control={form.control}
+                name="isCryptoAccepted"
+                render={({ field }) => (
+                  <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                    <div className="flex-col items-start w-full">
+                      <FormControl>
+                        <div className="flex items-center mt-3 space-x-2">
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                            id="isCryptoAccepted"
+                          />
+                          <label
+                            htmlFor="isCryptoAccepted"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            Crypto
+                          </label>
+                        </div>
+                      </FormControl>
+                      <FormDescription className="mt-1 ml-2">
+                        Select if your company accepts payments via
+                        cryptocurrency.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
                     </div>
-                  </FormControl>
-                  <FormDescription className="mt-1 ml-2">
-                    Select this option if your company accepts payments via
-                    cryptocurrency.
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
+                  </FormItem>
+                )}
+              />
 
-          {/* Payment Modes */}
-          <FormField
-            control={form.control}
-            name="paymentModes"
-            render={() => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col max-sm:gap-y-2">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
-                  Payment Modes <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="flex-col items-start w-full">
-                  <FormControl>
-                    <div className="flex gap-x-5 items-center">
-                      {/* Credit/Debit Cards Checkbox */}
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          checked={form.watch("paymentModes.creditDebitCards")}
-                          onCheckedChange={(checked) =>
-                            form.setValue(
-                              "paymentModes.creditDebitCards",
-                              checked as boolean
-                            )
-                          }
-                          className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
-                          id="creditDebitCards"
-                        />
-                        <Label htmlFor="creditDebitCards">
-                          Credit/Debit Cards
-                        </Label>
-                      </div>
-
-                      {/* Tabby Checkbox */}
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          checked={form.watch("paymentModes.tabby")}
-                          onCheckedChange={(checked) =>
-                            form.setValue(
-                              "paymentModes.tabby",
-                              checked as boolean
-                            )
-                          }
-                          className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
-                          id="tabby"
-                        />
-                        <Label htmlFor="tabby">Tabby</Label>
-                      </div>
+              {/* credit/debit details */}
+              <FormField
+                control={form.control}
+                name="creditDebitCards"
+                render={({ field }) => (
+                  <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                    <div className="flex-col items-start w-full">
+                      <FormControl>
+                        <div className="flex items-center mt-3 space-x-2">
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                            id="isCreditDebitCard"
+                          />
+                          <label
+                            htmlFor="isCreditDebitCard"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            Credit / Debit card
+                          </label>
+                        </div>
+                      </FormControl>
+                      <FormDescription className="mt-1 ml-2">
+                        Select if your company accepts payments via credit or
+                        debit card.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
                     </div>
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Select payment modes available.
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
+                  </FormItem>
+                )}
+              />
+
+              {/*Tabby */}
+              <FormField
+                control={form.control}
+                name="tabby"
+                render={({ field }) => (
+                  <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                    <div className="flex-col items-start w-full">
+                      <FormControl>
+                        <div className="flex items-center mt-3 space-x-2">
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                            id="isTabby"
+                          />
+                          <label
+                            htmlFor="isTabby"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            Tabby
+                          </label>
+                        </div>
+                      </FormControl>
+                      <FormDescription className="mt-1 ml-2">
+                        Select if your company accepts payments via Tabby.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
 
           {/* spot delivery */}
           <FormField

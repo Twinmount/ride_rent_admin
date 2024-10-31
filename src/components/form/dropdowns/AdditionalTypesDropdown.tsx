@@ -34,54 +34,54 @@ const SERVICE_OPTIONS = [
   },
 ];
 
-type ServicesDropdownProps = {
+type AdditionalTypesDropdownProps = {
   value: string[];
   onChangeHandler: (value: string[]) => void;
   isDisabled?: boolean;
   vehicleTypeId: string;
 };
 
-const ServicesDropdown = ({
+const AdditionalTypesDropdown = ({
   value = [],
   onChangeHandler,
   isDisabled = false,
   vehicleTypeId,
-}: ServicesDropdownProps) => {
-  const [selectedServices, setSelectedServices] = useState<string[]>(
-    value || []
-  );
+}: AdditionalTypesDropdownProps) => {
+  const [selectedAdditionalTypes, setSelectedAdditionalTypes] = useState<
+    string[]
+  >(value || []);
 
   // Filter service options based on vehicleTypeId selection
   const filteredServices = SERVICE_OPTIONS.filter(
-    (service) =>
-      service.typeId !== vehicleTypeId ||
-      selectedServices.includes(service.typeId)
+    (types) =>
+      types.typeId !== vehicleTypeId ||
+      selectedAdditionalTypes.includes(types.typeId)
   );
 
   useEffect(() => {
-    // Update selectedServices if vehicleTypeId is in selected services
-    if (selectedServices.includes(vehicleTypeId)) {
-      const updatedSelectedServices = selectedServices.filter(
+    // Update selectedAdditionalTypes if vehicleTypeId is in selected type
+    if (selectedAdditionalTypes.includes(vehicleTypeId)) {
+      const updatedSelectedAdditionalTypes = selectedAdditionalTypes.filter(
         (serviceId) => serviceId !== vehicleTypeId
       );
-      setSelectedServices(updatedSelectedServices);
-      onChangeHandler(updatedSelectedServices);
+      setSelectedAdditionalTypes(updatedSelectedAdditionalTypes);
+      onChangeHandler(updatedSelectedAdditionalTypes);
     }
   }, [vehicleTypeId]); // Only re-run when vehicleTypeId changes
 
-  const handleSelectService = (serviceId: string) => {
-    let updatedSelectedServices: string[];
+  const handleSelectAdditionalType = (serviceId: string) => {
+    let updatedSelectedAdditionalTypes: string[];
 
-    if (selectedServices.includes(serviceId)) {
-      updatedSelectedServices = selectedServices.filter(
+    if (selectedAdditionalTypes.includes(serviceId)) {
+      updatedSelectedAdditionalTypes = selectedAdditionalTypes.filter(
         (id) => id !== serviceId
       );
     } else {
-      updatedSelectedServices = [...selectedServices, serviceId];
+      updatedSelectedAdditionalTypes = [...selectedAdditionalTypes, serviceId];
     }
 
-    setSelectedServices(updatedSelectedServices);
-    onChangeHandler(updatedSelectedServices);
+    setSelectedAdditionalTypes(updatedSelectedAdditionalTypes);
+    onChangeHandler(updatedSelectedAdditionalTypes);
   };
 
   return (
@@ -96,8 +96,8 @@ const ServicesDropdown = ({
         >
           {!vehicleTypeId
             ? "choose a vehicle type first"
-            : selectedServices.length > 0
-            ? `${selectedServices.length} services selected`
+            : selectedAdditionalTypes.length > 0
+            ? `${selectedAdditionalTypes.length} services selected`
             : `Choose services offered`}
           <ChevronDown className="w-6 h-6 opacity-50" />
         </Button>
@@ -113,13 +113,13 @@ const ServicesDropdown = ({
                   <CommandItem
                     key={service.typeId}
                     value={service.typeId}
-                    onSelect={() => handleSelectService(service.typeId)}
+                    onSelect={() => handleSelectAdditionalType(service.typeId)}
                     className="flex gap-x-2 items-center mt-1"
                   >
                     <Checkbox
-                      checked={selectedServices.includes(service.typeId)}
+                      checked={selectedAdditionalTypes.includes(service.typeId)}
                       onCheckedChange={() =>
-                        handleSelectService(service.typeId)
+                        handleSelectAdditionalType(service.typeId)
                       }
                       className="bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none "
                     />
@@ -135,4 +135,4 @@ const ServicesDropdown = ({
   );
 };
 
-export default ServicesDropdown;
+export default AdditionalTypesDropdown;

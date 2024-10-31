@@ -2,6 +2,7 @@ import { useFormContext, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FormDescription } from "../ui/form";
+import HourlyRentalDetailFormField from "./HourlyRentalDetailsFormField";
 
 const RentalDetailField = ({
   period,
@@ -127,6 +128,7 @@ const RentalDetailsFormField = () => {
       <RentalDetailField period="day" />
       <RentalDetailField period="week" />
       <RentalDetailField period="month" />
+      <HourlyRentalDetailFormField />
     </div>
   );
 };

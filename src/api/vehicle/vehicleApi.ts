@@ -55,8 +55,10 @@ export const addPrimaryDetailsForm = async (
       rentalDetails: JSON.stringify(values.rentalDetails),
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
-      services: values.services,
+      additionalTypes: values.additionalTypes || [],
       securityDeposit: values.securityDeposit,
+      creditDebitCards: values.creditDebitCards,
+      tabby: values.tabby,
     };
 
     // Send the request as a JSON object
@@ -116,8 +118,10 @@ export const updatePrimaryDetailsForm = async (
       rentalDetails: JSON.stringify(values.rentalDetails),
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
-      services: values.services,
+      additionalTypes: values.additionalTypes || [],
       securityDeposit: values.securityDeposit,
+      creditDebitCards: values.creditDebitCards,
+      tabby: values.tabby,
     };
 
     // Send the request as a JSON object

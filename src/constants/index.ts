@@ -119,7 +119,6 @@ export const orgs = [{ id: "1", label: "UAE", value: "uae" }];
 export const PrimaryFormDefaultValues: PrimaryFormType = {
   vehicleCategoryId: "",
   vehicleTypeId: "", //'luxury' for example
-
   vehicleBrandId: "",
   vehicleModel: "",
   vehiclePhotos: [], //upto 8 photos of the vehicle
@@ -128,7 +127,6 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   commercialLicenses: [],
   commercialLicenseExpireDate: new Date(),
   isLease: false,
-
   isCryptoAccepted: false,
   isSpotDeliverySupported: false,
   specification: "UAE_SPEC",
@@ -136,26 +134,24 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
     day: { enabled: false, rentInAED: "", mileageLimit: "" },
     week: { enabled: false, rentInAED: "", mileageLimit: "" },
     month: { enabled: false, rentInAED: "", mileageLimit: "" },
+    hour: {
+      enabled: false,
+      minBookingHours: "",
+      rentInAED: "",
+      mileageLimit: "",
+    },
   },
   phoneNumber: "",
   stateId: "",
   cityIds: [],
   description: "",
-  services: [],
+  additionalTypes: [],
   securityDeposit: {
     enabled: false,
     amountInAED: "",
   },
-  paymentModes: {
-    creditDebitCards: false,
-    tabby: false,
-  },
-  hourlyRentals: {
-    enabled: false,
-    minBookingHours: "",
-    rentInAED: "",
-    mileageLimit: "",
-  },
+  creditDebitCards: false,
+  tabby: false,
 };
 
 // login page default value

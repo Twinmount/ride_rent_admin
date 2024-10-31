@@ -12,11 +12,19 @@ export type CitiesType = {
   cityValue: string;
 };
 
-// rental details sub type
-export type RentalDetailType = {
+// Rental detail type for day, week, and month
+type RentalDetailType = {
   enabled: boolean;
-  rentInAED?: string;
-  mileageLimit?: string;
+  rentInAED: string;
+  mileageLimit: string;
+};
+
+// Hourly rental detail type, which includes minBookingHours
+type HourlyRentalDetailType = {
+  enabled: boolean;
+  rentInAED: string;
+  mileageLimit: string;
+  minBookingHours: string;
 };
 
 // primary details form type
@@ -39,25 +47,18 @@ export type PrimaryFormType = {
     day: RentalDetailType;
     week: RentalDetailType;
     month: RentalDetailType;
+    hour: HourlyRentalDetailType;
   };
   countryCode?: string;
   phoneNumber: string;
   stateId: string;
   cityIds: string[];
   description: string;
-  services?: string[];
+  additionalTypes?: string[];
   securityDeposit: {
     enabled: boolean;
     amountInAED?: string;
   };
-  paymentModes: {
-    creditDebitCards: boolean;
-    tabby: boolean;
-  };
-  hourlyRentals: {
-    enabled: boolean;
-    minBookingHours?: string;
-    rentInAED?: string;
-    mileageLimit?: string;
-  };
+  creditDebitCards: boolean;
+  tabby: boolean;
 };

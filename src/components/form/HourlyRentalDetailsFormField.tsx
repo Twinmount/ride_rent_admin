@@ -1,3 +1,4 @@
+// HourlyRentalDetailFormField.tsx
 import { useFormContext, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -10,43 +11,41 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const HourlyRentalsField = () => {
+const HourlyRentalDetailFormField = () => {
   const { control, watch } = useFormContext();
-  const isEnabled = watch("hourlyRentals.enabled");
+  const isEnabled = watch("rentalDetails.hour.enabled");
 
   return (
     <div className="p-2 mb-2 rounded-lg border-b shadow">
-      {/* Hourly Rentals Checkbox */}
       <Controller
-        name="hourlyRentals.enabled"
+        name="rentalDetails.hour.enabled"
         control={control}
         render={({ field }) => (
           <div className="flex items-center mt-3 space-x-2">
             <Checkbox
               checked={field.value}
-              onCheckedChange={(checked) => field.onChange(checked)}
+              onCheckedChange={field.onChange}
               className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
-              id="hourlyRentals-enabled"
+              id="rentalDetails-hour-enabled"
             />
             <label
-              htmlFor="hourlyRentals-enabled"
-              className="text-base font-medium leading-none"
+              htmlFor="rentalDetails-hour-enabled"
+              className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              Available for Hourly Rentals?
+              Hour
             </label>
           </div>
         )}
       />
 
-      {/* Conditionally Rendered Fields */}
       {isEnabled && (
-        <div className="p-4 mt-4 space-y-4 rounded-lg">
+        <>
           {/* Minimum Required Booking (Select) */}
           <Controller
-            name="hourlyRentals.minBookingHours"
+            name="rentalDetails.hour.minBookingHours"
             control={control}
             render={({ field }) => (
-              <div className="flex items-start space-x-2">
+              <div className="flex items-start mt-4 space-x-2">
                 <label className="w-36 font-medium">
                   Minimum Booking Hours:
                 </label>
@@ -72,7 +71,7 @@ const HourlyRentalsField = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription className="">
+                  <FormDescription>
                     Select the minimum required booking hours (1–10 hours).
                   </FormDescription>
                 </div>
@@ -82,10 +81,10 @@ const HourlyRentalsField = () => {
 
           {/* Rent in AED */}
           <Controller
-            name="hourlyRentals.rentInAED"
+            name="rentalDetails.hour.rentInAED"
             control={control}
             render={({ field }) => (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center mt-4 space-x-2">
                 <label className="w-36 font-medium">Rent in AED:</label>
                 <div className="flex flex-col w-full">
                   <Input
@@ -108,7 +107,7 @@ const HourlyRentalsField = () => {
                       }
                     }}
                   />
-                  <FormDescription className="">
+                  <FormDescription>
                     Specify the hourly rental price in AED.
                   </FormDescription>
                 </div>
@@ -118,10 +117,10 @@ const HourlyRentalsField = () => {
 
           {/* Mileage Limit */}
           <Controller
-            name="hourlyRentals.mileageLimit"
+            name="rentalDetails.hour.mileageLimit"
             control={control}
             render={({ field }) => (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center mt-4 space-x-2">
                 <label className="w-36 font-medium">Mileage Limit:</label>
                 <div className="flex flex-col w-full">
                   <Input
@@ -152,10 +151,10 @@ const HourlyRentalsField = () => {
               </div>
             )}
           />
-        </div>
+        </>
       )}
     </div>
   );
 };
 
-export default HourlyRentalsField;
+export default HourlyRentalDetailFormField;
