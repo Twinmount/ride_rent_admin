@@ -126,33 +126,6 @@ export const validateSecurityDeposit = (
   return null;
 };
 
-type HourlyRentalsType = {
-  enabled: boolean;
-  minBookingHours?: string;
-  rentInAED?: string;
-  mileageLimit?: string;
-};
-
-// Hourly Rentals validation helper function
-export const validateHourlyRentals = (
-  hourlyRentals: HourlyRentalsType
-): string | null => {
-  if (hourlyRentals.enabled) {
-    if (!hourlyRentals.minBookingHours) {
-      return "Please select the minimum booking hours.";
-    }
-    if (!hourlyRentals.rentInAED) {
-      return "Please enter the hourly rent amount in AED.";
-    }
-    if (!hourlyRentals.mileageLimit) {
-      return "Please enter the mileage limit for hourly rentals.";
-    }
-  }
-
-  // If all validations pass, return null (no error)
-  return null;
-};
-
 // file upload image file size validator
 export const validateFileSize = (file: File, maxSizeMB: number) => {
   const maxSizeBytes = maxSizeMB * 1024 * 1024;

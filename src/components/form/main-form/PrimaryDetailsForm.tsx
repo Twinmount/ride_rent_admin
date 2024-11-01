@@ -107,17 +107,6 @@ export default function PrimaryDetailsForm({
       return;
     }
 
-    // const hourlyRentalsError = validateHourlyRentals(values.hourlyRentals);
-
-    // if (hourlyRentalsError) {
-    //   form.setError("hourlyRentals", {
-    //     type: "manual",
-    //     message: hourlyRentalsError,
-    //   });
-    //   form.setFocus("hourlyRentals");
-    //   return;
-    // }
-
     if (isPhotosUploading || isLicenseUploading) {
       toast({
         title: "File Upload in Progress",
@@ -129,9 +118,6 @@ export default function PrimaryDetailsForm({
       return;
     }
 
-    // console.log("values : ", values);
-    // return;
-
     // Append other form data
     try {
       let data;
@@ -139,13 +125,15 @@ export default function PrimaryDetailsForm({
         data = await addPrimaryDetailsForm(
           values as PrimaryFormType,
           countryCode,
-          userId as string
+          userId as string,
+          isCarsCategory
         );
       } else if (type === "Update") {
         data = await updatePrimaryDetailsForm(
           vehicleId as string,
           values as PrimaryFormType,
-          initialCountryCode as string
+          initialCountryCode as string,
+          isCarsCategory
         );
       }
 
@@ -270,7 +258,7 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* services dropdown */}
+          {/* services dropdown for cars */}
           {isCarsCategory && (
             <FormField
               control={form.control}
@@ -763,7 +751,7 @@ export default function PrimaryDetailsForm({
                           </label>
                         </div>
                       </FormControl>
-                      <FormDescription className="mt-1 ml-2">
+                      <FormDescription className="mt-1 ml-7">
                         Select if your company accepts payments via
                         cryptocurrency.
                       </FormDescription>
@@ -796,7 +784,7 @@ export default function PrimaryDetailsForm({
                           </label>
                         </div>
                       </FormControl>
-                      <FormDescription className="mt-1 ml-2">
+                      <FormDescription className="mt-1 ml-7">
                         Select if your company accepts payments via credit or
                         debit card.
                       </FormDescription>
@@ -829,7 +817,7 @@ export default function PrimaryDetailsForm({
                           </label>
                         </div>
                       </FormControl>
-                      <FormDescription className="mt-1 ml-2">
+                      <FormDescription className="mt-1 ml-7">
                         Select if your company accepts payments via Tabby.
                       </FormDescription>
                       <FormMessage className="ml-2" />

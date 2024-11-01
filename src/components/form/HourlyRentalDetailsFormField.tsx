@@ -46,8 +46,8 @@ const HourlyRentalDetailFormField = () => {
             control={control}
             render={({ field }) => (
               <div className="flex items-start mt-4 space-x-2">
-                <label className="w-36 font-medium">
-                  Minimum Booking Hours:
+                <label className="flex items-start w-36 font-medium max-md:text-sm">
+                  Minimum Booking Hours <span className="mt-3">:</span>
                 </label>
                 <div className="flex flex-col w-full">
                   <Select

@@ -24,7 +24,8 @@ export type RentalDetailType = {
 export const addPrimaryDetailsForm = async (
   values: PrimaryFormType,
   countryCode: string,
-  userId: string
+  userId: string,
+  isCarsCategory: boolean
 ): Promise<AddPrimaryFormResponse> => {
   try {
     // Extracting phone number and country code
@@ -33,7 +34,7 @@ export const addPrimaryDetailsForm = async (
       .trim();
 
     // Prepare the request body as a regular object (no FormData)
-    const requestBody = {
+    const requestBody: Record<string, any> = {
       userId,
       countryCode,
       vehicleCategoryId: values.vehicleCategoryId,
@@ -55,11 +56,15 @@ export const addPrimaryDetailsForm = async (
       rentalDetails: JSON.stringify(values.rentalDetails),
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
-      additionalTypes: values.additionalTypes || [],
       securityDeposit: values.securityDeposit,
       creditDebitCards: values.creditDebitCards,
       tabby: values.tabby,
     };
+
+    // Include additionalTypes only if isCarsCategory is true
+    if (isCarsCategory) {
+      requestBody.additionalTypes = values.additionalTypes || [];
+    }
 
     // Send the request as a JSON object
     const data = await API.post<AddPrimaryFormResponse>({
@@ -87,7 +92,8 @@ export const addPrimaryDetailsForm = async (
 export const updatePrimaryDetailsForm = async (
   vehicleId: string,
   values: PrimaryFormType,
-  countryCode: string
+  countryCode: string,
+  isCarsCategory: boolean
 ): Promise<AddPrimaryFormResponse> => {
   try {
     // Extracting phone number and country code
@@ -96,7 +102,7 @@ export const updatePrimaryDetailsForm = async (
       .trim();
 
     // Prepare the request body as a regular object (no FormData)
-    const requestBody = {
+    const requestBody: Record<string, any> = {
       vehicleId,
       countryCode,
       vehicleCategoryId: values.vehicleCategoryId,
@@ -118,11 +124,15 @@ export const updatePrimaryDetailsForm = async (
       rentalDetails: JSON.stringify(values.rentalDetails),
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
-      additionalTypes: values.additionalTypes || [],
       securityDeposit: values.securityDeposit,
       creditDebitCards: values.creditDebitCards,
       tabby: values.tabby,
     };
+
+    // Include additionalTypes only if isCarsCategory is true
+    if (isCarsCategory) {
+      requestBody.additionalTypes = values.additionalTypes || [];
+    }
 
     // Send the request as a JSON object
     const data = await API.put<AddPrimaryFormResponse>({
