@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 
 const HourlyRentalDetailFormField = () => {
-  const { control, watch } = useFormContext();
+  const { control, watch, clearErrors } = useFormContext();
   const isEnabled = watch("rentalDetails.hour.enabled");
 
   return (
@@ -24,7 +24,12 @@ const HourlyRentalDetailFormField = () => {
           <div className="flex items-center mt-3 space-x-2">
             <Checkbox
               checked={field.value}
-              onCheckedChange={field.onChange}
+              onCheckedChange={(value) => {
+                field.onChange(value);
+                if (!value) {
+                  clearErrors([`rentalDetails`]);
+                }
+              }}
               className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
               id="rentalDetails-hour-enabled"
             />
@@ -51,7 +56,10 @@ const HourlyRentalDetailFormField = () => {
                 </label>
                 <div className="flex flex-col w-full">
                   <Select
-                    onValueChange={(value) => field.onChange(value)}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      clearErrors("rentalDetails");
+                    }}
                     value={field.value || ""}
                   >
                     <SelectTrigger className="ring-0 select-field focus:ring-0 input-fields">
@@ -106,6 +114,10 @@ const HourlyRentalDetailFormField = () => {
                         e.preventDefault();
                       }
                     }}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      clearErrors(`rentalDetails`);
+                    }}
                   />
                   <FormDescription>
                     Specify the hourly rental price in AED.
@@ -141,6 +153,10 @@ const HourlyRentalDetailFormField = () => {
                       ) {
                         e.preventDefault();
                       }
+                    }}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      clearErrors(`rentalDetails`);
                     }}
                   />
                   <FormDescription>

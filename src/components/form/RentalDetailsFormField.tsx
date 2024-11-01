@@ -9,7 +9,7 @@ const RentalDetailField = ({
 }: {
   period: "day" | "week" | "month";
 }) => {
-  const { control, watch } = useFormContext();
+  const { control, watch, clearErrors } = useFormContext();
   const isEnabled = watch(`rentalDetails.${period}.enabled`);
 
   return (
@@ -21,7 +21,12 @@ const RentalDetailField = ({
           <div className="flex items-center mt-3 space-x-2">
             <Checkbox
               checked={field.value}
-              onCheckedChange={field.onChange}
+              onCheckedChange={(value) => {
+                field.onChange(value);
+                if (!value) {
+                  clearErrors([`rentalDetails`]); // Clear related errors when checkbox is unchecked
+                }
+              }}
               className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
               id={`rentalDetails-${period}-enabled`}
             />
@@ -68,6 +73,10 @@ const RentalDetailField = ({
                         e.preventDefault();
                       }
                     }}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      clearErrors(`rentalDetails`);
+                    }}
                   />
                   <FormDescription>
                     {`Rent of the Vehicle in AED per ${period} `}
@@ -107,6 +116,10 @@ const RentalDetailField = ({
                       ) {
                         e.preventDefault();
                       }
+                    }}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      clearErrors(`rentalDetails`);
                     }}
                   />
                   <FormDescription>

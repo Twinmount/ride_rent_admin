@@ -80,6 +80,7 @@ export default function PrimaryDetailsForm({
   const form = useForm<z.infer<typeof PrimaryFormSchema>>({
     resolver: zodResolver(PrimaryFormSchema),
     defaultValues: initialValues as PrimaryFormType,
+    shouldFocusError: true,
   });
 
   // Define a submit handler.
@@ -118,6 +119,8 @@ export default function PrimaryDetailsForm({
       return;
     }
 
+    console.log(values);
+    return;
     // Append other form data
     try {
       let data;
@@ -854,7 +857,7 @@ export default function PrimaryDetailsForm({
                       </label>
                     </div>
                   </FormControl>
-                  <FormDescription className="mt-1 ml-2">
+                  <FormDescription className="mt-1 ml-7">
                     Select this option if your company offers on-the-spot
                     delivery services.
                   </FormDescription>
