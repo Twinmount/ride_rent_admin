@@ -19,7 +19,7 @@ type DropdownProps = {
   isLoading: boolean;
 };
 
-const StatesDropdown = ({ options, isLoading }: DropdownProps) => {
+const GeneralStatesDropdown = ({ options, isLoading }: DropdownProps) => {
   const { state, setState } = useAdminContext();
 
   // Check if any state has newVehicles or updatedVehicles
@@ -87,4 +87,4 @@ const StatesDropdown = ({ options, isLoading }: DropdownProps) => {
   );
 };
 
-export default StatesDropdown;
+export default GeneralStatesDropdown;

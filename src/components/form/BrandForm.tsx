@@ -21,7 +21,7 @@ import Spinner from "../general/Spinner";
 import { addBrand, updateBrand } from "@/api/brands";
 import { toast } from "../ui/use-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import VehicleCategoryDropdown from "./VehicleCategoryDropdown";
+import VehicleCategoryDropdown from "./dropdowns/VehicleCategoryDropdown";
 import { useState } from "react";
 import { GcsFilePaths } from "@/constants/enum";
 import { deleteMultipleFiles } from "@/helpers/form";

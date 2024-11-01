@@ -22,7 +22,7 @@ import { toast } from "../ui/use-toast";
 import { addListingMetaData, updateListingMetaData } from "@/api/meta-data";
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
-import StatesDropdown from "./StatesDropdown";
+import StatesDropdown from "./dropdowns/StatesDropdown";
 import VehicleTypesDropdown from "./dropdowns/VehicleTypesDropdown";
 import CategoryDropdown from "./dropdowns/CategoryDropdown";
 

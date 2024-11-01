@@ -37,7 +37,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import CitiesDropdown from "../dropdowns/CitiesDropdown";
 import CategoryDropdown from "../dropdowns/CategoryDropdown";
 import VehicleTypesDropdown from "../dropdowns/VehicleTypesDropdown";
-import StatesDropdown from "../StatesDropdown";
+import StatesDropdown from "../dropdowns/StatesDropdown";
 import { save, StorageKeys } from "@/utils/storage";
 import { toast } from "@/components/ui/use-toast";
 import { addPrimaryDetailsForm, updatePrimaryDetailsForm } from "@/api/vehicle";
@@ -119,8 +119,6 @@ export default function PrimaryDetailsForm({
       return;
     }
 
-    console.log(values);
-    return;
     // Append other form data
     try {
       let data;
