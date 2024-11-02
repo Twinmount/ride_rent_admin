@@ -145,7 +145,7 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   stateId: "",
   cityIds: [],
   description: "",
-  additionalTypes: [],
+  additionalVehicleTypes: [],
   securityDeposit: {
     enabled: false,
     amountInAED: "",

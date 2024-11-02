@@ -263,7 +263,7 @@ export default function PrimaryDetailsForm({
           {isCarsCategory && (
             <FormField
               control={form.control}
-              name="additionalTypes"
+              name="additionalVehicleTypes"
               render={({ field }) => (
                 <FormItem className="flex mb-2 w-full max-sm:flex-col">
                   <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">

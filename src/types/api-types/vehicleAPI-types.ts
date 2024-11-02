@@ -58,6 +58,12 @@ export type RentalDetailsType = {
     enabled: boolean;
     rentInAED: string;
     mileageLimit: string;
+    minBookingHours: string;
+  };
+  hour: {
+    enabled: boolean;
+    rentInAED: string;
+    mileageLimit: string;
   };
 };
 
@@ -127,6 +133,13 @@ export type SingleVehicleType = {
   newRegistration: boolean;
   features: Record<string, FeatureType[]>;
   specs: Record<string, SpecificationType>;
+  additionalVehicleTypes: string[];
+  securityDeposit: {
+    enabled: boolean;
+    amountInAed: string;
+  };
+  isCreditOrDebitCardsSupported: boolean;
+  isTabbySupported: boolean;
   updatedAt: string;
   createdAt: string;
 };
@@ -276,7 +289,7 @@ export type GetPrimaryForm = {
   description: string;
   vehiclePhotos: string[];
   commercialLicenses: string[];
-  additionalTypes?: string[];
+  additionalVehicleTypes?: string[];
   securityDeposit: {
     enabled: boolean;
     amountInAED?: string;

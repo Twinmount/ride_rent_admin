@@ -55,9 +55,9 @@ export const addPrimaryDetailsForm = async (
       isTabbySupported: values.isTabbySupported.toString(),
     };
 
-    // Include additionalTypes only if isCarsCategory is true
+    // Include additionalVehicleTypes only if isCarsCategory is true
     if (isCarsCategory) {
-      requestBody.additionalTypes = values.additionalTypes || [];
+      requestBody.additionalVehicleTypes = values.additionalVehicleTypes || [];
     }
 
     // Send the request as a JSON object
@@ -124,9 +124,9 @@ export const updatePrimaryDetailsForm = async (
       isTabbySupported: values.isTabbySupported.toString(),
     };
 
-    // Include additionalTypes only if isCarsCategory is true
+    // Include additionalVehicleTypes only if isCarsCategory is true
     if (isCarsCategory) {
-      requestBody.additionalTypes = values.additionalTypes || [];
+      requestBody.additionalVehicleTypes = values.additionalVehicleTypes || [];
     }
 
     // Send the request as a JSON object
