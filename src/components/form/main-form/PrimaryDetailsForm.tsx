@@ -692,7 +692,7 @@ export default function PrimaryDetailsForm({
                       </label>
                     </div>
                   </FormControl>
-                  <FormDescription className="mt-1 ml-2">
+                  <FormDescription className="mt-1 ml-6">
                     Select if this vehicle is available for lease.
                   </FormDescription>
                   <FormMessage className="ml-2" />
@@ -714,7 +714,7 @@ export default function PrimaryDetailsForm({
                   <FormControl>
                     <SecurityDepositField />
                   </FormControl>
-                  <FormDescription className="ml-2">
+                  <FormDescription className="ml-8">
                     Specify if a security deposit is required and provide the
                     amount if applicable.
                   </FormDescription>
@@ -765,7 +765,7 @@ export default function PrimaryDetailsForm({
               {/* credit/debit details */}
               <FormField
                 control={form.control}
-                name="creditDebitCards"
+                name="isCreditOrDebitCardsSupported"
                 render={({ field }) => (
                   <FormItem className="flex mb-2 w-full max-sm:flex-col">
                     <div className="flex-col items-start w-full">
@@ -798,7 +798,7 @@ export default function PrimaryDetailsForm({
               {/*Tabby */}
               <FormField
                 control={form.control}
-                name="tabby"
+                name="isTabbySupported"
                 render={({ field }) => (
                   <FormItem className="flex mb-2 w-full max-sm:flex-col">
                     <div className="flex-col items-start w-full">

@@ -150,8 +150,8 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
     enabled: false,
     amountInAED: "",
   },
-  creditDebitCards: false,
-  tabby: false,
+  isCreditOrDebitCardsSupported: false,
+  isTabbySupported: false,
 };
 
 // login page default value

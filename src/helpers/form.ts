@@ -283,7 +283,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     vehicleId: data.vehicleId,
     vehicleCategoryId: data.vehicleCategoryId,
     vehicleTypeId: data.vehicleTypeId,
-    additionalTypes: data.additionalTypes || [],
+    additionalTypes: data?.additionalTypes || [],
     vehicleBrandId: data.vehicleBrandId,
     vehicleModel: data.vehicleModel,
     vehiclePhotos: data.vehiclePhotos,
@@ -301,8 +301,8 @@ export function mapGetPrimaryFormToPrimaryFormType(
     phoneNumber: formattedPhoneNumber, // Set the combined phone number
     stateId: data.stateId,
     cityIds: data.cityIds,
-    creditDebitCards: data.creditDebitCards,
-    tabby: data.tabby,
+    isCreditOrDebitCardsSupported: data.isCreditOrDebitCardsSupported,
+    isTabbySupported: data.isTabbySupported,
   };
 }
 

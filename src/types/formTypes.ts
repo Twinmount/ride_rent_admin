@@ -59,6 +59,6 @@ export type PrimaryFormType = {
     enabled: boolean;
     amountInAED?: string;
   };
-  creditDebitCards: boolean;
-  tabby: boolean;
+  isCreditOrDebitCardsSupported: boolean;
+  isTabbySupported: boolean;
 };

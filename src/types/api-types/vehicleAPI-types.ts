@@ -281,8 +281,8 @@ export type GetPrimaryForm = {
     enabled: boolean;
     amountInAED?: string;
   };
-  creditDebitCards: boolean;
-  tabby: boolean;
+  isCreditOrDebitCardsSupported: boolean;
+  isTabbySupported: boolean;
 };
 
 // Specification form get all response

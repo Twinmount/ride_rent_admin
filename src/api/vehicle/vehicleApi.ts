@@ -14,13 +14,6 @@ import {
 } from "@/types/api-types/vehicleAPI-types";
 import { PrimaryFormType } from "@/types/formTypes";
 
-// rental details sub type
-export type RentalDetailType = {
-  enabled: boolean;
-  rentInAED?: string;
-  mileageLimit?: string;
-};
-
 export const addPrimaryDetailsForm = async (
   values: PrimaryFormType,
   countryCode: string,
@@ -57,8 +50,9 @@ export const addPrimaryDetailsForm = async (
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
       securityDeposit: values.securityDeposit,
-      creditDebitCards: values.creditDebitCards,
-      tabby: values.tabby,
+      isCreditOrDebitCardsSupported:
+        values.isCreditOrDebitCardsSupported.toString(),
+      isTabbySupported: values.isTabbySupported.toString(),
     };
 
     // Include additionalTypes only if isCarsCategory is true
@@ -125,8 +119,9 @@ export const updatePrimaryDetailsForm = async (
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
       securityDeposit: values.securityDeposit,
-      creditDebitCards: values.creditDebitCards,
-      tabby: values.tabby,
+      isCreditOrDebitCardsSupported:
+        values.isCreditOrDebitCardsSupported.toString(),
+      isTabbySupported: values.isTabbySupported.toString(),
     };
 
     // Include additionalTypes only if isCarsCategory is true

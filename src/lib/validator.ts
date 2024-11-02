@@ -189,8 +189,8 @@ export const PrimaryFormSchema = z.object({
     enabled: z.boolean().default(false),
     amountInAED: z.string().optional().default(""),
   }),
-  creditDebitCards: z.boolean().default(false),
-  tabby: z.boolean().default(false),
+  isCreditOrDebitCardsSupported: z.boolean().default(false),
+  isTabbySupported: z.boolean().default(false),
 });
 
 // login form schema
