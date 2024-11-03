@@ -50,9 +50,8 @@ export const addPrimaryDetailsForm = async (
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
       securityDeposit: values.securityDeposit,
-      isCreditOrDebitCardsSupported:
-        values.isCreditOrDebitCardsSupported.toString(),
-      isTabbySupported: values.isTabbySupported.toString(),
+      isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
+      isTabbySupported: values.isTabbySupported,
     };
 
     // Include additionalVehicleTypes only if isCarsCategory is true
@@ -119,9 +118,8 @@ export const updatePrimaryDetailsForm = async (
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
       securityDeposit: values.securityDeposit,
-      isCreditOrDebitCardsSupported:
-        values.isCreditOrDebitCardsSupported.toString(),
-      isTabbySupported: values.isTabbySupported.toString(),
+      isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
+      isTabbySupported: values.isTabbySupported,
     };
 
     // Include additionalVehicleTypes only if isCarsCategory is true
