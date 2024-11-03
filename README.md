@@ -41,6 +41,7 @@ To build the project, use the following command:
 
 ```bash
 npm run build:dev
+npm run build:prod
 ```
 
 ## Building the Project in Production
