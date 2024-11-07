@@ -12,43 +12,13 @@ import {
   GetSpecificationFormFieldsResponse,
   VehicleListingResponse,
 } from "@/types/api-types/vehicleAPI-types";
-
-// rental details sub type
-export type RentalDetailType = {
-  enabled: boolean;
-  rentInAED?: string;
-  mileageLimit?: string;
-};
-
-type PrimaryFormType = {
-  vehicleCategoryId: string;
-  vehicleTypeId: string;
-  vehicleBrandId: string;
-  vehicleModel: string;
-  vehiclePhotos: string[]; // Array of files or URLs
-  vehicleRegistrationNumber: string;
-  vehicleRegisteredYear: string;
-  commercialLicenses: string[]; // Array of files or URLs
-  commercialLicenseExpireDate: Date;
-  isLease: boolean;
-  isCryptoAccepted: boolean;
-  isSpotDeliverySupported: boolean;
-  specification: "UAE_SPEC" | "USA_SPEC" | "OTHERS";
-  rentalDetails: {
-    day: RentalDetailType;
-    week: RentalDetailType;
-    month: RentalDetailType;
-  };
-  phoneNumber: string;
-  stateId: string;
-  cityIds: string[];
-  description: string;
-};
+import { PrimaryFormType } from "@/types/formTypes";
 
 export const addPrimaryDetailsForm = async (
   values: PrimaryFormType,
   countryCode: string,
-  userId: string
+  userId: string,
+  isCarsCategory: boolean
 ): Promise<AddPrimaryFormResponse> => {
   try {
     // Extracting phone number and country code
@@ -57,7 +27,7 @@ export const addPrimaryDetailsForm = async (
       .trim();
 
     // Prepare the request body as a regular object (no FormData)
-    const requestBody = {
+    const requestBody: Record<string, any> = {
       userId,
       countryCode,
       vehicleCategoryId: values.vehicleCategoryId,
@@ -79,7 +49,15 @@ export const addPrimaryDetailsForm = async (
       rentalDetails: JSON.stringify(values.rentalDetails),
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
+      securityDeposit: values.securityDeposit,
+      isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
+      isTabbySupported: values.isTabbySupported,
     };
+
+    // Include additionalVehicleTypes only if isCarsCategory is true
+    if (isCarsCategory) {
+      requestBody.additionalVehicleTypes = values.additionalVehicleTypes || [];
+    }
 
     // Send the request as a JSON object
     const data = await API.post<AddPrimaryFormResponse>({
@@ -107,7 +85,8 @@ export const addPrimaryDetailsForm = async (
 export const updatePrimaryDetailsForm = async (
   vehicleId: string,
   values: PrimaryFormType,
-  countryCode: string
+  countryCode: string,
+  isCarsCategory: boolean
 ): Promise<AddPrimaryFormResponse> => {
   try {
     // Extracting phone number and country code
@@ -116,7 +95,7 @@ export const updatePrimaryDetailsForm = async (
       .trim();
 
     // Prepare the request body as a regular object (no FormData)
-    const requestBody = {
+    const requestBody: Record<string, any> = {
       vehicleId,
       countryCode,
       vehicleCategoryId: values.vehicleCategoryId,
@@ -138,7 +117,15 @@ export const updatePrimaryDetailsForm = async (
       rentalDetails: JSON.stringify(values.rentalDetails),
       vehiclePhotos: values.vehiclePhotos,
       commercialLicenses: values.commercialLicenses,
+      securityDeposit: values.securityDeposit,
+      isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
+      isTabbySupported: values.isTabbySupported,
     };
+
+    // Include additionalVehicleTypes only if isCarsCategory is true
+    if (isCarsCategory) {
+      requestBody.additionalVehicleTypes = values.additionalVehicleTypes || [];
+    }
 
     // Send the request as a JSON object
     const data = await API.put<AddPrimaryFormResponse>({

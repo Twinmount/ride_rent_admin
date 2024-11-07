@@ -4,14 +4,14 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
-import { ChevronDown } from 'lucide-react'
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
 
 type CompanyStatusDropdownProps = {
-  status: string
-  setStatus: (status: string) => void
-}
+  status: string;
+  setStatus: (status: string) => void;
+};
 
 export default function CompanyStatusDropdown({
   status,
@@ -23,7 +23,7 @@ export default function CompanyStatusDropdown({
         <Button
           variant="outline"
           className={`text-white bg-gray-800 hover:bg-gray-800 w-fit flex-center hover:text-white ${
-            status === 'REJECTED' && 'bg-red-500 hover:bg-red-600'
+            status === "REJECTED" && "bg-red-500 hover:bg-red-600"
           }`}
         >
           {status} <ChevronDown />
@@ -41,5 +41,5 @@ export default function CompanyStatusDropdown({
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

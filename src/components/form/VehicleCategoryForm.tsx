@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import {
   Form,
@@ -10,61 +10,61 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { CategoryFormType } from '@/types/types'
-import { CategoryFormSchema } from '@/lib/validator'
-import { CategoryFormDefaultValues } from '@/constants'
-import Spinner from '../general/Spinner'
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { CategoryFormType } from "@/types/types";
+import { CategoryFormSchema } from "@/lib/validator";
+import { CategoryFormDefaultValues } from "@/constants";
+import Spinner from "../general/Spinner";
 
-import { useNavigate, useParams } from 'react-router-dom'
-import { toast } from '../ui/use-toast'
-import { addCategory, updateCategory } from '@/api/vehicle-categories'
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "../ui/use-toast";
+import { addCategory, updateCategory } from "@/api/vehicle-categories";
 
 type CategoryFormProps = {
-  type: 'Add' | 'Update'
-  formData?: CategoryFormType | null
-}
+  type: "Add" | "Update";
+  formData?: CategoryFormType | null;
+};
 
 export default function CategoryForm({ type, formData }: CategoryFormProps) {
   const initialValues =
-    formData && type === 'Update' ? formData : CategoryFormDefaultValues
+    formData && type === "Update" ? formData : CategoryFormDefaultValues;
 
-  const navigate = useNavigate()
-  const { categoryId } = useParams<{ categoryId: string }>()
+  const navigate = useNavigate();
+  const { categoryId } = useParams<{ categoryId: string }>();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof CategoryFormSchema>>({
     resolver: zodResolver(CategoryFormSchema),
     defaultValues: initialValues,
-  })
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof CategoryFormSchema>) {
     try {
-      let data
-      if (type === 'Add') {
-        data = await addCategory(values)
-      } else if (type === 'Update') {
-        data = await updateCategory(values, categoryId as string)
+      let data;
+      if (type === "Add") {
+        data = await addCategory(values);
+      } else if (type === "Update") {
+        data = await updateCategory(values, categoryId as string);
       }
 
       if (data) {
         toast({
           title: `${type} Category successfully`,
-          className: 'bg-yellow text-white',
-        })
-        navigate('/manage-categories')
+          className: "bg-yellow text-white",
+        });
+        navigate("/manage-categories");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
-        variant: 'destructive',
+        variant: "destructive",
         title: `${type} Category failed`,
-        description: 'Something went wrong',
-      })
+        description: "Something went wrong",
+      });
     }
   }
 
@@ -74,14 +74,14 @@ export default function CategoryForm({ type, formData }: CategoryFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
       >
-        <div className="flex flex-col gap-5 r ">
+        <div className="flex flex-col gap-5 r">
           {/* category label */}
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Category</FormLabel>
+              <FormItem className="mb-2 w-full">
+                <FormLabel className="ml-2">Category</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg: 'Sports Car'"
@@ -102,8 +102,8 @@ export default function CategoryForm({ type, formData }: CategoryFormProps) {
             control={form.control}
             name="value"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Category Value</FormLabel>
+              <FormItem className="mb-2 w-full">
+                <FormLabel className="ml-2">Category Value</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg: 'sports-car'"
@@ -128,10 +128,10 @@ export default function CategoryForm({ type, formData }: CategoryFormProps) {
           disabled={form.formState.isSubmitting}
           className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
         >
-          {form.formState.isSubmitting ? 'Processing...' : `${type} Category`}
+          {form.formState.isSubmitting ? "Processing..." : `${type} Category`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
       </form>
     </Form>
-  )
+  );
 }

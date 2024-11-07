@@ -128,11 +128,19 @@ export const BlogPromotionFormSchema = z.object({
     .url("Link must be a valid URL"),
 });
 
-// RentalDetailType Schema
+// RentalDetailType Schema for day, week, and month rentals )
 const RentalDetailTypeSchema = z.object({
-  enabled: z.boolean().optional(),
-  rentInAED: z.string().optional(),
-  mileageLimit: z.string().optional(),
+  enabled: z.boolean().optional().default(false),
+  rentInAED: z.string().optional().default(""),
+  mileageLimit: z.string().optional().default(""),
+});
+
+// HourlyRentalDetailType Schema with minBookingHours
+const HourlyRentalDetailTypeSchema = z.object({
+  enabled: z.boolean().optional().default(false),
+  rentInAED: z.string().optional().default(""),
+  mileageLimit: z.string().optional().default(""),
+  minBookingHours: z.string().optional().default(""), // Only for hourly rentals
 });
 
 // Primary Form Schema
@@ -165,6 +173,7 @@ export const PrimaryFormSchema = z.object({
     day: RentalDetailTypeSchema,
     week: RentalDetailTypeSchema,
     month: RentalDetailTypeSchema,
+    hour: HourlyRentalDetailTypeSchema, // Uses schema with minBookingHours
   }),
   phoneNumber: z.string().min(6, "Provide a valid mobile number"),
   stateId: z.string().min(1, "State  is required"),
@@ -175,6 +184,13 @@ export const PrimaryFormSchema = z.object({
     .string()
     .min(10, "Description must be at least 10 characters long")
     .max(5000, "Description cannot exceed 5000 characters"),
+  additionalVehicleTypes: z.array(z.string()).optional(),
+  securityDeposit: z.object({
+    enabled: z.boolean().default(false),
+    amountInAED: z.string().optional().default(""),
+  }),
+  isCreditOrDebitCardsSupported: z.boolean().default(false),
+  isTabbySupported: z.boolean().default(false),
 });
 
 // login form schema

@@ -1,7 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
-import 'react-datepicker/dist/react-datepicker.css'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import "react-datepicker/dist/react-datepicker.css";
 
 import {
   Form,
@@ -11,105 +11,106 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { CompanyFormDefaultValues } from '@/constants'
-import { CompanyFormSchema } from '@/lib/validator'
-import { ShieldCheck, Copy } from 'lucide-react'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import SingleFileUpload from '../SingleFileUpload'
-import { useNavigate, useParams } from 'react-router-dom'
-import { toast } from '@/components/ui/use-toast'
-import { updateCompany } from '@/api/company'
-import Spinner from '@/components/general/Spinner'
-import { useState } from 'react'
-import { CompanyType } from '@/types/api-types/vehicleAPI-types'
-import { useQueryClient } from '@tanstack/react-query'
-import { GcsFilePaths } from '@/constants/enum'
-import { deleteMultipleFiles } from '@/helpers/form'
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { CompanyFormDefaultValues } from "@/constants";
+import { CompanyFormSchema } from "@/lib/validator";
+import { ShieldCheck, Copy } from "lucide-react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "@/components/ui/use-toast";
+import { updateCompany } from "@/api/company";
+import Spinner from "@/components/general/Spinner";
+import { useState } from "react";
+import { CompanyType } from "@/types/api-types/vehicleAPI-types";
+import { useQueryClient } from "@tanstack/react-query";
+import { GcsFilePaths } from "@/constants/enum";
+import { deleteMultipleFiles } from "@/helpers/form";
+import SingleFileUpload from "../file-uploads/SingleFileUpload";
 
 type CompanyFormProps = {
-  type: 'Update'
-  formData?: CompanyType | null
-}
+  type: "Update";
+  formData?: CompanyType | null;
+};
 
 export default function CompanyForm({ type, formData }: CompanyFormProps) {
-  const navigate = useNavigate()
-  const { companyId } = useParams<{ companyId: string }>()
-  const [isFileUploading, setIsFileUploading] = useState(false)
-  const [deletedImages, setDeletedImages] = useState<string[]>([])
+  const navigate = useNavigate();
+  const { companyId } = useParams<{ companyId: string }>();
+  const [isFileUploading, setIsFileUploading] = useState(false);
+  const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const initialValues =
-    formData && type === 'Update'
+    formData && type === "Update"
       ? {
           ...formData,
           expireDate: formData.expireDate
             ? new Date(formData.expireDate)
             : undefined,
         }
-      : CompanyFormDefaultValues
+      : CompanyFormDefaultValues;
 
   // creating form
   const form = useForm<z.infer<typeof CompanyFormSchema>>({
     resolver: zodResolver(CompanyFormSchema),
     defaultValues: initialValues,
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof CompanyFormSchema>) {
     if (isFileUploading) {
       toast({
-        title: 'File Upload in Progress',
+        title: "File Upload in Progress",
         description:
-          'Please wait until the file upload completes before submitting the form.',
+          "Please wait until the file upload completes before submitting the form.",
         duration: 3000,
-        className: 'bg-orange',
-      })
-      return
+        className: "bg-orange",
+      });
+      return;
     }
 
     try {
-      const data = await updateCompany(values, companyId as string)
+      const data = await updateCompany(values, companyId as string);
 
       if (data) {
         // actually delete the images from the db, if any
-      
-        await deleteMultipleFiles(deletedImages)
+
+        await deleteMultipleFiles(deletedImages);
       }
 
       if (data) {
         toast({
           title: `Company ${type}ed successfully`,
-          className: 'bg-yellow text-white',
-        })
-        navigate('/registrations')
+          className: "bg-yellow text-white",
+        });
+        navigate("/registrations");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
-        variant: 'destructive',
+        variant: "destructive",
         title: `${type} Company failed`,
-        description: 'Something went wrong',
-      })
+        description: "Something went wrong",
+      });
     } finally {
       queryClient.invalidateQueries({
-        queryKey: ['company-details-page', { exact: true }],
-      })
+        queryKey: ["company-details-page", { exact: true }],
+      });
     }
   }
 
   const handleCopyAgentId = () => {
-    navigator.clipboard.writeText(initialValues.agentId || '')
+    navigator.clipboard.writeText(initialValues.agentId || "");
     toast({
-      title: 'Copied to clipboard',
-      description: 'Agent ID has been copied to your clipboard.',
-      className: 'bg-green-500 text-white',
-    })
-  }
+      title: "Copied to clipboard",
+      description: "Agent ID has been copied to your clipboard.",
+      className: "bg-green-500 text-white",
+    });
+  };
 
   return (
     <Form {...form}>
@@ -124,7 +125,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
               Your Agent Id <span className="mr-5 max-sm:hidden">:</span>
             </div>
             <div className="flex items-center mt-4 w-full text-lg font-semibold text-gray-500 cursor-default">
-              {initialValues.agentId}{' '}
+              {initialValues.agentId}{" "}
               <ShieldCheck className="ml-3 text-green-500" size={20} />
               <Button
                 type="button"
@@ -179,7 +180,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 downloadFileName={
                   formData?.companyName
                     ? `[${formData.companyName}] - company-logo`
-                    : 'company-logo'
+                    : "company-logo"
                 }
                 setDeletedImages={setDeletedImages}
               />
@@ -196,7 +197,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 label="Commercial License"
                 description={
                   <>
-                    Please upload a <strong>PHOTO</strong> or a{' '}
+                    Please upload a <strong>PHOTO</strong> or a{" "}
                     <strong>SCREENSHOT</strong> of your commercial license,
                     maximum file size 5MB.
                   </>
@@ -209,7 +210,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 downloadFileName={
                   formData?.companyName
                     ? `[${formData.companyName}] - commercial-license`
-                    : 'commercial-license'
+                    : "commercial-license"
                 }
                 setDeletedImages={setDeletedImages}
               />
@@ -250,7 +251,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             render={({ field }) => (
               <FormItem className="flex mb-2 w-full max-sm:flex-col">
                 <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
-                  Registration Number{' '}
+                  Registration Number{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -285,5 +286,5 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

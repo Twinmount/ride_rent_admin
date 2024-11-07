@@ -6,7 +6,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-} from '@tanstack/react-table'
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -15,15 +15,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { SingleVehicleType } from '@/types/api-types/vehicleAPI-types'
+} from "@/components/ui/table";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { SingleVehicleType } from "@/types/api-types/vehicleAPI-types";
 
 interface AllListingTableProps {
-  columns: ColumnDef<SingleVehicleType>[]
-  data: SingleVehicleType[]
-  loading: boolean
+  columns: ColumnDef<SingleVehicleType>[];
+  data: SingleVehicleType[];
+  loading: boolean;
 }
 
 export function AllListingTable({
@@ -31,7 +31,7 @@ export function AllListingTable({
   data,
   loading,
 }: AllListingTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
     data,
@@ -43,11 +43,11 @@ export function AllListingTable({
     state: {
       sorting,
     },
-  })
+  });
 
   return (
     <div>
-      <div className="bg-white border rounded-md">
+      <div className="bg-white rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -79,19 +79,19 @@ export function AllListingTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+                  data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
                       className={`${
-                        cell.column.id !== 'isDisabled' && 'min-w-44'
+                        cell.column.id !== "isDisabled" && "min-w-44"
                       } max-w-44`}
                     >
-                      {cell.column.id === 'vehicleModel' ? (
+                      {cell.column.id === "vehicleModel" ? (
                         <Link
                           to={`/listings/edit/${row.original.vehicleId}/${row.original.company.companyId}/${row.original.company.userId}`}
-                          className="font-semibold text-blue-600 hover:underline "
+                          className="font-semibold text-blue-600 hover:underline"
                         >
                           {cell.getValue() as string}
                         </Link>
@@ -119,5 +119,5 @@ export function AllListingTable({
         </Table>
       </div>
     </div>
-  )
+  );
 }

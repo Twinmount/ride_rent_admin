@@ -1,41 +1,42 @@
-import React, { useState, useEffect } from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
+import React, { useState, useEffect } from "react";
+import { useFormContext, Controller } from "react-hook-form";
 import {
   FormControl,
   FormDescription,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Upload, Eye, Download, Trash2, MoreVertical } from 'lucide-react'
-import { toast } from '@/components/ui/use-toast'
-import ImagePreviewModal from '../modal/ImagePreviewModal'
-import { uploadSingleFile } from '@/api/file-upload'
-import { GcsFilePaths } from '@/constants/enum'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Upload, Eye, Download, Trash2, MoreVertical } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+import ImagePreviewModal from "../../modal/ImagePreviewModal";
+import { uploadSingleFile } from "@/api/file-upload";
+import { GcsFilePaths } from "@/constants/enum";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from '@/components/ui/dropdown-menu'
-import PreviewImageComponent from './PreviewImageComponent'
-import { Progress } from '../ui/progress'
-import { downloadFileFromStream } from '@/helpers/form'
+} from "@/components/ui/dropdown-menu";
+import PreviewImageComponent from "../PreviewImageComponent";
+
+import { downloadFileFromStream } from "@/helpers/form";
+import { Progress } from "@/components/ui/progress";
 
 type PromotionFileUploadProps = {
-  name: string
-  label: string
-  description: React.ReactNode
-  existingFile?: string | null
-  isDisabled?: boolean
-  maxSizeMB?: number
-  isDownloadable?: boolean
-  setIsFileUploading?: (isUploading: boolean) => void
-  bucketFilePath: GcsFilePaths
-  downloadFileName?: string
-  setDeletedImages: (deletedPaths: (prev: string[]) => string[]) => void
-}
+  name: string;
+  label: string;
+  description: React.ReactNode;
+  existingFile?: string | null;
+  isDisabled?: boolean;
+  maxSizeMB?: number;
+  isDownloadable?: boolean;
+  setIsFileUploading?: (isUploading: boolean) => void;
+  bucketFilePath: GcsFilePaths;
+  downloadFileName?: string;
+  setDeletedImages: (deletedPaths: (prev: string[]) => string[]) => void;
+};
 
 const PromotionFileUpload = ({
   name,
@@ -50,69 +51,69 @@ const PromotionFileUpload = ({
   downloadFileName,
   setDeletedImages,
 }: PromotionFileUploadProps) => {
-  const { control, setValue, clearErrors } = useFormContext()
-  const [isUploading, setIsUploading] = useState(false)
-  const [previewImage, setPreviewImage] = useState<string | null>(null)
-  const [imagePath, setImagePath] = useState<string | null>(existingFile)
-  const [progress, setProgress] = useState<number>(0)
+  const { control, setValue, clearErrors } = useFormContext();
+  const [isUploading, setIsUploading] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [imagePath, setImagePath] = useState<string | null>(existingFile);
+  const [progress, setProgress] = useState<number>(0);
 
   // Sync loading state with parent if necessary
   useEffect(() => {
     if (setIsFileUploading) {
-      setIsFileUploading(isUploading)
+      setIsFileUploading(isUploading);
     }
-  }, [isUploading, setIsFileUploading])
+  }, [isUploading, setIsFileUploading]);
 
   // Fetch image URL if `existingFile` is present (on Update)
   useEffect(() => {
     if (existingFile) {
-      setImagePath(existingFile)
-      setValue(name, existingFile)
+      setImagePath(existingFile);
+      setValue(name, existingFile);
     }
-  }, [existingFile, setValue, name])
+  }, [existingFile, setValue, name]);
 
   // Handle file upload and setting values (allow images + GIF)
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      const fileSizeMB = file.size / (1024 * 1024)
-      const fileExtension = file.name.split('.').pop()?.toLowerCase()
+      const fileSizeMB = file.size / (1024 * 1024);
+      const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
       // Allow only images and GIF files
       if (
-        !['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(fileExtension || '')
+        !["png", "jpg", "jpeg", "gif", "webp"].includes(fileExtension || "")
       ) {
         toast({
-          variant: 'destructive',
-          title: 'Invalid file type',
-          description: 'Only PNG, JPG, JPEG, WEBP and GIF formats are allowed.',
-        })
+          variant: "destructive",
+          title: "Invalid file type",
+          description: "Only PNG, JPG, JPEG, WEBP and GIF formats are allowed.",
+        });
         const fileInput = document.getElementById(
           `file-upload-${name}`
-        ) as HTMLInputElement
+        ) as HTMLInputElement;
         if (fileInput) {
-          fileInput.value = '' // Clear the file input field
+          fileInput.value = ""; // Clear the file input field
         }
-        return
+        return;
       }
 
       if (fileSizeMB > maxSizeMB) {
         toast({
-          variant: 'destructive',
+          variant: "destructive",
           title: `File size exceeds ${maxSizeMB} MB`,
-        })
+        });
         const fileInput = document.getElementById(
           `file-upload-${name}`
-        ) as HTMLInputElement
+        ) as HTMLInputElement;
         if (fileInput) {
-          fileInput.value = '' // Clear the file input field
+          fileInput.value = ""; // Clear the file input field
         }
-        return
+        return;
       }
 
-      setIsUploading(true)
+      setIsUploading(true);
       try {
         const uploadResponse = await uploadSingleFile(
           bucketFilePath,
@@ -120,74 +121,74 @@ const PromotionFileUpload = ({
           (progressEvent) => {
             if (progressEvent.total) {
               const progress =
-                (progressEvent.loaded / progressEvent.total) * 100
-              setProgress(progress)
+                (progressEvent.loaded / progressEvent.total) * 100;
+              setProgress(progress);
             }
           }
-        )
-        const uploadedFilePath = uploadResponse.result.path
+        );
+        const uploadedFilePath = uploadResponse.result.path;
 
-        setValue(name, uploadedFilePath)
-        setImagePath(uploadedFilePath) // Set the new image path
-        clearErrors(name)
+        setValue(name, uploadedFilePath);
+        setImagePath(uploadedFilePath); // Set the new image path
+        clearErrors(name);
       } catch (error) {
         toast({
-          variant: 'destructive',
-          title: 'File upload failed',
-          description: 'Please try again.',
-        })
+          variant: "destructive",
+          title: "File upload failed",
+          description: "Please try again.",
+        });
       } finally {
-        setIsUploading(false)
-        setProgress(0)
+        setIsUploading(false);
+        setProgress(0);
       }
     }
-  }
+  };
 
   // Handle image deletion
   const handleDeleteImage = () => {
     if (imagePath) {
       // Add the image path to the deletedImages array using the setDeletedImages
-      setDeletedImages((prev) => [...prev, imagePath])
+      setDeletedImages((prev) => [...prev, imagePath]);
     }
 
     const fileInput = document.getElementById(
       `file-upload-${name}`
-    ) as HTMLInputElement
+    ) as HTMLInputElement;
     if (fileInput) {
-      fileInput.value = '' // Clear the file input field
+      fileInput.value = ""; // Clear the file input field
     }
 
-    setImagePath(null) // Remove image path for PreviewImageComponent
-    setValue(name, null) // Remove the value from form
-  }
+    setImagePath(null); // Remove image path for PreviewImageComponent
+    setValue(name, null); // Remove the value from form
+  };
 
   // Handle image preview in modal
   const handlePreviewImage = () => {
     if (imagePath) {
-      setPreviewImage(imagePath)
+      setPreviewImage(imagePath);
     }
-  }
+  };
 
   // Handle image download using the helper function
   const handleDownloadImage = async () => {
     if (imagePath) {
       try {
-        const fileName = downloadFileName || label
-        await downloadFileFromStream(imagePath, fileName)
+        const fileName = downloadFileName || label;
+        await downloadFileFromStream(imagePath, fileName);
       } catch (error) {
         toast({
-          variant: 'destructive',
-          title: 'Download failed',
-          description: 'Unable to download the image. Please try again.',
-        })
+          variant: "destructive",
+          title: "Download failed",
+          description: "Unable to download the image. Please try again.",
+        });
       }
     }
-  }
+  };
 
   return (
     <>
-      <FormItem className="flex w-full mb-2 max-sm:flex-col">
-        <FormLabel className="flex justify-between w-64 mt-4 ml-2 text-base max-sm:w-fit lg:text-lg">
+      <FormItem className="flex mb-2 w-full max-sm:flex-col">
+        <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base max-sm:w-fit lg:text-lg">
           {label} <span className="mr-5 max-sm:hidden">:</span>
         </FormLabel>
         <div className="flex-col items-start w-full">
@@ -205,18 +206,18 @@ const PromotionFileUpload = ({
                     disabled={isDisabled || isUploading}
                     accept=".png,.jpg,.jpeg,.gif, .webp" // Accept GIF and image formats
                   />
-                  <div className="flex items-center gap-4 mt-2">
+                  <div className="flex gap-4 items-center mt-2">
                     {imagePath ? (
                       <div className="relative w-24 group/box">
                         <PreviewImageComponent imagePath={imagePath} />
-                        <div className="absolute top-0 bottom-0 left-0 right-0 space-x-2">
+                        <div className="absolute top-0 right-0 bottom-0 left-0 space-x-2">
                           {!isDisabled && (
                             <DropdownMenu>
                               <DropdownMenuTrigger
                                 asChild
-                                className="border-none outline-none ring-0"
+                                className="border-none ring-0 outline-none"
                               >
-                                <button className="absolute p-1 bg-white border rounded-full shadow-md outline-none h-fit right-1 top-1 ring-0">
+                                <button className="absolute top-1 right-1 p-1 bg-white rounded-full border ring-0 shadow-md outline-none h-fit">
                                   <MoreVertical className="w-5 h-5 text-gray-600" />
                                 </button>
                               </DropdownMenuTrigger>
@@ -226,7 +227,7 @@ const PromotionFileUpload = ({
                                   onClick={handleDeleteImage}
                                   disabled={isDisabled || isUploading}
                                 >
-                                  <Trash2 className="w-5 h-5 mr-2 text-red-600" />
+                                  <Trash2 className="mr-2 w-5 h-5 text-red-600" />
                                   Delete
                                 </DropdownMenuItem>
 
@@ -235,7 +236,7 @@ const PromotionFileUpload = ({
                                   onClick={handlePreviewImage}
                                   disabled={isUploading}
                                 >
-                                  <Eye className="w-5 h-5 mr-2 text-blue-600" />
+                                  <Eye className="mr-2 w-5 h-5 text-blue-600" />
                                   Preview
                                 </DropdownMenuItem>
 
@@ -245,7 +246,7 @@ const PromotionFileUpload = ({
                                     onClick={handleDownloadImage}
                                     disabled={isUploading}
                                   >
-                                    <Download className="w-5 h-5 mr-2 text-green-600" />
+                                    <Download className="mr-2 w-5 h-5 text-green-600" />
                                     Download
                                   </DropdownMenuItem>
                                 )}
@@ -257,15 +258,15 @@ const PromotionFileUpload = ({
                     ) : (
                       <label
                         htmlFor={`file-upload-${name}`}
-                        className="relative flex justify-center w-24 cursor-pointer"
+                        className="flex relative justify-center w-24 cursor-pointer"
                       >
-                        <div className="flex flex-col items-center justify-center w-24 h-24 border rounded-lg cursor-pointer bg-gray-50">
+                        <div className="flex flex-col justify-center items-center w-24 h-24 bg-gray-50 rounded-lg border cursor-pointer">
                           <Upload size={24} className="text-yellow" />
                           <span className="text-sm text-yellow">Upload</span>
                         </div>
                         {isUploading && (
                           <div className="absolute w-[99%] mx-auto mt-2 bottom-1">
-                            <div className="w-full mt-2">
+                            <div className="mt-2 w-full">
                               <Progress value={progress} className="w-[95%] " />
                             </div>
                           </div>
@@ -290,7 +291,7 @@ const PromotionFileUpload = ({
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default PromotionFileUpload
+export default PromotionFileUpload;

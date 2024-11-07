@@ -4,29 +4,29 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { fetchAllCategories } from '@/api/vehicle-categories'
-import { CategoryType } from '@/types/api-types/API-types'
+} from "@/components/ui/select";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllCategories } from "@/api/vehicle-categories";
+import { CategoryType } from "@/types/api-types/API-types";
 
 type DropdownProps = {
-  value?: string // This will be categoryId
-  onChangeHandler?: (value: string) => void
-  placeholder?: string
-  isDisabled?: boolean
-}
+  value?: string; // This will be categoryId
+  onChangeHandler?: (value: string) => void;
+  placeholder?: string;
+  isDisabled?: boolean;
+};
 
 const VehicleCategoryDropdown = ({
   value,
   onChangeHandler,
-  placeholder = 'option',
+  placeholder = "option",
   isDisabled = false,
 }: DropdownProps) => {
-  const [categories, setCategories] = useState<CategoryType[]>([])
+  const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null
-  )
+  );
 
   // Fetch categories using react-query
   const {
@@ -34,27 +34,28 @@ const VehicleCategoryDropdown = ({
     isLoading: isCategoryLoading,
     isSuccess,
   } = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => fetchAllCategories({ page: 1, limit: 20, sortOrder: 'ASC' }),
-  })
+    queryKey: ["categories"],
+    queryFn: () => fetchAllCategories({ page: 1, limit: 20, sortOrder: "ASC" }),
+  });
 
   useEffect(() => {
     if (isSuccess && categoryData) {
-      setCategories(categoryData.result.list)
+      setCategories(categoryData.result.list);
 
       // If initial value exists, use it; otherwise, select the first category
-      const initialCategoryId = value || categoryData.result.list[0]?.categoryId
-      setSelectedCategoryId(initialCategoryId)
+      const initialCategoryId =
+        value || categoryData.result.list[0]?.categoryId;
+      setSelectedCategoryId(initialCategoryId);
       if (onChangeHandler) {
-        onChangeHandler(initialCategoryId)
+        onChangeHandler(initialCategoryId);
       }
     }
-  }, [categoryData, isSuccess, value, onChangeHandler])
+  }, [categoryData, isSuccess, value, onChangeHandler]);
 
   // Find the selected category's name based on the selectedCategoryId
   const selectedCategoryName = categories.find(
     (category) => category.categoryId === selectedCategoryId
-  )?.name
+  )?.name;
 
   return (
     <Select
@@ -62,19 +63,19 @@ const VehicleCategoryDropdown = ({
         // Find the selected category by name
         const selectedCategory = categories.find(
           (category) => category.name === selectedValue
-        )
+        );
         // Pass the categoryId to the form handler
         if (selectedCategory) {
-          setSelectedCategoryId(selectedCategory.categoryId)
+          setSelectedCategoryId(selectedCategory.categoryId);
           if (onChangeHandler) {
-            onChangeHandler(selectedCategory.categoryId)
+            onChangeHandler(selectedCategory.categoryId);
           }
         }
       }}
-      value={selectedCategoryName || ''}
+      value={selectedCategoryName || ""}
       disabled={isDisabled || isCategoryLoading}
     >
-      <SelectTrigger className="select-field ring-0 focus:ring-0 input-fields">
+      <SelectTrigger className="ring-0 select-field focus:ring-0 input-fields">
         <SelectValue
           className="!font-bold !text-black"
           placeholder={`Choose ${placeholder}`}
@@ -95,7 +96,7 @@ const VehicleCategoryDropdown = ({
           ))}
       </SelectContent>
     </Select>
-  )
-}
+  );
+};
 
-export default VehicleCategoryDropdown
+export default VehicleCategoryDropdown;

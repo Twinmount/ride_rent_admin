@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
 import { Menu } from "lucide-react";
 
-import StatesDropdown from "../GeneralStatesDropdown";
+import GeneralStatesDropdown from "../GeneralStatesDropdown";
 import { NavbarStateType } from "@/types/types";
 
 type NavbarProps = {
@@ -53,7 +53,7 @@ const Navbar = ({ options, isLoading }: NavbarProps) => {
         )}
 
         <div className="gap-x-4 mr-6 flex-center">
-          <StatesDropdown options={options} isLoading={isLoading} />
+          <GeneralStatesDropdown options={options} isLoading={isLoading} />
         </div>
       </nav>
     </header>
