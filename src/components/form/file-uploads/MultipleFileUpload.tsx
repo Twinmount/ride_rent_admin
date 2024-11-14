@@ -19,6 +19,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
 import PreviewImageComponent from "../PreviewImageComponent";
 import ImagePlaceholder from "../../ImagePlaceholder";
 
@@ -51,6 +61,9 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   const [files, setFiles] = useState<string[]>(existingFiles);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [uploadingCount, setUploadingCount] = useState(0);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+    useState(false);
+  const [fileToDelete, setFileToDelete] = useState<string | null>(null);
 
   // Get max file count based on name
   const getMaxCount = () => {
@@ -129,9 +142,15 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
     }
   };
 
-  const handleDeleteFile = (filePath: string) => {
-    setFiles((prevFiles) => prevFiles.filter((path) => path !== filePath));
-    setDeletedFiles((prev) => [...prev, filePath]);
+  const handleDeleteFile = () => {
+    if (fileToDelete) {
+      setFiles((prevFiles) =>
+        prevFiles.filter((path) => path !== fileToDelete)
+      );
+      setDeletedFiles((prev) => [...prev, fileToDelete]);
+      setFileToDelete(null); // Clear the file to delete
+    }
+    setIsDeleteConfirmationOpen(false); // Close the confirmation modal
   };
 
   const handlePreviewImage = (filePath: string) => {
@@ -198,7 +217,10 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                                 Download
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                onClick={() => handleDeleteFile(filePath)}
+                                onClick={() => {
+                                  setFileToDelete(filePath); // Set the file to be deleted
+                                  setIsDeleteConfirmationOpen(true); // Open the confirmation modal
+                                }}
                               >
                                 <Trash2 className="mr-2 w-5 h-5 text-red-600" />
                                 Delete
@@ -236,6 +258,29 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
           imagePath={previewImage}
           setSelectedImage={setPreviewImage} // Close modal function
         />
+      )}
+
+      {/* delete confirmation modal */}
+      {isDeleteConfirmationOpen && (
+        <Dialog
+          open={isDeleteConfirmationOpen}
+          onOpenChange={setIsDeleteConfirmationOpen}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirm Deletion</DialogTitle>
+            </DialogHeader>
+            <p>Are you sure you want to delete this file?</p>
+            <DialogFooter>
+              <Button onClick={() => setIsDeleteConfirmationOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleDeleteFile} variant="destructive">
+                Confirm
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
     </>
   );

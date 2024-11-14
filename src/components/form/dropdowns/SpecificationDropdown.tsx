@@ -30,8 +30,15 @@ const SpecificationDropdown = ({
   onChangeHandler,
   options,
   isDisabled = false,
+  isEngineType = false,
 }: DropdownProps) => {
   const [open, setOpen] = React.useState(false);
+
+  const sortedOptions = React.useMemo(() => {
+    return isEngineType
+      ? [...options].sort((a, b) => a.label.localeCompare(b.label))
+      : options;
+  }, [options, isEngineType]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -44,18 +51,18 @@ const SpecificationDropdown = ({
           className="justify-between w-full"
         >
           {value
-            ? options.find((option) => option.value === value)?.label
+            ? sortedOptions.find((option) => option.value === value)?.label
             : "Choose option..."}
           <ChevronsUpDown className="ml-2 w-4 h-4 opacity-50 shrink-0" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0 w-11/12">
         <Command>
-          {options.length > 5 && <CommandInput placeholder="Search..." />}
+          {sortedOptions.length > 5 && <CommandInput placeholder="Search..." />}
           <CommandList>
-            <CommandEmpty>No options found.</CommandEmpty>
+            <CommandEmpty>No result found.</CommandEmpty>
             <CommandGroup className="pr-2 w-96">
-              {options.map((option) => (
+              {sortedOptions.map((option) => (
                 <CommandItem
                   key={option.value}
                   value={option.value}

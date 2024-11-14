@@ -285,12 +285,12 @@ export const BlogFormSchema = z.object({
   blogTitle: z
     .string()
     .min(3, "Blog title should be at least 3 characters long")
-    .max(60, "Blog title should not exceed 60 characters"),
+    .max(120, "Blog title should not exceed 120 characters"),
 
   blogDescription: z
     .string()
     .min(10, "Blog description should be at least 10 characters long")
-    .max(120, "Blog description should not exceed 100 characters"),
+    .max(150, "Blog description should not exceed 150 characters"),
 
   blogImage: z.string().min(1, "Blog image is required"),
   blogCategory: z
@@ -306,12 +306,12 @@ export const BlogFormSchema = z.object({
   metaTitle: z
     .string()
     .min(3, "Meta title should be at least 3 characters long")
-    .max(60, "Meta title should not exceed 60 characters"),
+    .max(150, "Meta title should not exceed 150 characters"),
 
   metaDescription: z
     .string()
     .min(10, "Meta description should be at least 10 characters long")
-    .max(160, "Meta description should not exceed 160 characters"),
+    .max(500, "Meta description should not exceed 500 characters"),
 
   blogContent: z
     .string()
