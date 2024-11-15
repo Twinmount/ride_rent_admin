@@ -38,7 +38,7 @@ export type PrimaryFormType = {
   vehicleRegistrationNumber: string;
   vehicleRegisteredYear: string;
   commercialLicenses: string[]; // Array of  URLs
-  commercialLicenseExpireDate: Date;
+  commercialLicenseExpireDate: Date | undefined;
   isLease: boolean;
   isCryptoAccepted: boolean;
   isSpotDeliverySupported: boolean;

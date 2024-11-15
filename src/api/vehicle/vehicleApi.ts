@@ -37,7 +37,7 @@ export const addPrimaryDetailsForm = async (
       vehicleRegistrationNumber: values.vehicleRegistrationNumber,
       vehicleRegisteredYear: values.vehicleRegisteredYear,
       commercialLicenseExpireDate:
-        values.commercialLicenseExpireDate.toISOString(),
+        values.commercialLicenseExpireDate!.toISOString(),
       isLease: values.isLease.toString(), // Convert boolean to string
       isCryptoAccepted: values.isCryptoAccepted.toString(), // Convert boolean to string
       isSpotDeliverySupported: values.isSpotDeliverySupported.toString(), // Convert boolean to string
@@ -105,7 +105,7 @@ export const updatePrimaryDetailsForm = async (
       vehicleRegistrationNumber: values.vehicleRegistrationNumber,
       vehicleRegisteredYear: values.vehicleRegisteredYear,
       commercialLicenseExpireDate:
-        values.commercialLicenseExpireDate.toISOString(),
+        values.commercialLicenseExpireDate!.toISOString(),
       isLease: values.isLease.toString(), // Convert boolean to string
       isCryptoAccepted: values.isCryptoAccepted.toString(), // Convert boolean to string
       isSpotDeliverySupported: values.isSpotDeliverySupported.toString(), // Convert boolean to string
