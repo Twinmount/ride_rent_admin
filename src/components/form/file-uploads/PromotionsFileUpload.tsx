@@ -19,6 +19,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
 import PreviewImageComponent from "../PreviewImageComponent";
 
 import { downloadFileFromStream } from "@/helpers/form";
@@ -56,6 +66,8 @@ const PromotionFileUpload = ({
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imagePath, setImagePath] = useState<string | null>(existingFile);
   const [progress, setProgress] = useState<number>(0);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+    useState(false);
 
   // Sync loading state with parent if necessary
   useEffect(() => {
@@ -160,6 +172,7 @@ const PromotionFileUpload = ({
 
     setImagePath(null); // Remove image path for PreviewImageComponent
     setValue(name, null); // Remove the value from form
+    setIsDeleteConfirmationOpen(false);
   };
 
   // Handle image preview in modal
@@ -224,7 +237,9 @@ const PromotionFileUpload = ({
                               <DropdownMenuContent className="w-28">
                                 {/* Delete */}
                                 <DropdownMenuItem
-                                  onClick={handleDeleteImage}
+                                  onClick={() =>
+                                    setIsDeleteConfirmationOpen(true)
+                                  } // Open modal instead of directly deleting
                                   disabled={isDisabled || isUploading}
                                 >
                                   <Trash2 className="mr-2 w-5 h-5 text-red-600" />
@@ -289,6 +304,28 @@ const PromotionFileUpload = ({
           imagePath={previewImage}
           setSelectedImage={setPreviewImage}
         />
+      )}
+
+      {isDeleteConfirmationOpen && (
+        <Dialog
+          open={isDeleteConfirmationOpen}
+          onOpenChange={setIsDeleteConfirmationOpen}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirm Deletion</DialogTitle>
+            </DialogHeader>
+            <p>Are you sure you want to delete this image?</p>
+            <DialogFooter>
+              <Button onClick={() => setIsDeleteConfirmationOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleDeleteImage} variant="destructive">
+                Confirm
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       )}
     </>
   );

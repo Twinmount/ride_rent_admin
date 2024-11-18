@@ -209,51 +209,54 @@ export default function SpecificationsForm({
       >
         <div className="flex flex-col gap-5 w-full max-w-full md:max-w-[800px] mx-auto">
           {fields.length > 0 ? (
-            fields.map((spec) => (
-              <FormField
-                key={spec.id}
-                control={form.control}
-                name={spec.name}
-                render={({ field }) => {
-                  // selecting the default value for Update case.
-                  const selectedOption = spec.values
-                    .filter((option) => option !== null)
-                    .find(
-                      (
-                        option
-                      ): option is {
-                        name: string;
-                        label: string;
-                        selected: boolean;
-                      } => option && "selected" in option && option.selected
-                    );
+            fields.map((spec) => {
+              return (
+                <FormField
+                  key={spec.id}
+                  control={form.control}
+                  name={spec.name}
+                  render={({ field }) => {
+                    // selecting the default value for Update case.
+                    const selectedOption = spec.values
+                      .filter((option) => option !== null)
+                      .find(
+                        (
+                          option
+                        ): option is {
+                          name: string;
+                          label: string;
+                          selected: boolean;
+                        } => option && "selected" in option && option.selected
+                      );
 
-                  return (
-                    <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                      <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
-                        {spec.name}
-                        <span className="mr-5 max-sm:hidden">:</span>
-                      </FormLabel>
-                      <div className="flex-col items-start w-full">
-                        <FormControl>
-                          <SpecificationDropdown
-                            onChangeHandler={field.onChange}
-                            value={field.value || selectedOption?.name || ""}
-                            options={spec.values
-                              .filter((value) => value !== null)
-                              .map((value) => ({
-                                label: value!.label, // Non-null assertion
-                                value: value!.name,
-                              }))}
-                          />
-                        </FormControl>
-                        <FormMessage className="ml-2" />
-                      </div>
-                    </FormItem>
-                  );
-                }}
-              />
-            ))
+                    return (
+                      <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                        <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                          {spec.name}
+                          <span className="mr-5 max-sm:hidden">:</span>
+                        </FormLabel>
+                        <div className="flex-col items-start w-full">
+                          <FormControl>
+                            <SpecificationDropdown
+                              onChangeHandler={field.onChange}
+                              value={field.value || selectedOption?.name || ""}
+                              options={spec.values
+                                .filter((value) => value !== null)
+                                .map((value) => ({
+                                  label: value!.label, // Non-null assertion
+                                  value: value!.name,
+                                }))}
+                              isEngineType={spec.name === "Engine Type"}
+                            />
+                          </FormControl>
+                          <FormMessage className="ml-2" />
+                        </div>
+                      </FormItem>
+                    );
+                  }}
+                />
+              );
+            })
           ) : (
             <p>No specifications found for this category.</p>
           )}

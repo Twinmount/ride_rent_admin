@@ -132,6 +132,9 @@ export default function FeaturesForm({
       if (response) {
         toast({
           title: `Features ${type.toLowerCase()}ed successfully`,
+          description: isAddOrIncomplete
+            ? "Vehicle is live now. No need of manual change status"
+            : "Changes will be directly reflected in the live. No need of manual status change.",
           className: "bg-yellow text-white",
         });
         queryClient.invalidateQueries({
@@ -207,7 +210,7 @@ export default function FeaturesForm({
           disabled={form.formState.isSubmitting}
           className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-darkYellow"
         >
-          {isAddOrIncomplete ? "Add Features" : "Update Features"}
+          {isAddOrIncomplete ? "List Vehicle" : "Update Features"}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
       </form>

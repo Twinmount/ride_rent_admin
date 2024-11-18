@@ -67,6 +67,9 @@ export default function BlogForm({ type, formData }: StateFormProps) {
       return;
     }
 
+    console.log(values);
+    return;
+
     try {
       let data;
       if (type === "Add") {
@@ -138,7 +141,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                 const newValue = e.target.value;
 
                 // Prevent typing if the character count exceeds 50
-                if (newValue.length <= 60) {
+                if (newValue.length <= 120) {
                   setCharCount(newValue.length);
                   field.onChange(e);
                 }
@@ -162,13 +165,13 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                     </FormControl>
                     <FormDescription className="ml-2 w-full flex-between">
                       <span className="w-full max-w-[90%]">
-                        Add your Blog Title. 60 characters max. Less is better.
+                        Add your Blog Title. 120 characters max. Less is better.
                       </span>{" "}
                       <span
                         className={`ml-auto mr-5 ${
-                          charCount >= 50 ? "text-red-500" : ""
+                          charCount >= 120 ? "text-red-500" : ""
                         }`}
-                      >{`${charCount}/50`}</span>
+                      >{`${charCount}/120`}</span>
                     </FormDescription>
                     <FormMessage className="ml-2" />
                   </div>
@@ -192,7 +195,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                 const newValue = e.target.value;
 
                 // Prevent typing if the character count exceeds 120
-                if (newValue.length <= 120) {
+                if (newValue.length <= 150) {
                   setCharCount(newValue.length);
                   field.onChange(e);
                 }
@@ -222,9 +225,9 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                       </span>
                       <span
                         className={`ml-auto mr-5 ${
-                          charCount >= 120 ? "text-red-500" : ""
+                          charCount >= 150 ? "text-red-500" : ""
                         }`}
-                      >{`${charCount}/120`}</span>
+                      >{`${charCount}/150`}</span>
                     </FormDescription>
                     <FormMessage className="ml-2" />
                   </div>
@@ -303,31 +306,57 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           )}
         />
 
-        {/* meta title */}
         <FormField
           control={form.control}
           name="metaTitle"
-          render={({ field }) => (
-            <FormItem className="flex mb-2 w-full max-sm:flex-col">
-              <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base max-sm:w-fit lg:text-lg">
-                Meta title<span className="mr-5 max-sm:hidden">:</span>
-              </FormLabel>
-              <div className="flex-col items-start w-full">
-                <FormControl>
-                  <Input
-                    placeholder="e.g., 'Best Attractions in Abu Dhabi'"
-                    {...field}
-                    className="input-field"
-                  />
-                </FormControl>
-                <FormDescription className="ml-2">
-                  This value will be used to show the "description" in each blog
-                  cards in the frontend.
-                </FormDescription>
-                <FormMessage className="ml-2" />
-              </div>
-            </FormItem>
-          )}
+          render={({ field }) => {
+            const [charCount, setCharCount] = useState(
+              field.value?.length || 0
+            );
+
+            const handleInputChange = (
+              e: React.ChangeEvent<HTMLInputElement>
+            ) => {
+              const newValue = e.target.value;
+
+              // Prevent typing if the character count exceeds 120
+              if (newValue.length <= 150) {
+                setCharCount(newValue.length);
+                field.onChange(e);
+              }
+            };
+
+            return (
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base max-sm:w-fit lg:text-lg">
+                  Meta Title
+                  <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., 'Top Attractions in Abu Dhabi'"
+                      {...field}
+                      className="input-field"
+                      onChange={handleInputChange} // Handle change to track character count
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2 w-full flex-between">
+                    <span className="w-full max-w-[90%]">
+                      Provide the meta title. 150 characters max.
+                    </span>
+                    <span
+                      className={`ml-auto mr-5 ${
+                        charCount >= 150 ? "text-red-500" : ""
+                      }`}
+                    >{`${charCount}/150`}</span>
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            );
+          }}
         />
 
         <FormField
