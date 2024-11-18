@@ -67,9 +67,6 @@ export default function BlogForm({ type, formData }: StateFormProps) {
       return;
     }
 
-    console.log(values);
-    return;
-
     try {
       let data;
       if (type === "Add") {
