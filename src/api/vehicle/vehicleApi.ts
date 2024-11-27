@@ -127,9 +127,6 @@ export const updatePrimaryDetailsForm = async (
       requestBody.additionalVehicleTypes = values.additionalVehicleTypes || [];
     }
 
-    console.log("requestBody ", requestBody);
-    return;
-
     // Send the request as a JSON object
     const data = await API.put<AddPrimaryFormResponse>({
       slug: Slug.PUT_PRIMARY_FORM,
