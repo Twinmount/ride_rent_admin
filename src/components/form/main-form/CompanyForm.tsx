@@ -103,11 +103,14 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
     }
   }
 
-  const handleCopyAgentId = () => {
-    navigator.clipboard.writeText(initialValues.agentId || "");
+  const handleCopy = (value: string, label: string) => {
+    // Add '+' if copying a phone number
+    const textToCopy = label === "Phone Number" ? `+${value}` : value;
+
+    navigator.clipboard.writeText(textToCopy || "");
     toast({
       title: "Copied to clipboard",
-      description: "Agent ID has been copied to your clipboard.",
+      description: `${label} has been copied to your clipboard.`,
       className: "bg-green-500 text-white",
     });
   };
@@ -119,23 +122,86 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
         className="flex flex-col w-full gap-5 max-w-[800px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8 border-t shadow-md"
       >
         <div className="flex flex-col gap-5 p-3 mx-auto w-full rounded-3xl">
-          {/* agent id */}
-          <div className="flex mb-2 w-full max-sm:flex-col">
-            <div className="flex justify-between mt-4 ml-2 w-72 text-base font-semibold max-sm:w-fit lg:text-lg">
-              Your Agent Id <span className="mr-5 max-sm:hidden">:</span>
+          {/* Agent ID */}
+          {initialValues?.agentId && (
+            <div className="flex mb-2 w-full max-sm:flex-col">
+              <div className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+                Your Agent ID <span className="mr-5 max-sm:hidden">:</span>
+              </div>
+              <div className="flex items-center mt-4 w-full text-lg font-semibold text-gray-500 cursor-default">
+                {initialValues.agentId}{" "}
+                <ShieldCheck className="ml-3 text-green-500" size={20} />
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleCopy(initialValues.agentId as string, "Agent ID")
+                  }
+                  className="p-1 ml-8 text-gray-500 h-fit bg-slate-600 hover:bg-slate-900 hover:shadow-md"
+                >
+                  <Copy className="w-5 h-5 text-white" />
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center mt-4 w-full text-lg font-semibold text-gray-500 cursor-default">
-              {initialValues.agentId}{" "}
-              <ShieldCheck className="ml-3 text-green-500" size={20} />
-              <Button
-                type="button"
-                onClick={handleCopyAgentId} // Call the copy handler
-                className="p-1 ml-8 text-gray-500 h-fit bg-slate-600 hover:bg-slate-900 hover:shadow-md"
-              >
-                <Copy className="w-5 h-5 text-white" />
-              </Button>
+          )}
+
+          {/* Email */}
+          {initialValues?.email && (
+            <div className="flex mb-2 w-full max-sm:flex-col">
+              <div className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+                Email <span className="mr-5 max-sm:hidden">:</span>
+              </div>
+              <div className="flex items-center mt-4 w-full text-lg font-semibold text-gray-500 cursor-pointer">
+                <a
+                  href={`mailto:${initialValues?.email}`}
+                  className="underline hover:text-blue-600"
+                  title="Send an email"
+                >
+                  {initialValues?.email}
+                </a>
+                <ShieldCheck className="ml-3 text-green-500" size={20} />
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleCopy(initialValues.email as string, "Email")
+                  }
+                  className="p-1 ml-8 text-gray-500 h-fit bg-slate-600 hover:bg-slate-900 hover:shadow-md"
+                >
+                  <Copy className="w-5 h-5 text-white" />
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Phone Number */}
+          {initialValues?.phoneNumber && (
+            <div className="flex mb-2 w-full max-sm:flex-col">
+              <div className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+                Phone Number <span className="mr-5 max-sm:hidden">:</span>
+              </div>
+              <div className="flex items-center mt-4 w-full text-lg font-semibold tracking-widest text-gray-500 cursor-pointer">
+                <a
+                  href={`tel:+${initialValues?.phoneNumber}`}
+                  className="underline hover:text-blue-600"
+                  title="Call this number"
+                >
+                  +{initialValues?.phoneNumber}
+                </a>
+                <ShieldCheck className="ml-3 text-green-500" size={20} />
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleCopy(
+                      initialValues.phoneNumber as string,
+                      "Phone Number"
+                    )
+                  }
+                  className="p-1 ml-8 text-gray-500 h-fit bg-slate-600 hover:bg-slate-900 hover:shadow-md"
+                >
+                  <Copy className="w-5 h-5 text-white" />
+                </Button>
+              </div>
+            </div>
+          )}
 
           {/* company name */}
           <FormField

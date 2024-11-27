@@ -9,13 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { fetchAllCategories } from "@/api/vehicle-categories";
 
-type CategoryDropdownProps = {
+type ListingMetaCategoryDropdownProps = {
   value?: string;
   onChangeHandler: (value: string) => void;
   placeholder?: string;
   isDisabled?: boolean;
   setIsCarsCategory?: (isCars: boolean) => void;
-  setHideCommercialLicenses: (value: boolean) => void;
 };
 
 type CategoryType = {
@@ -24,13 +23,12 @@ type CategoryType = {
   value: string;
 };
 
-const CategoryDropdown = ({
+const ListingMetaCategoryDropdown = ({
   value,
   onChangeHandler,
   isDisabled = false,
   setIsCarsCategory,
-  setHideCommercialLicenses,
-}: CategoryDropdownProps) => {
+}: ListingMetaCategoryDropdownProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: () => fetchAllCategories({ page: 1, limit: 20, sortOrder: "ASC" }),
@@ -44,32 +42,26 @@ const CategoryDropdown = ({
     }
   }, [data]);
 
-  // Set isCarsCategory and hideCommercialLicenses based on the initial value
+  // Set isCarsCategory based on the initial value
   useEffect(() => {
-    if (value && categories.length > 0) {
+    if (value && categories.length > 0 && setIsCarsCategory) {
       const selectedCategory = categories.find(
         (category) => category.categoryId === value
       );
-      setIsCarsCategory?.(selectedCategory?.value === "cars");
-      setHideCommercialLicenses?.(
-        ["bicycles", "buggies"].includes(selectedCategory?.value || "")
-      );
+      setIsCarsCategory(selectedCategory?.value === "cars");
     }
-  }, [value, categories, setIsCarsCategory, setHideCommercialLicenses]);
+  }, [value, categories, setIsCarsCategory]);
 
   const handleChange = (selectedCategoryId: string) => {
     onChangeHandler(selectedCategoryId);
 
     // Find the selected category object
-    const selectedCategory = categories.find(
-      (category) => category.categoryId === selectedCategoryId
-    );
-
-    // Update states based on the selected category
-    setIsCarsCategory?.(selectedCategory?.value === "cars");
-    setHideCommercialLicenses?.(
-      ["bicycles", "buggies"].includes(selectedCategory?.value || "")
-    );
+    if (setIsCarsCategory) {
+      const selectedCategory = categories.find(
+        (category) => category.categoryId === selectedCategoryId
+      );
+      setIsCarsCategory(selectedCategory?.value === "cars");
+    }
   };
 
   return (
@@ -100,4 +92,4 @@ const CategoryDropdown = ({
   );
 };
 
-export default CategoryDropdown;
+export default ListingMetaCategoryDropdown;

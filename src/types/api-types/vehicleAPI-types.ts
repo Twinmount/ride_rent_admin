@@ -10,6 +10,8 @@ export type CompanyType = {
   commercialLicense: string;
   expireDate: string;
   userId: string;
+  phoneNumber: string;
+  email: string;
 };
 
 // type of single brand
