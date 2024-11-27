@@ -167,6 +167,8 @@ export const CompanyFormDefaultValues: CompanyFormType = {
   commercialLicense: "",
   expireDate: new Date(),
   regNumber: "",
+  phoneNumber: "",
+  email: "",
 };
 
 // Company registration phase 2 form default values

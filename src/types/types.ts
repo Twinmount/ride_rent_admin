@@ -134,6 +134,8 @@ export type CompanyFormType = {
   agentId?: string;
   approvalStatus?: string;
   rejectionReason?: string;
+  phoneNumber?: string;
+  email?: string;
 };
 
 export type CompanyStatusFormType = {

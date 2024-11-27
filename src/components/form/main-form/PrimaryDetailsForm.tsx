@@ -457,7 +457,10 @@ export default function PrimaryDetailsForm({
                       Upload{" "}
                       <span className="font-bold text-yellow">front</span> &{" "}
                       <span className="font-bold text-yellow">back</span> images
-                      of the Registration Card / Mulkia
+                      of the Registration Card /{" "}
+                      {isCustomCommercialLicenseLabel
+                        ? "Certificate"
+                        : "Mulkia"}
                     </>
                   }
                   maxSizeMB={15}
