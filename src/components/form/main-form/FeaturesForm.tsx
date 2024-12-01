@@ -22,7 +22,8 @@ import Spinner from "@/components/general/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { formatFeatures } from "@/helpers/form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Check, Copy } from "lucide-react";
 
 type FeaturesFormType = Record<string, string[] | null>;
 
@@ -37,6 +38,7 @@ export default function FeaturesForm({
   refetchLevels,
   isAddOrIncomplete,
 }: FeaturesFormProps) {
+  const [isCopied, setIsCopied] = useState(false);
   const { vehicleId, vehicleCategoryId } = useVehicleIdentifiers(type);
   const navigate = useNavigate();
   const { userId } = useParams<{ userId: string }>();
@@ -153,6 +155,28 @@ export default function FeaturesForm({
     }
   }
 
+  // Function to handle copying the selected values
+  const handleCopySelectedValues = () => {
+    if (!data?.result) return;
+
+    // Gather all the selected "name" values
+    const selectedValues = data.result
+      .flatMap((feature) =>
+        feature.values
+          .filter((value) => value.selected)
+          .map((value) => value.name)
+      )
+      .join(", "); // Join them as a comma-separated string
+
+    // Copy the string to the clipboard
+    navigator.clipboard.writeText(selectedValues);
+
+    setIsCopied(true); // Set copied state to true
+
+    // Revert back to original state after 3 seconds
+    setTimeout(() => setIsCopied(false), 3000);
+  };
+
   const fields = data?.result || [];
 
   return isLoading ? (
@@ -213,6 +237,22 @@ export default function FeaturesForm({
           {isAddOrIncomplete ? "List Vehicle" : "Update Features"}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
+
+        {!isAddOrIncomplete && (
+          <Button
+            type="button"
+            size="lg"
+            onClick={handleCopySelectedValues}
+            className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2 mt-3 !text-lg !font-semibold button gap-x-1  text-white"
+          >
+            {isCopied ? (
+              <Check className="w-4 h-4 text-green-500" />
+            ) : (
+              <Copy className="w-4 h-4 text-yellow" />
+            )}
+            {isCopied ? "Copied" : "Copy selected features"}
+          </Button>
+        )}
       </form>
     </Form>
   );
