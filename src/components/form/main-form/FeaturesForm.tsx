@@ -243,7 +243,7 @@ export default function FeaturesForm({
             type="button"
             size="lg"
             onClick={handleCopySelectedValues}
-            className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2 mt-3 !text-lg !font-semibold button gap-x-1  text-white"
+            className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2  !text-lg !font-semibold button gap-x-1  text-white"
           >
             {isCopied ? (
               <Check className="w-4 h-4 text-green-500" />
