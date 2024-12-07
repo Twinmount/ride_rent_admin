@@ -37,10 +37,14 @@ export default function ManageLinksPage() {
         ]}
       />
 
-      <h1 className="mt-6 mb-8 text-2xl font-bold text-center sm:text-left">
+      <h1 className="mt-6 text-2xl font-bold text-center sm:text-left">
         Currently Active Links In{" "}
         <span className="text-yellow">{state.stateName}</span>
       </h1>
+      <h3 className="mb-8 italic text-gray-600 text-center sm:text-left">
+        This will appear as the quick links in navbar and the footer of the
+        official website
+      </h3>
       <div className="flex flex-col gap-3 max-w-[800px]">
         {isLoading ? (
           <LinkSkelton />
