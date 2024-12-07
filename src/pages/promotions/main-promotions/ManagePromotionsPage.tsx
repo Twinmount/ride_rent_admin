@@ -5,11 +5,11 @@ import PromotionPreviewModal from "@/components/modal/PromotionPreviewModal";
 import { fetchAllPromotions } from "@/api/promotions";
 import { useQuery } from "@tanstack/react-query";
 import { Eye, FilePenLine, Plus } from "lucide-react";
-
 import { Link } from "react-router-dom";
 import { PromotionType } from "@/types/api-types/API-types";
 import NavigationTab from "@/components/NavigationTab";
 import Pagination from "@/components/Pagination";
+import { toast } from "@/components/ui/use-toast";
 
 export default function ManagePromotionsPage() {
   const { state } = useAdminContext();
@@ -31,6 +31,14 @@ export default function ManagePromotionsPage() {
   // Destructure to get the 'list' array from 'data'
   const promotions = data?.result?.list || [];
 
+  const handleToast = () => {
+    toast({
+      title: "Limit of 5 promotions exceeded",
+      description: `At a time, only a maximum of 5 promotions is allowed per state. Delete some to add more `,
+      className: "bg-orange text-white",
+    });
+  };
+
   return (
     <section className="container pb-16 h-auto min-h-screen">
       {/* navigate between quick links and promotions */}
@@ -47,7 +55,8 @@ export default function ManagePromotionsPage() {
         <span className="text-yellow">{state.stateName}</span>
       </h1>
       <h3 className="mb-8 italic text-gray-600 text-center sm:text-left">
-        This will appear ad/promotions appearing in the home page.
+        This will appear as ad/promotions in the home page. At a time, maximum 5
+        promotions per state allowed.
       </h3>
 
       {isLoading ? (
@@ -101,14 +110,25 @@ export default function ManagePromotionsPage() {
         </p>
       )}
 
-      <button className="fixed z-30 overflow-hidden cursor-pointer w-fit h-fit rounded-xl right-10 bottom-10 shadow-xl  hover:scale-[1.02]  transition-all ">
-        <Link
-          className="gap-x-1 px-3 py-2 text-white flex-center bg-yellow"
-          to={`/marketing/promotions/add`}
+      {promotions.length > 5 ? (
+        <button
+          className="fixed z-30 overflow-hidden cursor-pointer w-fit h-fit rounded-xl right-10 bottom-10 shadow-xl  hover:scale-[1.02]  transition-all "
+          onClick={handleToast}
         >
-          New Promotion <Plus />
-        </Link>
-      </button>
+          <span className="gap-x-1 px-3 py-2 text-white flex-center bg-gray-500">
+            New Promotion <Plus />
+          </span>
+        </button>
+      ) : (
+        <button className="fixed z-30 overflow-hidden cursor-pointer w-fit h-fit rounded-xl right-10 bottom-10 shadow-xl  hover:scale-[1.02]  transition-all ">
+          <Link
+            className="gap-x-1 px-3 py-2 text-white flex-center bg-yellow"
+            to={`/marketing/promotions/add`}
+          >
+            New Promotion <Plus />
+          </Link>
+        </button>
+      )}
 
       {promotions.length > 0 && (
         <div className="mt-auto">
