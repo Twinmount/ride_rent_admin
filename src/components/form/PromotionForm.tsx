@@ -85,6 +85,10 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
       }
 
       if (data) {
+        queryClient.invalidateQueries({
+          queryKey: ["promotions", state],
+          exact: true,
+        });
         toast({
           title: `${type} Promotion successfully`,
           className: "bg-yellow text-white",

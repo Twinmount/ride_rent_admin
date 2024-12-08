@@ -38,10 +38,13 @@ export default function ManageRecommendedLinksPage() {
         ]}
       />
 
-      <h1 className="mt-6 mb-8 text-xl font-bold text-center md:text-2xl sm:text-left">
+      <h1 className="mt-6 text-xl font-bold text-center md:text-2xl sm:text-left">
         Currently Active Recommended Links In{" "}
         <span className="text-yellow">{state.stateName}</span>
       </h1>
+      <h3 className="mb-8 italic text-gray-600 text-center sm:text-left">
+        This will appear as the "related links" in the vehicle details page.
+      </h3>
       <div className="flex flex-col gap-3 max-w-[800px]">
         {isLoading ? (
           <LinkSkelton />
