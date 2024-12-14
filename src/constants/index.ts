@@ -169,6 +169,8 @@ export const CompanyFormDefaultValues: CompanyFormType = {
   regNumber: "",
   phoneNumber: "",
   email: "",
+  companyAddress: "", // Default empty value
+  companyLanguages: [],
 };
 
 // Company registration phase 2 form default values
