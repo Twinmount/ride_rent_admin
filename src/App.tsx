@@ -231,7 +231,7 @@ const router = createBrowserRouter([
                 ),
               },
               {
-                path: "/listings/add/:userId",
+                path: "/listings/add/:userId/:companyId",
                 element: <VehiclesFormAddPage />,
               },
               {

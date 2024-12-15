@@ -136,6 +136,8 @@ export type CompanyFormType = {
   rejectionReason?: string;
   phoneNumber?: string;
   email?: string;
+  companyAddress: string;
+  companyLanguages: string[];
 };
 
 export type CompanyStatusFormType = {

@@ -20,7 +20,6 @@ import { CompanyFormSchema } from "@/lib/validator";
 import { ShieldCheck, Copy } from "lucide-react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { updateCompany } from "@/api/company";
@@ -31,6 +30,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { GcsFilePaths } from "@/constants/enum";
 import { deleteMultipleFiles } from "@/helpers/form";
 import SingleFileUpload from "../file-uploads/SingleFileUpload";
+import CompanyLanguagesDropdown from "../dropdowns/CompanyLanguagesDropdown";
+import { Textarea } from "@/components/ui/textarea";
 
 type CompanyFormProps = {
   type: "Update";
@@ -98,7 +99,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
       });
     } finally {
       queryClient.invalidateQueries({
-        queryKey: ["company-details-page", { exact: true }],
+        queryKey: ["company-details-page", companyId],
+        exact: true,
       });
     }
   }
@@ -317,7 +319,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             render={({ field }) => (
               <FormItem className="flex mb-2 w-full max-sm:flex-col">
                 <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
-                  Registration Number{" "}
+                  Registration Number/Trade License Number{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -337,6 +339,81 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 </div>
               </FormItem>
             )}
+          />
+
+          <FormField
+            control={form.control}
+            name="companyLanguages"
+            render={({ field }) => (
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+                  Supported Languages{" "}
+                  <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <CompanyLanguagesDropdown
+                      value={field.value}
+                      onChangeHandler={field.onChange}
+                      placeholder="Languages"
+                    />
+                  </FormControl>
+                  <FormDescription className="mt-1 ml-1">
+                    Select all the languages the staff can speak or understand.
+                    These will be displayed on company's public profile page,
+                    helping customers feel comfortable with communication.
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="companyAddress"
+            render={({ field }) => {
+              const [charCount, setCharCount] = useState(
+                field.value?.length || 0
+              ); // To track character count
+
+              const handleInputChange = (
+                e: React.ChangeEvent<HTMLTextAreaElement>
+              ) => {
+                const newValue = e.target.value;
+                if (newValue.length <= 150) {
+                  setCharCount(newValue.length);
+                  field.onChange(e);
+                }
+              };
+
+              return (
+                <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                  <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base h-fit min-w-52 lg:text-lg">
+                    Company Address
+                    <span className="mr-5 max-sm:hidden">:</span>
+                  </FormLabel>
+                  <div className="flex-col items-start w-full">
+                    <FormControl>
+                      <Textarea
+                        placeholder="Company Address"
+                        {...field}
+                        className={`textarea rounded-xl transition-all duration-300 h-28`} // Dynamic height
+                        onChange={handleInputChange} // Handle change to track character count
+                      />
+                    </FormControl>
+                    <FormDescription className="mt-1 ml-2 w-full flex-between">
+                      <span className="w-full max-w-[90%]">
+                        Provide company address. This will be showed in the
+                        public company profile page. 150 characters max.
+                      </span>{" "}
+                      <span className="ml-auto"> {`${charCount}/150`}</span>
+                    </FormDescription>
+                    <FormMessage className="ml-2" />
+                  </div>
+                </FormItem>
+              );
+            }}
           />
         </div>
 

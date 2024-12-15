@@ -232,6 +232,8 @@ export interface companyType {
   userId: string;
   phoneNumber: string;
   email: string;
+  companyAddress: string;
+  companyLanguages: string[];
 }
 
 //  interface for the get-all-companies  API response

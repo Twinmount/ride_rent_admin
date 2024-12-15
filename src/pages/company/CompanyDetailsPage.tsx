@@ -8,8 +8,9 @@ export default function CompanyDetailsPage() {
   const { companyId } = useParams<{ companyId: string }>();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["company-details-page"],
+    queryKey: ["company-details-page", companyId],
     queryFn: () => getCompany(companyId as string),
+    enabled: !!companyId,
   });
 
   return (
@@ -33,7 +34,9 @@ export default function CompanyDetailsPage() {
 
       {data?.result.approvalStatus === "APPROVED" && (
         <div className="mt-5 mb-10 ml-12 text-lg font-semibold text-blue-500 hover:underline">
-          <Link to={`/listings/add/${data?.result.userId}`}>
+          <Link
+            to={`/listings/add/${data?.result.userId}/${data?.result.companyId}`}
+          >
             Manually add new vehicle under this company?
           </Link>
         </div>
