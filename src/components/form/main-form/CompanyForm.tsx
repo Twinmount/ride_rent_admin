@@ -319,7 +319,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             render={({ field }) => (
               <FormItem className="flex mb-2 w-full max-sm:flex-col">
                 <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
-                  Registration Number{" "}
+                  Registration Number/Trade License Number{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="flex-col items-start w-full">
@@ -359,8 +359,9 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                     />
                   </FormControl>
                   <FormDescription className="mt-1 ml-1">
-                    Select all the languages your company operates in. This will
-                    be listed in your public company profile page.
+                    Select all the languages the staff can speak or understand.
+                    These will be displayed on company's public profile page,
+                    helping customers feel comfortable with communication.
                   </FormDescription>
                   <FormMessage />
                 </div>
@@ -403,7 +404,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                     </FormControl>
                     <FormDescription className="mt-1 ml-2 w-full flex-between">
                       <span className="w-full max-w-[90%]">
-                        Provide company address. This will be showed in your
+                        Provide company address. This will be showed in the
                         public company profile page. 150 characters max.
                       </span>{" "}
                       <span className="ml-auto"> {`${charCount}/150`}</span>
