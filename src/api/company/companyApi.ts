@@ -65,7 +65,6 @@ export const addCompany = async (values: CompanyType, userId: string) => {
 };
 
 export const updateCompany = async (values: CompanyType, companyId: string) => {
-  console.log(" update company api called", values);
   try {
     const data = await API.put({
       slug: Slug.PUT_COMPANY,

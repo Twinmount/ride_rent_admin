@@ -8,8 +8,9 @@ export default function CompanyDetailsPage() {
   const { companyId } = useParams<{ companyId: string }>();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["company-details-page"],
+    queryKey: ["company-details-page", companyId],
     queryFn: () => getCompany(companyId as string),
+    enabled: !!companyId,
   });
 
   return (
