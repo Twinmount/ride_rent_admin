@@ -133,7 +133,7 @@ export default function FeaturesForm({
       }
       if (response) {
         toast({
-          title: `Features ${type.toLowerCase()}ed successfully`,
+          title: `Features ${type.toLowerCase()} successful`,
           description: isAddOrIncomplete
             ? "Vehicle is live now. No need of manual change status"
             : "Changes will be directly reflected in the live. No need of manual status change.",

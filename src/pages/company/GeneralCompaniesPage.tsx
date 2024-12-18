@@ -1,23 +1,23 @@
-import { useState } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { companyColumns } from '../../components/table/company-registrations/GeneralCompanyColumn'
-import { CompanyTable } from '@/components/table/company-registrations/CompanyTable'
-import { getAllCompany, updateCompanyStatus } from '@/api/company'
-import { SortDropdown } from '@/components/SortDropdown'
-import { LimitDropdown } from '@/components/LimitDropdown'
-import Pagination from '@/components/Pagination'
-import CompanyStatusModal from '@/components/CompanyStatusModal' // Modal for updating company status
-import { toast } from '@/components/ui/use-toast'
-import { CompanyType } from '@/types/api-types/vehicleAPI-types'
-import { CompanyNavDropdown } from '@/components/CompanyNavDropdown'
-import SearchComponent from '@/components/Search'
-import { useSearchParams } from 'react-router-dom'
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { companyColumns } from "../../components/table/company-registrations/GeneralCompanyColumn";
+import { CompanyTable } from "@/components/table/company-registrations/CompanyTable";
+import { getAllCompany, updateCompanyStatus } from "@/api/company";
+import { SortDropdown } from "@/components/SortDropdown";
+import { LimitDropdown } from "@/components/LimitDropdown";
+import Pagination from "@/components/Pagination";
+import CompanyStatusModal from "@/components/CompanyStatusModal"; // Modal for updating company status
+import { toast } from "@/components/ui/use-toast";
+import { CompanyType } from "@/types/api-types/vehicleAPI-types";
+import { CompanyNavDropdown } from "@/components/CompanyNavDropdown";
+import SearchComponent from "@/components/Search";
+import { useSearchParams } from "react-router-dom";
 
 interface GeneralCompaniesPageProps {
-  queryKey: string[]
-  approvalStatus?: 'APPROVED' | 'PENDING' | 'REJECTED' | 'UNDER_REVIEW'
-  isModified?: boolean
-  title: string
+  queryKey: string[];
+  approvalStatus?: "APPROVED" | "PENDING" | "REJECTED" | "UNDER_REVIEW";
+  isModified?: boolean;
+  title: string;
 }
 
 export default function GeneralCompaniesPage({
@@ -25,16 +25,16 @@ export default function GeneralCompaniesPage({
   approvalStatus,
   isModified = false,
 }: GeneralCompaniesPageProps) {
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10)
-  const [sortOrder, setSortOrder] = useState<'ASC' | 'DESC'>('DESC')
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10);
+  const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
   const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
     null
-  )
-  const [searchParams] = useSearchParams()
-  const searchTerm = searchParams.get('search') || ''
+  );
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("search") || "";
 
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
@@ -47,27 +47,27 @@ export default function GeneralCompaniesPage({
         edited: isModified,
         search: searchTerm.trim(),
       }),
-  })
+  });
 
   const handleOpenModal = (company: CompanyType) => {
-    setSelectedCompany(company)
-  }
+    setSelectedCompany(company);
+  };
 
   const handleCloseModal = () => {
-    setSelectedCompany(null)
-  }
+    setSelectedCompany(null);
+  };
 
   const handleSubmitModal = async (values: {
-    approvalStatus: 'APPROVED' | 'PENDING' | 'REJECTED'
-    rejectionReason?: string
+    approvalStatus: "APPROVED" | "PENDING" | "REJECTED";
+    rejectionReason?: string;
   }) => {
-    if (values.approvalStatus === 'PENDING') {
+    if (values.approvalStatus === "PENDING") {
       toast({
-        variant: 'destructive',
-        title: 'Invalid Status Change',
-        description: 'Cannot change status back to PENDING.',
-      })
-      return
+        variant: "destructive",
+        title: "Invalid Status Change",
+        description: "Cannot change status back to PENDING.",
+      });
+      return;
     }
     if (selectedCompany) {
       try {
@@ -77,34 +77,34 @@ export default function GeneralCompaniesPage({
             rejectionReason: values.rejectionReason,
           },
           selectedCompany.companyId // Pass the companyId separately
-        )
+        );
 
         if (data) {
           queryClient.invalidateQueries({
             queryKey: [...queryKey, page, limit, sortOrder],
-          })
+          });
           queryClient.invalidateQueries({
-            queryKey: ['company-listing-count'],
+            queryKey: ["company-listing-count"],
             exact: true,
-          })
+          });
           toast({
-            title: 'Company status updated successfully',
-            className: 'bg-green-500 text-white',
-          })
+            title: "Company status updated successfully",
+            className: "bg-green-500 text-white",
+          });
         }
 
-        handleCloseModal()
+        handleCloseModal();
       } catch (error) {
-        console.error('Failed to update company status:', error)
+        console.error("Failed to update company status:", error);
         toast({
-          variant: 'destructive',
-          title: 'Failed to update status',
+          variant: "destructive",
+          title: "Failed to update status",
           description:
-            'Something went wrong while updating the company status.',
-        })
+            "Something went wrong while updating the company status.",
+        });
       }
     }
-  }
+  };
 
   return (
     <section className="container min-h-screen py-5 mx-auto md:py-7">
@@ -131,7 +131,7 @@ export default function GeneralCompaniesPage({
         <p className="ml-2 text-sm italic text-left text-gray-500">
           <span className="font-semibold text-gray-600">
             company name or agent id
-          </span>{' '}
+          </span>{" "}
           can be used to search the company
         </p>
       </div>
@@ -153,7 +153,7 @@ export default function GeneralCompaniesPage({
 
       {selectedCompany && (
         <CompanyStatusModal
-          rejectionReason={selectedCompany.rejectionReason || ''}
+          rejectionReason={selectedCompany.rejectionReason || ""}
           companyName={selectedCompany.companyName}
           currentStatus={selectedCompany.approvalStatus}
           isOpen={!!selectedCompany}
@@ -162,5 +162,5 @@ export default function GeneralCompaniesPage({
         />
       )}
     </section>
-  )
+  );
 }

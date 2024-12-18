@@ -180,7 +180,7 @@ export default function SpecificationsForm({
 
       if (response) {
         toast({
-          title: `Specifications ${type.toLowerCase()}ed successfully`,
+          title: `Specifications ${type.toLowerCase()} successful`,
           className: "bg-yellow text-white",
         });
 
