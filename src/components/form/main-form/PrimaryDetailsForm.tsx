@@ -54,6 +54,7 @@ type PrimaryFormProps = {
   formData?: PrimaryFormType | null;
   onNextTab?: () => void;
   initialCountryCode?: string;
+  levelsFilled?: number;
 };
 
 export default function PrimaryDetailsForm({
@@ -61,6 +62,7 @@ export default function PrimaryDetailsForm({
   onNextTab,
   formData,
   initialCountryCode,
+  levelsFilled,
 }: PrimaryFormProps) {
   const [countryCode, setCountryCode] = useState<string>("");
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
@@ -202,6 +204,9 @@ export default function PrimaryDetailsForm({
     "3f249138-f0ee-48f2-bc70-db5dcf20f0f3", // Charters
   ].includes(vehicleCategoryId);
 
+  // category dropdown is disabled if levels filled is 3
+  const isCategoryDisabled = levelsFilled === 3;
+
   return (
     <Form {...form}>
       <form
@@ -240,10 +245,13 @@ export default function PrimaryDetailsForm({
                       value={initialValues.vehicleCategoryId}
                       setIsCarsCategory={setIsCarsCategory}
                       setHideCommercialLicenses={setHideCommercialLicenses}
+                      isDisabled={isCategoryDisabled}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    select vehicle category
+                    {isCategoryDisabled
+                      ? "Cannot change category of published vehicle"
+                      : "select vehicle category"}
                   </FormDescription>
                 </div>
                 <FormMessage />
