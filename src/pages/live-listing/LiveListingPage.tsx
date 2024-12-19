@@ -23,7 +23,15 @@ export default function AllListingPage() {
   const { state } = useAdminContext();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["vehicles listings", page, limit, sortOrder, searchTerm, state],
+    queryKey: [
+      "listings",
+      "live-listings",
+      page,
+      limit,
+      sortOrder,
+      searchTerm,
+      state,
+    ],
     queryFn: () =>
       fetchAllVehicles({
         page,
