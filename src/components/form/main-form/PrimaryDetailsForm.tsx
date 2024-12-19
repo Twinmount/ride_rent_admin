@@ -48,6 +48,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { GcsFilePaths } from "@/constants/enum";
 import AdditionalTypesDropdown from "../dropdowns/AdditionalTypesDropdown";
 import SecurityDepositField from "../SecurityDepositField";
+import { useQueryClient } from "@tanstack/react-query";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -61,7 +62,6 @@ export default function PrimaryDetailsForm({
   type,
   onNextTab,
   formData,
-  initialCountryCode,
   levelsFilled,
 }: PrimaryFormProps) {
   const [countryCode, setCountryCode] = useState<string>("");
@@ -75,6 +75,8 @@ export default function PrimaryDetailsForm({
     vehicleId: string;
     userId: string;
   }>();
+
+  const queryClient = useQueryClient();
 
   const initialValues = formData ? formData : PrimaryFormDefaultValues;
 
@@ -135,7 +137,7 @@ export default function PrimaryDetailsForm({
         data = await updatePrimaryDetailsForm(
           vehicleId as string,
           values as PrimaryFormType,
-          initialCountryCode as string,
+          countryCode as string,
           isCarsCategory
         );
       }
@@ -180,6 +182,16 @@ export default function PrimaryDetailsForm({
         });
       }
       console.error(error);
+    } finally {
+      // invalidating cached data in the listing page
+      queryClient.invalidateQueries({
+        queryKey: ["listings", vehicleId],
+        exact: false,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["primary-details-form", vehicleId],
+        exact: true,
+      });
     }
   }
 

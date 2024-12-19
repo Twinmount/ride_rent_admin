@@ -139,9 +139,7 @@ export default function FeaturesForm({
             : "Changes will be directly reflected in the live. No need of manual status change.",
           className: "bg-yellow text-white",
         });
-        queryClient.invalidateQueries({
-          queryKey: ["features-update-form-data", vehicleId],
-        });
+
         refetchLevels?.();
         navigate("/listings");
       }
@@ -151,6 +149,12 @@ export default function FeaturesForm({
         variant: "destructive",
         title: `${type} Features failed`,
         description: "Something went wrong",
+      });
+    } finally {
+      // invalidating cached data in the listing page
+      queryClient.invalidateQueries({
+        queryKey: ["features-update-form-data", vehicleId],
+        exact: true,
       });
     }
   }
