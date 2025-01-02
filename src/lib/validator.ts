@@ -183,6 +183,10 @@ export const PrimaryFormSchema = z
       .string()
       .min(10, "Description must be at least 10 characters long")
       .max(5000, "Description cannot exceed 5000 characters"),
+    vehicleTitle: z
+      .string()
+      .min(1, "Vehicle title is required")
+      .max(150, "Vehicle title cannot exceed 150 characters"),
     additionalVehicleTypes: z.array(z.string()).optional(),
     securityDeposit: z.object({
       enabled: z.boolean().default(false),

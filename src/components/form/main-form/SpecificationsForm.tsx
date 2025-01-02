@@ -24,6 +24,7 @@ import { formatSpecifications, hasSelected } from "@/helpers/form";
 import { SpecificationFormData } from "@/types/api-types/vehicleAPI-types";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { useSpecificationFormQuery } from "@/hooks/useFormQuery";
 
 type SpecificationFormType = Record<string, string | null>;
 
@@ -52,28 +53,11 @@ export default function SpecificationsForm({
   }, []);
 
   // useQuery for fetching form data, now relying on levelsFilled
-  const { data, isLoading } = useQuery({
-    queryKey: [
-      isAddOrIncomplete
-        ? "specification-form-data"
-        : "specification-update-form-data",
-      vehicleId,
-    ],
-    queryFn: async () => {
-      if (isAddOrIncomplete) {
-        const data = await getSpecificationFormFieldData({
-          vehicleCategoryId: vehicleCategoryId as string,
-          vehicleTypeId: vehicleTypeId as string,
-        });
-        return {
-          ...data,
-          result: data.result.list,
-        };
-      } else {
-        return await getSpecificationFormData(vehicleId);
-      }
-    },
-    enabled: !!vehicleId,
+  const { data, isLoading } = useSpecificationFormQuery({
+    vehicleId,
+    vehicleCategoryId,
+    vehicleTypeId,
+    isAddOrIncomplete: !!isAddOrIncomplete,
   });
 
   const fields = data?.result || [];
@@ -100,7 +84,14 @@ export default function SpecificationsForm({
     }
   }, [data]);
 
-  // Custom validation logic: Ensures at least one option is selected for each specification
+  /**
+   * Validates the specifications form, ensuring that at least one valid option
+   * is selected for each specification. If any specification is invalid, it sets
+   * corresponding error messages and displays a toast notification.
+   *
+   * @param values - The current values of the specifications form.
+   * @returns A boolean indicating whether the form is valid.
+   */
   const validateSpecifications = (values: SpecificationFormType) => {
     let isValid = true;
     const updatedErrors: Record<string, string> = {};

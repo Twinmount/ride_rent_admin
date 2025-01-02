@@ -9,6 +9,7 @@ import { PrimaryFormType } from "@/types/formTypes";
 import { TabsTypes } from "@/types/types";
 import imageCompression from "browser-image-compression";
 import { deleteFile } from "@/api/file-upload";
+import { PrimaryFormSchema } from "@/lib/validator";
 
 type SpecificationOption = { label: string; value: string };
 
@@ -121,8 +122,31 @@ export const validateSecurityDeposit = (
   if (securityDeposit.enabled && !securityDeposit.amountInAED) {
     return "Please enter a valid deposit amount in AED.";
   }
-
   // If all validations pass, return null (no error)
+  return null;
+};
+
+// helpers/validateFormFields.ts
+type FieldName = keyof z.infer<typeof PrimaryFormSchema>;
+
+interface ValidationError {
+  fieldName: FieldName;
+  errorMessage: string;
+}
+
+export const validateRentalDetailsAndSecurityDeposit = (
+  values: z.infer<typeof PrimaryFormSchema>
+): ValidationError | null => {
+  const rentalError = validateRentalDetails(values.rentalDetails);
+  if (rentalError) {
+    return { fieldName: "rentalDetails", errorMessage: rentalError };
+  }
+
+  const securityDepositError = validateSecurityDeposit(values.securityDeposit);
+  if (securityDepositError) {
+    return { fieldName: "securityDeposit", errorMessage: securityDepositError };
+  }
+
   return null;
 };
 
@@ -296,6 +320,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     isCryptoAccepted: data.isCryptoAccepted,
     isSpotDeliverySupported: data.isSpotDeliverySupported,
     description: data.description,
+    vehicleTitle: data.vehicleTitle,
     specification: data.specification as "UAE_SPEC" | "USA_SPEC" | "OTHERS",
     rentalDetails: data.rentalDetails,
     phoneNumber: formattedPhoneNumber, // Set the combined phone number

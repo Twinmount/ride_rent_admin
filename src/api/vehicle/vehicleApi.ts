@@ -42,6 +42,7 @@ export const addPrimaryDetailsForm = async (
       isCryptoAccepted: values.isCryptoAccepted.toString(), // Convert boolean to string
       isSpotDeliverySupported: values.isSpotDeliverySupported.toString(), // Convert boolean to string
       description: values.description,
+      vehicleTitle: values.vehicleTitle,
       specification: values.specification,
       phoneNumber,
       stateId: values.stateId,
@@ -110,6 +111,7 @@ export const updatePrimaryDetailsForm = async (
       isCryptoAccepted: values.isCryptoAccepted.toString(), // Convert boolean to string
       isSpotDeliverySupported: values.isSpotDeliverySupported.toString(), // Convert boolean to string
       description: values.description,
+      vehicleTitle: values.vehicleTitle,
       specification: values.specification,
       phoneNumber,
       stateId: values.stateId,
