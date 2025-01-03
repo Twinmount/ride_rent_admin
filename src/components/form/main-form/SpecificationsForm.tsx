@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Form,
   FormControl,
@@ -11,12 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import SpecificationDropdown from "../dropdowns/SpecificationDropdown";
 import { useVehicleIdentifiers } from "@/hooks/useVehicleIdentifiers";
-import {
-  addSpecifications,
-  getSpecificationFormData,
-  getSpecificationFormFieldData,
-  updateSpecifications,
-} from "@/api/vehicle";
+import { addSpecifications, updateSpecifications } from "@/api/vehicle";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import Spinner from "@/components/general/Spinner";
 import { toast } from "@/components/ui/use-toast";
