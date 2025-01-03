@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -26,11 +26,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import RentalDetailsFormField from "../RentalDetailsFormField";
 import MultipleFileUpload from "../file-uploads/MultipleFileUpload";
-import {
-  deleteMultipleFiles,
-  validateRentalDetails,
-  validateSecurityDeposit,
-} from "@/helpers/form";
+import { validateRentalDetailsAndSecurityDeposit } from "@/helpers/form";
 import BrandsDropdown from "../dropdowns/BrandsDropdown";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -40,7 +36,6 @@ import VehicleTypesDropdown from "../dropdowns/VehicleTypesDropdown";
 import StatesDropdown from "../dropdowns/StatesDropdown";
 import { save, StorageKeys } from "@/utils/storage";
 import { toast } from "@/components/ui/use-toast";
-import { addPrimaryDetailsForm, updatePrimaryDetailsForm } from "@/api/vehicle";
 import Spinner from "@/components/general/Spinner";
 import { useParams } from "react-router-dom";
 import { ApiError } from "@/types/types";
@@ -49,6 +44,12 @@ import { GcsFilePaths } from "@/constants/enum";
 import AdditionalTypesDropdown from "../dropdowns/AdditionalTypesDropdown";
 import SecurityDepositField from "../SecurityDepositField";
 import { useQueryClient } from "@tanstack/react-query";
+import { useFormValidationToast } from "@/hooks/useFormValidationToast";
+import {
+  showFileUploadInProgressToast,
+  showSuccessToast,
+} from "@/utils/toastUtils";
+import { handleLevelOneFormSubmission } from "@/utils/form-utils";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -64,7 +65,7 @@ export default function PrimaryDetailsForm({
   formData,
   levelsFilled,
 }: PrimaryFormProps) {
-  const [countryCode, setCountryCode] = useState<string>("");
+  const [countryCode, setCountryCode] = useState<string>("+971");
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
   const [isLicenseUploading, setIsLicenseUploading] = useState(false);
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
@@ -89,69 +90,38 @@ export default function PrimaryDetailsForm({
 
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
-    const rentalError = validateRentalDetails(values.rentalDetails);
-    if (rentalError) {
-      form.setError("rentalDetails", {
-        type: "manual",
-        message: rentalError,
-      });
-      form.setFocus("rentalDetails");
-      return;
-    }
+    const validationError = validateRentalDetailsAndSecurityDeposit(values);
 
-    const securityDepositError = validateSecurityDeposit(
-      values.securityDeposit
-    );
-
-    if (securityDepositError) {
-      form.setError("securityDeposit", {
+    if (validationError) {
+      form.setError(validationError.fieldName, {
         type: "manual",
-        message: securityDepositError,
+        message: validationError.errorMessage,
       });
-      form.setFocus("securityDeposit");
+      form.setFocus(validationError.fieldName);
       return;
     }
 
     if (isPhotosUploading || isLicenseUploading) {
-      toast({
-        title: "File Upload in Progress",
-        description:
-          "Please wait until the file upload completes before submitting the form.",
-        duration: 3000,
-        className: "bg-orange",
-      });
+      showFileUploadInProgressToast();
       return;
     }
 
     // Append other form data
     try {
-      let data;
-      if (type === "Add") {
-        data = await addPrimaryDetailsForm(
-          values as PrimaryFormType,
+      const data = await handleLevelOneFormSubmission(
+        type,
+        values as PrimaryFormType,
+        {
           countryCode,
-          userId as string,
-          isCarsCategory
-        );
-      } else if (type === "Update") {
-        data = await updatePrimaryDetailsForm(
-          vehicleId as string,
-          values as PrimaryFormType,
-          countryCode as string,
-          isCarsCategory
-        );
-      }
+          userId,
+          vehicleId,
+          isCarsCategory,
+          deletedFiles,
+        }
+      );
 
       if (data) {
-        // actually delete the images from the db, if any
-        await deleteMultipleFiles(deletedFiles);
-      }
-
-      if (data) {
-        toast({
-          title: `Vehicle ${type.toLowerCase()} successful`,
-          className: "bg-yellow text-white",
-        });
+        showSuccessToast(type);
 
         if (type === "Add") {
           save(StorageKeys.VEHICLE_ID, data.result.vehicleId);
@@ -195,17 +165,8 @@ export default function PrimaryDetailsForm({
     }
   }
 
-  useEffect(() => {
-    // Check for validation errors and scroll to the top if errors are present
-    if (Object.keys(form.formState.errors).length > 0) {
-      toast({
-        variant: "destructive",
-        title: `Validation Error`,
-        description: "Please make sure all required values are provided",
-      });
-      window.scrollTo({ top: 65, behavior: "smooth" }); // Scroll to the top of the page
-    }
-  }, [form.formState.errors]);
+  // custom hook to validate complex form fields
+  useFormValidationToast(form);
 
   const vehicleCategoryId = form.watch("vehicleCategoryId");
 
@@ -385,6 +346,54 @@ export default function PrimaryDetailsForm({
                 </div>
               </FormItem>
             )}
+          />
+
+          {/* vehicle title */}
+          <FormField
+            control={form.control}
+            name="vehicleTitle"
+            render={({ field }) => {
+              const [charCount, setCharCount] = useState(
+                field.value?.length || 0
+              ); // To track character count
+
+              const handleInputChange = (
+                e: React.ChangeEvent<HTMLTextAreaElement>
+              ) => {
+                setCharCount(e.target.value.length);
+                field.onChange(e);
+              };
+
+              return (
+                <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                  <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base h-fit min-w-52 lg:text-lg">
+                    Vehicle Title
+                    <span className="mr-5 max-sm:hidden">:</span>
+                  </FormLabel>
+                  <div className="flex-col items-start w-full">
+                    <FormControl>
+                      <Textarea
+                        placeholder="Vehicle Title"
+                        {...field}
+                        className={`textarea rounded-2xl transition-all duration-300 outline-none border-none focus:ring-0 ring-0 h-20`} // Dynamic height
+                        onChange={handleInputChange} // Handle change to track character count
+                      />
+                    </FormControl>
+                    <FormDescription className="ml-2 w-full flex-between">
+                      <span className="w-full max-w-[90%]">
+                        Provide vehicle title. This will be used for showing the
+                        vehicle{" "}
+                        <strong>title of the vehicle details page</strong>, and
+                        also for the <strong>SEO meta data</strong> purposes.
+                        150 characters max
+                      </span>{" "}
+                      <span className="ml-auto"> {`${charCount}/150`}</span>
+                    </FormDescription>
+                    <FormMessage className="ml-2" />
+                  </div>
+                </FormItem>
+              );
+            }}
           />
 
           {/* vehicle registration number */}

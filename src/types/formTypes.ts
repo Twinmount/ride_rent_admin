@@ -54,6 +54,7 @@ export type PrimaryFormType = {
   stateId: string;
   cityIds: string[];
   description: string;
+  vehicleTitle: string;
   additionalVehicleTypes?: string[];
   securityDeposit: {
     enabled: boolean;
