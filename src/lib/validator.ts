@@ -343,5 +343,5 @@ export const BlogFormSchema = z.object({
   blogContent: z
     .string()
     .min(20, "Blog content should be at least 20 characters long") // Define minimal content for meaningful entries
-    .max(5000, "Blog content should not exceed 5000 characters"),
+    .max(10000, "Blog content should not exceed 10,000 characters"),
 });
