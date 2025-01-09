@@ -291,6 +291,7 @@ export type GetPrimaryForm = {
   isCryptoAccepted: boolean;
   isSpotDeliverySupported: boolean;
   description: string;
+  vehicleTitle: string;
   vehiclePhotos: string[];
   commercialLicenses: string[];
   additionalVehicleTypes?: string[];

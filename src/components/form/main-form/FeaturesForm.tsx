@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   Form,
   FormControl,
@@ -11,12 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import MultiSelectDropdown from "../dropdowns/MultiSelectDropdown";
 import { useVehicleIdentifiers } from "@/hooks/useVehicleIdentifiers";
-import {
-  addFeatures,
-  getFeaturesFormData,
-  getFeaturesFormFieldsData,
-  updateFeatures,
-} from "@/api/vehicle";
+import { addFeatures, updateFeatures } from "@/api/vehicle";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import Spinner from "@/components/general/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
@@ -24,6 +19,7 @@ import { toast } from "@/components/ui/use-toast";
 import { formatFeatures } from "@/helpers/form";
 import { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
+import { useFeaturesFormQuery } from "@/hooks/useFormQuery";
 
 type FeaturesFormType = Record<string, string[] | null>;
 
@@ -49,25 +45,10 @@ export default function FeaturesForm({
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  const { data, isLoading } = useQuery({
-    queryKey: [
-      isAddOrIncomplete ? "features-form-data" : "features-update-form-data",
-      vehicleId,
-    ],
-    queryFn: async () => {
-      if (isAddOrIncomplete) {
-        const data = await getFeaturesFormFieldsData({
-          vehicleCategoryId: vehicleCategoryId as string,
-        });
-        return {
-          ...data,
-          result: data.result.list,
-        };
-      } else {
-        return await getFeaturesFormData(vehicleId);
-      }
-    },
-    enabled: !!vehicleId,
+  const { data, isLoading } = useFeaturesFormQuery({
+    vehicleId,
+    vehicleCategoryId,
+    isAddOrIncomplete: !!isAddOrIncomplete,
   });
 
   const form = useForm<FeaturesFormType>({
@@ -139,9 +120,7 @@ export default function FeaturesForm({
             : "Changes will be directly reflected in the live. No need of manual status change.",
           className: "bg-yellow text-white",
         });
-        queryClient.invalidateQueries({
-          queryKey: ["features-update-form-data", vehicleId],
-        });
+
         refetchLevels?.();
         navigate("/listings");
       }
@@ -151,6 +130,12 @@ export default function FeaturesForm({
         variant: "destructive",
         title: `${type} Features failed`,
         description: "Something went wrong",
+      });
+    } finally {
+      // invalidating cached data in the listing page
+      queryClient.invalidateQueries({
+        queryKey: ["features-update-form-data", vehicleId],
+        exact: true,
       });
     }
   }

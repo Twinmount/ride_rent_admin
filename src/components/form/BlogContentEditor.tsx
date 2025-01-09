@@ -1,8 +1,8 @@
-import { RichTextEditor, Link } from '@mantine/tiptap'
-import { useEditor } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline'
-import TextAlign from '@tiptap/extension-text-align'
+import { RichTextEditor, Link } from "@mantine/tiptap";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
 
 import {
   FormControl,
@@ -10,15 +10,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
 interface BlogContentEditorProps {
-  content?: string // initial content if any
-  onUpdate: (content: string) => void // callback to update the HTML string
+  content?: string; // initial content if any
+  onUpdate: (content: string) => void; // callback to update the HTML string
 }
 
 export default function BlogContentEditor({
-  content = '', // initial content is empty if not provided
+  content = "", // initial content is empty if not provided
   onUpdate,
 }: BlogContentEditorProps) {
   // Initialize the editor with necessary extensions and content
@@ -27,14 +27,14 @@ export default function BlogContentEditor({
       StarterKit,
       Underline,
       Link,
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
     content,
     onUpdate: ({ editor }) => {
-      const htmlContent = editor.getHTML() ?? ''
-      onUpdate(htmlContent)
+      const htmlContent = editor.getHTML() ?? "";
+      onUpdate(htmlContent);
     },
-  })
+  });
 
   return (
     <FormItem className="flex flex-col w-full mb-2 max-sm:flex-col">
@@ -43,15 +43,15 @@ export default function BlogContentEditor({
       </FormLabel>
       <FormDescription className="w-full ml-2">
         Make sure appropriate page structure is maintained here as it will be
-        directly reflected in the Frontend UI. And also, note that, <br />
-        &#8226; use{' '}
+        directly reflected in the Frontend UI. <br />
+        &#8226; use{" "}
         <span className="px-1 font-semibold rounded-md bg-slate-300">
           ctrl+shift+v
-        </span>{' '}
-        or{' '}
+        </span>{" "}
+        or{" "}
         <span className="px-1 font-semibold rounded-md bg-slate-300">
           cmd+shift+v
-        </span>{' '}
+        </span>{" "}
         to paste a copied text <br />
       </FormDescription>
       <FormControl>
@@ -108,5 +108,5 @@ export default function BlogContentEditor({
 
       <FormMessage />
     </FormItem>
-  )
+  );
 }
