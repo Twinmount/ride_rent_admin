@@ -57,7 +57,8 @@ export default function AllListingPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [
-          "vehicles listings",
+          "listings",
+          "live-listings",
           page,
           limit,
           sortOrder,

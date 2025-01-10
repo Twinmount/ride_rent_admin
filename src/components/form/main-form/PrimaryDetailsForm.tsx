@@ -64,8 +64,11 @@ export default function PrimaryDetailsForm({
   onNextTab,
   formData,
   levelsFilled,
+  initialCountryCode,
 }: PrimaryFormProps) {
-  const [countryCode, setCountryCode] = useState<string>("+971");
+  const [countryCode, setCountryCode] = useState<string>(
+    initialCountryCode || "+971"
+  );
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
   const [isLicenseUploading, setIsLicenseUploading] = useState(false);
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
