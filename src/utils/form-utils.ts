@@ -1,6 +1,7 @@
 // utils/submitForm.ts
 import { addPrimaryDetailsForm, updatePrimaryDetailsForm } from "@/api/vehicle";
 import { deleteMultipleFiles } from "@/helpers/form";
+import { sanitizeStringToSlug } from "@/lib/utils";
 import { PrimaryFormType } from "@/types/formTypes";
 
 export const handleLevelOneFormSubmission = async (
@@ -20,10 +21,18 @@ export const handleLevelOneFormSubmission = async (
     deletedFiles: string[];
   }
 ) => {
+  const formattedSeries = sanitizeStringToSlug(values.vehicleSeries);
+  const payload = {
+    ...values,
+    vehicleSeries: formattedSeries, // Ensure it's correctly sanitized
+  };
+
+  // console.log("Payload:", payload);
+
   let data;
   if (type === "Add") {
     data = await addPrimaryDetailsForm(
-      values,
+      payload,
       countryCode,
       userId as string,
       isCarsCategory
@@ -31,7 +40,7 @@ export const handleLevelOneFormSubmission = async (
   } else if (type === "Update") {
     data = await updatePrimaryDetailsForm(
       vehicleId as string,
-      values,
+      payload,
       countryCode,
       isCarsCategory
     );

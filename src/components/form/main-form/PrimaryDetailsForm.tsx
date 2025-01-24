@@ -50,6 +50,7 @@ import {
   showSuccessToast,
 } from "@/utils/toastUtils";
 import { handleLevelOneFormSubmission } from "@/utils/form-utils";
+import VehicleSeriesSearch from "../dropdowns/VehicleSeriesSearch";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -324,6 +325,127 @@ export default function PrimaryDetailsForm({
               </FormItem>
             )}
           />
+
+          {/* vehicle series */}
+          <FormField
+            control={form.control}
+            name="vehicleSeries"
+            render={({ field }) => (
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                  Vehicle Series <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <VehicleSeriesSearch
+                      value={field.value}
+                      vehicleBrandId={form.watch("vehicleBrandId")}
+                      onChangeHandler={(series, metaTitle, metaDescription) => {
+                        const sanitizedSeries = series
+                          .replace(/[^a-zA-Z0-9-\s]/g, "") // Remove invalid characters
+                          .replace(/\s+/g, " ") // Normalize spaces
+                          .trim(); // Trim leading/trailing spaces
+
+                        field.onChange(sanitizedSeries); // Set vehicleSeries
+
+                        // Reset or set meta fields to empty strings if not provided
+                        form.setValue(
+                          "vehicleSeriesMetaTitle",
+                          metaTitle ?? ""
+                        );
+                        form.setValue(
+                          "vehicleSeriesMetaDescription",
+                          metaDescription ?? ""
+                        );
+                      }}
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Enter or Search the vehicle series. 80 characters max.
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* vehicle series meta title */}
+          <FormField
+            control={form.control}
+            name="vehicleSeriesMetaTitle"
+            render={({ field }) => (
+              <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                  Series Meta Title{" "}
+                  <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="flex-col items-start w-full">
+                  <FormControl>
+                    <Input
+                      placeholder="eg: 'BMW S Series'"
+                      {...field}
+                      className={`input-field`}
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Enter the meta title for this particular series, e.g.,
+                    "Mercedes-Benz C-Class 2024. Only alpha numeric characters
+                    are allowed.
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* vehicle series meta description */}
+          <FormField
+            control={form.control}
+            name="vehicleSeriesMetaDescription"
+            render={({ field }) => {
+              const [charCount, setCharCount] = useState(
+                field.value?.length || 0
+              ); // To track character count
+
+              const limit = 1000;
+
+              const handleInputChange = (
+                e: React.ChangeEvent<HTMLTextAreaElement>
+              ) => {
+                setCharCount(e.target.value.length);
+                field.onChange(e);
+              };
+              return (
+                <FormItem className="flex mb-2 w-full max-sm:flex-col">
+                  <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                    Series Meta Description{" "}
+                    <span className="mr-5 max-sm:hidden">:</span>
+                  </FormLabel>
+                  <div className="flex-col items-start w-full">
+                    <FormControl>
+                      <Textarea
+                        placeholder="Vehicle Series Meta Description"
+                        {...field}
+                        onChange={handleInputChange}
+                        className={`textarea rounded-2xl transition-all duration-300 outline-none border-none focus:ring-0 ring-0 h-20`}
+                      />
+                    </FormControl>
+                    <FormDescription className="ml-2 w-full flex-between">
+                      <span className="w-full max-w-[90%]">
+                        Provide vehicle description.{limit} characters max.
+                      </span>{" "}
+                      <span className="ml-auto">
+                        {" "}
+                        {`${charCount}/${limit}`}
+                      </span>
+                    </FormDescription>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              );
+            }}
+          />
+
           {/* model name */}
           <FormField
             control={form.control}

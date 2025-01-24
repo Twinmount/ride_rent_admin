@@ -149,6 +149,22 @@ export const PrimaryFormSchema = z
     vehicleCategoryId: z.string().min(1, "Category is required"),
     vehicleTypeId: z.string().min(1, "Type is required"),
     vehicleBrandId: z.string().min(1, "Brand is required"),
+    vehicleSeries: z
+      .string()
+      .min(1, "Series is required")
+      .regex(
+        /^[a-zA-Z0-9\s-]+$/,
+        "Series must only contain alphanumeric characters, hyphens, and spaces"
+      ),
+
+    vehicleSeriesMetaTitle: z
+      .string()
+      .min(1, "Meta title is required")
+      .max(80, "Meta title cannot exceed 80 characters"),
+    vehicleSeriesMetaDescription: z
+      .string()
+      .min(1, "Meta description is required")
+      .max(5000, "Meta description cannot exceed 5000 characters"),
     vehicleModel: z.string().min(1, "Model is required"),
     vehicleRegistrationNumber: z
       .string()
