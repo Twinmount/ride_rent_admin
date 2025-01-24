@@ -9,6 +9,7 @@ import StatesLoadingSkelton from "@/components/skelton/StatesLoader";
 import ScrollToTop from "@/helpers/ScrollToTop";
 import { getAllVehicleListingCount } from "@/api/vehicle";
 import { MantineProvider } from "@mantine/core";
+import { NewSidebar } from "@/components/sidebar/NewSidebar";
 
 export default function Layout() {
   const { state, setState } = useAdminContext();
@@ -48,7 +49,9 @@ export default function Layout() {
   return (
     <MantineProvider>
       <Navbar options={options} isLoading={isLoading} />
-      <Sidebar />
+      {/* <Sidebar /> */}
+      <NewSidebar />
+
       <ScrollToTop />
       <MainWrapper>
         {isLoading ? (

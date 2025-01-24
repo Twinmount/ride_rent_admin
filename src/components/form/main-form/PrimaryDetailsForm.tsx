@@ -51,6 +51,7 @@ import {
 } from "@/utils/toastUtils";
 import { handleLevelOneFormSubmission } from "@/utils/form-utils";
 import VehicleSeriesSearch from "../dropdowns/VehicleSeriesSearch";
+import { sanitizeStringToSlug } from "@/lib/utils";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -364,6 +365,15 @@ export default function PrimaryDetailsForm({
                     Enter or Search the vehicle series. 80 characters max.
                   </FormDescription>
                   <FormMessage />
+
+                  {form.watch("vehicleSeries") && (
+                    <div className="text-sm ml-2 mt-2 text-gray-500">
+                      public site URL will be:{" "}
+                      <span className="font-semibold italic ml-2">
+                        /{sanitizeStringToSlug(form.watch("vehicleSeries"))}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </FormItem>
             )}

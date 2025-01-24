@@ -27,6 +27,7 @@ export const debounce = <T extends any[]>(
  * @returns {string} - The sanitized slug.
  */
 export function sanitizeStringToSlug(input: string): string {
+  if (!input) return "";
   return input
     .trim() // Remove leading and trailing spaces
     .toLowerCase() // Convert to lower-case
