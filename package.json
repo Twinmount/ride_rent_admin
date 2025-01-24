@@ -44,7 +44,6 @@
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.2.1",
-    "framer-motion": "^12.0.3",
     "google-libphonenumber": "^3.2.38",
     "input-otp": "^1.2.4",
     "jwt-decode": "^4.0.0",
