@@ -10,18 +10,49 @@ import {
   FileSearch,
 } from "lucide-react";
 
-// Sidebar content
-export const sidebarContent = [
+// Define the type for the items in the "accordion"
+export type SidebarSubItemType = {
+  label: string;
+  link: string;
+};
+
+// Define the base type for common properties
+type SidebarBase = {
+  type: "link" | "accordion";
+  label: string; // The label of the item
+  icon: any; // The icon component
+};
+
+// Define the type for a simple "link" item
+type SidebarLink = SidebarBase & {
+  type: "link";
+  link: string;
+};
+
+// Define the type for an "accordion" item
+export type SidebarAccordionType = SidebarBase & {
+  type: "accordion";
+  baseLink: string;
+  items: SidebarSubItemType[];
+};
+
+// Union type for all sidebar items
+export type SidebarItem = SidebarLink | SidebarAccordionType;
+
+// Array of sidebar content
+export const sidebarContent: SidebarItem[] = [
+  // Dashboard route
   {
     type: "link", // A regular link
     label: "Dashboard",
     icon: LayoutDashboard,
     link: "/",
   },
+  // Vehicle Listings routes
   {
     type: "accordion",
     label: "Listings",
-    baseLink: "/listings", // Base link for all items in this accordion
+    baseLink: "/listings",
     icon: List,
     items: [
       { label: "Live Listings", link: "/listings/live" },
@@ -31,52 +62,81 @@ export const sidebarContent = [
       { label: "Rejected Listings", link: "/listings/rejected" },
     ],
   },
+  // Agents/Company routes
   {
-    type: "link",
+    type: "accordion",
     label: "Agents",
+    baseLink: "/registrations",
     icon: UserPlus,
-    link: "/registrations",
+    items: [
+      { label: "All Companies", link: "/registrations/live" },
+      { label: "New Registrations", link: "/registrations/new" },
+      { label: "Rejected Registrations", link: "/registrations/rejected" },
+    ],
   },
+  // Categories and types routes
   {
     type: "accordion", // An expandable accordion
     label: "Categories & Types",
     icon: CarFront,
+    baseLink: "/vehicle",
     items: [
-      { label: "Categories", link: "/categories" },
-      { label: "Vehicle Types", link: "/vehicle-types" },
+      { label: "Categories", link: "/vehicle/manage-categories/" },
+      { label: "Vehicle Types", link: "/vehicle/manage-types/" },
     ],
   },
+  // Brands route
   {
     type: "link",
     label: "Brands",
     icon: Star,
     link: "/manage-brands",
   },
+  // Locations routes
   {
     type: "accordion",
     label: "Locations",
     icon: MapPin,
+    baseLink: "/locations",
     items: [
-      { label: "Cities", link: "/locations/cities" },
-      { label: "States", link: "/locations/states" },
+      { label: "States", link: "/locations/manage-states" },
+      { label: "Cities", link: "/locations/manage-cities" },
     ],
   },
+  // Marketing routes
   {
-    type: "link",
+    type: "accordion",
     label: "Links & Promotions",
+    baseLink: "/marketing",
     icon: Megaphone,
-    link: "/marketing",
+    items: [
+      { label: "Quick Links", link: "/marketing/quick-links" },
+      { label: "Related Links", link: "/marketing/related-links" },
+      { label: "Promotions", link: "/marketing/promotions" },
+    ],
   },
+
+  // Blogs routes
   {
-    type: "link",
+    type: "accordion",
     label: "Blogs",
+    baseLink: "/happenings",
     icon: FileText,
-    link: "/happenings",
+    items: [
+      { label: "Blogs", link: "/happenings/blogs" },
+      { label: "Blog Promotions", link: "/happenings/promotions" },
+    ],
   },
+
+  // Meta Data routes
   {
-    type: "link",
+    type: "accordion",
     label: "Meta Data",
+    baseLink: "/meta-data",
     icon: FileSearch,
-    link: "/meta-data",
+    items: [
+      { label: "Home Page", link: "/meta-data/home" },
+      { label: "Listings Page", link: "/meta-data/listing" },
+    ],
   },
 ];

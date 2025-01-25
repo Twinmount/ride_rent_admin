@@ -1,5 +1,4 @@
 export type VehicleStatusType =
-  | "ALL"
   | "APPROVED"
   | "REJECTED"
   | "PENDING"
@@ -36,6 +35,8 @@ export type PrimaryFormType = {
   vehicleSeries: string;
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
+  vehicleSeriesPageHeading: string;
+  vehicleSeriesPageSubheading: string;
   vehicleModel: string;
   vehiclePhotos: string[]; // Array of  URLs
   vehicleRegistrationNumber: string;

@@ -1,43 +1,35 @@
-import { useState } from 'react'
-import AdsSkelton from '@/components/skelton/AdsSkelton'
-import PromotionPreviewModal from '@/components/modal/PromotionPreviewModal'
-import { useQuery } from '@tanstack/react-query'
-import { Eye, FilePenLine, Plus } from 'lucide-react'
+import { useState } from "react";
+import AdsSkelton from "@/components/skelton/AdsSkelton";
+import PromotionPreviewModal from "@/components/modal/PromotionPreviewModal";
+import { useQuery } from "@tanstack/react-query";
+import { Eye, FilePenLine, Plus } from "lucide-react";
 
-import { Link } from 'react-router-dom'
-import { PromotionType } from '@/types/api-types/API-types'
-import { fetchAllBlogPromotions } from '@/api/blogs'
-import Pagination from '@/components/Pagination'
-import NavigationTab from '@/components/NavigationTab'
+import { Link } from "react-router-dom";
+import { PromotionType } from "@/types/api-types/API-types";
+import { fetchAllBlogPromotions } from "@/api/blogs";
+import Pagination from "@/components/Pagination";
 
 export default function ManageBlogPromotionsPage() {
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   const [selectedPromotion, setSelectedPromotion] =
-    useState<PromotionType | null>(null)
+    useState<PromotionType | null>(null);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['blog-promotions'],
+    queryKey: ["blog-promotions"],
     queryFn: () =>
       fetchAllBlogPromotions({
         page,
         limit: 10,
-        sortOrder: 'DESC',
+        sortOrder: "DESC",
       }),
-  })
+  });
 
   // Destructure to get the 'list' array from 'data'
-  const promotions = data?.result?.list || []
+  const promotions = data?.result?.list || [];
 
   return (
     <section className="container h-auto min-h-screen pb-10">
-      {/* navigate between blogs and blog promotions */}
-      <NavigationTab
-        navItems={[
-          { label: 'Blogs', to: '/happenings/blogs' },
-          { label: 'Promotions', to: '/happenings/promotions' },
-        ]}
-      />
-      <h1 className="mt-6 mb-8 text-2xl font-bold text-center sm:text-left">
+      <h1 className="mb-8 mt-6 text-center text-2xl font-bold sm:text-left">
         Live Blog Promotions
       </h1>
 
@@ -50,25 +42,25 @@ export default function ManageBlogPromotionsPage() {
           {promotions.map((data) => (
             <div
               key={data.promotionId}
-              className="relative w-full overflow-hidden rounded-lg h-72 group"
+              className="group relative h-72 w-full overflow-hidden rounded-lg"
             >
               {/* Gradient Background */}
-              <div className="absolute inset-0 z-10 transition-opacity duration-300 opacity-0 flex-center gap-x-4 bg-black/80 group-hover:opacity-100">
+              <div className="flex-center absolute inset-0 z-10 gap-x-4 bg-black/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 {/* preview Modal Trigger */}
                 <div
-                  className="z-20 text-white cursor-pointer group/preview flex-center gap-x-1 hover:text-yellow"
+                  className="group/preview flex-center z-20 cursor-pointer gap-x-1 text-white hover:text-yellow"
                   onClick={() => setSelectedPromotion(data)}
                 >
                   <span className="opacity-0 group-hover/preview:opacity-100">
                     Preview
-                  </span>{' '}
+                  </span>{" "}
                   <Eye size={25} />
                 </div>
                 <Link
                   to={`/happenings/promotions/edit/${data.promotionId}`}
-                  className="text-white flex-center gap-x-1 hover:text-yellow group/edit"
+                  className="flex-center group/edit gap-x-1 text-white hover:text-yellow"
                 >
-                  <FilePenLine size={23} />{' '}
+                  <FilePenLine size={23} />{" "}
                   <span className="opacity-0 group-hover/edit:opacity-100">
                     Edit
                   </span>
@@ -80,20 +72,20 @@ export default function ManageBlogPromotionsPage() {
                 src={data.promotionImage}
                 alt="promotion image"
                 loading="lazy"
-                className="z-0 object-cover w-full h-full rounded-lg"
+                className="z-0 h-full w-full rounded-lg object-cover"
               />
             </div>
           ))}
         </div>
       ) : (
-        <p className="mt-20 text-xl font-semibold text-center text-gray-500">
+        <p className="mt-20 text-center text-xl font-semibold text-gray-500">
           No Blog Promotions Found!
         </p>
       )}
 
-      <button className="fixed z-30 overflow-hidden cursor-pointer w-fit h-fit rounded-xl right-10 bottom-10 shadow-xl  hover:scale-[1.02]  transition-all ">
+      <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
         <Link
-          className="px-3 py-2 text-white flex-center gap-x-1 bg-yellow"
+          className="flex-center gap-x-1 bg-yellow px-3 py-2 text-white"
           to={`/happenings/promotions/add`}
         >
           New Blog Promotion <Plus />
@@ -118,5 +110,5 @@ export default function ManageBlogPromotionsPage() {
         />
       )}
     </section>
-  )
+  );
 }

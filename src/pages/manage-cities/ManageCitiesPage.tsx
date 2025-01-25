@@ -1,31 +1,24 @@
-import { useAdminContext } from '@/context/AdminContext'
-import { Plus } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { fetchAllCities } from '@/api/cities'
-import NavigationTab from '@/components/NavigationTab'
-import GridSkelton from '@/components/skelton/GridSkelton'
+import { useAdminContext } from "@/context/AdminContext";
+import { Plus } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllCities } from "@/api/cities";
+
+import GridSkelton from "@/components/skelton/GridSkelton";
 
 export default function ManageCitiesPage() {
-  const { state } = useAdminContext()
+  const { state } = useAdminContext();
 
   const { data, isLoading } = useQuery({
-    queryKey: ['cities', state],
+    queryKey: ["cities", state],
     queryFn: () => fetchAllCities(state.stateId as string),
-  })
+  });
 
-  const cities = data?.result || []
+  const cities = data?.result || [];
 
   return (
     <section className="container h-auto min-h-screen pb-10">
-      {/* navigate between states and cities */}
-      <NavigationTab
-        navItems={[
-          { label: 'States', to: '/locations/manage-states' },
-          { label: 'Cities', to: '/locations/manage-cities' },
-        ]}
-      />
-      <h1 className="mt-6 mb-8 text-2xl font-bold text-center sm:text-left">
+      <h1 className="mb-8 mt-6 text-center text-2xl font-bold sm:text-left">
         Cities Under <span className="text-yellow">{state.stateName}</span>
       </h1>
 
@@ -39,24 +32,24 @@ export default function ManageCitiesPage() {
             <Link
               to={`/locations/manage-cities/edit/${data.cityId}`}
               key={data.cityId}
-              className="w-full overflow-hidden text-base text-center bg-white border shadow-md rounded-xl h-14 flex-center hover:text-yellow hover:border-yellow"
+              className="flex-center h-14 w-full overflow-hidden rounded-xl border bg-white text-center text-base shadow-md hover:border-yellow hover:text-yellow"
             >
               {data.cityName}
             </Link>
           ))}
         </div>
       ) : (
-        <div className="text-2xl text-center mt-36">No Cities Found!</div>
+        <div className="mt-36 text-center text-2xl">No Cities Found!</div>
       )}
 
-      <button className="fixed z-30 overflow-hidden cursor-pointer w-fit h-fit rounded-xl right-10 bottom-10 shadow-xl  hover:scale-[1.02]  transition-all ">
+      <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
         <Link
-          className="px-3 py-2 text-white flex-center gap-x-1 bg-yellow"
+          className="flex-center gap-x-1 bg-yellow px-3 py-2 text-white"
           to={`/locations/manage-cities/add`}
         >
           New City <Plus />
         </Link>
       </button>
     </section>
-  )
+  );
 }

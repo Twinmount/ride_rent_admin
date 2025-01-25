@@ -123,6 +123,8 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   vehicleSeries: "",
   vehicleSeriesMetaTitle: "",
   vehicleSeriesMetaDescription: "",
+  vehicleSeriesPageHeading: "",
+  vehicleSeriesPageSubheading: "",
   vehicleModel: "",
   vehiclePhotos: [], //upto 8 photos of the vehicle
   vehicleRegistrationNumber: "",

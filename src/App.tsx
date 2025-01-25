@@ -31,93 +31,93 @@ import RouteErrorBoundary from "./layout/RouteErrorBoundary";
 // lazy loaded pages
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"));
 const LiveListingPage = lazy(
-  () => import("./pages/live-listing/LiveListingPage")
+  () => import("./pages/live-listing/LiveListingPage"),
 );
 
 const GeneralListingPage = lazy(
-  () => import("./pages/live-listing/GeneralListingPage")
+  () => import("./pages/live-listing/GeneralListingPage"),
 );
 const VehiclesFormUpdatePage = lazy(
-  () => import("./pages/live-listing/VehiclesFormUpdatePage")
+  () => import("./pages/live-listing/VehiclesFormUpdatePage"),
 );
 const VehiclesFormAddPage = lazy(
-  () => import("./pages/live-listing/VehiclesFormAddPage")
+  () => import("./pages/live-listing/VehiclesFormAddPage"),
 );
 
 // company registrations page
 
 const GeneralCompaniesPage = lazy(
-  () => import("./pages/company/GeneralCompaniesPage")
+  () => import("./pages/company/GeneralCompaniesPage"),
 );
 const CompanyDetailsPage = lazy(
-  () => import("./pages/company/CompanyDetailsPage")
+  () => import("./pages/company/CompanyDetailsPage"),
 );
 // vehicle categories page imports
 const ManageCategoriesPage = lazy(
-  () => import("./pages/manage-categories/ManageCategoriesPage")
+  () => import("./pages/manage-categories/ManageCategoriesPage"),
 );
 const AddCategoryPage = lazy(
-  () => import("./pages/manage-categories/AddCategoryPage")
+  () => import("./pages/manage-categories/AddCategoryPage"),
 );
 const EditCategoryPage = lazy(
-  () => import("./pages/manage-categories/EditCategoryPage")
+  () => import("./pages/manage-categories/EditCategoryPage"),
 );
 
 // vehicle types page import
 const ManageTypesPage = lazy(
-  () => import("./pages/manage-types/ManageTypesPage")
+  () => import("./pages/manage-types/ManageTypesPage"),
 );
 const EditTypePage = lazy(() => import("./pages/manage-types/EditTypePage"));
 const AddTypePage = lazy(() => import("./pages/manage-types/AddTypePage"));
 
 // brands page import
 const ManageBrandsPage = lazy(
-  () => import("./pages/manage-brands/ManageBrandsPage")
+  () => import("./pages/manage-brands/ManageBrandsPage"),
 );
 const AddBrandPage = lazy(() => import("./pages/manage-brands/AddBrandPage"));
 const EditBrandPage = lazy(() => import("./pages/manage-brands/EditBrandPage"));
 
 // states page pages
 const ManageStatesPage = lazy(
-  () => import("./pages/manage-states/ManageStatesPage")
+  () => import("./pages/manage-states/ManageStatesPage"),
 );
 const AddStatePage = lazy(() => import("./pages/manage-states/AddStatePage"));
 const EditStatePage = lazy(() => import("./pages/manage-states/EditStatePage"));
 
 // city pages imports
 const ManageCitiesPage = lazy(
-  () => import("./pages/manage-cities/ManageCitiesPage")
+  () => import("./pages/manage-cities/ManageCitiesPage"),
 );
 const AddCityPage = lazy(() => import("./pages/manage-cities/AddCityPage"));
 const EditCityPage = lazy(() => import("./pages/manage-cities/EditCityPage"));
 
 //  links page import
 const ManageLinksPage = lazy(
-  () => import("./pages/quick-links/ManageLinksPage")
+  () => import("./pages/quick-links/ManageLinksPage"),
 );
 const AddLinkPage = lazy(() => import("./pages/quick-links/AddLinkPage"));
 const EditLinkPage = lazy(() => import("./pages/quick-links/EditLinkPage"));
 
 // recommended links pages
-const ManageRecommendedLinksPage = lazy(
-  () => import("./pages/recommended-links/ManageRecommendedLinksPage")
+const ManageRelatedLinksPage = lazy(
+  () => import("./pages/related-links/ManageRelatedLinksPage"),
 );
-const AddRecommendedLinkPage = lazy(
-  () => import("./pages/recommended-links/AddRecommendedLinkPage")
+const AddRelatedLinkPage = lazy(
+  () => import("./pages/related-links/AddRelatedLinkPage"),
 );
-const EditRecommendedLinkPage = lazy(
-  () => import("./pages/recommended-links/EditRecommendedLinkPage")
+const EditRelatedLinkPage = lazy(
+  () => import("./pages/related-links/EditRelatedLinkPage"),
 );
 
 // ads page import
 const ManagePromotionsPage = lazy(
-  () => import("./pages/promotions/main-promotions/ManagePromotionsPage")
+  () => import("./pages/promotions/main-promotions/ManagePromotionsPage"),
 );
 const AddPromotionPage = lazy(
-  () => import("./pages/promotions/main-promotions/AddPromotionPage")
+  () => import("./pages/promotions/main-promotions/AddPromotionPage"),
 );
 const EditPromotionPage = lazy(
-  () => import("./pages/promotions/main-promotions/EditPromotionPage")
+  () => import("./pages/promotions/main-promotions/EditPromotionPage"),
 );
 // blogs promotions page import
 const ManageBlogsPage = lazy(() => import("./pages/blogs/ManageBlogsPage"));
@@ -126,32 +126,32 @@ const EditBlogPage = lazy(() => import("./pages/blogs/EditBlogPage"));
 
 // blogs page import
 const ManageBlogsPromotionsPage = lazy(
-  () => import("./pages/promotions/blog-promotions/ManageBlogsPromotionsPage")
+  () => import("./pages/promotions/blog-promotions/ManageBlogsPromotionsPage"),
 );
 const AddBlogPromotionsPage = lazy(
-  () => import("./pages/promotions/blog-promotions/AddBlogsPromotionPage")
+  () => import("./pages/promotions/blog-promotions/AddBlogsPromotionPage"),
 );
 const EditBlogPromotionsPage = lazy(
-  () => import("./pages/promotions/blog-promotions/EditBlogsPromotionPage")
+  () => import("./pages/promotions/blog-promotions/EditBlogsPromotionPage"),
 );
 // meta data page routes
 const HomeMetaDataPage = lazy(
-  () => import("./pages/meta-data/home-meta/HomeMetaDataPage")
+  () => import("./pages/meta-data/home-meta/HomeMetaDataPage"),
 );
 const AddHomeMetaPage = lazy(
-  () => import("./pages/meta-data/home-meta/AddHomeMetaPage")
+  () => import("./pages/meta-data/home-meta/AddHomeMetaPage"),
 );
 const EditHomeMetaPage = lazy(
-  () => import("./pages/meta-data/home-meta/EditHomeMetaPage")
+  () => import("./pages/meta-data/home-meta/EditHomeMetaPage"),
 );
 const ListingMetaDataPage = lazy(
-  () => import("./pages/meta-data/listing-meta/ListingMetaDataPage")
+  () => import("./pages/meta-data/listing-meta/ListingMetaDataPage"),
 );
 const AddListingMetaPage = lazy(
-  () => import("./pages/meta-data/listing-meta/AddListingMetaPage")
+  () => import("./pages/meta-data/listing-meta/AddListingMetaPage"),
 );
 const EditListingMetaPage = lazy(
-  () => import("./pages/meta-data/listing-meta/EditListingMetaPage")
+  () => import("./pages/meta-data/listing-meta/EditListingMetaPage"),
 );
 
 const router = createBrowserRouter([
@@ -241,7 +241,7 @@ const router = createBrowserRouter([
 
               // Company routes
               {
-                path: "/registrations",
+                path: "/registrations/live",
                 element: (
                   <GeneralCompaniesPage
                     queryKey={["companies", "all-companies"]}
@@ -278,10 +278,6 @@ const router = createBrowserRouter([
               },
 
               // vehicle category route
-              {
-                path: "/vehicle",
-                element: <Navigate to={"/vehicle/manage-categories"} />,
-              },
               {
                 path: "/vehicle/manage-categories/",
                 element: <ManageCategoriesPage />,
@@ -333,10 +329,6 @@ const router = createBrowserRouter([
 
               // state route
               {
-                path: "/locations/",
-                element: <Navigate to={"/locations/manage-states"} />,
-              },
-              {
                 path: "/locations/manage-states",
                 element: <ManageStatesPage />,
               },
@@ -377,16 +369,16 @@ const router = createBrowserRouter([
 
               // recommended links routes
               {
-                path: "/marketing/recommended-links",
-                element: <ManageRecommendedLinksPage />,
+                path: "/marketing/related-links",
+                element: <ManageRelatedLinksPage />,
               },
               {
-                path: "/marketing/recommended-links/add",
-                element: <AddRecommendedLinkPage />,
+                path: "/marketing/related-links/add",
+                element: <AddRelatedLinkPage />,
               },
               {
-                path: "/marketing/recommended-links/edit/:linkId",
-                element: <EditRecommendedLinkPage />,
+                path: "/marketing/related-links/edit/:linkId",
+                element: <EditRelatedLinkPage />,
               },
 
               // promotions route

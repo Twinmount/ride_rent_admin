@@ -52,12 +52,12 @@ export enum Slug {
   DELETE_LINK = "/links",
   GET_ALL_LINKS = "/links/list",
 
-  // Links Recommended Endpoints
-  ADD_RECOMMENDED_LINK = "/recomented-links",
-  GET_RECOMMENDED_LINK = "/recomented-links",
-  PUT_RECOMMENDED_LINK = "/recomented-links",
-  DELETE_RECOMMENDED_LINK = "/recomented-links",
-  GET_ALL_RECOMMENDED_LINKS = "/recomented-links/list",
+  // Related Links Endpoints
+  ADD_RELATED_LINK = "/recomented-links",
+  GET_RELATED_LINK = "/recomented-links",
+  PUT_RELATED_LINK = "/recomented-links",
+  DELETE_RELATED_LINK = "/recomented-links",
+  GET_ALL_RELATED_LINKS = "/recomented-links/list",
 
   // Links Endpoints
   ADD_PROMOTION = "/promotions",

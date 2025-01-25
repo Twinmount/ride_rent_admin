@@ -1,37 +1,48 @@
+import { Link } from "react-router-dom";
+import { SidebarSubItemType } from "./sidebar-items";
+
 type SidebarItemProps = {
-  item: any;
-  isActive: boolean;
-  onClick: () => void;
-  variant?: "default" | "accordionChild";
-  isAccordionTrigger?: boolean;
+  icon?: any; // Optional icon
+  label: string;
+  onClick?: () => void;
 };
 
-export const SidebarItem = ({
-  item,
-  isActive,
-  onClick,
-  variant = "default",
-}: SidebarItemProps) => {
-  const defaultClasses = `${isActive ? "bg-slate-800 text-white" : ""}`;
-  const accordionChildClasses = `text-sm pl-6 ${
-    isActive ? "text-black font-semibold" : "text-gray-600 hover:text-gray-800"
-  }`;
+// sidebar general item which acts like a link
+export const SidebarItem = ({ icon, label, onClick }: SidebarItemProps) => {
+  // Default class for regular sidebar options
+  const classNames = `flex h-11 min-h-11 w-full items-center justify-start gap-2 whitespace-nowrap rounded-lg pl-2 w-full truncate text-ellipsis text-left cursor-pointer no-underline`;
 
-  const className =
-    variant === "default" ? defaultClasses : accordionChildClasses;
-
-  const Icon = item.icon;
+  const Icon = icon;
 
   return (
-    <div
-      className={`flex h-11 min-h-11 w-full items-center justify-start gap-2 whitespace-nowrap rounded-lg px-4 transition-all duration-100 ease-out ${className}`}
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && onClick()}
-    >
+    <div className={`${classNames} `} onClick={onClick}>
+      {/* Render icon if available */}
       {Icon && <Icon className="text-xl" size={20} strokeWidth={3} />}
-      <div className="line-clamp-1 w-full truncate">{item.label}</div>
+
+      {/* Sidebar item label */}
+      <span className="">{label}</span>
     </div>
+  );
+};
+
+// sidebar accordion sub items link
+export const AccordionSidebarItem = ({
+  item,
+  isActive,
+}: {
+  item: SidebarSubItemType;
+  isActive: boolean;
+}) => {
+  const activeClassNames = `${
+    isActive ? "text-black font-semibold" : "text-gray-600 hover:text-gray-800 "
+  }`;
+
+  return (
+    <Link
+      to={item.link}
+      className={`h-9 min-h-9 w-36 min-w-36 max-w-36 items-center justify-start gap-2 truncate text-ellipsis whitespace-nowrap rounded-lg pl-6 text-left no-underline ${activeClassNames}`}
+    >
+      {item.label}
+    </Link>
   );
 };

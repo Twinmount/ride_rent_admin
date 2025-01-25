@@ -13,10 +13,10 @@ import { GeneralListingColumns } from "@/components/table/live-listing/columns/G
 import { SingleVehicleType } from "@/types/api-types/vehicleAPI-types";
 import VehicleStatusModal from "@/components/VehicleStatusModal";
 import { toast } from "@/components/ui/use-toast";
-import { ListingsNavDropdown } from "@/components/ListingsNavDropdown";
 import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
+import ListingHeader from "./ListingHeader";
 
 interface GeneralListingPageProps {
   queryKey: any[];
@@ -129,11 +129,11 @@ export default function GeneralListingPage({
   };
 
   return (
-    <section className="container py-5 mx-auto min-h-screen md:py-7">
-      <div className="my-2 mb-6 flex-between max-sm:flex-col">
-        {/* navigation dropdown */}
-        <ListingsNavDropdown />{" "}
-        <div className="gap-x-2 flex-between w-fit max-sm:mt-3">
+    <section className="container mx-auto min-h-screen py-5 md:py-7">
+      <div className="flex-between my-2 mb-6 max-sm:flex-col">
+        {/* Heading */}
+        <ListingHeader />
+        <div className="flex-between w-fit gap-x-2 max-sm:mt-3">
           <SortDropdown
             sortOrder={sortOrder}
             setSortOrder={setSortOrder}
@@ -150,7 +150,7 @@ export default function GeneralListingPage({
       {/* search component */}
       <div className="mb-8">
         <SearchComponent placeholder="Search vehicle" isBrandSearch={false} />
-        <p className="ml-2 text-sm italic text-left text-gray-500">
+        <p className="ml-2 text-left text-sm italic text-gray-500">
           <span className="font-semibold text-gray-600">
             vehicle model,vehicle registration number, vehicle code, registered
             year or phone number

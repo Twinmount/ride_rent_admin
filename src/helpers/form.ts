@@ -15,12 +15,15 @@ type SpecificationOption = { label: string; value: string };
 
 // function to create dynamic specification form zod schema based on the currently choose vehicle category
 const createSpecificationSchemaForCategory = (
-  fields: Record<string, SpecificationOption[]>
+  fields: Record<string, SpecificationOption[]>,
 ) => {
-  const schemaObject = Object.keys(fields).reduce((acc, field) => {
-    acc[field] = z.string(); // Adjust type according to your needs
-    return acc;
-  }, {} as Record<string, z.ZodTypeAny>);
+  const schemaObject = Object.keys(fields).reduce(
+    (acc, field) => {
+      acc[field] = z.string(); // Adjust type according to your needs
+      return acc;
+    },
+    {} as Record<string, z.ZodTypeAny>,
+  );
   return z.object({ specifications: z.object(schemaObject) });
 };
 
@@ -30,12 +33,15 @@ type FeatureOption = { label: string; value: string };
 
 // Function to create dynamic feature form zod schema based on the currently chosen vehicle category
 export const createFeatureSchemaForCategory = (
-  fields: Record<string, FeatureOption[]>
+  fields: Record<string, FeatureOption[]>,
 ) => {
-  const schemaObject = Object.keys(fields).reduce((acc, field) => {
-    acc[field] = z.array(z.string()); // Each field should be an array of strings
-    return acc;
-  }, {} as Record<string, z.ZodTypeAny>);
+  const schemaObject = Object.keys(fields).reduce(
+    (acc, field) => {
+      acc[field] = z.array(z.string()); // Each field should be an array of strings
+      return acc;
+    },
+    {} as Record<string, z.ZodTypeAny>,
+  );
   return z.object({ features: z.object(schemaObject) });
 };
 
@@ -73,7 +79,7 @@ type RentalDetailsType = {
 };
 // rental details form field validation helper function
 export const validateRentalDetails = (
-  rentalDetails: RentalDetailsType
+  rentalDetails: RentalDetailsType,
 ): string | null => {
   const { day, week, month, hour } = rentalDetails;
 
@@ -117,7 +123,7 @@ type SecurityDepositType = {
 
 // security deposit form field validation helper function
 export const validateSecurityDeposit = (
-  securityDeposit: SecurityDepositType
+  securityDeposit: SecurityDepositType,
 ): string | null => {
   if (securityDeposit.enabled && !securityDeposit.amountInAED) {
     return "Please enter a valid deposit amount in AED.";
@@ -135,7 +141,7 @@ interface ValidationError {
 }
 
 export const validateRentalDetailsAndSecurityDeposit = (
-  values: z.infer<typeof PrimaryFormSchema>
+  values: z.infer<typeof PrimaryFormSchema>,
 ): ValidationError | null => {
   const rentalError = validateRentalDetails(values.rentalDetails);
   if (rentalError) {
@@ -171,7 +177,7 @@ export const getImageDimensions = (file: File) => {
 export const validateImageDimensions = (
   file: File,
   maxWidth: number,
-  maxHeight: number
+  maxHeight: number,
 ) => {
   return new Promise<boolean>((resolve) => {
     const img = new Image();
@@ -203,7 +209,7 @@ export async function compressFiles(files: File[]): Promise<File[]> {
         }
       }
       return file; // If file is smaller than 2MB, no compression needed
-    })
+    }),
   );
   return compressedFiles;
 }
@@ -227,27 +233,30 @@ export const isPhoneValid = (phone: string) => {
  */
 export function formatFeatures(
   values: Record<string, string[] | null>,
-  featureData: FeaturesFormData[]
+  featureData: FeaturesFormData[],
 ): Record<string, { name: string; value: string; selected: boolean }[]> {
-  return Object.entries(values).reduce((acc, [key, selectedValues]) => {
-    if (selectedValues && selectedValues.length > 0) {
-      const featureOptions = featureData.find(
-        (feature) => feature.name === key
-      )?.values;
+  return Object.entries(values).reduce(
+    (acc, [key, selectedValues]) => {
+      if (selectedValues && selectedValues.length > 0) {
+        const featureOptions = featureData.find(
+          (feature) => feature.name === key,
+        )?.values;
 
-      if (featureOptions) {
-        acc[key] = selectedValues.map((value) => {
-          const option = featureOptions.find((v) => v.name === value);
-          return {
-            name: option?.name || value, // The name from the dropdown
-            value: option?.label || value, // The label from the dropdown or value if not found
-            selected: true, // Always true as it's selected
-          };
-        });
+        if (featureOptions) {
+          acc[key] = selectedValues.map((value) => {
+            const option = featureOptions.find((v) => v.name === value);
+            return {
+              name: option?.name || value, // The name from the dropdown
+              value: option?.label || value, // The label from the dropdown or value if not found
+              selected: true, // Always true as it's selected
+            };
+          });
+        }
       }
-    }
-    return acc;
-  }, {} as Record<string, { name: string; value: string; selected: boolean }[]>);
+      return acc;
+    },
+    {} as Record<string, { name: string; value: string; selected: boolean }[]>,
+  );
 }
 
 /**
@@ -259,31 +268,37 @@ export function formatFeatures(
  */
 export function formatSpecifications(
   values: Record<string, string | null>,
-  specData: SpecificationFormData[]
+  specData: SpecificationFormData[],
 ): Record<
   string,
   { name: string; value: string; selected: boolean; hoverInfo: string }
 > {
-  return Object.keys(values).reduce((acc, key) => {
-    const selectedLabel = values[key] as string;
-    const specItem = specData.find((spec) => spec.name === key);
+  return Object.keys(values).reduce(
+    (acc, key) => {
+      const selectedLabel = values[key] as string;
+      const specItem = specData.find((spec) => spec.name === key);
 
-    if (specItem) {
-      const selectedValueObj = specItem.values.find(
-        (value) => value.name === selectedLabel
-      );
+      if (specItem) {
+        const selectedValueObj = specItem.values.find(
+          (value) => value.name === selectedLabel,
+        );
 
-      if (selectedValueObj) {
-        acc[key] = {
-          name: selectedValueObj.name,
-          value: selectedValueObj.label,
-          selected: true,
-          hoverInfo: specItem.hoverInfo, // Adding hoverInfo to the object
-        };
+        if (selectedValueObj) {
+          acc[key] = {
+            name: selectedValueObj.name,
+            value: selectedValueObj.label,
+            selected: true,
+            hoverInfo: specItem.hoverInfo, // Adding hoverInfo to the object
+          };
+        }
       }
-    }
-    return acc;
-  }, {} as Record<string, { name: string; value: string; selected: boolean; hoverInfo: string }>); // Updated return type to include hoverInfo
+      return acc;
+    },
+    {} as Record<
+      string,
+      { name: string; value: string; selected: boolean; hoverInfo: string }
+    >,
+  ); // Updated return type to include hoverInfo
 }
 
 /**
@@ -298,7 +313,7 @@ export function formatSpecifications(
  * @returns {PrimaryFormType} The transformed data that conforms to the `PrimaryFormType`, ready to be used in the form.
  */
 export function mapGetPrimaryFormToPrimaryFormType(
-  data: GetPrimaryForm
+  data: GetPrimaryForm,
 ): PrimaryFormType {
   // Combine countryCode and phoneNumber into a single phoneNumber string
   const formattedPhoneNumber = `+${data.countryCode}${data.phoneNumber}`;
@@ -308,6 +323,11 @@ export function mapGetPrimaryFormToPrimaryFormType(
     vehicleCategoryId: data.vehicleCategoryId,
     vehicleTypeId: data.vehicleTypeId,
     vehicleBrandId: data.vehicleBrandId,
+    vehicleSeries: data.vehicleSeries,
+    vehicleSeriesMetaTitle: data.vehicleSeriesMetaTitle,
+    vehicleSeriesMetaDescription: data.vehicleSeriesMetaDescription,
+    vehicleSeriesPageHeading: data.vehicleSeriesPageHeading,
+    vehicleSeriesPageSubheading: data.vehicleSeriesPageSubheading,
     vehicleModel: data.vehicleModel,
     vehiclePhotos: data.vehiclePhotos,
     vehicleRegistrationNumber: data.vehicleRegistrationNumber,
@@ -402,7 +422,7 @@ export const validateTabAccess = ({
 export function hasSelected(
   value:
     | { name: string; label: string; _id?: string }
-    | { name: string; label: string; selected: boolean }
+    | { name: string; label: string; selected: boolean },
 ): value is { name: string; label: string; selected: boolean } {
   return (value as { selected: boolean }).selected !== undefined;
 }
@@ -410,7 +430,7 @@ export function hasSelected(
 // image download helper function
 export const downloadFileFromStream = async (
   imagePath: string,
-  fileName: string
+  fileName: string,
 ) => {
   try {
     const apiBaseUrl = import.meta.env.VITE_API_URL;
@@ -465,7 +485,7 @@ export const downloadFileFromStream = async (
 
 // Helper function to delete multiple files
 export const deleteMultipleFiles = async (
-  imagePaths: string[]
+  imagePaths: string[],
 ): Promise<void> => {
   if (imagePaths.length === 0) return;
 

@@ -1,15 +1,16 @@
+import React, { useMemo } from "react";
 import { sidebarContent } from "./sidebar-items";
 import { SidebarItem } from "./SidebarItem";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from "@/components/ui/accordion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@mantine/core";
 import ExcelDataDownloadModal from "../modal/ExcelDataDownloadModal";
 import LogoutModal from "../modal/LogoutModal";
+import SidebarAccordion from "./SidebarAccordion";
 
 export default function SidebarItemsContainer({
   isSmallScreen,
@@ -20,46 +21,60 @@ export default function SidebarItemsContainer({
   const navigate = useNavigate();
 
   const handleNavigation = (link: string) => {
-    if (location.pathname !== link) {
-      navigate(link);
-    }
+    navigate(link);
   };
 
+  // Determine the default open accordion based on the current location
+  const defaultOpenAccordion = useMemo(() => {
+    return sidebarContent.find(
+      (item) =>
+        item.type === "accordion" &&
+        item.items.some((subItem) => subItem.link === location.pathname),
+    )?.label;
+  }, [location.pathname]);
+
+  // Function to determine if an item is active
+  const isItemActive = (itemLink: string, label: string) => {
+    // Special case for "Dashboard"
+    if (label === "Dashboard") {
+      return location.pathname === itemLink;
+    }
+    // General case
+    return location.pathname.startsWith(itemLink);
+  };
   return (
-    <SidebarItemContainerWrapper isSmallScreen={isSmallScreen}>
+    <SidebarItemContainerWrapper
+      isSmallScreen={isSmallScreen}
+      defaultValue={defaultOpenAccordion}
+    >
       {sidebarContent.map((item) =>
         item.type === "link" ? (
-          <SidebarItem
-            key={item.link}
-            item={item}
-            isActive={location.pathname === item.link}
-            onClick={() => handleNavigation(item.link as string)}
-          />
-        ) : (
           <AccordionItem
-            key={item.label}
+            key={item.link}
             value={item.label}
             className="border-none no-underline"
           >
-            <AccordionTrigger className="w-full max-w-full !no-underline">
-              <SidebarAccordionTrigger
-                item={item}
-                isActive={location.pathname.startsWith(item.baseLink!)}
-                onClick={() => handleNavigation(item.link as string)}
+            <AccordionTrigger
+              className={`h-11 min-h-11 w-full max-w-full rounded-lg pr-1 !no-underline transition-colors ${isItemActive(item.link, item.label) ? "bg-slate-800 text-white" : "hover:bg-slate-100"}`}
+              showChevron={false}
+            >
+              {/* Wrap SidebarItem in AccordionItem */}
+              <SidebarItem
+                icon={item.icon}
+                label={item.label}
+                onClick={() => {
+                  handleNavigation(item.link);
+                }}
               />
             </AccordionTrigger>
-            <AccordionContent>
-              {item.items?.map((subItem) => (
-                <SidebarItem
-                  key={subItem.link}
-                  item={subItem}
-                  isActive={location.pathname === subItem.link}
-                  onClick={() => handleNavigation(subItem.link as string)}
-                  variant="accordionChild"
-                />
-              ))}
-            </AccordionContent>
           </AccordionItem>
+        ) : (
+          <SidebarAccordion
+            key={item.label}
+            item={item}
+            handleNavigation={handleNavigation}
+            location={location}
+          />
         ),
       )}
 
@@ -70,64 +85,31 @@ export default function SidebarItemsContainer({
   );
 }
 
+// wrapper for sidebar items which includes the Accordion* and ScrollArea component from shadcn
 const SidebarItemContainerWrapper = ({
   isSmallScreen,
   children,
+  defaultValue,
 }: {
   isSmallScreen: boolean;
   children: React.ReactNode;
+  defaultValue?: string;
 }) => {
   return (
     <ScrollArea
-      className={`flex h-full max-h-full min-h-full flex-col items-center gap-y-1 pl-[0.6rem] ${
+      className={`flex h-full max-h-full min-h-full flex-col items-center gap-y-2 pb-3 pl-[0.6rem] ${
         !isSmallScreen && "shadow-md"
       }`}
     >
-      <Accordion type="single" collapsible className="w-[93%]">
+      {/* shadcn accordion wrapper for all the child accordion items elements */}
+      <Accordion
+        type="single"
+        defaultValue={defaultValue}
+        collapsible
+        className="w-[93%]"
+      >
         {children}
       </Accordion>
     </ScrollArea>
-  );
-};
-
-type SidebarAccordionTriggerProps = {
-  item: any;
-  isActive: boolean;
-  onClick: () => void;
-  variant?: "default" | "accordionChild";
-  isAccordionTrigger?: boolean;
-};
-
-export const SidebarAccordionTrigger = ({
-  item,
-  isActive,
-  onClick,
-  variant = "default",
-}: SidebarAccordionTriggerProps) => {
-  const defaultClasses = `${isActive ? "bg-slate-800 text-white" : ""}`;
-  const accordionChildClasses = `text-sm pl-6 ${
-    isActive ? "text-black font-semibold" : "text-gray-600 hover:text-gray-800"
-  }`;
-
-  const className =
-    variant === "default" ? defaultClasses : accordionChildClasses;
-
-  const Icon = item.icon;
-
-  return (
-    <span
-      className={`flex h-11 min-h-11 w-full max-w-[90%] items-center gap-2 rounded-lg pl-2`}
-      onClick={onClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && onClick()}
-    >
-      {Icon && <Icon className="w-5 text-xl" size={20} strokeWidth={3} />}
-
-      {/* truncate text using javascript */}
-      <span className="w-36 min-w-36 max-w-36 truncate text-ellipsis text-left no-underline">
-        {item.label}
-      </span>
-    </span>
   );
 };
