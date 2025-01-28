@@ -1,45 +1,88 @@
-export const searchSeries = async (
+import { VehicleSeriesSearch } from "@/types/api-types/API-types";
+import { Slug } from "../Api-Endpoints";
+import { API } from "../ApiService";
+import { VehicleSeriesType } from "@/types/types";
+
+// fetch all vehicle series based on the vehicle brand and search term
+export const searchVehicleSeries = async (urlParams: {
+  vehicleSeries: string;
+  brandId: string;
+}): Promise<VehicleSeriesSearch> => {
+  try {
+    // generating query params
+    const queryParams = new URLSearchParams({
+      vehicleSeries: urlParams.vehicleSeries,
+      brandId: urlParams.brandId,
+    }).toString();
+
+    const slugWithParams = `${Slug.GET_SEARCH_VEHICLE_SERIES}?${queryParams}`;
+
+    const data = await API.get<VehicleSeriesSearch>({
+      slug: slugWithParams,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch brands data");
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching brands:", error);
+    throw error;
+  }
+};
+
+// Add a new vehicle series
+export const addVehicleSeries = async (
+  seriesData: VehicleSeriesType,
   brandId: string,
-  searchTerm: string
-): Promise<
-  Array<{
-    vehicleSeries: string;
-    vehicleSeriesMetaTitle: string;
-    vehicleSeriesMetaDescription: string;
-  }>
-> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // Mimicking random results with the same structure
-      if (!brandId) {
-        reject("Brand ID is required");
-        return;
-      }
+): Promise<VehicleSeriesType> => {
+  try {
+    const slug = Slug.POST_VEHICLE_SERIES;
 
-      const mockResults = [
-        {
-          vehicleSeries: `abc-Series-A`,
-          vehicleSeriesMetaTitle: `Meta Title for ABC Series A`,
-          vehicleSeriesMetaDescription: `Meta Description for ABC Series A. Detailed information about the series.`,
-        },
-        {
-          vehicleSeries: `EFG Series B`,
-          vehicleSeriesMetaTitle: `Meta Title for EFG Series B`,
-          vehicleSeriesMetaDescription: `Meta Description for EFG Series B. Comprehensive details about the series.`,
-        },
-        {
-          vehicleSeries: `HIJ Series C`,
-          vehicleSeriesMetaTitle: `Meta Title for HIJ Series C`,
-          vehicleSeriesMetaDescription: `Meta Description for HIJ Series C. Specifications and features of this series.`,
-        },
-      ];
+    const requestBody = {
+      ...seriesData,
+      brandId,
+    };
 
-      // Return results matching the search term
-      if (searchTerm) {
-        resolve(mockResults);
-      } else {
-        resolve([]); // Return empty for no search term
-      }
-    }, 1000); // Mimics a 1-second API delay
-  });
+    const data = await API.post<VehicleSeriesType>({
+      slug,
+      body: requestBody,
+    });
+
+    if (!data) {
+      throw new Error("Failed to add vehicle series");
+    }
+    return data;
+  } catch (error) {
+    console.error("Error adding vehicle series:", error);
+    throw error;
+  }
+};
+
+// Update an existing vehicle series
+export const updateVehicleSeries = async (
+  seriesData: VehicleSeriesType,
+  vehicleSeriesId: string,
+): Promise<VehicleSeriesType> => {
+  try {
+    const slug = `${Slug.PUT_VEHICLE_SERIES}`;
+
+    const requestBody = {
+      ...seriesData,
+      vehicleSeriesId,
+    };
+
+    const data = await API.put<VehicleSeriesType>({
+      slug,
+      body: requestBody,
+    });
+
+    if (!data) {
+      throw new Error("Failed to update vehicle series");
+    }
+    return data;
+  } catch (error) {
+    console.error("Error updating vehicle series:", error);
+    throw error;
+  }
 };

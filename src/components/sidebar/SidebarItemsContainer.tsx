@@ -69,12 +69,7 @@ export default function SidebarItemsContainer({
             </AccordionTrigger>
           </AccordionItem>
         ) : (
-          <SidebarAccordion
-            key={item.label}
-            item={item}
-            handleNavigation={handleNavigation}
-            location={location}
-          />
+          <SidebarAccordion key={item.label} item={item} location={location} />
         ),
       )}
 

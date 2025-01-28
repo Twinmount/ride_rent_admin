@@ -69,7 +69,7 @@ export default function PrimaryDetailsForm({
   initialCountryCode,
 }: PrimaryFormProps) {
   const [countryCode, setCountryCode] = useState<string>(
-    initialCountryCode || "+971"
+    initialCountryCode || "+971",
   );
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
   const [isLicenseUploading, setIsLicenseUploading] = useState(false);
@@ -122,7 +122,7 @@ export default function PrimaryDetailsForm({
           vehicleId,
           isCarsCategory,
           deletedFiles,
-        }
+        },
       );
 
       if (data) {
@@ -189,20 +189,20 @@ export default function PrimaryDetailsForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5  mx-auto bg-white  rounded-3xl p-2 md:p-4 py-8 !pb-8  "
+        className="mx-auto flex w-full flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 md:p-4"
       >
-        <div className="flex flex-col gap-5 w-full max-w-full md:max-w-[800px] mx-auto ">
-          {/* category of the vehicle */}
+        <div className="mx-auto flex w-full max-w-full flex-col gap-5 md:max-w-[800px]">
+          {/* Vehicle Category */}
           <FormField
             control={form.control}
             name="vehicleCategoryId"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
                   Vehicle Category <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <CategoryDropdown
                       onChangeHandler={(value) => {
@@ -237,17 +237,17 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* type of the vehicle */}
+          {/* Vehicle Type  */}
           <FormField
             control={form.control}
             name="vehicleTypeId"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Vehicle Type <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <VehicleTypesDropdown
                       vehicleCategoryId={form.watch("vehicleCategoryId")}
@@ -271,8 +271,8 @@ export default function PrimaryDetailsForm({
               control={form.control}
               name="additionalVehicleTypes"
               render={({ field }) => (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                     <div>
                       Services Offered <br />
                       <span>&#40;optional&#41;</span>
@@ -280,7 +280,7 @@ export default function PrimaryDetailsForm({
 
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
-                  <div className="flex-col items-start w-full">
+                  <div className="w-full flex-col items-start">
                     <FormControl>
                       <AdditionalTypesDropdown
                         value={field.value || []}
@@ -300,16 +300,16 @@ export default function PrimaryDetailsForm({
             />
           )}
 
-          {/* brand name */}
+          {/* Brand Name */}
           <FormField
             control={form.control}
             name="vehicleBrandId"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Brand Name <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <BrandsDropdown
                       vehicleCategoryId={form.watch("vehicleCategoryId")}
@@ -327,21 +327,27 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* vehicle series */}
+          {/* Vehicle Series */}
           <FormField
             control={form.control}
             name="vehicleSeries"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Vehicle Series <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <VehicleSeriesSearch
                       value={field.value}
                       vehicleBrandId={form.watch("vehicleBrandId")}
-                      onChangeHandler={(series, metaTitle, metaDescription) => {
+                      onChangeHandler={(
+                        series,
+                        heading,
+                        subHeading,
+                        metaTitle,
+                        metaDescription,
+                      ) => {
                         const sanitizedSeries = series
                           .replace(/[^a-zA-Z0-9-\s]/g, "") // Remove invalid characters
                           .replace(/\s+/g, " ") // Normalize spaces
@@ -351,12 +357,22 @@ export default function PrimaryDetailsForm({
 
                         // Reset or set meta fields to empty strings if not provided
                         form.setValue(
+                          "vehicleSeriesPageHeading",
+                          heading ?? "",
+                        );
+
+                        form.setValue(
+                          "vehicleSeriesPageSubheading",
+                          subHeading ?? "",
+                        );
+
+                        form.setValue(
                           "vehicleSeriesMetaTitle",
-                          metaTitle ?? ""
+                          metaTitle ?? "",
                         );
                         form.setValue(
                           "vehicleSeriesMetaDescription",
-                          metaDescription ?? ""
+                          metaDescription ?? "",
                         );
                       }}
                     />
@@ -367,13 +383,69 @@ export default function PrimaryDetailsForm({
                   <FormMessage />
 
                   {form.watch("vehicleSeries") && (
-                    <div className="text-sm ml-2 mt-2 text-gray-500">
+                    <div className="ml-2 mt-2 text-sm text-gray-500">
                       public site URL will be:{" "}
-                      <span className="font-semibold italic ml-2">
+                      <span className="ml-2 font-semibold italic">
                         /{sanitizeStringToSlug(form.watch("vehicleSeries"))}
                       </span>
                     </div>
                   )}
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Series page title */}
+          <FormField
+            control={form.control}
+            name="vehicleSeriesPageHeading"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  Series Page Heading{" "}
+                  <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <Input
+                      placeholder="eg: 'Rent BMW S Series'"
+                      {...field}
+                      className={`input-field`}
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    This will be showed as the heading the Nextjs series page.
+                    100 characters max.
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Series Page Subtitle */}
+          <FormField
+            control={form.control}
+            name="vehicleSeriesPageSubheading"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  Series Page Subheading{" "}
+                  <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <Input
+                      placeholder="vehicle series page sub heading"
+                      {...field}
+                      className={`input-field`}
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    This will be showed as the sub heading in the Nextjs series
+                    page. 200 characters max.
+                  </FormDescription>
+                  <FormMessage />
                 </div>
               </FormItem>
             )}
@@ -384,12 +456,12 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="vehicleSeriesMetaTitle"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Series Meta Title{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
                       placeholder="eg: 'BMW S Series'"
@@ -408,41 +480,42 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* vehicle series meta description */}
+          {/* Series Meta Description */}
           <FormField
             control={form.control}
             name="vehicleSeriesMetaDescription"
             render={({ field }) => {
               const [charCount, setCharCount] = useState(
-                field.value?.length || 0
+                field.value?.length || 0,
               ); // To track character count
 
               const limit = 1000;
 
               const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>
+                e: React.ChangeEvent<HTMLTextAreaElement>,
               ) => {
                 setCharCount(e.target.value.length);
                 field.onChange(e);
               };
               return (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                     Series Meta Description{" "}
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
-                  <div className="flex-col items-start w-full">
+                  <div className="w-full flex-col items-start">
                     <FormControl>
                       <Textarea
                         placeholder="Vehicle Series Meta Description"
                         {...field}
                         onChange={handleInputChange}
-                        className={`textarea rounded-2xl transition-all duration-300 outline-none border-none focus:ring-0 ring-0 h-20`}
+                        className={`textarea h-20 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
                       />
                     </FormControl>
-                    <FormDescription className="ml-2 w-full flex-between">
+                    <FormDescription className="flex-between ml-2 w-full">
                       <span className="w-full max-w-[90%]">
-                        Provide vehicle description.{limit} characters max.
+                        Provide meta description for this vehicle.{limit}{" "}
+                        characters max.
                       </span>{" "}
                       <span className="ml-auto">
                         {" "}
@@ -456,16 +529,16 @@ export default function PrimaryDetailsForm({
             }}
           />
 
-          {/* model name */}
+          {/* Model Name */}
           <FormField
             control={form.control}
             name="vehicleModel"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Model Name <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
                       placeholder="eg: 'Model'"
@@ -483,38 +556,37 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* vehicle title */}
+          {/* Vehicle Title */}
           <FormField
             control={form.control}
             name="vehicleTitle"
             render={({ field }) => {
               const [charCount, setCharCount] = useState(
-                field.value?.length || 0
+                field.value?.length || 0,
               ); // To track character count
 
               const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>
+                e: React.ChangeEvent<HTMLTextAreaElement>,
               ) => {
                 setCharCount(e.target.value.length);
                 field.onChange(e);
               };
 
               return (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base h-fit min-w-52 lg:text-lg">
-                    Vehicle Title
-                    <span className="mr-5 max-sm:hidden">:</span>
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                    Vehicle Title<span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
-                  <div className="flex-col items-start w-full">
+                  <div className="w-full flex-col items-start">
                     <FormControl>
                       <Textarea
                         placeholder="Vehicle Title"
                         {...field}
-                        className={`textarea rounded-2xl transition-all duration-300 outline-none border-none focus:ring-0 ring-0 h-20`} // Dynamic height
+                        className={`textarea h-20 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`} // Dynamic height
                         onChange={handleInputChange} // Handle change to track character count
                       />
                     </FormControl>
-                    <FormDescription className="ml-2 w-full flex-between">
+                    <FormDescription className="flex-between ml-2 w-full">
                       <span className="w-full max-w-[90%]">
                         Provide vehicle title. This will be used for showing the
                         vehicle{" "}
@@ -531,17 +603,17 @@ export default function PrimaryDetailsForm({
             }}
           />
 
-          {/* vehicle registration number */}
+          {/* Registration Number */}
           <FormField
             control={form.control}
             name="vehicleRegistrationNumber"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Registration Number{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
                       placeholder="eg: ABC12345"
@@ -601,7 +673,7 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* Mulkia */}
+          {/* Registration Card / Certificate / Mulkia */}
           {!hideCommercialLicenses && (
             <FormField
               control={form.control}
@@ -641,17 +713,17 @@ export default function PrimaryDetailsForm({
             />
           )}
 
-          {/* Mulkia Expiry */}
+          {/*  Registration Card / Mulkia Expiry Date */}
           <FormField
             control={form.control}
             name="commercialLicenseExpireDate"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Registration Card / Mulkia Expiry Date{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <DatePicker
                       selected={field.value}
@@ -671,16 +743,16 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* registered year */}
+          {/* Registered Year */}
           <FormField
             control={form.control}
             name="vehicleRegisteredYear"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Registered Year <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <YearPicker
                       onChangeHandler={field.onChange}
@@ -702,16 +774,16 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="specification"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Specification <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl className="mt-2">
                     <RadioGroup
                       value={field.value}
                       onValueChange={field.onChange}
-                      className="flex gap-x-5 items-center"
+                      className="flex items-center gap-x-5"
                       defaultValue="UAE_SPEC"
                     >
                       <div className="flex items-center space-x-2">
@@ -728,7 +800,7 @@ export default function PrimaryDetailsForm({
                       </div>
                     </RadioGroup>
                   </FormControl>
-                  <FormDescription className="mt-1 ml-2">
+                  <FormDescription className="ml-2 mt-1">
                     Select the regional specification of the vehicle
                   </FormDescription>
                   <FormMessage className="ml-2" />
@@ -736,16 +808,17 @@ export default function PrimaryDetailsForm({
               </FormItem>
             )}
           />
-          {/* mobile */}
+
+          {/* Whatsapp/Mobile */}
           <FormField
             control={form.control}
             name="phoneNumber"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Whatsapp/Mobile <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <PhoneInput
                       defaultCountry="ae"
@@ -781,17 +854,17 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* rental details */}
+          {/* Rental Details */}
           <FormField
             control={form.control}
             name="rentalDetails"
             render={() => {
               return (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                     Rental Details <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
-                  <div className="flex-col items-start w-full">
+                  <div className="w-full flex-col items-start">
                     <FormControl>
                       <RentalDetailsFormField />
                     </FormControl>
@@ -806,16 +879,16 @@ export default function PrimaryDetailsForm({
             }}
           />
 
-          {/* Location(state) */}
+          {/* Location (state) */}
           <FormField
             control={form.control}
             name="stateId"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Location <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <StatesDropdown
                       onChangeHandler={(value) => {
@@ -834,17 +907,18 @@ export default function PrimaryDetailsForm({
               </FormItem>
             )}
           />
-          {/* cities */}
+
+          {/* City / Serving areas */}
           <FormField
             control={form.control}
             name="cityIds"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base min-w-52 lg:text-lg">
-                  Cities / Serving Areas{" "}
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  City / Serving areas{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <CitiesDropdown
                       stateId={form.watch("stateId")}
@@ -867,17 +941,17 @@ export default function PrimaryDetailsForm({
             control={form.control}
             name="isLease"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Lease? <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
-                    <div className="flex items-center mt-3 space-x-2">
+                    <div className="mt-3 flex items-center space-x-2">
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                        className="h-5 w-5 bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
                         id="isLease"
                       />
                       <label
@@ -888,7 +962,7 @@ export default function PrimaryDetailsForm({
                       </label>
                     </div>
                   </FormControl>
-                  <FormDescription className="mt-1 ml-6">
+                  <FormDescription className="ml-6 mt-1">
                     Select if this vehicle is available for lease.
                   </FormDescription>
                   <FormMessage className="ml-2" />
@@ -897,16 +971,16 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* security deposit */}
+          {/* Security Deposit */}
           <FormField
             control={form.control}
             name="securityDeposit"
             render={() => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Security Deposit <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <SecurityDepositField />
                   </FormControl>
@@ -920,24 +994,24 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* payment details */}
-          <div className="flex mb-2 w-full max-sm:flex-col max-sm:space-y-1">
-            <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+          {/* Payment Info */}
+          <div className="mb-2 flex w-full max-sm:flex-col max-sm:space-y-1">
+            <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
               Payment Info <span className="mr-5 max-sm:hidden">:</span>
             </FormLabel>
-            <div className="p-2 w-full rounded-lg border-b shadow">
+            <div className="w-full rounded-lg border-b p-2 shadow">
               <FormField
                 control={form.control}
                 name="isCryptoAccepted"
                 render={({ field }) => (
-                  <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                    <div className="flex-col items-start w-full">
+                  <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                    <div className="w-full flex-col items-start">
                       <FormControl>
-                        <div className="flex items-center mt-3 space-x-2">
+                        <div className="mt-3 flex items-center space-x-2">
                           <Checkbox
                             checked={field.value}
                             onCheckedChange={field.onChange}
-                            className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                            className="h-5 w-5 bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
                             id="isCryptoAccepted"
                           />
                           <label
@@ -948,7 +1022,7 @@ export default function PrimaryDetailsForm({
                           </label>
                         </div>
                       </FormControl>
-                      <FormDescription className="mt-1 ml-7">
+                      <FormDescription className="ml-7 mt-1">
                         Select if your company accepts payments via
                         cryptocurrency.
                       </FormDescription>
@@ -963,14 +1037,14 @@ export default function PrimaryDetailsForm({
                 control={form.control}
                 name="isCreditOrDebitCardsSupported"
                 render={({ field }) => (
-                  <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                    <div className="flex-col items-start w-full">
+                  <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                    <div className="w-full flex-col items-start">
                       <FormControl>
-                        <div className="flex items-center mt-3 space-x-2">
+                        <div className="mt-3 flex items-center space-x-2">
                           <Checkbox
                             checked={field.value}
                             onCheckedChange={field.onChange}
-                            className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                            className="h-5 w-5 bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
                             id="isCreditDebitCard"
                           />
                           <label
@@ -981,7 +1055,7 @@ export default function PrimaryDetailsForm({
                           </label>
                         </div>
                       </FormControl>
-                      <FormDescription className="mt-1 ml-7">
+                      <FormDescription className="ml-7 mt-1">
                         Select if your company accepts payments via credit or
                         debit card.
                       </FormDescription>
@@ -996,14 +1070,14 @@ export default function PrimaryDetailsForm({
                 control={form.control}
                 name="isTabbySupported"
                 render={({ field }) => (
-                  <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                    <div className="flex-col items-start w-full">
+                  <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                    <div className="w-full flex-col items-start">
                       <FormControl>
-                        <div className="flex items-center mt-3 space-x-2">
+                        <div className="mt-3 flex items-center space-x-2">
                           <Checkbox
                             checked={field.value}
                             onCheckedChange={field.onChange}
-                            className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                            className="h-5 w-5 bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
                             id="isTabby"
                           />
                           <label
@@ -1014,7 +1088,7 @@ export default function PrimaryDetailsForm({
                           </label>
                         </div>
                       </FormControl>
-                      <FormDescription className="mt-1 ml-7">
+                      <FormDescription className="ml-7 mt-1">
                         Select if your company accepts payments via Tabby.
                       </FormDescription>
                       <FormMessage className="ml-2" />
@@ -1025,22 +1099,22 @@ export default function PrimaryDetailsForm({
             </div>
           </div>
 
-          {/* spot delivery */}
+          {/* Spot Delivery */}
           <FormField
             control={form.control}
             name="isSpotDeliverySupported"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Spot delivery? <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
-                    <div className="flex items-center mt-3 space-x-2">
+                    <div className="mt-3 flex items-center space-x-2">
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                        className="h-5 w-5 bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
                         id="isSpotDeliverySupported"
                       />
                       <label
@@ -1051,7 +1125,7 @@ export default function PrimaryDetailsForm({
                       </label>
                     </div>
                   </FormControl>
-                  <FormDescription className="mt-1 ml-7">
+                  <FormDescription className="ml-7 mt-1">
                     Select this option if your company offers on-the-spot
                     delivery services.
                   </FormDescription>
@@ -1061,33 +1135,33 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* vehicle description */}
+          {/* Vehicle Description */}
           <FormField
             control={form.control}
             name="description"
             render={({ field }) => {
               const [isFocused, setIsFocused] = useState(false); // To manage focus state
               const [charCount, setCharCount] = useState(
-                field.value?.length || 0
+                field.value?.length || 0,
               ); // To track character count
 
               const handleFocus = () => setIsFocused(true);
               const handleBlur = () => setIsFocused(false);
               const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>
+                e: React.ChangeEvent<HTMLTextAreaElement>,
               ) => {
                 setCharCount(e.target.value.length);
                 field.onChange(e);
               };
 
               return (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base h-fit min-w-52 lg:text-lg">
-                    Vehicle Description
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                    Vehicle Description{" "}
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
                   <div
-                    className="flex-col items-start w-full"
+                    className="w-full flex-col items-start"
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                   >
@@ -1095,15 +1169,16 @@ export default function PrimaryDetailsForm({
                       <Textarea
                         placeholder="Vehicle Description"
                         {...field}
-                        className={`textarea rounded-2xl transition-all duration-300 outline-none border-none focus:ring-0 ring-0 ${
+                        className={`textarea rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0 ${
                           isFocused ? "h-96" : "h-20"
                         }`} // Dynamic height
                         onChange={handleInputChange} // Handle change to track character count
                       />
                     </FormControl>
-                    <FormDescription className="ml-2 w-full flex-between">
+                    <FormDescription className="flex-between ml-2 w-full">
                       <span className="w-full max-w-[90%]">
-                        Provide vehicle description.5000 characters max.
+                        Provide vehicle description.5000 characters max. This
+                        will be showed in the Vehicle Details Page.
                       </span>{" "}
                       <span className="ml-auto"> {`${charCount}/5000`}</span>
                     </FormDescription>
@@ -1120,7 +1195,7 @@ export default function PrimaryDetailsForm({
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-darkYellow"
+          className="flex-center button hover:bg-darkYellow col-span-2 mx-auto mt-3 w-full bg-yellow !text-lg !font-semibold md:w-10/12 lg:w-8/12"
         >
           {type === "Add" ? "Add Vehicle" : "Update Vehicle"}
           {form.formState.isSubmitting && <Spinner />}

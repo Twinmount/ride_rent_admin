@@ -7,14 +7,14 @@ export const VehicleTypeFormSchema = z.object({
     .min(3, "Vehicle Type title should be at least 3 characters long")
     .regex(
       /^[A-Za-z\s]+$/,
-      "Vehicle Type title should only contain letters and spaces"
+      "Vehicle Type title should only contain letters and spaces",
     ),
   value: z
     .string()
     .min(3, "vehicle type value should be at least 3 characters long")
     .regex(
       /^[a-z-]+$/,
-      "vehicle type value should only contain lowercase letters and hyphens"
+      "vehicle type value should only contain lowercase letters and hyphens",
     ),
 });
 
@@ -25,14 +25,14 @@ export const BrandFormSchema = z.object({
     .min(3, "Brand title should be at least 3 characters long")
     .regex(
       /^[A-Za-z\s]+$/,
-      "Brand title should only contain letters and spaces"
+      "Brand title should only contain letters and spaces",
     ),
   brandValue: z
     .string()
     .min(3, "Brand value should be at least 3 characters long")
     .regex(
       /^[a-z-]+$/,
-      "Brand value should only contain lowercase letters and hyphens"
+      "Brand value should only contain lowercase letters and hyphens",
     ),
   brandLogo: z.string().min(1, "Brand logo is required"),
   vehicleCategoryId: z.string().min(1, "Category is required"),
@@ -45,14 +45,14 @@ export const StateFormSchema = z.object({
     .min(3, "State title should be at least 3 characters long")
     .regex(
       /^[A-Za-z\s]+$/,
-      "State title should only contain letters and spaces"
+      "State title should only contain letters and spaces",
     ),
   stateValue: z
     .string()
     .min(3, "State value should be at least 3 characters long")
     .regex(
       /^[a-z-]+$/,
-      "State value should only contain lowercase letters and hyphens"
+      "State value should only contain lowercase letters and hyphens",
     ),
   stateImage: z.string().min(1, "State image is required"),
 });
@@ -64,14 +64,14 @@ export const CityFormSchema = z.object({
     .min(3, "City title should be at least 3 characters long")
     .regex(
       /^[A-Za-z\s]+$/,
-      "City title should only contain letters and spaces"
+      "City title should only contain letters and spaces",
     ),
   cityValue: z
     .string()
     .min(3, "City value should be at least 3 characters long")
     .regex(
       /^[a-z-]+$/,
-      "City value should only contain lowercase letters and hyphens"
+      "City value should only contain lowercase letters and hyphens",
     ),
 });
 // Category Form Schema
@@ -81,14 +81,14 @@ export const CategoryFormSchema = z.object({
     .min(3, "Category label should be at least 3 characters long")
     .regex(
       /^[A-Za-z\s]+$/,
-      "State title should only contain letters and spaces"
+      "State title should only contain letters and spaces",
     ),
   value: z
     .string()
     .min(3, "Category value should be at least 3 characters long")
     .regex(
       /^[a-z-]+$/,
-      "Category value should only contain lowercase letters and hyphens"
+      "Category value should only contain lowercase letters and hyphens",
     ),
 });
 
@@ -154,9 +154,17 @@ export const PrimaryFormSchema = z
       .min(1, "Series is required")
       .regex(
         /^[a-zA-Z0-9\s-]+$/,
-        "Series must only contain alphanumeric characters, hyphens, and spaces"
+        "Series must only contain alphanumeric characters, hyphens, and spaces",
       ),
 
+    vehicleSeriesPageHeading: z
+      .string()
+      .min(1, "Page heading is required")
+      .max(100, "Page heading cannot exceed 100 characters"),
+    vehicleSeriesPageSubheading: z
+      .string()
+      .min(1, "Page subheading is required")
+      .max(200, "Page subheading cannot exceed 200 characters"),
     vehicleSeriesMetaTitle: z
       .string()
       .min(1, "Meta title is required")
@@ -230,7 +238,7 @@ export const PrimaryFormSchema = z
       message:
         "Commercial License is  required and must contain both front and back of the document",
       path: ["commercialLicenses"], // Attach error to the correct field
-    }
+    },
   );
 
 // login form schema
@@ -279,7 +287,7 @@ export const CompanyStatusFormSchema = z
     {
       message: "Rejection reason is required when the status is REJECTED",
       path: ["rejectionReason"], // Error message will be applied to the rejectionReason field
-    }
+    },
   );
 
 // Vehicle Status Form Schema
@@ -298,7 +306,7 @@ export const VehicleStatusFormSchema = z
     {
       message: "Rejection reason is required when the status is REJECTED",
       path: ["rejectionReason"], // Error message will be applied to the rejectionReason field
-    }
+    },
   );
 
 export const HomeMetaFormSchema = z.object({
@@ -364,4 +372,14 @@ export const BlogFormSchema = z.object({
     .string()
     .min(20, "Blog content should be at least 20 characters long") // Define minimal content for meaningful entries
     .max(10000, "Blog content should not exceed 10,000 characters"),
+});
+
+export const VehicleSeriesSchema = z.object({
+  vehicleSeries: z.string().min(1, "Vehicle series is required"),
+  vehicleSeriesMetaTitle: z.string().min(1, "Meta title is required"),
+  vehicleSeriesMetaDescription: z
+    .string()
+    .min(1, "Meta description is required"),
+  vehicleSeriesPageHeading: z.string().min(1, "Page heading is required"),
+  vehicleSeriesPageSubheading: z.string().min(1, "Page subheading is required"),
 });

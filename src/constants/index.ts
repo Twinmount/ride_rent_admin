@@ -121,10 +121,10 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   vehicleTypeId: "", //'luxury' for example
   vehicleBrandId: "",
   vehicleSeries: "",
-  vehicleSeriesMetaTitle: "",
-  vehicleSeriesMetaDescription: "",
   vehicleSeriesPageHeading: "",
   vehicleSeriesPageSubheading: "",
+  vehicleSeriesMetaTitle: "",
+  vehicleSeriesMetaDescription: "",
   vehicleModel: "",
   vehiclePhotos: [], //upto 8 photos of the vehicle
   vehicleRegistrationNumber: "",

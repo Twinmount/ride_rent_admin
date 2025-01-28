@@ -196,3 +196,12 @@ export type CategoryType =
   | "news"
   | "travel"
   | "travel";
+
+export type VehicleSeriesType = {
+  vehicleSeriesId?: string;
+  vehicleSeries: string;
+  vehicleSeriesMetaTitle: string;
+  vehicleSeriesMetaDescription: string;
+  vehicleSeriesPageHeading: string;
+  vehicleSeriesPageSubheading: string;
+};

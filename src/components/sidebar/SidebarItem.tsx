@@ -40,9 +40,9 @@ export const AccordionSidebarItem = ({
   return (
     <Link
       to={item.link}
-      className={`h-9 min-h-9 w-36 min-w-36 max-w-36 items-center justify-start gap-2 truncate text-ellipsis whitespace-nowrap rounded-lg pl-6 text-left no-underline ${activeClassNames}`}
+      className={`h-9 min-h-9 w-36 min-w-36 max-w-36 items-center justify-start gap-2 truncate text-ellipsis whitespace-nowrap rounded-lg pl-6 text-left text-sm no-underline ${activeClassNames}`}
     >
-      {item.label}
+      &#187; &nbsp;{item.label}
     </Link>
   );
 };
