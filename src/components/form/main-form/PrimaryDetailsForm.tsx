@@ -76,6 +76,7 @@ export default function PrimaryDetailsForm({
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [isCarsCategory, setIsCarsCategory] = useState(false);
   const [hideCommercialLicenses, setHideCommercialLicenses] = useState(false);
+  const [isAutoFilled, setIsAutoFilled] = useState(false);
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string;
@@ -355,6 +356,18 @@ export default function PrimaryDetailsForm({
 
                         field.onChange(sanitizedSeries); // Set vehicleSeries
 
+                        // If autofilled, set the fields and disable editing
+                        if (
+                          heading ||
+                          subHeading ||
+                          metaTitle ||
+                          metaDescription
+                        ) {
+                          setIsAutoFilled(true);
+                        } else {
+                          setIsAutoFilled(false);
+                        }
+
                         // Reset or set meta fields to empty strings if not provided
                         form.setValue(
                           "vehicleSeriesPageHeading",
@@ -411,6 +424,7 @@ export default function PrimaryDetailsForm({
                       placeholder="eg: 'Rent BMW S Series'"
                       {...field}
                       className={`input-field`}
+                      readOnly={isAutoFilled}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -439,6 +453,7 @@ export default function PrimaryDetailsForm({
                       placeholder="vehicle series page sub heading"
                       {...field}
                       className={`input-field`}
+                      readOnly={isAutoFilled}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -467,6 +482,7 @@ export default function PrimaryDetailsForm({
                       placeholder="eg: 'BMW S Series'"
                       {...field}
                       className={`input-field`}
+                      readOnly={isAutoFilled}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -510,6 +526,7 @@ export default function PrimaryDetailsForm({
                         {...field}
                         onChange={handleInputChange}
                         className={`textarea h-20 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
+                        readOnly={isAutoFilled}
                       />
                     </FormControl>
                     <FormDescription className="flex-between ml-2 w-full">

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Command,
@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ChevronsUpDown, Edit3 } from "lucide-react";
-import { debounce, revertSlugToString } from "@/lib/utils";
+import { revertSlugToString } from "@/lib/utils";
 import { searchVehicleSeries } from "@/api/vehicle-series";
 import VehicleSeriesDialog from "@/components/dialog/VehicleSeriesDialog";
 
@@ -38,40 +38,38 @@ const VehicleSeriesSearch = ({
   onChangeHandler,
   placeholder = "Search series...",
 }: VehicleSeriesSearchProps) => {
-  const [searchTerm, setSearchTerm] = useState(value || ""); // Start with the current value
+  const [searchTerm, setSearchTerm] = useState(value || ""); // Updates instantly
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm); // Delayed state for API call
   const [open, setOpen] = useState(false);
   const [selectedSeries, setSelectedSeries] = useState<any | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false); // Dialog open state
 
-  // Fetch series data
-  const { data, isFetching, refetch } = useQuery({
-    queryKey: ["searchSeries", vehicleBrandId, searchTerm],
+  // Fetch series data when debouncedSearchTerm changes
+  const { data, isFetching } = useQuery({
+    queryKey: ["searchSeries", vehicleBrandId, debouncedSearchTerm],
     queryFn: async () =>
       await searchVehicleSeries({
-        vehicleSeries: searchTerm,
+        vehicleSeries: debouncedSearchTerm,
         brandId: vehicleBrandId,
       }),
-    enabled: false, // Initial fetch disabled
+    enabled: !!vehicleBrandId && !!(debouncedSearchTerm.length > 2), // Only fetch if valid search term
   });
 
-  // Debounce search to prevent excessive API calls
-  const debouncedSearch = useCallback(
-    debounce((query: string) => {
-      if (query.trim()) refetch();
-    }, 500),
-    [refetch],
-  );
-
-  // Trigger API call when `searchTerm` changes
+  // Effect to update `debouncedSearchTerm` only after user stops typing for 500ms
   useEffect(() => {
-    if (searchTerm.trim()) debouncedSearch(searchTerm);
-  }, [searchTerm, debouncedSearch]);
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500); // Debounce delay
 
-  // Restrict input to letters, numbers, and hyphen only
+    return () => {
+      clearTimeout(handler); // Clear timeout if user types again
+    };
+  }, [searchTerm]); // Runs when `searchTerm` changes
+
+  // Handle input change (updates immediately)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const sanitizedValue = e.target.value.replace(/[^a-zA-Z0-9-\s]/g, ""); // Allow letters, numbers, hyphens, and spaces
-
-    setSearchTerm(sanitizedValue); // Update search term
+    setSearchTerm(sanitizedValue); // Update input field immediately
     onChangeHandler(sanitizedValue); // Update parent state
   };
 
@@ -91,29 +89,10 @@ const VehicleSeriesSearch = ({
   ) => {
     setSearchTerm(series);
     setOpen(false);
-    onChangeHandler(series, heading, subHeading, metaTitle, metaDesc); // Autofill meta fields or reset them
+    onChangeHandler(series, heading, subHeading, metaTitle, metaDesc);
   };
 
-  const seriesData = data?.result.list || [
-    {
-      vehicleSeriesId: "1",
-      vehicleSeries: "series-1",
-      vehicleSeriesMetaTitle: "Series 1 Meta Title",
-      vehicleSeriesMetaDescription: "This is a description for Series 1.",
-      vehicleSeriesPageHeading: "Series 1 Heading",
-      vehicleSeriesPageSubheading: "Series 1 Subheading",
-      seriesCode: "S1",
-    },
-    {
-      vehicleSeriesId: "2",
-      vehicleSeries: "series-2",
-      vehicleSeriesMetaTitle: "Series 2 Meta Title",
-      vehicleSeriesMetaDescription: "This is a description for Series 2.",
-      vehicleSeriesPageHeading: "Series 2 Heading",
-      vehicleSeriesPageSubheading: "Series 2 Subheading",
-      seriesCode: "S2",
-    },
-  ]; // Ensure `data` is always an array
+  const seriesData = data?.result || [];
 
   return (
     <>
@@ -137,7 +116,7 @@ const VehicleSeriesSearch = ({
               value={searchTerm}
               placeholder={placeholder}
               onChange={handleInputChange}
-              className="h-10 w-full border-b text-sm outline-none focus:ring-0"
+              className="h-10 w-full border border-gray-300 text-sm outline-none focus-within:border-gray-400 focus-within:ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             />
             <CommandList>
               {isFetching ? (
@@ -151,7 +130,7 @@ const VehicleSeriesSearch = ({
                       className="mb-1 border"
                     >
                       <div className="flex flex-col">
-                        <span className="font-semibold">
+                        <span className="font-semibold italic">
                           Add new series "{searchTerm}"
                         </span>
                         <span className="text-sm text-gray-500">
@@ -190,7 +169,18 @@ const VehicleSeriesSearch = ({
                   ))}
                 </CommandGroup>
               ) : searchTerm.length ? (
-                <CommandEmpty>No series found for "{searchTerm}".</CommandEmpty>
+                <CommandItem
+                  key="manual-entry"
+                  onSelect={() => handleSelect(searchTerm, "", "")}
+                  className="mb-1 border"
+                >
+                  <div className="flex flex-col">
+                    <span className="font-semibold">Add "{searchTerm}"</span>
+                    <span className="text-sm text-gray-500">
+                      Add this new series under the selected brand.
+                    </span>
+                  </div>
+                </CommandItem>
               ) : (
                 <CommandEmpty>Search or enter a series </CommandEmpty>
               )}

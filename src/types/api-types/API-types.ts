@@ -382,10 +382,7 @@ export interface VehicleSeriesType {
 //  Get all Vehicle Series Search
 export interface VehicleSeriesSearch {
   status: string;
-  result: {
-    list: VehicleSeriesType[]; // Array of brands
-    page: number; // Current page number
-    total: number; // Total number of categories
-  };
+  result: VehicleSeriesType[]; // Array of brands
+
   statusCode: number;
 }

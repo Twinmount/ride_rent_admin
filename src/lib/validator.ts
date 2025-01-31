@@ -156,7 +156,6 @@ export const PrimaryFormSchema = z
         /^[a-zA-Z0-9\s-]+$/,
         "Series must only contain alphanumeric characters, hyphens, and spaces",
       ),
-
     vehicleSeriesPageHeading: z
       .string()
       .min(1, "Page heading is required")
