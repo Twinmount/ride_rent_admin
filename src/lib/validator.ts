@@ -182,7 +182,7 @@ export const PrimaryFormSchema = z
     description: z
       .string()
       .min(10, "Description must be at least 10 characters long")
-      .max(5000, "Description cannot exceed 5000 characters"),
+      .max(8000, "Description cannot exceed 5000 characters"), //additional 3000 is for to compensate for the text editor html tags strings.
     vehicleTitle: z
       .string()
       .min(1, "Vehicle title is required")
