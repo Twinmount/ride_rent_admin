@@ -50,6 +50,7 @@ import {
   showSuccessToast,
 } from "@/utils/toastUtils";
 import { handleLevelOneFormSubmission } from "@/utils/form-utils";
+import VehicleDescriptionTextEditor from "../VehicleDescriptionTextEditor";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -933,53 +934,12 @@ export default function PrimaryDetailsForm({
           <FormField
             control={form.control}
             name="description"
-            render={({ field }) => {
-              const [isFocused, setIsFocused] = useState(false); // To manage focus state
-              const [charCount, setCharCount] = useState(
-                field.value?.length || 0
-              ); // To track character count
-
-              const handleFocus = () => setIsFocused(true);
-              const handleBlur = () => setIsFocused(false);
-              const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>
-              ) => {
-                setCharCount(e.target.value.length);
-                field.onChange(e);
-              };
-
-              return (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base h-fit min-w-52 lg:text-lg">
-                    Vehicle Description
-                    <span className="mr-5 max-sm:hidden">:</span>
-                  </FormLabel>
-                  <div
-                    className="flex-col items-start w-full"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                  >
-                    <FormControl>
-                      <Textarea
-                        placeholder="Vehicle Description"
-                        {...field}
-                        className={`textarea rounded-2xl transition-all duration-300 outline-none border-none focus:ring-0 ring-0 ${
-                          isFocused ? "h-96" : "h-20"
-                        }`} // Dynamic height
-                        onChange={handleInputChange} // Handle change to track character count
-                      />
-                    </FormControl>
-                    <FormDescription className="ml-2 w-full flex-between">
-                      <span className="w-full max-w-[90%]">
-                        Provide vehicle description.5000 characters max.
-                      </span>{" "}
-                      <span className="ml-auto"> {`${charCount}/5000`}</span>
-                    </FormDescription>
-                    <FormMessage className="ml-2" />
-                  </div>
-                </FormItem>
-              );
-            }}
+            render={({ field }) => (
+              <VehicleDescriptionTextEditor
+                content={field.value}
+                onUpdate={(updatedContent) => field.onChange(updatedContent)}
+              />
+            )}
           />
         </div>
 
