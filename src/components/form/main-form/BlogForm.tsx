@@ -56,8 +56,6 @@ export default function BlogForm({ type, formData }: StateFormProps) {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof BlogFormSchema>) {
-    console.log(values);
-    return;
     if (isFileUploading) {
       toast({
         title: "File Upload in Progress",
@@ -93,7 +91,6 @@ export default function BlogForm({ type, formData }: StateFormProps) {
         });
         queryClient.invalidateQueries({
           queryKey: ["blogs"],
-          exact: true,
         });
         navigate("/happenings/blogs");
       }
@@ -113,7 +110,6 @@ export default function BlogForm({ type, formData }: StateFormProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["blogs"],
-        exact: true,
       });
     },
   });
