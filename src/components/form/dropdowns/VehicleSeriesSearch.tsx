@@ -22,6 +22,7 @@ import VehicleSeriesDialog from "@/components/dialog/VehicleSeriesDialog";
 type VehicleSeriesSearchProps = {
   value?: string;
   vehicleBrandId: string;
+  stateId: string;
   onChangeHandler: (
     series: string,
     heading?: string,
@@ -35,6 +36,7 @@ type VehicleSeriesSearchProps = {
 const VehicleSeriesSearch = ({
   value = "",
   vehicleBrandId,
+  stateId,
   onChangeHandler,
   placeholder = "Search series...",
 }: VehicleSeriesSearchProps) => {
@@ -52,7 +54,8 @@ const VehicleSeriesSearch = ({
         vehicleSeries: debouncedSearchTerm,
         brandId: vehicleBrandId,
       }),
-    enabled: !!vehicleBrandId && !!(debouncedSearchTerm.length > 2), // Only fetch if valid search term
+    enabled:
+      !!vehicleBrandId && !!stateId && !!(debouncedSearchTerm.length > 2), // Only fetch if valid search term , as well as brandId and stateId are provided
   });
 
   // Effect to update `debouncedSearchTerm` only after user stops typing for 500ms
@@ -94,6 +97,19 @@ const VehicleSeriesSearch = ({
 
   const seriesData = data?.result || [];
 
+  // Popover placeholder logic via immediately invoked function expression (IIFE)
+  const popoverPlaceholder = (() => {
+    if (isFetching) {
+      return "Fetching series...";
+    } else if (!stateId) {
+      return "Choose a state first";
+    } else if (!vehicleBrandId) {
+      return "Choose a brand first";
+    } else {
+      return "Search series...";
+    }
+  })();
+
   return (
     <>
       <Popover open={open} onOpenChange={setOpen}>
@@ -104,9 +120,7 @@ const VehicleSeriesSearch = ({
             aria-expanded={open}
             className="w-full justify-between"
           >
-            {vehicleBrandId
-              ? value || placeholder // Show current value or placeholder
-              : "Choose a brand first"}{" "}
+            {value || popoverPlaceholder}
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>

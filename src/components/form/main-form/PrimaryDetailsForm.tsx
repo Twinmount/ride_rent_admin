@@ -328,6 +328,62 @@ export default function PrimaryDetailsForm({
               </FormItem>
             )}
           />
+          {/* Location (state) */}
+          <FormField
+            control={form.control}
+            name="stateId"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  Location <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <StatesDropdown
+                      onChangeHandler={(value) => {
+                        field.onChange(value);
+                        form.setValue("cityIds", []); //
+                      }}
+                      value={initialValues.stateId}
+                      placeholder="location"
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Choose your state/location
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* City / Serving areas */}
+          <FormField
+            control={form.control}
+            name="cityIds"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  City / Serving areas{" "}
+                  <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <CitiesDropdown
+                      stateId={form.watch("stateId")}
+                      value={field.value}
+                      onChangeHandler={field.onChange}
+                      placeholder="cities"
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Select all the cities of operation/serving areas.
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            )}
+          />
 
           {/* Vehicle Series */}
           <FormField
@@ -343,6 +399,7 @@ export default function PrimaryDetailsForm({
                     <VehicleSeriesSearch
                       value={field.value}
                       vehicleBrandId={form.watch("vehicleBrandId")}
+                      stateId={form.watch("stateId")}
                       onChangeHandler={(
                         series,
                         heading,
