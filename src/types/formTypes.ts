@@ -35,6 +35,8 @@ export type PrimaryFormType = {
   vehicleSeries: string;
   vehicleSeriesPageHeading: string;
   vehicleSeriesPageSubheading: string;
+  vehicleSeriesInfoTitle: string;
+  vehicleSeriesInfoDescription: string;
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
   vehicleModel: string;

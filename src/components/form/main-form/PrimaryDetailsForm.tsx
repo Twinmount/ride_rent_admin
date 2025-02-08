@@ -469,6 +469,87 @@ export default function PrimaryDetailsForm({
           {/* vehicle series meta title */}
           <FormField
             control={form.control}
+            name="vehicleSeriesInfoTitle"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  Series Info Title{" "}
+                  <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <Input
+                      placeholder="eg: 'BMW S Series'"
+                      {...field}
+                      className={`input-field`}
+                      readOnly={isAutoFilled}
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Enter the series info title for this particular series.This
+                    will be showed as the info box title in the Nextjs series
+                    page.
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Series Meta Description */}
+          <FormField
+            control={form.control}
+            name="vehicleSeriesInfoDescription"
+            render={({ field }) => {
+              const [charCount, setCharCount] = useState(
+                field.value?.length || 0,
+              ); // To track character count
+
+              const limit = 300;
+
+              const handleInputChange = (
+                e: React.ChangeEvent<HTMLTextAreaElement>,
+              ) => {
+                setCharCount(e.target.value.length);
+                field.onChange(e);
+              };
+              return (
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                    Series Info Description{" "}
+                    <span className="mr-5 max-sm:hidden">:</span>
+                  </FormLabel>
+                  <div className="w-full flex-col items-start">
+                    <FormControl>
+                      <Textarea
+                        placeholder="Vehicle Series Meta Description"
+                        {...field}
+                        onChange={handleInputChange}
+                        className={`textarea h-20 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
+                        readOnly={isAutoFilled}
+                      />
+                    </FormControl>
+                    <FormDescription className="flex-between ml-2 w-full">
+                      <span className="w-full max-w-[90%]">
+                        Enter the series info description for this particular
+                        series.This will be showed as the info box description
+                        in the Nextjs series page. {limit} characters max.
+                      </span>{" "}
+                      <span className="ml-auto">
+                        {" "}
+                        {`${charCount}/${limit}`}
+                      </span>
+                    </FormDescription>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              );
+            }}
+          />
+
+          {/* vehicle series meta title */}
+          <FormField
+            control={form.control}
             name="vehicleSeriesMetaTitle"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">

@@ -164,6 +164,14 @@ export const PrimaryFormSchema = z
       .string()
       .min(1, "Page subheading is required")
       .max(200, "Page subheading cannot exceed 200 characters"),
+    vehicleSeriesInfoTitle: z
+      .string()
+      .min(1, "Meta title is required")
+      .max(80, "Meta title cannot exceed 80 characters"),
+    vehicleSeriesInfoDescription: z
+      .string()
+      .min(1, "Meta description is required")
+      .max(300, "Meta description cannot exceed 300 characters"),
     vehicleSeriesMetaTitle: z
       .string()
       .min(1, "Meta title is required")
