@@ -1,9 +1,3 @@
-import { RichTextEditor, Link } from "@mantine/tiptap";
-import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import TextAlign from "@tiptap/extension-text-align";
-
 import {
   FormControl,
   FormDescription,
@@ -11,6 +5,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import RichTextEditorComponent from "./RichTextEditorComponent";
 
 interface BlogContentEditorProps {
   content?: string; // initial content if any
@@ -21,21 +16,6 @@ export default function BlogContentEditor({
   content = "", // initial content is empty if not provided
   onUpdate,
 }: BlogContentEditorProps) {
-  // Initialize the editor with necessary extensions and content
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-    ],
-    content,
-    onUpdate: ({ editor }) => {
-      const htmlContent = editor.getHTML() ?? "";
-      onUpdate(htmlContent);
-    },
-  });
-
   return (
     <FormItem className="flex flex-col w-full mb-2 max-sm:flex-col">
       <FormLabel className="w-full mt-4 ml-2 text-lg !font-bold text-left lg:text-xl">
@@ -55,55 +35,12 @@ export default function BlogContentEditor({
         to paste a copied text <br />
       </FormDescription>
       <FormControl>
-        <RichTextEditor editor={editor} className="shadow-lg">
-          {/* Toolbar with editor controls */}
-
-          <RichTextEditor.Toolbar
-            sticky
-            stickyOffset={75}
-            className="shadow-lg"
-          >
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Bold />
-              <RichTextEditor.Italic />
-              <RichTextEditor.Underline />
-              <RichTextEditor.ClearFormatting />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.H1 />
-              <RichTextEditor.H2 />
-              <RichTextEditor.H3 />
-              <RichTextEditor.H4 />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Hr />
-              <RichTextEditor.BulletList />
-              <RichTextEditor.OrderedList />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Link />
-              <RichTextEditor.Unlink />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.AlignLeft />
-              <RichTextEditor.AlignCenter />
-              <RichTextEditor.AlignJustify />
-              <RichTextEditor.AlignRight />
-            </RichTextEditor.ControlsGroup>
-
-            <RichTextEditor.ControlsGroup>
-              <RichTextEditor.Undo />
-              <RichTextEditor.Redo />
-            </RichTextEditor.ControlsGroup>
-          </RichTextEditor.Toolbar>
-
-          {/* Content editable area */}
-          <RichTextEditor.Content />
-        </RichTextEditor>
+        {/* Render the RichTextEditor component */}
+        <RichTextEditorComponent
+          content={content}
+          onUpdate={onUpdate}
+          isBlog={true}
+        />
       </FormControl>
 
       <FormMessage />

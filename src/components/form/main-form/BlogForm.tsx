@@ -91,7 +91,6 @@ export default function BlogForm({ type, formData }: StateFormProps) {
         });
         queryClient.invalidateQueries({
           queryKey: ["blogs"],
-          exact: true,
         });
         navigate("/happenings/blogs");
       }
@@ -111,7 +110,6 @@ export default function BlogForm({ type, formData }: StateFormProps) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["blogs"],
-        exact: true,
       });
     },
   });
@@ -445,8 +443,8 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           {isFileUploading
             ? "Uploading..."
             : form.formState.isSubmitting
-            ? "Processing..."
-            : `${type} Blog`}
+              ? "Processing..."
+              : `${type} Blog`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
 

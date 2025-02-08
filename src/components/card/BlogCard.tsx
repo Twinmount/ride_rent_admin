@@ -1,13 +1,13 @@
-import { BlogType } from '@/types/api-types/blogApi-types'
-import { Link } from 'react-router-dom'
+import { BlogType } from "@/types/api-types/blogApi-types";
+import { Link } from "react-router-dom";
 
 type BlogCardProps = {
-  blog: BlogType
-}
+  blog: BlogType;
+};
 
 export default function BlogCard({ blog }: BlogCardProps) {
   return (
-    <div className="group bg-white min-w-[265px] shadow-lg rounded-lg overflow-hidden max-w-sm mx-auto transform transition duration-300 hover:shadow-xl h-full hover:scale-[1.02]">
+    <div className="group bg-white min-w-[265px] w-full max-w-full shadow-lg rounded-lg overflow-hidden mx-auto transform transition duration-300 hover:shadow-xl h-full hover:scale-[1.02]">
       <Link
         to={`/happenings/blogs/edit/${blog.blogId}`}
         className="flex flex-col h-full"
@@ -24,12 +24,12 @@ export default function BlogCard({ blog }: BlogCardProps) {
           <div className="text-sm tracking-wide text-gray-600 uppercase">
             <span className="px-2 rounded-md shadow-md bg-slate-100 text-yellow">
               {blog.blogCategory}
-            </span>{' '}
-            &middot;{' '}
-            {new Date(blog.updatedAt).toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
+            </span>{" "}
+            &middot;{" "}
+            {new Date(blog.updatedAt).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
             })}
           </div>
           <h3 className="mt-2 text-lg font-semibold line-clamp-2">
@@ -41,5 +41,5 @@ export default function BlogCard({ blog }: BlogCardProps) {
         </div>
       </Link>
     </div>
-  )
+  );
 }

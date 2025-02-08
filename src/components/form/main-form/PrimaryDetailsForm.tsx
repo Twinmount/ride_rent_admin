@@ -52,6 +52,7 @@ import {
 import { handleLevelOneFormSubmission } from "@/utils/form-utils";
 import VehicleSeriesSearch from "../dropdowns/VehicleSeriesSearch";
 import { sanitizeStringToSlug } from "@/lib/utils";
+import VehicleDescriptionTextEditor from "../VehicleDescriptionTextEditor";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -1237,54 +1238,12 @@ export default function PrimaryDetailsForm({
           <FormField
             control={form.control}
             name="description"
-            render={({ field }) => {
-              const [isFocused, setIsFocused] = useState(false); // To manage focus state
-              const [charCount, setCharCount] = useState(
-                field.value?.length || 0,
-              ); // To track character count
-
-              const handleFocus = () => setIsFocused(true);
-              const handleBlur = () => setIsFocused(false);
-              const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>,
-              ) => {
-                setCharCount(e.target.value.length);
-                field.onChange(e);
-              };
-
-              return (
-                <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
-                    Vehicle Description{" "}
-                    <span className="mr-5 max-sm:hidden">:</span>
-                  </FormLabel>
-                  <div
-                    className="w-full flex-col items-start"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                  >
-                    <FormControl>
-                      <Textarea
-                        placeholder="Vehicle Description"
-                        {...field}
-                        className={`textarea rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0 ${
-                          isFocused ? "h-96" : "h-20"
-                        }`} // Dynamic height
-                        onChange={handleInputChange} // Handle change to track character count
-                      />
-                    </FormControl>
-                    <FormDescription className="flex-between ml-2 w-full">
-                      <span className="w-full max-w-[90%]">
-                        Provide vehicle description.5000 characters max. This
-                        will be showed in the Vehicle Details Page.
-                      </span>{" "}
-                      <span className="ml-auto"> {`${charCount}/5000`}</span>
-                    </FormDescription>
-                    <FormMessage className="ml-2" />
-                  </div>
-                </FormItem>
-              );
-            }}
+            render={({ field }) => (
+              <VehicleDescriptionTextEditor
+                content={field.value}
+                onUpdate={(updatedContent) => field.onChange(updatedContent)}
+              />
+            )}
           />
         </div>
 
