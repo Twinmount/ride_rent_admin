@@ -149,12 +149,19 @@ export const PrimaryFormSchema = z
     vehicleCategoryId: z.string().min(1, "Category is required"),
     vehicleTypeId: z.string().min(1, "Type is required"),
     vehicleBrandId: z.string().min(1, "Brand is required"),
-    vehicleSeries: z
+    vehicleSeriesLabel: z
       .string()
       .min(1, "Series is required")
       .regex(
         /^[a-zA-Z0-9\s-]+$/,
         "Series must only contain alphanumeric characters, hyphens, and spaces",
+      ),
+    vehicleSeries: z
+      .string()
+      .min(1, "Series is required")
+      .regex(
+        /^[a-z0-9-]+$/,
+        "Series value must be lowercase, hyphen-separated, and alphanumeric",
       ),
     vehicleSeriesPageHeading: z
       .string()
@@ -217,7 +224,7 @@ export const PrimaryFormSchema = z
     vehicleTitle: z
       .string()
       .min(1, "Vehicle title is required")
-      .max(150, "Vehicle title cannot exceed 150 characters"),
+      .max(100, "Vehicle title cannot exceed 100 characters"),
     additionalVehicleTypes: z.array(z.string()).optional(),
     securityDeposit: z.object({
       enabled: z.boolean().default(false),

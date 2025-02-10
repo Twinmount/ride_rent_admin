@@ -257,6 +257,9 @@ export type GetPrimaryForm = {
   vehicleTypeId: string;
   vehicleBrandId: string;
   vehicleSeries: string;
+  vehicleSeriesLabel: string;
+  vehicleSeriesInfoTitle: string;
+  vehicleSeriesInfoDescription: string;
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
   vehicleSeriesPageHeading: string;

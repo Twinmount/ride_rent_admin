@@ -200,7 +200,7 @@ export default function PrimaryDetailsForm({
             name="vehicleCategoryId"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold max-sm:w-fit lg:text-lg">
                   Vehicle Category <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
@@ -245,7 +245,7 @@ export default function PrimaryDetailsForm({
             name="vehicleTypeId"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Vehicle Type <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
@@ -274,7 +274,7 @@ export default function PrimaryDetailsForm({
               name="additionalVehicleTypes"
               render={({ field }) => (
                 <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                     <div>
                       Services Offered <br />
                       <span>&#40;optional&#41;</span>
@@ -308,7 +308,7 @@ export default function PrimaryDetailsForm({
             name="vehicleBrandId"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Brand Name <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
@@ -328,13 +328,88 @@ export default function PrimaryDetailsForm({
               </FormItem>
             )}
           />
+
+          {/* Model Name */}
+          <FormField
+            control={form.control}
+            name="vehicleModel"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
+                  Model Name <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <Input
+                      placeholder="eg: 'Model'"
+                      {...field}
+                      className={`input-field`}
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Enter the model name, e.g., "Mercedes-Benz C-Class 2024
+                    Latest Model.
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Vehicle Title */}
+          <FormField
+            control={form.control}
+            name="vehicleTitle"
+            render={({ field }) => {
+              const [charCount, setCharCount] = useState(
+                field.value?.length || 0,
+              ); // To track character count
+
+              const handleInputChange = (
+                e: React.ChangeEvent<HTMLInputElement>,
+              ) => {
+                setCharCount(e.target.value.length);
+                field.onChange(e);
+              };
+
+              return (
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
+                    Vehicle Title<span className="mr-5 max-sm:hidden">:</span>
+                  </FormLabel>
+                  <div className="w-full flex-col items-start">
+                    <FormControl>
+                      <Input
+                        placeholder="eg: 'Model'"
+                        {...field}
+                        className={`input-field`}
+                        onChange={handleInputChange} // Handle change to track character count
+                      />
+                    </FormControl>
+                    <FormDescription className="flex-between ml-2 w-full">
+                      <span className="w-full max-w-[90%]">
+                        Provide vehicle title. This will be used for showing the
+                        vehicle{" "}
+                        <strong>title of the vehicle details page</strong>, and
+                        also for the <strong>SEO meta data</strong> purposes.
+                        100 characters max.
+                      </span>{" "}
+                      <span className="ml-auto"> {`${charCount}/100`}</span>
+                    </FormDescription>
+                    <FormMessage className="ml-2" />
+                  </div>
+                </FormItem>
+              );
+            }}
+          />
+
           {/* Location (state) */}
           <FormField
             control={form.control}
             name="stateId"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Location <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
@@ -363,7 +438,7 @@ export default function PrimaryDetailsForm({
             name="cityIds"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   City / Serving areas{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
@@ -388,10 +463,10 @@ export default function PrimaryDetailsForm({
           {/* Vehicle Series */}
           <FormField
             control={form.control}
-            name="vehicleSeries"
+            name="vehicleSeriesLabel"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Vehicle Series <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
@@ -428,6 +503,11 @@ export default function PrimaryDetailsForm({
 
                         // Reset or set meta fields to empty strings if not provided
                         form.setValue(
+                          "vehicleSeries",
+                          sanitizeStringToSlug(series) ?? "",
+                        );
+
+                        form.setValue(
                           "vehicleSeriesPageHeading",
                           heading ?? "",
                         );
@@ -450,19 +530,27 @@ export default function PrimaryDetailsForm({
                   </FormControl>
                   <FormDescription className="ml-2">
                     Enter or Search the vehicle series. 80 characters max.
+                    {form.watch("vehicleSeries") && (
+                      <span className="mt-2 text-sm text-gray-500">
+                        public site URL will be:{" "}
+                        <span className="font-semibold italic">
+                          /{sanitizeStringToSlug(form.watch("vehicleSeries"))}
+                        </span>
+                      </span>
+                    )}
                   </FormDescription>
                   <FormMessage />
-
-                  {form.watch("vehicleSeries") && (
-                    <div className="ml-2 mt-2 text-sm text-gray-500">
-                      public site URL will be:{" "}
-                      <span className="ml-2 font-semibold italic">
-                        /{sanitizeStringToSlug(form.watch("vehicleSeries"))}
-                      </span>
-                    </div>
-                  )}
                 </div>
               </FormItem>
+            )}
+          />
+
+          {/* Series page title */}
+          <FormField
+            control={form.control}
+            name="vehicleSeries"
+            render={({ field }) => (
+              <Input type="hidden" {...field} className="hidden" />
             )}
           />
 
@@ -472,7 +560,7 @@ export default function PrimaryDetailsForm({
             name="vehicleSeriesPageHeading"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Series Page Heading{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
@@ -501,16 +589,16 @@ export default function PrimaryDetailsForm({
             name="vehicleSeriesPageSubheading"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Series Page Subheading{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
                   <FormControl>
-                    <Input
+                    <Textarea
                       placeholder="vehicle series page sub heading"
                       {...field}
-                      className={`input-field`}
+                      className={`textarea h-28 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
                       readOnly={isAutoFilled}
                     />
                   </FormControl>
@@ -530,7 +618,7 @@ export default function PrimaryDetailsForm({
             name="vehicleSeriesInfoTitle"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Series Info Title{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
@@ -540,7 +628,7 @@ export default function PrimaryDetailsForm({
                       placeholder="eg: 'BMW S Series'"
                       {...field}
                       className={`input-field`}
-                      readOnly={isAutoFilled}
+                      readOnly={false}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -573,7 +661,7 @@ export default function PrimaryDetailsForm({
               };
               return (
                 <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                     Series Info Description{" "}
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
@@ -583,8 +671,8 @@ export default function PrimaryDetailsForm({
                         placeholder="Vehicle Series Meta Description"
                         {...field}
                         onChange={handleInputChange}
-                        className={`textarea h-20 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
-                        readOnly={isAutoFilled}
+                        className={`textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
+                        readOnly={false}
                       />
                     </FormControl>
                     <FormDescription className="flex-between ml-2 w-full">
@@ -611,7 +699,7 @@ export default function PrimaryDetailsForm({
             name="vehicleSeriesMetaTitle"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Series Meta Title{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
@@ -654,7 +742,7 @@ export default function PrimaryDetailsForm({
               };
               return (
                 <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                     Series Meta Description{" "}
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
@@ -664,7 +752,7 @@ export default function PrimaryDetailsForm({
                         placeholder="Vehicle Series Meta Description"
                         {...field}
                         onChange={handleInputChange}
-                        className={`textarea h-20 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
+                        className={`textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
                         readOnly={isAutoFilled}
                       />
                     </FormControl>
@@ -685,87 +773,13 @@ export default function PrimaryDetailsForm({
             }}
           />
 
-          {/* Model Name */}
-          <FormField
-            control={form.control}
-            name="vehicleModel"
-            render={({ field }) => (
-              <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
-                  Model Name <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="w-full flex-col items-start">
-                  <FormControl>
-                    <Input
-                      placeholder="eg: 'Model'"
-                      {...field}
-                      className={`input-field`}
-                    />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Enter the model name, e.g., "Mercedes-Benz C-Class 2024
-                    Latest Model.
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
-
-          {/* Vehicle Title */}
-          <FormField
-            control={form.control}
-            name="vehicleTitle"
-            render={({ field }) => {
-              const [charCount, setCharCount] = useState(
-                field.value?.length || 0,
-              ); // To track character count
-
-              const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>,
-              ) => {
-                setCharCount(e.target.value.length);
-                field.onChange(e);
-              };
-
-              return (
-                <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
-                    Vehicle Title<span className="mr-5 max-sm:hidden">:</span>
-                  </FormLabel>
-                  <div className="w-full flex-col items-start">
-                    <FormControl>
-                      <Textarea
-                        placeholder="Vehicle Title"
-                        {...field}
-                        className={`textarea h-20 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`} // Dynamic height
-                        onChange={handleInputChange} // Handle change to track character count
-                      />
-                    </FormControl>
-                    <FormDescription className="flex-between ml-2 w-full">
-                      <span className="w-full max-w-[90%]">
-                        Provide vehicle title. This will be used for showing the
-                        vehicle{" "}
-                        <strong>title of the vehicle details page</strong>, and
-                        also for the <strong>SEO meta data</strong> purposes.
-                        150 characters max
-                      </span>{" "}
-                      <span className="ml-auto"> {`${charCount}/150`}</span>
-                    </FormDescription>
-                    <FormMessage className="ml-2" />
-                  </div>
-                </FormItem>
-              );
-            }}
-          />
-
           {/* Registration Number */}
           <FormField
             control={form.control}
             name="vehicleRegistrationNumber"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Registration Number{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
@@ -875,7 +889,7 @@ export default function PrimaryDetailsForm({
             name="commercialLicenseExpireDate"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Registration Card / Mulkia Expiry Date{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
@@ -905,7 +919,7 @@ export default function PrimaryDetailsForm({
             name="vehicleRegisteredYear"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Registered Year <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
@@ -931,7 +945,7 @@ export default function PrimaryDetailsForm({
             name="specification"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Specification <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
@@ -971,7 +985,7 @@ export default function PrimaryDetailsForm({
             name="phoneNumber"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Whatsapp/Mobile <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
@@ -1017,7 +1031,7 @@ export default function PrimaryDetailsForm({
             render={() => {
               return (
                 <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                     Rental Details <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
                   <div className="w-full flex-col items-start">
@@ -1041,7 +1055,7 @@ export default function PrimaryDetailsForm({
             name="stateId"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Location <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
@@ -1070,7 +1084,7 @@ export default function PrimaryDetailsForm({
             name="cityIds"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   City / Serving areas{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
@@ -1098,7 +1112,7 @@ export default function PrimaryDetailsForm({
             name="isLease"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Lease? <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
@@ -1133,7 +1147,7 @@ export default function PrimaryDetailsForm({
             name="securityDeposit"
             render={() => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Security Deposit <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
@@ -1152,7 +1166,7 @@ export default function PrimaryDetailsForm({
 
           {/* Payment Info */}
           <div className="mb-2 flex w-full max-sm:flex-col max-sm:space-y-1">
-            <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+            <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
               Payment Info <span className="mr-5 max-sm:hidden">:</span>
             </FormLabel>
             <div className="w-full rounded-lg border-b p-2 shadow">
@@ -1261,7 +1275,7 @@ export default function PrimaryDetailsForm({
             name="isSpotDeliverySupported"
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
                   Spot delivery? <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">

@@ -372,6 +372,7 @@ export interface DeleteSingleImageResponse {
 export interface VehicleSeriesType {
   vehicleSeriesId: string;
   vehicleSeries: string;
+  vehicleSeriesLabel: string;
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
   vehicleSeriesPageHeading: string;

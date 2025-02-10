@@ -18,6 +18,7 @@ import { ChevronsUpDown, Edit3 } from "lucide-react";
 import { revertSlugToString } from "@/lib/utils";
 import { searchVehicleSeries } from "@/api/vehicle-series";
 import VehicleSeriesDialog from "@/components/dialog/VehicleSeriesDialog";
+import { VehicleSeriesType } from "@/types/types";
 
 type VehicleSeriesSearchProps = {
   value?: string;
@@ -73,7 +74,6 @@ const VehicleSeriesSearch = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const sanitizedValue = e.target.value.replace(/[^a-zA-Z0-9-\s]/g, ""); // Allow letters, numbers, hyphens, and spaces
     setSearchTerm(sanitizedValue); // Update input field immediately
-    onChangeHandler(sanitizedValue); // Update parent state
   };
 
   // Open dialog and set selected series
@@ -135,7 +135,7 @@ const VehicleSeriesSearch = ({
             <CommandList>
               {isFetching ? (
                 <CommandEmpty>Loading...</CommandEmpty>
-              ) : seriesData.length ? (
+              ) : seriesData.length > 0 ? (
                 <CommandGroup>
                   {searchTerm && (
                     <CommandItem
@@ -153,7 +153,7 @@ const VehicleSeriesSearch = ({
                       </div>
                     </CommandItem>
                   )}
-                  {seriesData.map((series: any) => (
+                  {seriesData.map((series: VehicleSeriesType) => (
                     <CommandItem
                       key={series.vehicleSeriesId}
                       className="mb-1 flex items-center justify-between border"
