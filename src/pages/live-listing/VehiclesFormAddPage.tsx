@@ -118,7 +118,7 @@ export default function VehiclesFormAddPage() {
                   type="Add"
                   formData={formData}
                   onNextTab={() => handleNextTab("specifications")}
-                  initialCountryCode="+971"
+                  initialCountryCode="971"
                 />
               )}
             </Suspense>

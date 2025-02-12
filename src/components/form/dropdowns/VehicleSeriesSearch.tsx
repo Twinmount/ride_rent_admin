@@ -24,7 +24,7 @@ type VehicleSeriesSearchProps = {
   vehicleBrandId: string;
   stateId: string;
   onChangeHandler: (data: {
-    series: string;
+    seriesLabel: string;
     heading?: string;
     subHeading?: string;
     infoTitle?: string;
@@ -85,7 +85,7 @@ const VehicleSeriesSearch = ({
 
   // Handle series selection
   const handleSelect = (
-    series: string,
+    seriesLabel: string,
     heading: string = "",
     subHeading: string = "",
     infoTitle: string = "",
@@ -93,10 +93,10 @@ const VehicleSeriesSearch = ({
     metaTitle: string = "",
     metaDescription: string = "",
   ) => {
-    setSearchTerm(series);
+    setSearchTerm(seriesLabel);
     setOpen(false);
     onChangeHandler({
-      series,
+      seriesLabel,
       heading,
       subHeading,
       infoTitle,
@@ -120,6 +120,14 @@ const VehicleSeriesSearch = ({
       return "Search series...";
     }
   })();
+
+  const isNewSeries =
+    searchTerm.trim().length > 0 &&
+    !seriesData.some(
+      (series) =>
+        revertSlugToString(series.vehicleSeries).toLowerCase().trim() ===
+        searchTerm.toLowerCase().trim(),
+    );
 
   return (
     <>
@@ -148,7 +156,7 @@ const VehicleSeriesSearch = ({
                 <CommandEmpty>Loading...</CommandEmpty>
               ) : seriesData.length > 0 ? (
                 <CommandGroup>
-                  {searchTerm && (
+                  {isNewSeries && (
                     <CommandItem
                       key="manual-entry"
                       onSelect={() => handleSelect(searchTerm, "", "")}
@@ -170,7 +178,7 @@ const VehicleSeriesSearch = ({
                       className="mb-1 flex items-center justify-between border"
                       onSelect={() =>
                         handleSelect(
-                          series.vehicleSeries,
+                          series.vehicleSeriesLabel,
                           series.vehicleSeriesPageHeading,
                           series.vehicleSeriesPageSubheading,
                           series.vehicleSeriesInfoTitle,

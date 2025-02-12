@@ -70,14 +70,14 @@ export default function PrimaryDetailsForm({
   initialCountryCode,
 }: PrimaryFormProps) {
   const [countryCode, setCountryCode] = useState<string>(
-    initialCountryCode || "+971",
+    initialCountryCode || "971",
   );
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
   const [isLicenseUploading, setIsLicenseUploading] = useState(false);
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [isCarsCategory, setIsCarsCategory] = useState(false);
   const [hideCommercialLicenses, setHideCommercialLicenses] = useState(false);
-  const [isAutoFilled, setIsAutoFilled] = useState(false);
+  const [isSeriesAutoFilled, setIsSeriesAutoFilled] = useState(false);
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string;
@@ -467,7 +467,9 @@ export default function PrimaryDetailsForm({
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
                 <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
-                  Vehicle Series <span className="mr-5 max-sm:hidden">:</span>
+                  Vehicle Series
+                  <br /> (label)
+                  <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
                   <FormControl>
@@ -476,7 +478,7 @@ export default function PrimaryDetailsForm({
                       vehicleBrandId={form.watch("vehicleBrandId")}
                       stateId={form.watch("stateId")}
                       onChangeHandler={({
-                        series,
+                        seriesLabel,
                         heading,
                         subHeading,
                         infoTitle,
@@ -484,12 +486,12 @@ export default function PrimaryDetailsForm({
                         metaTitle,
                         metaDescription,
                       }) => {
-                        const sanitizedSeries = series
+                        const sanitizedSeries = seriesLabel
                           .replace(/[^a-zA-Z0-9-\s]/g, "") // Remove invalid characters
                           .replace(/\s+/g, " ") // Normalize spaces
                           .trim(); // Trim leading/trailing spaces
 
-                        field.onChange(sanitizedSeries); // Set vehicleSeries
+                        field.onChange(seriesLabel); // Set vehicleSeries
 
                         // If auto filled, set the fields and disable editing
                         if (
@@ -500,15 +502,15 @@ export default function PrimaryDetailsForm({
                           metaTitle ||
                           metaDescription
                         ) {
-                          setIsAutoFilled(true);
+                          setIsSeriesAutoFilled(true);
                         } else {
-                          setIsAutoFilled(false);
+                          setIsSeriesAutoFilled(false);
                         }
 
                         // Reset or set meta fields to empty strings if not provided
                         form.setValue(
                           "vehicleSeries",
-                          sanitizeStringToSlug(series) ?? "",
+                          sanitizeStringToSlug(sanitizedSeries) ?? "",
                         );
 
                         form.setValue(
@@ -544,11 +546,12 @@ export default function PrimaryDetailsForm({
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    Enter or Search the vehicle series. 80 characters max.
+                    Enter or Search the vehicle series. 80 characters max. This
+                    will be used to show in the UI.
                     <br />
                     {form.watch("vehicleSeries") && (
                       <span className="mt-2 text-sm text-gray-500">
-                        public site URL will ends in:{" "}
+                        Public URL will be :{" "}
                         <span className="font-semibold">
                           /{sanitizeStringToSlug(form.watch("vehicleSeries"))}
                         </span>
@@ -586,12 +589,12 @@ export default function PrimaryDetailsForm({
                       placeholder="eg: 'Rent BMW S Series'"
                       {...field}
                       className={`input-field`}
-                      readOnly={isAutoFilled}
+                      readOnly={isSeriesAutoFilled}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    This will be showed as the heading the Nextjs series page.
-                    100 characters max.
+                    This will be showed as the <strong>heading</strong> of
+                    Series listing page. 100 characters max.
                   </FormDescription>
                   <FormMessage />
                 </div>
@@ -599,7 +602,7 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* Series Page Subtitle */}
+          {/* Series Page Subheading */}
           <FormField
             control={form.control}
             name="vehicleSeriesPageSubheading"
@@ -615,12 +618,12 @@ export default function PrimaryDetailsForm({
                       placeholder="vehicle series page sub heading"
                       {...field}
                       className={`textarea h-28 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
-                      readOnly={isAutoFilled}
+                      readOnly={isSeriesAutoFilled}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    This will be showed as the sub heading in the Nextjs series
-                    page. 200 characters max.
+                    This will be showed as the <strong>sub-heading</strong> of
+                    Series listing page.. 200 characters max.
                   </FormDescription>
                   <FormMessage />
                 </div>
@@ -628,7 +631,7 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* vehicle series meta title */}
+          {/* vehicle series info title */}
           <FormField
             control={form.control}
             name="vehicleSeriesInfoTitle"
@@ -644,13 +647,13 @@ export default function PrimaryDetailsForm({
                       placeholder="eg: 'BMW S Series'"
                       {...field}
                       className={`input-field`}
-                      readOnly={false}
+                      readOnly={isSeriesAutoFilled}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
                     Enter the series info title for this particular series.This
                     will be showed as the info box title in the Nextjs series
-                    page.
+                    listing page.
                   </FormDescription>
                   <FormMessage />
                 </div>
@@ -658,7 +661,7 @@ export default function PrimaryDetailsForm({
             )}
           />
 
-          {/* Series Meta Description */}
+          {/* Series Info Description */}
           <FormField
             control={form.control}
             name="vehicleSeriesInfoDescription"
@@ -688,14 +691,15 @@ export default function PrimaryDetailsForm({
                         {...field}
                         onChange={handleInputChange}
                         className={`textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
-                        readOnly={false}
+                        readOnly={isSeriesAutoFilled}
                       />
                     </FormControl>
                     <FormDescription className="flex-between ml-2 w-full">
                       <span className="w-full max-w-[90%]">
                         Enter the series info description for this particular
                         series.This will be showed as the info box description
-                        in the Nextjs series page. {limit} characters max.
+                        in the Nextjs series listing page. {limit} characters
+                        max.
                       </span>{" "}
                       <span className="ml-auto">
                         {" "}
@@ -725,13 +729,12 @@ export default function PrimaryDetailsForm({
                       placeholder="eg: 'BMW S Series'"
                       {...field}
                       className={`input-field`}
-                      readOnly={isAutoFilled}
+                      readOnly={isSeriesAutoFilled}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    Enter the meta title for this particular series, e.g.,
-                    "Mercedes-Benz C-Class 2024. Only alpha numeric characters
-                    are allowed.
+                    Enter the meta title for this particular series. Only alpha
+                    numeric characters are allowed.
                   </FormDescription>
                   <FormMessage />
                 </div>
@@ -769,7 +772,7 @@ export default function PrimaryDetailsForm({
                         {...field}
                         onChange={handleInputChange}
                         className={`textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0`}
-                        readOnly={isAutoFilled}
+                        readOnly={isSeriesAutoFilled}
                       />
                     </FormControl>
                     <FormDescription className="flex-between ml-2 w-full">
@@ -777,10 +780,7 @@ export default function PrimaryDetailsForm({
                         Provide meta description for this vehicle.{limit}{" "}
                         characters max.
                       </span>{" "}
-                      <span className="ml-auto">
-                        {" "}
-                        {`${charCount}/${limit}`}
-                      </span>
+                      <span className="ml-auto">{`${charCount}/${limit}`}</span>
                     </FormDescription>
                     <FormMessage />
                   </div>
