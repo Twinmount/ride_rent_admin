@@ -200,8 +200,10 @@ export type CategoryType =
 export type VehicleSeriesType = {
   vehicleSeriesId?: string;
   vehicleSeries: string;
-  vehicleSeriesMetaTitle: string;
-  vehicleSeriesMetaDescription: string;
+  vehicleSeriesInfoTitle: string;
+  vehicleSeriesInfoDescription: string;
   vehicleSeriesPageHeading: string;
   vehicleSeriesPageSubheading: string;
+  vehicleSeriesMetaTitle: string;
+  vehicleSeriesMetaDescription: string;
 };

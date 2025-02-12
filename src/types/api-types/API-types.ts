@@ -373,10 +373,12 @@ export interface VehicleSeriesType {
   vehicleSeriesId: string;
   vehicleSeries: string;
   vehicleSeriesLabel: string;
-  vehicleSeriesMetaTitle: string;
-  vehicleSeriesMetaDescription: string;
   vehicleSeriesPageHeading: string;
   vehicleSeriesPageSubheading: string;
+  vehicleSeriesInfoTitle: string;
+  vehicleSeriesInfoDescription: string;
+  vehicleSeriesMetaTitle: string;
+  vehicleSeriesMetaDescription: string;
   seriesCode: string;
 }
 

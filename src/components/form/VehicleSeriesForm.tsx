@@ -18,7 +18,7 @@ import { toast } from "@/components/ui/use-toast";
 import Spinner from "@/components/general/Spinner";
 import { VehicleSeriesSchema } from "@/lib/validator";
 import { VehicleSeriesType } from "@/types/types";
-import { addVehicleSeries, updateVehicleSeries } from "@/api/vehicle-series";
+// import { addVehicleSeries, updateVehicleSeries } from "@/api/vehicle-series";
 
 type VehicleSeriesFormProps = {
   type: "Add" | "Update";
@@ -30,7 +30,7 @@ type VehicleSeriesFormProps = {
 export default function VehicleSeriesForm({
   type,
   formData,
-  brandId,
+  // brandId,
   onSuccess,
 }: VehicleSeriesFormProps) {
   const [isEditing, setIsEditing] = useState(type === "Add"); // Initially editable for "Add" type
@@ -49,11 +49,11 @@ export default function VehicleSeriesForm({
 
   async function onSubmit(values: z.infer<typeof VehicleSeriesSchema>) {
     try {
-      if (type === "Add") {
-        await addVehicleSeries(values, brandId); // Call API to add vehicle series
-      } else if (type === "Update") {
-        await updateVehicleSeries(values, formData?.vehicleSeriesId as string); // Call API to update vehicle series
-      }
+      // if (type === "Add") {
+      //   await addVehicleSeries(values, brandId); // Call API to add vehicle series
+      // } else if (type === "Update") {
+      //   await updateVehicleSeries(values, formData?.vehicleSeriesId as string); // Call API to update vehicle series
+      // }
 
       toast({
         title: `${type} Vehicle Series successful`,

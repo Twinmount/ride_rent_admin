@@ -14,23 +14,24 @@ import {
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronsUpDown, Edit3 } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import { revertSlugToString } from "@/lib/utils";
 import { searchVehicleSeries } from "@/api/vehicle-series";
-import VehicleSeriesDialog from "@/components/dialog/VehicleSeriesDialog";
-import { VehicleSeriesType } from "@/types/types";
+// import VehicleSeriesDialog from "@/components/dialog/VehicleSeriesDialog";
 
 type VehicleSeriesSearchProps = {
   value?: string;
   vehicleBrandId: string;
   stateId: string;
-  onChangeHandler: (
-    series: string,
-    heading?: string,
-    subHeading?: string,
-    metaTitle?: string,
-    metaDescription?: string,
-  ) => void;
+  onChangeHandler: (data: {
+    series: string;
+    heading?: string;
+    subHeading?: string;
+    infoTitle?: string;
+    infoDescription?: string;
+    metaTitle?: string;
+    metaDescription?: string;
+  }) => void;
   placeholder?: string;
 };
 
@@ -44,8 +45,8 @@ const VehicleSeriesSearch = ({
   const [searchTerm, setSearchTerm] = useState(value || ""); // Updates instantly
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm); // Delayed state for API call
   const [open, setOpen] = useState(false);
-  const [selectedSeries, setSelectedSeries] = useState<any | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false); // Dialog open state
+  // const [selectedSeries, setSelectedSeries] = useState<any | null>(null);
+  // const [dialogOpen, setDialogOpen] = useState(false); // Dialog open state
 
   // Fetch series data when debouncedSearchTerm changes
   const { data, isFetching } = useQuery({
@@ -77,22 +78,32 @@ const VehicleSeriesSearch = ({
   };
 
   // Open dialog and set selected series
-  const handleEditClick = (series: any) => {
-    setSelectedSeries(series);
-    setDialogOpen(true);
-  };
+  // const handleEditClick = (series: any) => {
+  //   setSelectedSeries(series);
+  //   setDialogOpen(true);
+  // };
 
   // Handle series selection
   const handleSelect = (
     series: string,
     heading: string = "",
     subHeading: string = "",
+    infoTitle: string = "",
+    infoDescription: string = "",
     metaTitle: string = "",
-    metaDesc: string = "",
+    metaDescription: string = "",
   ) => {
     setSearchTerm(series);
     setOpen(false);
-    onChangeHandler(series, heading, subHeading, metaTitle, metaDesc);
+    onChangeHandler({
+      series,
+      heading,
+      subHeading,
+      infoTitle,
+      infoDescription,
+      metaTitle,
+      metaDescription,
+    });
   };
 
   const seriesData = data?.result || [];
@@ -153,7 +164,7 @@ const VehicleSeriesSearch = ({
                       </div>
                     </CommandItem>
                   )}
-                  {seriesData.map((series: VehicleSeriesType) => (
+                  {seriesData.map((series) => (
                     <CommandItem
                       key={series.vehicleSeriesId}
                       className="mb-1 flex items-center justify-between border"
@@ -162,6 +173,8 @@ const VehicleSeriesSearch = ({
                           series.vehicleSeries,
                           series.vehicleSeriesPageHeading,
                           series.vehicleSeriesPageSubheading,
+                          series.vehicleSeriesInfoTitle,
+                          series.vehicleSeriesInfoDescription,
                           series.vehicleSeriesMetaTitle,
                           series.vehicleSeriesMetaDescription,
                         )
@@ -175,10 +188,10 @@ const VehicleSeriesSearch = ({
                           {series.vehicleSeriesMetaTitle}
                         </span>
                       </div>
-                      <Edit3
+                      {/* <Edit3
                         className="cursor-pointer text-gray-600 hover:text-gray-800"
                         onClick={() => handleEditClick(series)}
-                      />
+                      /> */}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -204,12 +217,12 @@ const VehicleSeriesSearch = ({
       </Popover>
 
       {/* Dialog for editing vehicle series */}
-      <VehicleSeriesDialog
+      {/* <VehicleSeriesDialog
         series={selectedSeries}
         brandId={vehicleBrandId}
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
-      />
+      /> */}
     </>
   );
 };
