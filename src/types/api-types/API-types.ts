@@ -367,3 +367,25 @@ export interface DeleteSingleImageResponse {
     fileFullPath: string;
   };
 }
+
+//  vehicle series type
+export interface VehicleSeriesType {
+  vehicleSeriesId: string;
+  vehicleSeries: string;
+  vehicleSeriesLabel: string;
+  vehicleSeriesPageHeading: string;
+  vehicleSeriesPageSubheading: string;
+  vehicleSeriesInfoTitle: string;
+  vehicleSeriesInfoDescription: string;
+  vehicleSeriesMetaTitle: string;
+  vehicleSeriesMetaDescription: string;
+  seriesCode: string;
+}
+
+//  Get all Vehicle Series Search
+export interface VehicleSeriesSearch {
+  status: string;
+  result: VehicleSeriesType[]; // Array of brands
+
+  statusCode: number;
+}

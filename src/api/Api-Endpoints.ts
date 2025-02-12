@@ -52,12 +52,12 @@ export enum Slug {
   DELETE_LINK = "/links",
   GET_ALL_LINKS = "/links/list",
 
-  // Links Recommended Endpoints
-  ADD_RECOMMENDED_LINK = "/recomented-links",
-  GET_RECOMMENDED_LINK = "/recomented-links",
-  PUT_RECOMMENDED_LINK = "/recomented-links",
-  DELETE_RECOMMENDED_LINK = "/recomented-links",
-  GET_ALL_RECOMMENDED_LINKS = "/recomented-links/list",
+  // Related Links Endpoints
+  ADD_RELATED_LINK = "/recomented-links",
+  GET_RELATED_LINK = "/recomented-links",
+  PUT_RELATED_LINK = "/recomented-links",
+  DELETE_RELATED_LINK = "/recomented-links",
+  GET_ALL_RELATED_LINKS = "/recomented-links/list",
 
   // Links Endpoints
   ADD_PROMOTION = "/promotions",
@@ -87,6 +87,11 @@ export enum Slug {
   GET_LEVELS_FILLED = "/vehicle/level-filled",
   GET_VEHICLE_LISTINGS_COUNT_BY_STATE = "/vehicle/dashboard/count",
   GET_ALL_VEHICLE_LISTINGS_COUNT = "/vehicle/dashboard/count/state",
+
+  // vehicle series end points
+  POST_VEHICLE_SERIES = "/vehicle-series",
+  GET_SEARCH_VEHICLE_SERIES = "/vehicle-series/search",
+  PUT_VEHICLE_SERIES = "/vehicle-series",
 
   // vehicle primary form endPoints
   POST_PRIMARY_FORM = "/vehicle/level-one",

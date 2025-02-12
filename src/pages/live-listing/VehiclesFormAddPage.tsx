@@ -15,13 +15,13 @@ import FormSkelton from "@/components/skelton/FormSkelton";
 
 // Lazy-loaded components
 const PrimaryDetailsForm = lazy(
-  () => import("@/components/form/main-form/PrimaryDetailsForm")
+  () => import("@/components/form/main-form/PrimaryDetailsForm"),
 );
 const SpecificationsForm = lazy(
-  () => import("@/components/form/main-form/SpecificationsForm")
+  () => import("@/components/form/main-form/SpecificationsForm"),
 );
 const FeaturesForm = lazy(
-  () => import("@/components/form/main-form/FeaturesForm")
+  () => import("@/components/form/main-form/FeaturesForm"),
 );
 
 export default function VehiclesFormAddPage() {
@@ -73,15 +73,15 @@ export default function VehiclesFormAddPage() {
     : null;
 
   return (
-    <section className="container h-auto min-h-screen py-10 bg-white">
-      <div className="mb-5 ml-5 flex-center w-fit gap-x-4">
+    <section className="container h-auto min-h-screen bg-white py-10">
+      <div className="flex-center mb-5 ml-5 w-fit gap-x-4">
         <button
           onClick={() => navigate(-1)}
-          className="transition-colors border-none outline-none w-fit flex-center hover:text-yellow"
+          className="flex-center w-fit border-none outline-none transition-colors hover:text-yellow"
         >
           <CircleArrowLeft />
         </button>
-        <h1 className="text-center h3-bold max-sm:text-xl sm:text-left">
+        <h1 className="h3-bold text-center max-sm:text-xl sm:text-left">
           Add New Vehicle
         </h1>
       </div>
@@ -92,10 +92,10 @@ export default function VehiclesFormAddPage() {
           onValueChange={handleTabChange}
           className="w-full"
         >
-          <TabsList className="w-full bg-white flex-center gap-x-2">
+          <TabsList className="flex-center w-full gap-x-2 bg-white">
             <TabsTrigger
               value="primary"
-              className="h-9 max-sm:text-sm max-sm:px-2"
+              className="h-9 max-sm:px-2 max-sm:text-sm"
             >
               Primary Details
             </TabsTrigger>
@@ -118,6 +118,7 @@ export default function VehiclesFormAddPage() {
                   type="Add"
                   formData={formData}
                   onNextTab={() => handleNextTab("specifications")}
+                  initialCountryCode="971"
                 />
               )}
             </Suspense>

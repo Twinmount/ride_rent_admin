@@ -9,9 +9,9 @@ import Pagination from "@/components/Pagination";
 import CompanyStatusModal from "@/components/CompanyStatusModal"; // Modal for updating company status
 import { toast } from "@/components/ui/use-toast";
 import { CompanyType } from "@/types/api-types/vehicleAPI-types";
-import { CompanyNavDropdown } from "@/components/CompanyNavDropdown";
 import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
+import CompanyPageHeading from "./CompanyPageHeading";
 
 interface GeneralCompaniesPageProps {
   queryKey: string[];
@@ -29,7 +29,7 @@ export default function GeneralCompaniesPage({
   const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10);
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
   const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
-    null
+    null,
   );
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
@@ -76,7 +76,7 @@ export default function GeneralCompaniesPage({
             approvalStatus: values.approvalStatus,
             rejectionReason: values.rejectionReason,
           },
-          selectedCompany.companyId // Pass the companyId separately
+          selectedCompany.companyId, // Pass the companyId separately
         );
 
         if (data) {
@@ -107,9 +107,9 @@ export default function GeneralCompaniesPage({
   };
 
   return (
-    <section className="container min-h-screen py-5 mx-auto md:py-7">
-      <div className="my-2 mb-6 flex-between max-sm:flex-col">
-        <CompanyNavDropdown />
+    <section className="container mx-auto min-h-screen py-5 md:py-7">
+      <div className="flex-between my-2 mb-6 max-sm:flex-col">
+        <CompanyPageHeading status={approvalStatus || "APPROVED"} />
 
         <div className="flex-between w-fit gap-x-2">
           <SortDropdown
@@ -128,7 +128,7 @@ export default function GeneralCompaniesPage({
       {/* search component */}
       <div className="mb-6">
         <SearchComponent placeholder="Search company" isBrandSearch={false} />
-        <p className="ml-2 text-sm italic text-left text-gray-500">
+        <p className="ml-2 text-left text-sm italic text-gray-500">
           <span className="font-semibold text-gray-600">
             company name or agent id
           </span>{" "}

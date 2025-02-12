@@ -81,7 +81,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
 
   // Handle file selection and upload
   const handleFilesChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const selectedFiles = Array.from(event.target.files || []);
     const validFiles: File[] = [];
@@ -120,7 +120,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
       // Upload all files at once
       const uploadResponse = await uploadMultipleFiles(
         bucketFilePath,
-        validFiles
+        validFiles,
       );
 
       const uploadedPaths = uploadResponse.result.paths;
@@ -145,7 +145,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   const handleDeleteFile = () => {
     if (fileToDelete) {
       setFiles((prevFiles) =>
-        prevFiles.filter((path) => path !== fileToDelete)
+        prevFiles.filter((path) => path !== fileToDelete),
       );
       setDeletedFiles((prev) => [...prev, fileToDelete]);
       setFileToDelete(null); // Clear the file to delete
@@ -174,11 +174,11 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
 
   return (
     <>
-      <FormItem className="flex mb-2 w-full max-sm:flex-col">
-        <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+      <FormItem className="mb-2 flex w-full max-sm:flex-col">
+        <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
           {label} <span className="mr-5 max-sm:hidden">:</span>
         </FormLabel>
-        <div className="flex-col items-start w-full">
+        <div className="w-full flex-col items-start">
           <FormControl>
             <Controller
               name={name}
@@ -187,25 +187,25 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                 <>
                   {/* Uploaded files preview */}
 
-                  <div className="grid grid-cols-4 gap-2 mt-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
+                  <div className="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
                     {files.length > 0 &&
                       files.map((filePath, index) => (
                         <div
                           key={index}
-                          className="overflow-hidden relative w-16 h-16 rounded-lg"
+                          className="relative h-16 w-16 overflow-hidden rounded-lg"
                         >
                           <PreviewImageComponent imagePath={filePath} />
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <button className="absolute top-1 right-1 p-1 bg-white rounded-full border ring-0 shadow-md outline-none h-fit">
-                                <MoreVertical className="w-5 h-5 text-gray-600" />
+                              <button className="absolute right-1 top-1 h-fit rounded-full border bg-white p-1 shadow-md outline-none ring-0">
+                                <MoreVertical className="h-5 w-5 text-gray-600" />
                               </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-28">
                               <DropdownMenuItem
                                 onClick={() => handlePreviewImage(filePath)}
                               >
-                                <Eye className="mr-2 w-5 h-5 text-blue-600" />
+                                <Eye className="mr-2 h-5 w-5 text-blue-600" />
                                 Preview
                               </DropdownMenuItem>
                               <DropdownMenuItem
@@ -213,7 +213,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                                   handleDownloadImage(filePath, index)
                                 }
                               >
-                                <Download className="mr-2 w-5 h-5 text-green-600" />
+                                <Download className="mr-2 h-5 w-5 text-green-600" />
                                 Download
                               </DropdownMenuItem>
                               <DropdownMenuItem
@@ -222,7 +222,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                                   setIsDeleteConfirmationOpen(true); // Open the confirmation modal
                                 }}
                               >
-                                <Trash2 className="mr-2 w-5 h-5 text-red-600" />
+                                <Trash2 className="mr-2 h-5 w-5 text-red-600" />
                                 Delete
                               </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -240,14 +240,14 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                           uploadingCount={uploadingCount}
                           onFileChange={handleFilesChange}
                         />
-                      )
+                      ),
                     )}
                   </div>
                 </>
               )}
             />
           </FormControl>
-          <FormDescription className="mt-1 ml-2">{description}</FormDescription>
+          <FormDescription className="ml-2 mt-1">{description}</FormDescription>
           <FormMessage />
         </div>
       </FormItem>

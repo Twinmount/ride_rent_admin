@@ -16,12 +16,12 @@ const HourlyRentalDetailFormField = () => {
   const isEnabled = watch("rentalDetails.hour.enabled");
 
   return (
-    <div className="p-2 mb-2 rounded-lg border-b shadow">
+    <div className="mb-2 rounded-lg border-b p-2 shadow">
       <Controller
         name="rentalDetails.hour.enabled"
         control={control}
         render={({ field }) => (
-          <div className="flex items-center mt-3 space-x-2">
+          <div className="mt-3 flex items-center space-x-2">
             <Checkbox
               checked={field.value}
               onCheckedChange={(value) => {
@@ -30,7 +30,7 @@ const HourlyRentalDetailFormField = () => {
                   clearErrors([`rentalDetails`]);
                 }
               }}
-              className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+              className="h-5 w-5 bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
               id="rentalDetails-hour-enabled"
             />
             <label
@@ -39,7 +39,7 @@ const HourlyRentalDetailFormField = () => {
             >
               Hour{" "}
               <span className="text-sm italic text-gray-700">
-                &#40;select to set hourly rental rates&#41;
+                &#40;select to set hourly rental rates. Optional&#41;
               </span>
             </label>
           </div>
@@ -53,11 +53,11 @@ const HourlyRentalDetailFormField = () => {
             name="rentalDetails.hour.minBookingHours"
             control={control}
             render={({ field }) => (
-              <div className="flex items-start mt-4 space-x-2">
-                <label className="flex items-start w-36 font-medium max-md:text-sm">
+              <div className="mt-4 flex items-start space-x-2">
+                <label className="flex w-36 items-start font-medium max-md:text-sm">
                   Minimum Booking Hours <span className="mt-3">:</span>
                 </label>
-                <div className="flex flex-col w-full">
+                <div className="flex w-full flex-col">
                   <Select
                     onValueChange={(value) => {
                       field.onChange(value);
@@ -65,7 +65,7 @@ const HourlyRentalDetailFormField = () => {
                     }}
                     value={field.value || ""}
                   >
-                    <SelectTrigger className="ring-0 select-field focus:ring-0 input-fields">
+                    <SelectTrigger className="select-field input-fields ring-0 focus:ring-0">
                       <SelectValue
                         className="!font-bold !text-black"
                         placeholder="Select hour"
@@ -95,9 +95,9 @@ const HourlyRentalDetailFormField = () => {
             name="rentalDetails.hour.rentInAED"
             control={control}
             render={({ field }) => (
-              <div className="flex items-center mt-4 space-x-2">
+              <div className="mt-4 flex items-center space-x-2">
                 <label className="w-36 font-medium">Rent in AED:</label>
-                <div className="flex flex-col w-full">
+                <div className="flex w-full flex-col">
                   <Input
                     {...field}
                     placeholder="Enter rent in AED"
@@ -135,9 +135,9 @@ const HourlyRentalDetailFormField = () => {
             name="rentalDetails.hour.mileageLimit"
             control={control}
             render={({ field }) => (
-              <div className="flex items-center mt-4 space-x-2">
+              <div className="mt-4 flex items-center space-x-2">
                 <label className="w-36 font-medium">Mileage Limit:</label>
-                <div className="flex flex-col w-full">
+                <div className="flex w-full flex-col">
                   <Input
                     {...field}
                     placeholder="Enter mileage limit"

@@ -32,7 +32,7 @@ export default function RichTextEditorComponent({
   if (!editor) return null; // Prevent rendering if editor is not ready
 
   return (
-    <RichTextEditor editor={editor} className="shadow-lg">
+    <RichTextEditor editor={editor} className="min-h-36 shadow-lg">
       <RichTextEditor.Toolbar sticky stickyOffset={75} className="shadow-lg">
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
@@ -74,7 +74,7 @@ export default function RichTextEditorComponent({
       </RichTextEditor.Toolbar>
 
       {/* Content Editable Area */}
-      <RichTextEditor.Content />
+      <RichTextEditor.Content aria-placeholder="Type your content here" />
     </RichTextEditor>
   );
 }

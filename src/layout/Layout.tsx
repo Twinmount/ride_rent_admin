@@ -1,5 +1,4 @@
 import Navbar from "@/components/general/Navbar";
-import Sidebar from "@/components/general/Sidebar";
 import MainWrapper from "@/components/general/MainWrapper";
 import { useAdminContext } from "@/context/AdminContext";
 import { Outlet } from "react-router-dom";
@@ -9,6 +8,7 @@ import StatesLoadingSkelton from "@/components/skelton/StatesLoader";
 import ScrollToTop from "@/helpers/ScrollToTop";
 import { getAllVehicleListingCount } from "@/api/vehicle";
 import { MantineProvider } from "@mantine/core";
+import { Sidebar } from "@/components/sidebar/Sidebar";
 
 export default function Layout() {
   const { state, setState } = useAdminContext();
@@ -25,7 +25,7 @@ export default function Layout() {
   useEffect(() => {
     if (!isLoading && options?.length && !state.stateId) {
       const dubaiState = options.find(
-        (state) => state.stateValue.toLowerCase() === "dubai"
+        (state) => state.stateValue.toLowerCase() === "dubai",
       );
       if (dubaiState) {
         const { stateId, stateName, stateValue } = dubaiState;
@@ -38,7 +38,7 @@ export default function Layout() {
 
   if (isError) {
     return (
-      <div className="flex justify-center pt-64 w-full h-screen text-3xl text-red-500 bg-white">
+      <div className="flex h-screen w-full justify-center bg-white pt-64 text-3xl text-red-500">
         Error fetching states :\ <br />
         {error?.message}
       </div>
@@ -48,7 +48,9 @@ export default function Layout() {
   return (
     <MantineProvider>
       <Navbar options={options} isLoading={isLoading} />
+
       <Sidebar />
+
       <ScrollToTop />
       <MainWrapper>
         {isLoading ? (
