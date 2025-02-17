@@ -73,7 +73,7 @@ export default function VehiclesFormAddPage() {
     : null;
 
   return (
-    <section className="container h-auto min-h-screen bg-white py-10">
+    <section className="container h-auto min-h-screen py-8">
       <div className="flex-center mb-5 ml-5 w-fit gap-x-4">
         <button
           onClick={() => navigate(-1)}
@@ -92,7 +92,7 @@ export default function VehiclesFormAddPage() {
           onValueChange={handleTabChange}
           className="w-full"
         >
-          <TabsList className="flex-center w-full gap-x-2 bg-white">
+          <TabsList className="flex-center mb-6 w-full gap-x-2">
             <TabsTrigger
               value="primary"
               className="h-9 max-sm:px-2 max-sm:text-sm"
