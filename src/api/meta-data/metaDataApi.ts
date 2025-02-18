@@ -9,6 +9,7 @@ import { API } from "../ApiService";
 
 type HomeMetaType = {
   stateId: string;
+  categoryId: string;
   metaTitle: string;
   metaDescription: string;
 };
@@ -26,12 +27,14 @@ export const fetchHomeMetaList = async (urlParams: {
   page: number;
   limit: number;
   sortOrder: string;
+  stateId: string;
 }): Promise<FetchHomeMetaListResponse> => {
   try {
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
+      state: urlParams.stateId,
     }).toString();
 
     const slugWithParams = `${Slug.GET_ADMIN_HOME_META_ALL}?${queryParams}`;
@@ -41,12 +44,12 @@ export const fetchHomeMetaList = async (urlParams: {
     });
 
     if (!data) {
-      throw new Error("Failed to fetch home meta list data");
+      throw new Error("Failed to fetch promotions data");
     }
 
     return data;
   } catch (error) {
-    console.error("Error fetching home meta list:", error);
+    console.error("Error fetching promotions:", error);
     throw error;
   }
 };
@@ -73,12 +76,12 @@ export const fetchListingMetaList = async (urlParams: {
     });
 
     if (!data) {
-      throw new Error("Failed to fetch listing metadata list data");
+      throw new Error("Failed to fetch promotions data");
     }
 
     return data;
   } catch (error) {
-    console.error("Error fetching listing metadata list:", error);
+    console.error("Error fetching promotions:", error);
     throw error;
   }
 };

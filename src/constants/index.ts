@@ -100,6 +100,7 @@ export const BlogPromotionFormDefaultValue = {
 
 export const HomeMetaFormDefaultValue = {
   stateId: "",
+  categoryId: "",
   metaTitle: "",
   metaDescription: "",
 };
