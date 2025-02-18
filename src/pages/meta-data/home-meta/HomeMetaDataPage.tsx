@@ -59,14 +59,14 @@ export default function HomeMetaData() {
         />
       )}
 
-      <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
+      {/* <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
         <Link
           className="flex-center flex-center gap-x-1 bg-yellow px-3 py-2 text-white shadow-xl transition-all hover:scale-[1.02]"
           to={`/meta-data/home/add`}
         >
           New Home Meta <Plus />
         </Link>
-      </button>
+      </button> */}
     </section>
   );
 }
