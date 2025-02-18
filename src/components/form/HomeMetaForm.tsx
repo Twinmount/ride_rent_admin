@@ -21,10 +21,11 @@ import Spinner from "../general/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import { addHomeMetaData, updateHomeMetaData } from "@/api/meta-data";
-
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
 import StatesDropdown from "./dropdowns/StatesDropdown";
+import MetaCategoryDropdownField from "./dropdowns/MetaCategoryDropdownField";
+import { useQueryClient } from "@tanstack/react-query";
 
 type HomeMetaFormProps = {
   type: "Add" | "Update";
@@ -44,6 +45,8 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
     defaultValues: initialValues,
   });
 
+  const queryClient = useQueryClient();
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof HomeMetaFormSchema>) {
     try {
@@ -59,7 +62,10 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
           title: `${type} Meta Data successfully`,
           className: "bg-yellow text-white",
         });
-        navigate("/manage-meta-data");
+        queryClient.invalidateQueries({
+          queryKey: ["home-meta-data"],
+        });
+        navigate("/meta-data/home");
       }
     } catch (error) {
       console.error(error);
@@ -75,7 +81,7 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mx-auto flex w-full flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 md:p-4"
+        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
         <div className="flex flex-col gap-5">
           <FormField
@@ -101,6 +107,33 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
                   </FormDescription>
                   <FormMessage className="ml-2" />
                 </div>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
+                  Vehicle Category <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <MetaCategoryDropdownField
+                      onChangeHandler={(value) => {
+                        field.onChange(value);
+                      }}
+                      value={initialValues.categoryId}
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    select vehicle category
+                  </FormDescription>
+                </div>
+                <FormMessage />
               </FormItem>
             )}
           />

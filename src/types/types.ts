@@ -106,6 +106,7 @@ export type BlogPromotionFormType = {
 
 export type HomeMetaFormType = {
   stateId: string;
+  categoryId: string;
   metaTitle: string;
   metaDescription: string;
 };

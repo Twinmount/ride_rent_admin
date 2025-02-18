@@ -3,13 +3,14 @@ import { fetchHomeMetaList } from "@/api/meta-data";
 
 import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
-import { Plus } from "lucide-react";
-import { Link } from "react-router-dom";
 import Pagination from "@/components/Pagination";
 import { useState } from "react";
+import { useAdminContext } from "@/context/AdminContext";
 
 export default function HomeMetaData() {
   const [page, setPage] = useState(1);
+
+  const { state } = useAdminContext();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({
@@ -19,22 +20,18 @@ export default function HomeMetaData() {
         page,
         limit: 20,
         sortOrder: "ASC",
+        stateId: state.stateId,
       }),
   });
-
-  // Function to truncate the text
-  const truncateText = (text: string, limit: number) => {
-    if (text.length > limit) {
-      return text.slice(0, limit) + "...";
-    }
-    return text;
-  };
 
   const seoData = data?.result?.list || [];
 
   return (
     <section className="h-auto min-h-screen w-full bg-gray-100 py-10">
-      <div className="container mx-auto max-w-4xl space-y-3">
+      <h1 className="mb-5 text-center text-2xl font-semibold lg:ml-6 lg:text-left lg:text-3xl">
+        Showing HomePage meta-data under {state.stateName} for all 11 categories
+      </h1>
+      <div className="container max-w-4xl space-y-3">
         {isLoading ? (
           <LazyLoader />
         ) : seoData.length === 0 ? (
@@ -46,7 +43,6 @@ export default function HomeMetaData() {
             <SeoData
               key={item.metaDataId}
               item={item}
-              truncateText={truncateText}
               link="/meta-data/home/edit"
             />
           ))
@@ -61,14 +57,14 @@ export default function HomeMetaData() {
         />
       )}
 
-      <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
+      {/* <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
         <Link
           className="flex-center flex-center gap-x-1 bg-yellow px-3 py-2 text-white shadow-xl transition-all hover:scale-[1.02]"
           to={`/meta-data/home/add`}
         >
           New Home Meta <Plus />
         </Link>
-      </button>
+      </button> */}
     </section>
   );
 }

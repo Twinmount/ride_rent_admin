@@ -325,6 +325,7 @@ export const VehicleStatusFormSchema = z
 
 export const HomeMetaFormSchema = z.object({
   stateId: z.string().min(1, "State is required"),
+  categoryId: z.string().min(1, "Vehicle Category is required"),
   metaTitle: z
     .string()
     .min(1, "Meta title is required")
