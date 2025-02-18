@@ -173,21 +173,21 @@ export const PrimaryFormSchema = z
       .max(200, "Page subheading cannot exceed 200 characters"),
     vehicleSeriesInfoTitle: z
       .string()
-      .min(1, "Meta title is required")
-      .max(80, "Meta title cannot exceed 80 characters"),
+      .min(1, "Series Info title is required")
+      .max(80, "Series Info title cannot exceed 80 characters"),
     vehicleSeriesInfoDescription: z
       .string()
-      .min(1, "Meta description is required")
-      .max(300, "Meta description cannot exceed 300 characters"),
+      .min(1, "Series Info description is required")
+      .max(300, "Series Info description cannot exceed 300 characters"),
     vehicleSeriesMetaTitle: z
       .string()
-      .min(1, "Meta title is required")
-      .max(80, "Meta title cannot exceed 80 characters"),
+      .min(1, "Series Meta title is required")
+      .max(80, "Series Meta title cannot exceed 80 characters"),
     vehicleSeriesMetaDescription: z
       .string()
-      .min(1, "Meta description is required")
-      .max(5000, "Meta description cannot exceed 5000 characters"),
-    vehicleModel: z.string().min(1, "Model is required"),
+      .min(1, "Series Meta description is required")
+      .max(5000, "Series Meta description cannot exceed 5000 characters"),
+    vehicleModel: z.string().min(1, "Vehicle Model is required"),
     vehicleRegistrationNumber: z
       .string()
       .min(1, "Vehicle registration number is required")
@@ -232,6 +232,14 @@ export const PrimaryFormSchema = z
     }),
     isCreditOrDebitCardsSupported: z.boolean().default(false),
     isTabbySupported: z.boolean().default(false),
+    vehicleMetaTitle: z
+      .string()
+      .min(1, "Vehicle Meta title is required")
+      .max(80, "Vehicle Meta title cannot exceed 80 characters"),
+    vehicleMetaDescription: z
+      .string()
+      .min(1, "Vehicle Meta description is required")
+      .max(5000, "Vehicle Meta description cannot exceed 5000 characters"),
   })
   .refine(
     (data) => {

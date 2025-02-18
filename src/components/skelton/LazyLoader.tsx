@@ -1,7 +1,7 @@
 const LazyLoader = () => {
   return (
-    <div className="w-full">
-      <div className="flex h-screen items-center justify-center space-x-2 bg-white dark:invert">
+    <div className="w-full rounded-3xl">
+      <div className="flex h-screen items-center justify-center space-x-2 rounded-3xl bg-white dark:invert">
         <span className="sr-only">Loading...</span>
         <div className="h-8 w-8 animate-bounce rounded-full bg-black [animation-delay:-0.3s]"></div>
         <div className="h-8 w-8 animate-bounce rounded-full bg-black [animation-delay:-0.15s]"></div>

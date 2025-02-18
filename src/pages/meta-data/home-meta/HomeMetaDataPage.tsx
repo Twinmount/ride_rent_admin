@@ -1,23 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchHomeMetaList } from "@/api/meta-data";
-
 import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
-import Pagination from "@/components/Pagination";
-import { useState } from "react";
 import { useAdminContext } from "@/context/AdminContext";
 
 export default function HomeMetaData() {
-  const [page, setPage] = useState(1);
-
   const { state } = useAdminContext();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({
-    queryKey: ["home-meta-data", page],
+    queryKey: ["home-meta-data", state.stateId],
     queryFn: () =>
       fetchHomeMetaList({
-        page,
+        page: 1,
         limit: 20,
         sortOrder: "ASC",
         stateId: state.stateId,
@@ -48,14 +43,6 @@ export default function HomeMetaData() {
           ))
         )}
       </div>
-
-      {seoData.length > 0 && (
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={data?.result.totalNumberOfPages || 1}
-        />
-      )}
 
       {/* <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
         <Link

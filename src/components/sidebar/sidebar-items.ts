@@ -8,6 +8,7 @@ import {
   Megaphone,
   FileText,
   FileSearch,
+  Group,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -92,6 +93,13 @@ export const sidebarContent: SidebarItem[] = [
     icon: Star,
     link: "/manage-brands",
   },
+  // Vehicle Series route
+  {
+    type: "link",
+    label: "Vehicle Series",
+    icon: Group,
+    link: "/manage-series",
+  },
   // Locations routes
   {
     type: "accordion",
@@ -137,6 +145,7 @@ export const sidebarContent: SidebarItem[] = [
     items: [
       { label: "Home Page", link: "/meta-data/home" },
       { label: "Listings Page", link: "/meta-data/listing" },
+      { label: "Agent Portfolio Page", link: "/meta-data/agent-portfolio" },
     ],
   },
 ];

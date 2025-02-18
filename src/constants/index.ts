@@ -162,6 +162,8 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   },
   isCreditOrDebitCardsSupported: false,
   isTabbySupported: false,
+  vehicleMetaTitle: "",
+  vehicleMetaDescription: "",
 };
 
 // login page default value

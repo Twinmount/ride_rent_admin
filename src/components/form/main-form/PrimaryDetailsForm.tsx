@@ -445,12 +445,12 @@ export default function PrimaryDetailsForm({
                     metaTitle,
                     metaDescription,
                   }) => {
+                    field.onChange(seriesLabel); // Set vehicleSeries
+
                     const sanitizedSeries = seriesLabel
                       .replace(/[^a-zA-Z0-9-\s]/g, "") // Remove invalid characters
                       .replace(/\s+/g, " ") // Normalize spaces
                       .trim(); // Trim leading/trailing spaces
-
-                    field.onChange(seriesLabel); // Set vehicleSeries
 
                     // If auto filled, set the fields and disable editing
                     if (
@@ -671,7 +671,7 @@ export default function PrimaryDetailsForm({
                   label="Series Meta Description"
                   description={
                     <span className="flex flex-col">
-                      <span>Provide a meta description for this vehicle.</span>
+                      <span>Provide a meta description for this Series.</span>
                       <span className="mt-1 text-sm text-gray-500">
                         {charCount}/{limit} characters used
                       </span>
@@ -931,6 +931,74 @@ export default function PrimaryDetailsForm({
                   <FormMessage className="ml-2" />
                 </div>
               </FormItem>
+            );
+          }}
+        />
+
+        {/* Vehicle  Meta Title */}
+        <FormField
+          control={form.control}
+          name="vehicleMetaTitle"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Vehicle Meta Title"
+              description={
+                <span>
+                  Enter the meta title for this vehicle. This will be used as
+                  the Meta Title in the vehicle-details-page in Nextjs.
+                  <br /> Only alphanumeric characters are allowed.
+                </span>
+              }
+            >
+              <Input
+                placeholder="Vehicle Meta Title"
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* Vehicle Meta Description */}
+        <FormField
+          control={form.control}
+          name="vehicleMetaDescription"
+          render={({ field }) => {
+            const [charCount, setCharCount] = useState(
+              field.value?.length || 0,
+            );
+            const limit = 1000;
+
+            const handleInputChange = (
+              e: React.ChangeEvent<HTMLTextAreaElement>,
+            ) => {
+              setCharCount(e.target.value.length);
+              field.onChange(e);
+            };
+
+            return (
+              <FormItemWrapper
+                label="Vehicle Meta Description"
+                description={
+                  <span className="flex flex-col">
+                    <span>
+                      Provide a meta description for this vehicle. This will be
+                      used as the Meta Description in the vehicle-details-page
+                      in Nextjs.
+                    </span>
+                    <span className="ml-auto mt-1 text-sm text-gray-500">
+                      {charCount}/{limit}
+                    </span>
+                  </span>
+                }
+              >
+                <Textarea
+                  placeholder="Vehicle  Meta Description"
+                  value={field.value}
+                  onChange={handleInputChange}
+                  className="textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
+                />
+              </FormItemWrapper>
             );
           }}
         />
