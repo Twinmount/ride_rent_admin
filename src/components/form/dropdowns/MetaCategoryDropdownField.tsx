@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { fetchAllCategories } from "@/api/vehicle-categories";
 
-type ListingMetaCategoryDropdownProps = {
+type MetaCategoryDropdownFieldProps = {
   value?: string;
   onChangeHandler: (value: string) => void;
   placeholder?: string;
@@ -23,12 +23,12 @@ type CategoryType = {
   value: string;
 };
 
-const ListingMetaCategoryDropdown = ({
+const MetaCategoryDropdownField = ({
   value,
   onChangeHandler,
   isDisabled = false,
   setIsCarsCategory,
-}: ListingMetaCategoryDropdownProps) => {
+}: MetaCategoryDropdownFieldProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: () => fetchAllCategories({ page: 1, limit: 20, sortOrder: "ASC" }),
@@ -46,7 +46,7 @@ const ListingMetaCategoryDropdown = ({
   useEffect(() => {
     if (value && categories.length > 0 && setIsCarsCategory) {
       const selectedCategory = categories.find(
-        (category) => category.categoryId === value
+        (category) => category.categoryId === value,
       );
       setIsCarsCategory(selectedCategory?.value === "cars");
     }
@@ -58,7 +58,7 @@ const ListingMetaCategoryDropdown = ({
     // Find the selected category object
     if (setIsCarsCategory) {
       const selectedCategory = categories.find(
-        (category) => category.categoryId === selectedCategoryId
+        (category) => category.categoryId === selectedCategoryId,
       );
       setIsCarsCategory(selectedCategory?.value === "cars");
     }
@@ -70,7 +70,7 @@ const ListingMetaCategoryDropdown = ({
       defaultValue={value}
       disabled={isDisabled || isLoading}
     >
-      <SelectTrigger className="ring-0 select-field focus:ring-0 input-fields">
+      <SelectTrigger className="select-field input-fields ring-0 focus:ring-0">
         <SelectValue
           className="!font-bold !text-black"
           placeholder="Choose category"
@@ -92,4 +92,4 @@ const ListingMetaCategoryDropdown = ({
   );
 };
 
-export default ListingMetaCategoryDropdown;
+export default MetaCategoryDropdownField;

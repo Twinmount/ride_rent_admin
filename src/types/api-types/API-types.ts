@@ -261,6 +261,7 @@ export interface HomeMetaListData {
   metaDataId: string;
   stateId: string;
   state: string;
+  categoryId: string;
   metaTitle: string;
   metaDescription: string;
 }
