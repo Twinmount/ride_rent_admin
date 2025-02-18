@@ -3,47 +3,32 @@ import { fetchListingMetaList } from "@/api/meta-data";
 
 import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
-import { fetchAllCategories } from "@/api/vehicle-categories";
-import { CategoryType } from "@/types/api-types/vehicleAPI-types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MetaCategoryDropdown from "@/components/MetaCategoryDropdown";
 import { useAdminContext } from "@/context/AdminContext";
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import Pagination from "@/components/Pagination";
+import { useCategorySelection } from "@/hooks/useCategorySelection";
 
 export default function ListingMetaDataPage() {
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
-    null,
-  );
   const [page, setPage] = useState(1);
 
   const { state } = useAdminContext();
 
-  // Fetch categories for dropdown
-  const { data: categoryData, isLoading: isCategoryLoading } = useQuery({
-    queryKey: ["categories", state, page],
-    queryFn: () => fetchAllCategories({ page, limit: 20, sortOrder: "ASC" }),
-  });
-
-  // Set initial category to "cars"
-  useEffect(() => {
-    if (categoryData?.result?.list) {
-      const defaultCategory = categoryData.result.list.find(
-        (category) => category.value === "cars",
-      );
-      if (defaultCategory) {
-        setSelectedCategory(defaultCategory);
-      }
-    }
-  }, [categoryData, isCategoryLoading]);
+  const {
+    selectedCategory,
+    setSelectedCategory,
+    categoryList,
+    isCategoryLoading,
+  } = useCategorySelection();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({
-    queryKey: ["listing-meta-data", selectedCategory?.value],
+    queryKey: ["listing-meta-data", selectedCategory?.value, page],
     queryFn: () =>
       fetchListingMetaList({
-        page: 1,
+        page,
         limit: 20,
         sortOrder: "ASC",
         category: selectedCategory?.value || "",
@@ -51,14 +36,6 @@ export default function ListingMetaDataPage() {
       }),
     enabled: !!selectedCategory, // Fetch only when category is selected
   });
-
-  // Function to truncate the text
-  const truncateText = (text: string, limit: number) => {
-    if (text.length > limit) {
-      return text.slice(0, limit) + "...";
-    }
-    return text;
-  };
 
   const seoData = data?.result?.list || [];
 
@@ -68,7 +45,7 @@ export default function ListingMetaDataPage() {
       <MetaCategoryDropdown
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
-        categories={categoryData?.result?.list || []}
+        categories={categoryList || []}
         isLoading={isCategoryLoading}
       />
 
@@ -84,7 +61,6 @@ export default function ListingMetaDataPage() {
             <SeoData
               key={item.metaDataId}
               item={item}
-              truncateText={truncateText}
               link="/meta-data/listing/edit"
             />
           ))
