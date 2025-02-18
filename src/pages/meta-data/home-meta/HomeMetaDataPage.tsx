@@ -3,8 +3,6 @@ import { fetchHomeMetaList } from "@/api/meta-data";
 
 import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
-import { Plus } from "lucide-react";
-import { Link } from "react-router-dom";
 import Pagination from "@/components/Pagination";
 import { useState } from "react";
 import { useAdminContext } from "@/context/AdminContext";
