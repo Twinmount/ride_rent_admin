@@ -61,9 +61,7 @@ const BrandsPage = lazy(() => import("./pages/manage-brands/BrandsPage"));
 const AddBrandPage = lazy(() => import("./pages/manage-brands/AddBrandPage"));
 const EditBrandPage = lazy(() => import("./pages/manage-brands/EditBrandPage"));
 
-const ManageSeriesPage = lazy(
-  () => import("./pages/manage-series/ManageSeriesPage"),
-);
+const SeriesPage = lazy(() => import("./pages/manage-series/SeriesPage"));
 const AddSeriesPage = lazy(() => import("./pages/manage-series/AddSeriesPage"));
 const EditSeriesPage = lazy(
   () => import("./pages/manage-series/EditSeriesPage"),
@@ -335,11 +333,11 @@ export const router = createBrowserRouter([
               // series routes
               {
                 path: "/manage-series",
-                element: <ManageSeriesPage />,
+                element: <SeriesPage />,
               },
               {
                 path: "/manage-series/:categoryId",
-                element: <ManageSeriesPage />,
+                element: <SeriesPage />,
               },
               {
                 path: "/manage-series/:categoryId/add-series",

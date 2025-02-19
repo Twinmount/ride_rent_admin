@@ -25,6 +25,8 @@ export const useCategories = () => {
       );
       if (defaultCategory) {
         setSelectedCategory(defaultCategory);
+      } else {
+        setSelectedCategory(categoryData.result.list[0]);
       }
     }
   }, [categoryData]);

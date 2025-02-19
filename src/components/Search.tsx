@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Input } from "./ui/input";
 
 function SearchComponent({
-  placeholder = "search brand..",
+  placeholder = "search..",
   isBrandSearch = true,
 }: {
   placeholder?: string;
@@ -12,7 +12,7 @@ function SearchComponent({
   const [searchValue, setSearchValue] = useState(""); // Update input value immediately
   const [searchParams, setSearchParams] = useSearchParams();
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
-    null
+    null,
   ); // Store timeout ID
 
   // Initialize search value from the URL if available when the component mounts
@@ -46,17 +46,15 @@ function SearchComponent({
 
   return (
     <div
-      className={`flex flex-col justify-start w-full mt-1 max-w-[500px] gap-y-2 ${
-        isBrandSearch ? "mb-8" : ""
-      }`}
+      className={`mt-1 flex w-full max-w-[500px] flex-col justify-start gap-y-2`}
     >
-      <div className="flex gap-x-1 justify-start items-center">
+      <div className="flex items-center justify-start gap-x-1">
         <Input
           type="search"
           value={searchValue}
           onChange={handleInputChange}
           placeholder={placeholder}
-          className="bg-white w-full h-[40px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-2xl p-regular-16 px-4 py-3 border focus-visible:ring-transparent"
+          className="p-regular-16 h-[40px] w-full rounded-2xl border bg-white px-4 py-3 placeholder:text-gray-500 focus-visible:ring-transparent focus-visible:ring-offset-0"
         />
       </div>
     </div>

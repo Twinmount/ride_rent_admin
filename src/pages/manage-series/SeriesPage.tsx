@@ -1,16 +1,18 @@
 import { useSearchParams, useParams } from "react-router-dom";
+import { useState } from "react";
 import Pagination from "@/components/Pagination";
 import SearchComponent from "@/components/Search";
 import CategoryDropdown from "@/components/VehicleCategoryDropdown";
 import { useCategories } from "@/hooks/useCategories";
 import { BrandGrid } from "@/components/BrandGrid";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
-import useFetchBrands from "./BrandsPage.hooks";
+import useFetchBrands from "./SeriesPage.hooks";
 import PageHeading from "@/components/general/PageHeading";
+import { SeriesList } from "@/components/SeriesList";
 
 export default function BrandsPage() {
   const { vehicleCategoryId } = useParams<{ vehicleCategoryId: string }>();
-
+  const [page, setPage] = useState(1);
   const [searchParams] = useSearchParams();
 
   // ✅ Use the existing useCategories hook
@@ -24,10 +26,11 @@ export default function BrandsPage() {
   const searchQuery = searchParams.get("search") || "";
 
   // Fetch brands after category is selected
-  const { brandData, isBrandsLoading, page, setPage } = useFetchBrands({
-    vehicleCategoryId:
-      vehicleCategoryId || (selectedCategory?.categoryId as string),
+  const { brandData, isBrandsLoading } = useFetchBrands({
+    vehicleCategoryId: vehicleCategoryId as string,
     searchQuery,
+    page,
+    isCategoryLoading,
   });
 
   // Extract brand list
@@ -35,11 +38,11 @@ export default function BrandsPage() {
 
   return (
     <section className="container h-auto min-h-screen py-6">
-      <PageHeading heading={`Manage Brands`} />
+      <PageHeading heading={`Manage Vehicle Series`} />
 
       <div className="flex items-center gap-3 pl-2 pr-10">
         {/* search component */}
-        <SearchComponent placeholder="search brand" />
+        <SearchComponent placeholder="search series name or brand" />
 
         {/* category dropdown */}
         <CategoryDropdown
@@ -47,14 +50,14 @@ export default function BrandsPage() {
           setSelectedCategory={setSelectedCategory}
           categories={categoryList}
           isLoading={isCategoryLoading}
-          type="brand"
+          type="series"
         />
       </div>
 
       {/* brand grid and loading skeleton */}
-      <BrandGrid
+      <SeriesList
         brandList={brandList}
-        isBrandsLoading={isBrandsLoading}
+        isSeriesLoading={isBrandsLoading}
         search={searchQuery}
         categoryValue={selectedCategory?.value}
       />
@@ -66,8 +69,8 @@ export default function BrandsPage() {
       />
 
       <FloatingActionButton
-        href={`/manage-brands/${selectedCategory?.categoryId}/add-brand`}
-        label="New Brand"
+        href={`/manage-series/${selectedCategory?.categoryId}/add-brand`}
+        label="New Series"
       />
     </section>
   );

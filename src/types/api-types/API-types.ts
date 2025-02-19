@@ -390,3 +390,21 @@ export interface VehicleSeriesSearch {
 
   statusCode: number;
 }
+
+// interface for the  Brand (GET BY ID) response
+export interface FetchSpecificSeriesResponse {
+  result: VehicleSeriesType;
+  status: string;
+  statusCode: number;
+}
+
+//  interface for the Series GET ALL) API response
+export interface FetchAllSeriesResponse {
+  status: string;
+  result: {
+    list: VehicleSeriesType[]; // Array of brands
+    page: number; // Current page number
+    total: number; // Total number of categories
+  };
+  statusCode: number;
+}

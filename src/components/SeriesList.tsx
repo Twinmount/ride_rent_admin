@@ -2,22 +2,22 @@ import { Link } from "react-router-dom";
 import GridSkelton from "@/components/skelton/GridSkelton";
 import { BrandType } from "@/types/api-types/API-types";
 
-type BrandGridProps = {
+type SeriesListProps = {
   brandList: BrandType[];
-  isBrandsLoading: boolean;
+  isSeriesLoading: boolean;
   search: string;
   categoryValue: string | null | undefined;
 };
 
-export const BrandGrid: React.FC<BrandGridProps> = ({
+export const SeriesList: React.FC<SeriesListProps> = ({
   brandList,
-  isBrandsLoading,
+  isSeriesLoading,
   search,
   categoryValue,
 }) => {
   const baseAssetsUrl = import.meta.env.VITE_ASSETS_URL;
 
-  if (isBrandsLoading) {
+  if (isSeriesLoading) {
     return (
       <div className="grid grid-cols-3 place-items-center gap-2 gap-y-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7">
         <GridSkelton type="brand" />
@@ -26,7 +26,7 @@ export const BrandGrid: React.FC<BrandGridProps> = ({
   }
 
   if (brandList.length === 0) {
-    return <NoBrandsFound search={search || ""} />;
+    return <NoSeriesFound search={search || ""} />;
   }
 
   return (
@@ -54,11 +54,11 @@ export const BrandGrid: React.FC<BrandGridProps> = ({
 };
 
 // Component to display a message when no brands are found
-const NoBrandsFound = ({ search }: { search: string }) => {
+const NoSeriesFound = ({ search }: { search: string }) => {
   return (
     <div className="flex-center col-span-full h-72 flex-col text-center">
       <p className="text-xl font-semibold text-gray-800">
-        No brands found {search && `for "${search}"`}
+        No series found {search && `for "${search}"`}
       </p>
     </div>
   );

@@ -45,7 +45,7 @@ export default function CategoryDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="!h-9 w-fit max-w-fit cursor-pointer !rounded-lg bg-slate-800 text-2xl text-white outline-none transition-colors hover:bg-slate-900 hover:text-yellow"
+        className="!h-9 w-fit max-w-fit cursor-pointer !rounded-lg bg-slate-800 text-2xl text-white outline-none transition-colors hover:bg-slate-900"
         disabled={isLoading || categories.length === 0}
       >
         <div className="flex items-center whitespace-nowrap rounded-lg pl-2 font-bold tracking-wider">

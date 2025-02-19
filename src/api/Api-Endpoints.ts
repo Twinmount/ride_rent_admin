@@ -92,6 +92,8 @@ export enum Slug {
   POST_VEHICLE_SERIES = "/vehicle-series",
   GET_SEARCH_VEHICLE_SERIES = "/vehicle-series/search",
   PUT_VEHICLE_SERIES = "/vehicle-series",
+  GET_SERIES_BY_ID = "/vehicle-series",
+  GET_ALL_SERIES = "/vehicle-series/list",
 
   // vehicle primary form endPoints
   POST_PRIMARY_FORM = "/vehicle/level-one",

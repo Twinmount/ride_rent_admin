@@ -11,7 +11,7 @@ export default function Pagination({
   setPage,
   totalPages,
 }: PaginationProps) {
-  if (totalPages < 1) {
+  if (!totalPages || totalPages < 1) {
     return null;
   }
 

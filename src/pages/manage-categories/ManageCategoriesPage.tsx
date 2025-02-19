@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllCategories } from "@/api/vehicle-categories";
 import { useState } from "react";
 import Pagination from "@/components/Pagination";
+import FloatingActionButton from "@/components/general/FloatingActionButton";
 
 export default function ManageCategoriesPage() {
   const [page, setPage] = useState(1);
@@ -52,24 +53,18 @@ export default function ManageCategoriesPage() {
       )}
 
       {/* add new category */}
-      <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
-        <Link
-          className="flex-center flex-center gap-x-1 bg-yellow px-3 py-2 text-white shadow-xl transition-all hover:scale-[1.02]"
-          to={`/vehicle/manage-categories/add`}
-        >
-          New Category <Plus />
-        </Link>
-      </button>
+      <FloatingActionButton
+        href={`/vehicle/manage-categories/add`}
+        label="New Category"
+      />
 
-      {categories.length > 0 && (
-        <div className="mt-auto">
-          <Pagination
-            page={page}
-            setPage={setPage}
-            totalPages={data?.result.totalNumberOfPages || 1}
-          />
-        </div>
-      )}
+      <div className="mt-auto">
+        <Pagination
+          page={page}
+          setPage={setPage}
+          totalPages={data?.result.totalNumberOfPages || 1}
+        />
+      </div>
     </section>
   );
 }
