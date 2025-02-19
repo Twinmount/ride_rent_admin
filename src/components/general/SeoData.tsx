@@ -8,14 +8,11 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { truncateText } from "@/helpers";
+import { HomeMetaListData } from "@/types/api-types/API-types";
 
 // Define props for the SeoData component
 interface SeoDataProps {
-  item: {
-    metaDataId: string;
-    metaTitle: string;
-    metaDescription: string;
-  };
+  item: HomeMetaListData;
   link: string;
 }
 
@@ -31,50 +28,87 @@ export default function SeoData({ item, link }: SeoDataProps) {
   return (
     <div
       key={item.metaDataId}
-      className="flex flex-col items-start rounded-lg border border-gray-200 bg-white p-4 shadow-md md:flex-row"
+      className="flex flex-col items-start rounded-lg border border-gray-200 bg-white p-4 shadow-md"
     >
-      <div className="w-full">
-        {/* Meta Title Section */}
-        <div className="mb-4 flex items-start justify-start">
-          <div className="w-6">
-            <Type className="mr-2 h-5 w-5 text-gray-800" />
-          </div>
-          <p className="text-gray-800">
-            {isExpanded ? item.metaTitle : truncateText(item.metaTitle, 80)}
-          </p>
-        </div>
-
-        {/* Meta Description Section */}
-        <div className="flex items-start justify-start">
-          <div className="w-6">
-            <AlignLeft className="mr-2 h-5 w-5 text-gray-800" />
-          </div>
-          <p className="text-sm text-gray-600">
-            {isExpanded
-              ? item.metaDescription
-              : truncateText(item.metaDescription, 100)}{" "}
-          </p>
-        </div>
+      {/* state and category tags */}
+      <div className="mb-3 flex items-center gap-x-3">
+        <span className="rounded-[0.5rem] bg-gray-800 px-3 py-0 text-sm text-white">
+          {item.state}
+        </span>
+        <span className="rounded-[0.5rem] bg-gray-800 px-3 py-0 text-sm text-white">
+          {item.category}
+        </span>
       </div>
 
-      {/* Expand/Collapse Button */}
-      <div className="flex h-20 w-7 flex-col items-center justify-between rounded-full p-0 max-md:ml-auto max-md:mt-2 max-md:h-7 max-md:w-fit max-md:flex-row md:ml-4 md:mt-0">
-        <Link to={`${link}/${item.metaDataId}`}>
-          <FilePenLine className="hover:text-yellow" />
-        </Link>
+      {/* meta title and meta description */}
+      <div className="flex w-full flex-col items-start rounded-lg md:flex-row">
+        <div className="w-full">
+          {/* Meta Title Section */}
+          <div className="mb-4 flex items-start justify-start">
+            <div className="w-6">
+              <Type className="mr-3 h-5 w-5 text-gray-800" />
+            </div>
+            <p className="text-gray-800">
+              {isExpanded ? item.metaTitle : truncateText(item.metaTitle, 80)}
+            </p>
+          </div>
 
-        <button
-          className="bg-yellow-500 hover:bg-yellow-600 flex items-center rounded-md px-4 py-2 font-semibold text-black transition"
-          onClick={toggleExpand}
-          aria-label={isExpanded ? "Collapse content" : "Expand content"}
-        >
-          {isExpanded ? (
-            <ChevronUp className="h-7 w-7 rounded-full bg-slate-800 text-white hover:bg-slate-900" />
-          ) : (
-            <ChevronDown className="h-7 w-7 rounded-full bg-slate-800 text-white hover:bg-slate-900" />
-          )}
-        </button>
+          {/* Meta Description Section */}
+          <div className="flex items-start justify-start">
+            <div className="w-6">
+              <AlignLeft className="mr-3 h-5 w-5 text-gray-800" />
+            </div>
+            <p
+              className={`text-wrap text-sm text-gray-600 ${!isExpanded && "line-clamp-1"}`}
+            >
+              {isExpanded
+                ? item.metaDescription
+                : truncateText(item.metaDescription, 100)}{" "}
+            </p>
+          </div>
+        </div>
+
+        {/* Expand/Collapse Button */}
+        <ExpandCollapseButton
+          isExpanded={isExpanded}
+          toggleExpand={toggleExpand}
+          item={item}
+          link={link}
+        />
       </div>
     </div>
   );
 }
+
+// Component for expand/collapse button + edit link
+const ExpandCollapseButton = ({
+  isExpanded,
+  toggleExpand,
+  item,
+  link,
+}: {
+  isExpanded: boolean;
+  toggleExpand: () => void;
+  item: HomeMetaListData;
+  link: string;
+}) => {
+  return (
+    <div className="flex h-20 w-7 flex-col items-center justify-between rounded-full p-0 max-md:ml-auto max-md:mt-2 max-md:h-7 max-md:w-fit max-md:flex-row md:ml-4 md:mt-0">
+      <Link to={`${link}/${item.metaDataId}`}>
+        <FilePenLine className="hover:text-yellow" />
+      </Link>
+
+      <button
+        className="bg-yellow-500 hover:bg-yellow-600 flex items-center rounded-md px-4 py-2 font-semibold text-black transition"
+        onClick={toggleExpand}
+        aria-label={isExpanded ? "Collapse content" : "Expand content"}
+      >
+        {isExpanded ? (
+          <ChevronUp className="h-7 w-7 rounded-full bg-slate-800 text-white hover:bg-slate-900" />
+        ) : (
+          <ChevronDown className="h-7 w-7 rounded-full bg-slate-800 text-white hover:bg-slate-900" />
+        )}
+      </button>
+    </div>
+  );
+};

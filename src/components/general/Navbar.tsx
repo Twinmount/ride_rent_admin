@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
 import { Menu } from "lucide-react";
 
-import GeneralStatesDropdown from "../GeneralStatesDropdown";
+import GeneralStatesDropdown from "../NavbarStatesDropdown";
 import { NavbarStateType } from "@/types/types";
 
 type NavbarProps = {
@@ -13,25 +13,25 @@ const Navbar = ({ options, isLoading }: NavbarProps) => {
   const { isSidebarOpen, toggleSidebar, isSmallScreen } = useAdminContext();
 
   return (
-    <header className="px-4 fixed top-0 left-0 right-0 h-[4.84rem] border-b bg-white z-50 transition-all ease-in-out flex-center">
-      <nav className="flex justify-between items-center w-full">
-        <div className="gap-x-4 w-fit flex-center">
+    <header className="flex-center fixed left-0 right-0 top-0 z-50 h-[4.84rem] border-b bg-white px-4 transition-all ease-in-out">
+      <nav className="flex w-full items-center justify-between">
+        <div className="flex-center w-fit gap-x-4">
           {isSmallScreen && (
             <button
               aria-label="Hamburger"
-              className="p-0 m-0 bg-transparent border-none cursor-pointer outline-none flex-center group"
+              className="flex-center group m-0 cursor-pointer border-none bg-transparent p-0 outline-none"
               onClick={toggleSidebar}
             >
               <Menu
                 strokeWidth={3}
-                className={`w-[1.6rem] h-[1.6rem] transition-colors duration-100 ease-in mb-1  group-hover:text-yellow`}
+                className={`mb-1 h-[1.6rem] w-[1.6rem] transition-colors duration-100 ease-in group-hover:text-yellow`}
               />
             </button>
           )}
-          <div className="p-0 w-fit">
+          <div className="w-fit p-0">
             <Link
               to={"/"}
-              className="p-0 text-sm text-right text-gray-600 max-w-fit"
+              className="max-w-fit p-0 text-right text-sm text-gray-600"
             >
               <figure className="m-0 max-sm:hidden">
                 <img
@@ -47,12 +47,12 @@ const Navbar = ({ options, isLoading }: NavbarProps) => {
         {/* sidebar */}
         {isSidebarOpen && isSmallScreen && (
           <div
-            className="fixed top-0 left-0 w-full h-full bg-black/30 z-[100] "
+            className="fixed left-0 top-0 z-[100] h-full w-full bg-black/30"
             onClick={toggleSidebar}
           />
         )}
 
-        <div className="gap-x-4 mr-6 flex-center">
+        <div className="flex-center mr-6 gap-x-4">
           <GeneralStatesDropdown options={options} isLoading={isLoading} />
         </div>
       </nav>

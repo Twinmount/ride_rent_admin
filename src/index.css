@@ -64,13 +64,13 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply !mx-auto !max-w-[100rem] bg-background text-foreground;
   }
 }
 
 @layer utilities {
   .wrapper {
-    @apply w-full p-5 max-w-7xl lg:mx-auto md:px-10 xl:px-0;
+    @apply w-full max-w-7xl p-5 md:px-10 lg:mx-auto xl:px-0;
   }
 
   .flex-center {
@@ -82,27 +82,27 @@
   }
 
   .input-field {
-    @apply bg-gray-100 h-[54px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-2xl p-regular-16 px-4 py-3 border-none focus-visible:ring-transparent !important;
+    @apply p-regular-16 h-[54px] rounded-2xl border-none bg-gray-100 px-4 py-3 placeholder:text-gray-500 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
   }
 
   .blog-input-field {
-    @apply bg-gray-100 h-[54px] placeholder:text-gray-500 rounded-xl p-regular-16 px-4 py-3 ring-1 ring-slate-300 focus-visible:ring-offset-1 !important;
+    @apply p-regular-16 h-[54px] rounded-xl bg-gray-100 px-4 py-3 ring-1 ring-slate-300 placeholder:text-gray-500 focus-visible:ring-offset-1 !important;
   }
 
   .admin-input-field {
-    @apply bg-white h-[44px] w-full max-w-[300px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-2xl p-regular-16 px-4 py-3 border focus-visible:ring-transparent !important;
+    @apply p-regular-16 h-[44px] w-full max-w-[300px] rounded-2xl border bg-white px-4 py-3 placeholder:text-gray-500 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
   }
 
   .textarea {
-    @apply bg-gray-100 flex flex-1 placeholder:text-gray-500 focus-visible:ring-offset-0 p-regular-16 px-5 py-3 border-none focus-visible:ring-transparent !important;
+    @apply p-regular-16 flex flex-1 border-none bg-gray-100 px-5 py-3 placeholder:text-gray-500 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
   }
 
   .button {
-    @apply rounded-2xl h-[54px] p-regular-16;
+    @apply p-regular-16 h-[54px] rounded-2xl;
   }
 
   .h3-bold {
-    @apply font-bold text-[24px] leading-[36px] md:text-[28px] md:leading-[44px];
+    @apply text-[24px] font-bold leading-[36px] md:text-[28px] md:leading-[44px];
   }
 
   .p-regular-16 {
@@ -120,7 +120,7 @@
   width: 100%;
   outline: none;
   margin-left: 16px;
-  @apply bg-gray-100 h-[54px] focus-visible:ring-offset-0 placeholder:text-gray-500 rounded-2xl p-regular-16 px-4 py-3 border-none focus-visible:ring-transparent !important;
+  @apply p-regular-16 h-[54px] rounded-2xl border-none bg-gray-100 px-4 py-3 placeholder:text-gray-500 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
 }
 
 .react-datepicker__day--selected {
