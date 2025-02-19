@@ -92,7 +92,7 @@ export const updateCompany = async (values: CompanyType, companyId: string) => {
 // update company status
 export const updateCompanyStatus = async (
   values: CompanyStatusType,
-  companyId: string
+  companyId: string,
 ) => {
   try {
     // Create the request body, excluding rejectionReason if the status is 'APPROVED'
@@ -119,7 +119,7 @@ export const updateCompanyStatus = async (
 
 // fetch company by company id
 export const getCompany = async (
-  companyId: string
+  companyId: string,
 ): Promise<FetchSpecificCompanyResponse> => {
   try {
     const data = await API.get<FetchSpecificCompanyResponse>({

@@ -409,3 +409,31 @@ export interface FetchAllSeriesResponse {
   };
   statusCode: number;
 }
+
+// single listing data type
+export interface CompanyPortfolioMetaData {
+  companyName: string;
+  companyLogo: string;
+  countryCode: string;
+  phoneNumber: string;
+  email: string;
+  companyAddress: string;
+  companyLanguages: string[];
+  regNumber: string;
+  agentId: string;
+  agentMetaTitle: string;
+  agentMetaDescription: string;
+}
+
+//  fetch listing all meta data
+export interface FetchCompanyPortfolioMetaResponse {
+  result: {
+    list: CompanyPortfolioMetaData[];
+    page: string;
+    limit: string;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  status: string;
+  statusCode: number;
+}

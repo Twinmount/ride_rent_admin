@@ -97,6 +97,7 @@ export default function ListingMetaForm({
                       }}
                       value={initialValues.stateId}
                       placeholder="state"
+                      isDisabled={type === "Update"}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -125,6 +126,7 @@ export default function ListingMetaForm({
                         form.setValue("typeId", "");
                       }}
                       value={initialValues.categoryId}
+                      isDisabled={type === "Update"}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -152,7 +154,9 @@ export default function ListingMetaForm({
                       vehicleCategoryId={form.watch("categoryId")}
                       value={field.value}
                       onChangeHandler={field.onChange}
-                      isDisabled={!form.watch("categoryId")}
+                      isDisabled={
+                        !form.watch("categoryId") || type === "Update"
+                      }
                     />
                   </FormControl>
                   <FormDescription className="ml-2">

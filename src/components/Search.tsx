@@ -4,10 +4,8 @@ import { Input } from "./ui/input";
 
 function SearchComponent({
   placeholder = "search..",
-  isBrandSearch = true,
 }: {
   placeholder?: string;
-  isBrandSearch?: boolean;
 }) {
   const [searchValue, setSearchValue] = useState(""); // Update input value immediately
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,7 +44,7 @@ function SearchComponent({
 
   return (
     <div
-      className={`mt-1 flex w-full max-w-[500px] flex-col justify-start gap-y-2`}
+      className={`mb-2 ml-3 flex w-full max-w-[500px] flex-col justify-start gap-y-2`}
     >
       <div className="flex items-center justify-start gap-x-1">
         <Input

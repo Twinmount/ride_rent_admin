@@ -25,14 +25,19 @@ export default function ListingMetaDataPage() {
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({
-    queryKey: ["listing-meta-data", selectedCategory?.value, page],
+    queryKey: [
+      "listing-meta-data",
+      selectedCategory?.categoryId,
+      state.stateId,
+      page,
+    ],
     queryFn: () =>
       fetchListingMetaList({
         page,
         limit: 20,
         sortOrder: "ASC",
-        category: selectedCategory?.value || "",
-        state: state.stateValue,
+        category: selectedCategory?.categoryId || "",
+        state: state.stateId,
       }),
     enabled: !!selectedCategory, // Fetch only when category is selected
   });

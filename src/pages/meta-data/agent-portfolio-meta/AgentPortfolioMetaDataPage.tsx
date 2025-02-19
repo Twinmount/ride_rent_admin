@@ -8,6 +8,8 @@ import { useAdminContext } from "@/context/AdminContext";
 
 import Pagination from "@/components/Pagination";
 import { useCategories } from "@/hooks/useCategories";
+import PageHeading from "@/components/general/PageHeading";
+import SearchComponent from "@/components/Search";
 
 export default function AgentPortfolioMetaDataPage() {
   const [page, setPage] = useState(1);
@@ -34,11 +36,12 @@ export default function AgentPortfolioMetaDataPage() {
 
   return (
     <section className="h-auto min-h-screen w-full bg-gray-100 py-10">
-      {/* category dropdown */}
-      <div className="flex-center mb-5 ml-5 w-fit gap-x-4">
-        <h2 className="h3-bold text-center sm:text-left">
-          Agent Portfolio Meta Data
-        </h2>
+      <div className="mb-6 ml-3 flex flex-col">
+        {/* page heading */}
+        <PageHeading heading={`Manage Agent Portfolio Meta`} />
+
+        {/* search component */}
+        <SearchComponent placeholder="search agent" />
       </div>
 
       <div className="container mx-auto max-w-4xl space-y-3">

@@ -124,6 +124,12 @@ export enum Slug {
   PUT_ADMIN_LISTING_META = "/metadata/listing",
   GET_ADMIN_LISTING_META_ALL = "/metadata/admin/listing/all",
 
+  // similar to listing meta, we need "company metadata endpoints "
+  POST_COMPANY_META = "/metadata/company",
+  GET_ADMIN_COMPANY_META = "/metadata/admin/company",
+  PUT_COMPANY_META = "/metadata/company",
+  GET_COMPANY_META_ALL = "/metadata/admin/company/all",
+
   GET_ADMIN_DASHBOARD = "/vehicle/admin/analytics",
 
   // excel data download endpoints
