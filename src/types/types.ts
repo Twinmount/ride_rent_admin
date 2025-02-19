@@ -106,6 +106,7 @@ export type BlogPromotionFormType = {
 
 export type HomeMetaFormType = {
   stateId: string;
+  categoryId: string;
   metaTitle: string;
   metaDescription: string;
 };
@@ -196,3 +197,14 @@ export type CategoryType =
   | "news"
   | "travel"
   | "travel";
+
+export type VehicleSeriesType = {
+  vehicleSeriesId?: string;
+  vehicleSeries: string;
+  vehicleSeriesInfoTitle: string;
+  vehicleSeriesInfoDescription: string;
+  vehicleSeriesPageHeading: string;
+  vehicleSeriesPageSubheading: string;
+  vehicleSeriesMetaTitle: string;
+  vehicleSeriesMetaDescription: string;
+};

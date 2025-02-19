@@ -25,10 +25,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAdminContext } from "@/context/AdminContext";
 import DeleteModal from "../modal/DeleteModal";
 import {
-  addRecommendedLink,
-  deleteRecommendedLink,
-  updateRecommendedLink,
-} from "@/api/recommended-links";
+  addRelatedLink,
+  deleteRelatedLink,
+  updateRelatedLink,
+} from "@/api/related-links";
 
 type RecommendedLinkFormProps = {
   type: "Add" | "Update";
@@ -60,9 +60,9 @@ export default function RecommendedLinkForm({
     try {
       let data;
       if (type === "Add") {
-        data = await addRecommendedLink(values, state.stateId as string);
+        data = await addRelatedLink(values, state.stateId as string);
       } else if (type === "Update") {
-        data = await updateRecommendedLink(values, linkId as string);
+        data = await updateRelatedLink(values, linkId as string);
       }
 
       if (data) {
@@ -92,7 +92,7 @@ export default function RecommendedLinkForm({
   }
 
   const { mutateAsync: deleteLinkMutation, isPending } = useMutation({
-    mutationFn: () => deleteRecommendedLink(linkId as string),
+    mutationFn: () => deleteRelatedLink(linkId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["recommended-links", state],
@@ -105,7 +105,7 @@ export default function RecommendedLinkForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
+        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
         <div className="flex flex-col gap-5">
           {/* type title */}
@@ -156,7 +156,7 @@ export default function RecommendedLinkForm({
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
+          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
         >
           {form.formState.isSubmitting
             ? "Processing..."
@@ -178,7 +178,7 @@ export default function RecommendedLinkForm({
           ></DeleteModal>
         )}
 
-        <p className="p-0 m-0 -mt-3 text-xs text-center text-red-500">
+        <p className="m-0 -mt-3 p-0 text-center text-xs text-red-500">
           Make sure appropriate state is selected before adding a link.
           Currently adding link under {state.stateName}
         </p>

@@ -11,7 +11,7 @@ export interface LinkType {
 }
 
 // add link
-export const addRecommendedLink = async (values: LinkType, stateId: string) => {
+export const addRelatedLink = async (values: LinkType, stateId: string) => {
   try {
     const requestBody = {
       ...values,
@@ -20,22 +20,19 @@ export const addRecommendedLink = async (values: LinkType, stateId: string) => {
 
     // Send the FormData object using the API post method
     const data = await API.post({
-      slug: Slug.ADD_RECOMMENDED_LINK,
+      slug: Slug.ADD_RELATED_LINK,
       body: requestBody,
     });
 
     return data;
   } catch (error) {
-    console.error("Error adding recommended links:", error);
+    console.error("Error adding related links:", error);
     throw error;
   }
 };
 
 // update link
-export const updateRecommendedLink = async (
-  values: LinkType,
-  linkId: string
-) => {
+export const updateRelatedLink = async (values: LinkType, linkId: string) => {
   try {
     const requestBody = {
       ...values,
@@ -44,39 +41,39 @@ export const updateRecommendedLink = async (
 
     // Send the FormData object using the API put method
     const data = await API.put({
-      slug: Slug.PUT_RECOMMENDED_LINK,
+      slug: Slug.PUT_RELATED_LINK,
       body: requestBody,
     });
 
     return data;
   } catch (error) {
-    console.error("Error updating recommended links:", error);
+    console.error("Error updating related links:", error);
     throw error;
   }
 };
 
 // fetch specific Link by ID
-export const fetchRecommendedLinkById = async (
-  linkId: string
+export const fetchRelatedLinkById = async (
+  linkId: string,
 ): Promise<FetchSpecificLinkResponse> => {
   try {
     const data = await API.get<FetchSpecificLinkResponse>({
-      slug: `${Slug.GET_RECOMMENDED_LINK}?linkId=${linkId}`,
+      slug: `${Slug.GET_RELATED_LINK}?linkId=${linkId}`,
     });
 
     if (!data) {
-      throw new Error("Failed to fetch recommended link data");
+      throw new Error("Failed to fetch related link data");
     }
 
     return data;
   } catch (error) {
-    console.error("Error fetching recommended link:", error);
+    console.error("Error fetching related link:", error);
     throw error;
   }
 };
 
 // fetch all Links
-export const fetchAllRecommendedLinks = async (urlParams: {
+export const fetchAllRelatedLinks = async (urlParams: {
   page: number;
   limit: number;
   sortOrder: string;
@@ -90,32 +87,32 @@ export const fetchAllRecommendedLinks = async (urlParams: {
       stateId: urlParams.stateId,
     }).toString();
 
-    const slugWithParams = `${Slug.GET_ALL_RECOMMENDED_LINKS}?${queryParams}`;
+    const slugWithParams = `${Slug.GET_ALL_RELATED_LINKS}?${queryParams}`;
 
     const data = await API.get<FetchLinksResponse>({
       slug: slugWithParams,
     });
 
     if (!data) {
-      throw new Error("Failed to fetch recommended link data");
+      throw new Error("Failed to fetch related link data");
     }
 
     return data;
   } catch (error) {
-    console.error("Error fetching recommended links:", error);
+    console.error("Error fetching related links:", error);
     throw error;
   }
 };
 
 // delete specific link by ID
-export const deleteRecommendedLink = async (linkId: string) => {
+export const deleteRelatedLink = async (linkId: string) => {
   try {
     const data = await API.delete({
-      slug: `${Slug.DELETE_RECOMMENDED_LINK}?linkId=${linkId}`,
+      slug: `${Slug.DELETE_RELATED_LINK}?linkId=${linkId}`,
     });
     return data;
   } catch (error) {
-    console.error("Error deleting Recommended link:", error);
+    console.error("Error deleting related link:", error);
     throw error;
   }
 };

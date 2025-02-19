@@ -21,10 +21,11 @@ import Spinner from "../general/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import { addHomeMetaData, updateHomeMetaData } from "@/api/meta-data";
-
 import { useState } from "react";
 import { Textarea } from "../ui/textarea";
 import StatesDropdown from "./dropdowns/StatesDropdown";
+import MetaCategoryDropdownField from "./dropdowns/MetaCategoryDropdownField";
+import { useQueryClient } from "@tanstack/react-query";
 
 type HomeMetaFormProps = {
   type: "Add" | "Update";
@@ -44,6 +45,8 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
     defaultValues: initialValues,
   });
 
+  const queryClient = useQueryClient();
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof HomeMetaFormSchema>) {
     try {
@@ -59,7 +62,10 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
           title: `${type} Meta Data successfully`,
           className: "bg-yellow text-white",
         });
-        navigate("/manage-meta-data");
+        queryClient.invalidateQueries({
+          queryKey: ["home-meta-data"],
+        });
+        navigate("/meta-data/home");
       }
     } catch (error) {
       console.error(error);
@@ -75,18 +81,18 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
+        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
-        <div className="flex flex-col gap-5 ">
+        <div className="flex flex-col gap-5">
           <FormField
             control={form.control}
             name="stateId"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   State <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <StatesDropdown
                       onChangeHandler={(value) => {
@@ -94,6 +100,7 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
                       }}
                       value={initialValues.stateId}
                       placeholder="state"
+                      isDisabled={type === "Update"}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -105,21 +112,49 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
+                  Vehicle Category <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <MetaCategoryDropdownField
+                      onChangeHandler={(value) => {
+                        field.onChange(value);
+                      }}
+                      value={initialValues.categoryId}
+                      isDisabled={type === "Update"}
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    select vehicle category
+                  </FormDescription>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* type value */}
           <FormField
             control={form.control}
             name="metaTitle"
             render={({ field }) => (
-              <FormItem className="flex w-full mb-2 max-sm:flex-col ">
-                <FormLabel className="flex justify-between mt-4 ml-2 text-base w-72 lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Meta Title <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Textarea
                       placeholder="Affordable car for rent in Dubai"
                       {...field}
-                      className="textarea rounded-xl h-28"
+                      className="textarea h-28 rounded-xl"
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -137,26 +172,26 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
             render={({ field }) => {
               const [isFocused, setIsFocused] = useState(false); // To manage focus state
               const [charCount, setCharCount] = useState(
-                field.value?.length || 0
+                field.value?.length || 0,
               ); // To track character count
 
               const handleFocus = () => setIsFocused(true);
               const handleBlur = () => setIsFocused(false);
               const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>
+                e: React.ChangeEvent<HTMLTextAreaElement>,
               ) => {
                 setCharCount(e.target.value.length);
                 field.onChange(e);
               };
 
               return (
-                <FormItem className="flex w-full mb-2 max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 text-base h-fit w-52 min-w-52 lg:text-lg">
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex h-fit w-52 min-w-52 justify-between text-base lg:text-lg">
                     Meta Description
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
                   <div
-                    className="flex-col items-start w-full"
+                    className="w-full flex-col items-start"
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                   >
@@ -170,13 +205,13 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
                         onChange={handleInputChange} // Handle change to track character count
                       />
                     </FormControl>
-                    <FormDescription className="w-full mt-1 ml-2 flex-between">
+                    <FormDescription className="flex-between ml-2 mt-1 w-full">
                       <span className="w-full max-w-[90%]">
                         Provide meta description.5000 characters max.
                       </span>{" "}
                       <span className="ml-auto"> {`${charCount}/5000`}</span>
                     </FormDescription>
-                    <FormMessage className="ml-2 " />
+                    <FormMessage className="ml-2" />
                   </div>
                 </FormItem>
               );
@@ -189,7 +224,7 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
+          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
         >
           {form.formState.isSubmitting ? "Processing..." : `${type} Home Meta`}
           {form.formState.isSubmitting && <Spinner />}

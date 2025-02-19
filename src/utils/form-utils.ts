@@ -18,7 +18,7 @@ export const handleLevelOneFormSubmission = async (
     vehicleId?: string;
     isCarsCategory: boolean;
     deletedFiles: string[];
-  }
+  },
 ) => {
   let data;
   if (type === "Add") {
@@ -26,14 +26,14 @@ export const handleLevelOneFormSubmission = async (
       values,
       countryCode,
       userId as string,
-      isCarsCategory
+      isCarsCategory,
     );
   } else if (type === "Update") {
     data = await updatePrimaryDetailsForm(
       vehicleId as string,
       values,
       countryCode,
-      isCarsCategory
+      isCarsCategory,
     );
   }
 

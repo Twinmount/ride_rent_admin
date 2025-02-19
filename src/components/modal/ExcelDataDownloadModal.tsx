@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog";
 
 import {
   Select,
@@ -15,63 +15,63 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { useQuery } from '@tanstack/react-query'
-import { fetchAllStates } from '@/api/states'
-import { downloadCompanyData, downloadVehicleData } from '@/api/excel-data'
-import { toast } from '../ui/use-toast'
-import { CloudDownload } from 'lucide-react'
+} from "@/components/ui/select";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllStates } from "@/api/states";
+import { downloadCompanyData, downloadVehicleData } from "@/api/excel-data";
+import { toast } from "../ui/use-toast";
+import { CloudDownload } from "lucide-react";
 
 type StateType = {
-  stateId: string
-  stateName: string
-  stateValue: string
-}
+  stateId: string;
+  stateName: string;
+  stateValue: string;
+};
 
 const ExcelDataDownloadModal = () => {
-  const [selectedStateId, setSelectedStateId] = useState<string | null>(null)
+  const [selectedStateId, setSelectedStateId] = useState<string | null>(null);
   const [selectedStateName, setSelectedStateName] = useState<string | null>(
-    null
-  )
+    null,
+  );
 
   const { data: statesData, isLoading: isStatesLoading } = useQuery({
-    queryKey: ['states'],
+    queryKey: ["states"],
     queryFn: fetchAllStates,
-  })
+  });
 
   const handleDownloadVehicleData = async () => {
     if (selectedStateId && selectedStateName) {
       try {
-        await downloadVehicleData(selectedStateId, selectedStateName)
+        await downloadVehicleData(selectedStateId, selectedStateName);
       } catch (error) {
-        alert('Error downloading vehicle data')
+        alert("Error downloading vehicle data");
       }
     } else {
       toast({
-        variant: 'destructive',
-        title: 'Choose a state to download',
-      })
+        variant: "destructive",
+        title: "Choose a state to download",
+      });
     }
-  }
+  };
 
   const handleDownloadCompanyData = async () => {
     try {
-      await downloadCompanyData()
+      await downloadCompanyData();
     } catch (error) {
-      alert('Error downloading company data')
+      alert("Error downloading company data");
     }
-  }
+  };
 
   return (
     <Dialog>
       <DialogTrigger
         tabIndex={-1}
-        className="w-full gap-2 mt-2 font-semibold text-white transition-colors bg-gray-900 border rounded-lg hover:bg-yellow hover:text-white h-9 flex-center"
+        className={`flex h-11 min-h-11 w-full max-w-full cursor-pointer items-center justify-start gap-2 truncate text-ellipsis whitespace-nowrap rounded-lg pl-2 pr-1 text-left text-black no-underline hover:bg-slate-800 hover:text-white`}
       >
-        Download
         <CloudDownload />
+        Download
       </DialogTrigger>
-      <DialogContent className="max-w-lg p-8 mx-auto transition-all duration-300 ease-out transform bg-white shadow-lg h-fit rounded-2xl max-sm:max-w-[95%]">
+      <DialogContent className="mx-auto h-fit max-w-lg transform rounded-2xl bg-white p-8 shadow-lg transition-all duration-300 ease-out max-sm:max-w-[95%]">
         <DialogHeader className="text-center">
           <DialogTitle className="text-2xl font-bold text-gray-800">
             Excel Data Download
@@ -79,17 +79,17 @@ const ExcelDataDownloadModal = () => {
         </DialogHeader>
 
         {/* Tabs for Vehicle Data and Company Data */}
-        <Tabs defaultValue="vehicle-data" className="w-full mt-1">
-          <TabsList className="w-full h-12 p-0 mb-6 overflow-hidden bg-transparent border border-gray-200 rounded-xl">
+        <Tabs defaultValue="vehicle-data" className="mt-1 w-full">
+          <TabsList className="mb-6 h-12 w-full overflow-hidden rounded-xl border border-gray-200 bg-transparent p-0">
             <TabsTrigger
               value="vehicle-data"
-              className="w-full h-full font-semibold text-gray-700 rounded-none rounded-r-lg focus:bg-blue-100 focus:text-blue-700"
+              className="h-full w-full rounded-none rounded-r-lg font-semibold text-gray-700 focus:bg-blue-100 focus:text-blue-700"
             >
               Vehicle
             </TabsTrigger>
             <TabsTrigger
               value="company-data"
-              className="w-full h-full font-semibold text-gray-700 rounded-none rounded-l-lg focus:bg-blue-100 focus:text-blue-700"
+              className="h-full w-full rounded-none rounded-l-lg font-semibold text-gray-700 focus:bg-blue-100 focus:text-blue-700"
             >
               Company
             </TabsTrigger>
@@ -105,17 +105,17 @@ const ExcelDataDownloadModal = () => {
               <Select
                 onValueChange={(value) => {
                   const selectedState = statesData?.result.find(
-                    (state: StateType) => state.stateId === value
-                  )
-                  setSelectedStateId(selectedState?.stateId || null)
-                  setSelectedStateName(selectedState?.stateName || null)
+                    (state: StateType) => state.stateId === value,
+                  );
+                  setSelectedStateId(selectedState?.stateId || null);
+                  setSelectedStateName(selectedState?.stateName || null);
                 }}
                 disabled={isStatesLoading}
               >
-                <SelectTrigger className="w-full border-gray-300 rounded-md ring-0 focus:ring-0">
+                <SelectTrigger className="w-full rounded-md border-gray-300 ring-0 focus:ring-0">
                   <SelectValue placeholder="Choose state" />
                 </SelectTrigger>
-                <SelectContent className="z-[110] border-gray-200 absolute max-md:max-h-44">
+                <SelectContent className="absolute z-[110] border-gray-200 max-md:max-h-44">
                   {statesData?.result.map((state: StateType) => (
                     <SelectItem key={state.stateId} value={state.stateId}>
                       {state.stateName}
@@ -127,7 +127,7 @@ const ExcelDataDownloadModal = () => {
               {/* Download Button for Vehicle Data */}
               <Button
                 onClick={handleDownloadVehicleData}
-                className="w-full py-2 mt-4 text-white rounded-md shadow-md bg-yellow hover:bg-yellow flex-center gap-x-2"
+                className="flex-center mt-4 w-full gap-x-2 rounded-md bg-yellow py-2 text-white shadow-md hover:bg-yellow"
               >
                 Download Vehicle Data <CloudDownload />
               </Button>
@@ -143,7 +143,7 @@ const ExcelDataDownloadModal = () => {
               {/* Download Button for Company Data */}
               <Button
                 onClick={handleDownloadCompanyData}
-                className="w-full py-2 mt-4 text-white rounded-md shadow-md bg-yellow hover:bg-yellow flex-center gap-x-2"
+                className="flex-center mt-4 w-full gap-x-2 rounded-md bg-yellow py-2 text-white shadow-md hover:bg-yellow"
               >
                 Download Company Data <CloudDownload />
               </Button>
@@ -152,7 +152,7 @@ const ExcelDataDownloadModal = () => {
         </Tabs>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
 
-export default ExcelDataDownloadModal
+export default ExcelDataDownloadModal;

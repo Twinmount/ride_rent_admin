@@ -24,7 +24,7 @@ import { useState } from "react";
 import { Textarea } from "../ui/textarea";
 import StatesDropdown from "./dropdowns/StatesDropdown";
 import VehicleTypesDropdown from "./dropdowns/VehicleTypesDropdown";
-import ListingMetaCategoryDropdown from "./dropdowns/ListngMetaCategoryDropdown";
+import MetaCategoryDropdownField from "./dropdowns/MetaCategoryDropdownField";
 
 type ListingMetaFormProps = {
   type: "Add" | "Update";
@@ -62,7 +62,7 @@ export default function ListingMetaForm({
           title: `${type} Meta Data successfully`,
           className: "bg-yellow text-white",
         });
-        navigate("/manage-meta-data/listing");
+        navigate("/meta-data/listing");
       }
     } catch (error) {
       console.error(error);
@@ -78,18 +78,18 @@ export default function ListingMetaForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
+        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
         <div className="flex flex-col gap-5">
           <FormField
             control={form.control}
             name="stateId"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   State <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <StatesDropdown
                       onChangeHandler={(value) => {
@@ -112,14 +112,14 @@ export default function ListingMetaForm({
             control={form.control}
             name="categoryId"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
                   Vehicle Category <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
-                    <ListingMetaCategoryDropdown
+                    <MetaCategoryDropdownField
                       onChangeHandler={(value) => {
                         field.onChange(value);
                         form.setValue("typeId", "");
@@ -141,12 +141,12 @@ export default function ListingMetaForm({
             control={form.control}
             name="typeId"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Vehicle Type <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <VehicleTypesDropdown
                       vehicleCategoryId={form.watch("categoryId")}
@@ -169,16 +169,16 @@ export default function ListingMetaForm({
             control={form.control}
             name="metaTitle"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                   Meta Title <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Textarea
                       placeholder="Best Affordable vehicle in  Dubai"
                       {...field}
-                      className="h-28 rounded-xl textarea"
+                      className="textarea h-28 rounded-xl"
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -197,26 +197,26 @@ export default function ListingMetaForm({
             render={({ field }) => {
               const [isFocused, setIsFocused] = useState(false); // To manage focus state
               const [charCount, setCharCount] = useState(
-                field.value?.length || 0
+                field.value?.length || 0,
               ); // To track character count
 
               const handleFocus = () => setIsFocused(true);
               const handleBlur = () => setIsFocused(false);
               const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>
+                e: React.ChangeEvent<HTMLTextAreaElement>,
               ) => {
                 setCharCount(e.target.value.length);
                 field.onChange(e);
               };
 
               return (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base h-fit min-w-52 lg:text-lg">
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex h-fit w-52 min-w-52 justify-between text-base lg:text-lg">
                     Meta Description
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
                   <div
-                    className="flex-col items-start w-full"
+                    className="w-full flex-col items-start"
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                   >
@@ -230,7 +230,7 @@ export default function ListingMetaForm({
                         onChange={handleInputChange} // Handle change to track character count
                       />
                     </FormControl>
-                    <FormDescription className="mt-1 ml-2 w-full flex-between">
+                    <FormDescription className="flex-between ml-2 mt-1 w-full">
                       <span className="w-full max-w-[90%]">
                         Provide meta description.5000 characters max.
                       </span>{" "}
@@ -249,7 +249,7 @@ export default function ListingMetaForm({
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
+          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
         >
           {form.formState.isSubmitting
             ? "Processing..."

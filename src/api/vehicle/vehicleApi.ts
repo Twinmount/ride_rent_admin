@@ -18,7 +18,7 @@ export const addPrimaryDetailsForm = async (
   values: PrimaryFormType,
   countryCode: string,
   userId: string,
-  isCarsCategory: boolean
+  isCarsCategory: boolean,
 ): Promise<AddPrimaryFormResponse> => {
   try {
     // Extracting phone number and country code
@@ -33,6 +33,14 @@ export const addPrimaryDetailsForm = async (
       vehicleCategoryId: values.vehicleCategoryId,
       vehicleTypeId: values.vehicleTypeId,
       vehicleBrandId: values.vehicleBrandId,
+      vehicleSeriesLabel: values.vehicleSeriesLabel,
+      vehicleSeries: values.vehicleSeries,
+      vehicleSeriesPageHeading: values.vehicleSeriesPageHeading,
+      vehicleSeriesPageSubheading: values.vehicleSeriesPageSubheading,
+      vehicleSeriesInfoTitle: values.vehicleSeriesInfoTitle,
+      vehicleSeriesInfoDescription: values.vehicleSeriesInfoDescription,
+      vehicleSeriesMetaTitle: values.vehicleSeriesMetaTitle,
+      vehicleSeriesMetaDescription: values.vehicleSeriesMetaDescription,
       vehicleModel: values.vehicleModel,
       vehicleRegistrationNumber: values.vehicleRegistrationNumber,
       vehicleRegisteredYear: values.vehicleRegisteredYear,
@@ -87,7 +95,7 @@ export const updatePrimaryDetailsForm = async (
   vehicleId: string,
   values: PrimaryFormType,
   countryCode: string,
-  isCarsCategory: boolean
+  isCarsCategory: boolean,
 ): Promise<AddPrimaryFormResponse> => {
   try {
     // Extracting phone number and country code
@@ -102,6 +110,14 @@ export const updatePrimaryDetailsForm = async (
       vehicleCategoryId: values.vehicleCategoryId,
       vehicleTypeId: values.vehicleTypeId,
       vehicleBrandId: values.vehicleBrandId,
+      vehicleSeriesLabel: values.vehicleSeriesLabel,
+      vehicleSeries: values.vehicleSeries,
+      vehicleSeriesPageHeading: values.vehicleSeriesPageHeading,
+      vehicleSeriesPageSubheading: values.vehicleSeriesPageSubheading,
+      vehicleSeriesInfoTitle: values.vehicleSeriesInfoTitle,
+      vehicleSeriesInfoDescription: values.vehicleSeriesInfoDescription,
+      vehicleSeriesMetaTitle: values.vehicleSeriesMetaTitle,
+      vehicleSeriesMetaDescription: values.vehicleSeriesMetaDescription,
       vehicleModel: values.vehicleModel,
       vehicleRegistrationNumber: values.vehicleRegistrationNumber,
       vehicleRegisteredYear: values.vehicleRegisteredYear,
@@ -162,7 +178,7 @@ type GetSpecificationFormDataParams = {
 
 // API function to get features form data for a specific vehicle (type === 'Update')
 export const getLevelsFilled = async (
-  vehicleId: string
+  vehicleId: string,
 ): Promise<GetLevelsFilledResponse> => {
   try {
     const url = `${Slug.GET_LEVELS_FILLED}?vehicleId=${vehicleId}`;
@@ -184,7 +200,7 @@ export const getLevelsFilled = async (
 
 // fetch specification form data
 export const getPrimaryDetailsFormDefaultData = async (
-  companyId: string
+  companyId: string,
 ): Promise<GetPrimaryFormResponse> => {
   try {
     const url = `${Slug.GET_PRIMARY_FORM_DEFAULT}?companyId=${companyId}`;
@@ -206,7 +222,7 @@ export const getPrimaryDetailsFormDefaultData = async (
 
 // fetch specification form data
 export const getPrimaryDetailsFormData = async (
-  vehicleId: string
+  vehicleId: string,
 ): Promise<GetPrimaryFormResponse> => {
   try {
     const url = `${Slug.GET_PRIMARY_FORM}?vehicleId=${vehicleId}`;
@@ -254,7 +270,7 @@ export const getSpecificationFormFieldData = async ({
 
 // API function returning the above type
 export const getSpecificationFormData = async (
-  vehicleId: string
+  vehicleId: string,
 ): Promise<GetSpecificationFormDataResponse> => {
   try {
     const url = `${Slug.GET_SPEC_FORM_DATA}?vehicleId=${vehicleId}`;
@@ -292,7 +308,7 @@ type AddSpecificationsRequestBody = {
 
 //add specifications
 export const addSpecifications = async (
-  requestBody: AddSpecificationsRequestBody
+  requestBody: AddSpecificationsRequestBody,
 ) => {
   try {
     const data = await API.post({
@@ -318,7 +334,7 @@ type UpdateSpecificationsRequestBody = {
 
 // Update specifications
 export const updateSpecifications = async (
-  requestBody: UpdateSpecificationsRequestBody
+  requestBody: UpdateSpecificationsRequestBody,
 ) => {
   try {
     const data = await API.put({
@@ -367,7 +383,7 @@ export const getFeaturesFormFieldsData = async ({
 
 // API function to get features form data for a specific vehicle (type === 'Update')
 export const getFeaturesFormData = async (
-  vehicleId: string
+  vehicleId: string,
 ): Promise<GetFeaturesFormDataResponse> => {
   try {
     const url = `${Slug.GET_FEATURES_FORM_DATA}?vehicleId=${vehicleId}`;
@@ -428,7 +444,7 @@ type UpdateFeaturesRequestBody = {
 
 // API function to update features
 export const updateFeatures = async (
-  requestBody: UpdateFeaturesRequestBody
+  requestBody: UpdateFeaturesRequestBody,
 ) => {
   try {
     const data = await API.put({
@@ -510,7 +526,7 @@ export const toggleVehicleVisibility = async ({
 
 // fetch listings count for vehicles
 export const getVehicleListingsCountByState = async (
-  stateId: string
+  stateId: string,
 ): Promise<VehicleListingResponse> => {
   try {
     const url = `${Slug.GET_VEHICLE_LISTINGS_COUNT_BY_STATE}?stateId=${stateId}`;
@@ -527,7 +543,7 @@ export const getVehicleListingsCountByState = async (
   } catch (error) {
     console.error(
       "Error fetching vehicle listing count per state data:",
-      error
+      error,
     );
     throw error;
   }

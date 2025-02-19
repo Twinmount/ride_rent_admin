@@ -100,6 +100,7 @@ export const BlogPromotionFormDefaultValue = {
 
 export const HomeMetaFormDefaultValue = {
   stateId: "",
+  categoryId: "",
   metaTitle: "",
   metaDescription: "",
 };
@@ -120,6 +121,14 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   vehicleCategoryId: "",
   vehicleTypeId: "", //'luxury' for example
   vehicleBrandId: "",
+  vehicleSeriesLabel: "",
+  vehicleSeries: "",
+  vehicleSeriesPageHeading: "",
+  vehicleSeriesPageSubheading: "",
+  vehicleSeriesInfoTitle: "",
+  vehicleSeriesInfoDescription: "",
+  vehicleSeriesMetaTitle: "",
+  vehicleSeriesMetaDescription: "",
   vehicleModel: "",
   vehiclePhotos: [], //upto 8 photos of the vehicle
   vehicleRegistrationNumber: "",
