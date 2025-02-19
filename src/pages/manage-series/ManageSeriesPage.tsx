@@ -37,18 +37,18 @@ export default function ManageBrandsPage() {
     queryFn: () => fetchAllCategories({ page: 1, limit: 20, sortOrder: "ASC" }),
   });
 
-  // redirecting to "/manage-brands/categoryId" route as soon as the category data is fetched
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     const categories = categoryData?.result?.list || [];
-  //     if (!vehicleCategoryId && categories.length > 0) {
-  //       const firstCategory = categories[0];
-  //       navigate(`/manage-brands/${firstCategory.categoryId}`, {
-  //         replace: true,
-  //       });
-  //     }
-  //   }
-  // }, [isSuccess, categoryData, vehicleCategoryId, navigate]);
+  // redirecting to "/manage-series/categoryId" route as soon as the category data is fetched
+  useEffect(() => {
+    if (isSuccess) {
+      const categories = categoryData?.result?.list || [];
+      if (!vehicleCategoryId && categories.length > 0) {
+        const firstCategory = categories[0];
+        navigate(`/manage-brands/${firstCategory.categoryId}`, {
+          replace: true,
+        });
+      }
+    }
+  }, [isSuccess, categoryData, vehicleCategoryId, navigate]);
 
   // destructuring the "categories" from categoryData
   const { list: categories = [] } = categoryData?.result || {};

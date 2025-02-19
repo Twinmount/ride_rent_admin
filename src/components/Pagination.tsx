@@ -11,6 +11,10 @@ export default function Pagination({
   setPage,
   totalPages,
 }: PaginationProps) {
+  if (totalPages < 1) {
+    return null;
+  }
+
   return (
     <ReactPaginate
       containerClassName="flex items-center justify-center gap-x-3 !mx-auto h-8 mt-10 mb-5 max-w-[95%]" // The class name for the pagination container

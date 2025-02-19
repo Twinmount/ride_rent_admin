@@ -7,14 +7,14 @@ import { useState } from "react";
 import { useAdminContext } from "@/context/AdminContext";
 
 import Pagination from "@/components/Pagination";
-import { useCategorySelection } from "@/hooks/useCategorySelection";
+import { useCategories } from "@/hooks/useCategories";
 
 export default function AgentPortfolioMetaDataPage() {
   const [page, setPage] = useState(1);
 
   const { state } = useAdminContext();
 
-  const { selectedCategory, isCategoryLoading } = useCategorySelection();
+  const { selectedCategory, isCategoryLoading } = useCategories();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({

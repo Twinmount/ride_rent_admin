@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,16 +7,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { ChevronDown } from 'lucide-react'
-import { CategoryType } from '@/types/api-types/API-types'
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
+import { CategoryType } from "@/types/api-types/API-types";
 
 interface CategoryDropdownProps {
-  selectedCategory?: CategoryType
-  setSelectedCategory: (category: CategoryType) => void
-  type: 'brand' | 'type'
-  categories: CategoryType[]
-  isLoading: boolean
+  selectedCategory?: CategoryType | null;
+  setSelectedCategory: (category: CategoryType) => void;
+  type: "brand" | "type" | "series";
+  categories: CategoryType[];
+  isLoading: boolean;
 }
 
 export default function CategoryDropdown({
@@ -26,37 +26,39 @@ export default function CategoryDropdown({
   categories,
   isLoading,
 }: CategoryDropdownProps) {
-  const params = useParams()
-  const navigate = useNavigate()
+  const params = useParams();
+  const navigate = useNavigate();
 
   // setting selected category and navigating to respective url
   const handleCategorySelect = (category: CategoryType) => {
-    setSelectedCategory(category)
-    if (type === 'type') {
-      navigate(`/vehicle/manage-types/${category.categoryId}`)
-    } else if (type === 'brand') {
-      navigate(`/manage-brands/${category.categoryId}`)
+    setSelectedCategory(category);
+    if (type === "type") {
+      navigate(`/vehicle/manage-types/${category.categoryId}`);
+    } else if (type === "brand") {
+      navigate(`/manage-brands/${category.categoryId}`);
+    } else if (type === "series") {
+      navigate(`/vehicle/manage-series/${category.categoryId}`);
     }
-  }
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="!h-9 text-white bg-slate-800 text-2xl outline-none cursor-pointer w-fit max-w-fit !rounded-lg hover:bg-slate-900 hover:text-yellow transition-colors"
+        className="!h-9 w-fit max-w-fit cursor-pointer !rounded-lg bg-slate-800 text-2xl text-white outline-none transition-colors hover:bg-slate-900 hover:text-yellow"
         disabled={isLoading || categories.length === 0}
       >
-        <div className="flex items-center pl-2 font-bold tracking-wider rounded-lg whitespace-nowrap">
+        <div className="flex items-center whitespace-nowrap rounded-lg pl-2 font-bold tracking-wider">
           {isLoading
-            ? 'Loading...'
+            ? "Loading..."
             : categories.length > 0
-            ? selectedCategory?.name || 'Select Category'
-            : 'No Categories'}
-          <ChevronDown className="relative ml-auto top-2" />
+              ? selectedCategory?.name || "Select Category"
+              : "No Categories"}
+          <ChevronDown className="relative top-2 ml-auto" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="ml-8 w-44">
-        <DropdownMenuLabel className="mb-2 font-bold bg-slate-100">
+        <DropdownMenuLabel className="mb-2 bg-slate-100 font-bold">
           Choose Category
         </DropdownMenuLabel>
         {isLoading ? (
@@ -78,9 +80,9 @@ export default function CategoryDropdown({
                 onClick={() => handleCategorySelect(category)}
                 className={`${
                   category.categoryId === params.vehicleCategoryId
-                    ? 'bg-slate-800 hover:bg-slate-800 text-white'
-                    : 'hover:bg-slate-200 text-black'
-                } font-semibold cursor-pointer`}
+                    ? "bg-slate-800 text-white hover:bg-slate-800"
+                    : "text-black hover:bg-slate-200"
+                } cursor-pointer font-semibold`}
               >
                 {category.name}
               </DropdownMenuItem>
@@ -90,5 +92,5 @@ export default function CategoryDropdown({
         )}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

@@ -9,7 +9,7 @@ import { useAdminContext } from "@/context/AdminContext";
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import Pagination from "@/components/Pagination";
-import { useCategorySelection } from "@/hooks/useCategorySelection";
+import { useCategories } from "@/hooks/useCategories";
 
 export default function ListingMetaDataPage() {
   const [page, setPage] = useState(1);
@@ -21,7 +21,7 @@ export default function ListingMetaDataPage() {
     setSelectedCategory,
     categoryList,
     isCategoryLoading,
-  } = useCategorySelection();
+  } = useCategories();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({

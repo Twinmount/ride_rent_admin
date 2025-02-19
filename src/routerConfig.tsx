@@ -57,9 +57,7 @@ const EditTypePage = lazy(() => import("./pages/manage-types/EditTypePage"));
 const AddTypePage = lazy(() => import("./pages/manage-types/AddTypePage"));
 
 // brands page import
-const ManageBrandsPage = lazy(
-  () => import("./pages/manage-brands/ManageBrandsPage"),
-);
+const BrandsPage = lazy(() => import("./pages/manage-brands/BrandsPage"));
 const AddBrandPage = lazy(() => import("./pages/manage-brands/AddBrandPage"));
 const EditBrandPage = lazy(() => import("./pages/manage-brands/EditBrandPage"));
 
@@ -319,11 +317,11 @@ export const router = createBrowserRouter([
               // brands routes
               {
                 path: "/manage-brands",
-                element: <ManageBrandsPage />,
+                element: <BrandsPage />,
               },
               {
                 path: "/manage-brands/:vehicleCategoryId",
-                element: <ManageBrandsPage />,
+                element: <BrandsPage />,
               },
               {
                 path: "/manage-brands/:vehicleCategoryId/add-brand",
@@ -340,15 +338,15 @@ export const router = createBrowserRouter([
                 element: <ManageSeriesPage />,
               },
               {
-                path: "/manage-series/:brandId",
+                path: "/manage-series/:categoryId",
                 element: <ManageSeriesPage />,
               },
               {
-                path: "/manage-series/:brandId/add-series",
+                path: "/manage-series/:categoryId/add-series",
                 element: <AddSeriesPage />,
               },
               {
-                path: "/manage-series/edit/:brandId",
+                path: "/manage-series/edit/:seriesId",
                 element: <EditSeriesPage />,
               },
 
