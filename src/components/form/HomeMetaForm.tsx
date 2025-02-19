@@ -100,6 +100,7 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
                       }}
                       value={initialValues.stateId}
                       placeholder="state"
+                      isDisabled={type === "Update"}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -127,6 +128,7 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
                         field.onChange(value);
                       }}
                       value={initialValues.categoryId}
+                      isDisabled={type === "Update"}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">

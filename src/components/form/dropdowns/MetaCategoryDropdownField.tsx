@@ -70,7 +70,10 @@ const MetaCategoryDropdownField = ({
       defaultValue={value}
       disabled={isDisabled || isLoading}
     >
-      <SelectTrigger className="select-field input-fields ring-0 focus:ring-0">
+      <SelectTrigger
+        className="select-field input-fields ring-0 focus:ring-0"
+        disabled={isDisabled}
+      >
         <SelectValue
           className="!font-bold !text-black"
           placeholder="Choose category"

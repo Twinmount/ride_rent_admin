@@ -2,32 +2,49 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchHomeMetaList } from "@/api/meta-data";
 import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
-import { useAdminContext } from "@/context/AdminContext";
-import PageHeading from "@/components/general/PageHeading";
+import Pagination from "@/components/Pagination";
+import { useState } from "react";
+import { useFetchStates } from "@/hooks/useFetchStates";
+import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
 
 export default function HomeMetaData() {
-  const { state } = useAdminContext();
+  const [page, setPage] = useState(1);
+
+  const { isStateLoading, selectedState, statesList, setSelectedState } =
+    useFetchStates();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({
-    queryKey: ["home-meta-data", state.stateId],
+    queryKey: ["home-meta-data", page, selectedState?.stateId],
     queryFn: () =>
       fetchHomeMetaList({
         page: 1,
         limit: 20,
-        sortOrder: "ASC",
-        stateId: state.stateId,
+        sortOrder: "DESC",
+        stateId: selectedState?.stateId as string,
       }),
+    enabled: !!selectedState,
   });
 
   const seoData = data?.result?.list || [];
 
   return (
     <section className="h-auto min-h-screen w-full bg-gray-100 py-10">
-      <PageHeading
-        heading={`Showing HomePage meta-data under ${state.stateName} for all 11 categories`}
-      />
+      <div className="mb-6 flex flex-col">
+        <h1 className="mb-5 text-center text-2xl font-semibold lg:ml-6 lg:text-left">
+          HomePage meta-data under {selectedState?.stateName} for all 11
+          categories
+        </h1>
 
+        <div className="ml-auto mr-6 w-fit md:mr-10 lg:mr-16">
+          <GeneralStatesDropdown
+            isLoading={isStateLoading}
+            options={statesList}
+            selectedState={selectedState}
+            setSelectedState={setSelectedState}
+          />
+        </div>
+      </div>
       <div className="container max-w-4xl space-y-3">
         {isLoading ? (
           <LazyLoader />
