@@ -223,7 +223,7 @@ const router = createBrowserRouter([
                 path: "/listings/pending",
                 element: (
                   <GeneralListingPage
-                    queryKey={["listings,pending-listings"]}
+                    queryKey={["listings, pending-listings"]}
                     approvalStatus="PENDING"
                     title="Rejected Listings"
                     newRegistration={true}
