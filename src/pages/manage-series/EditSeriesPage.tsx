@@ -1,21 +1,23 @@
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import FormSkelton from "@/components/skelton/FormSkelton";
-import BrandForm from "@/components/form/BrandForm";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBrandById } from "@/api/brands";
+import { fetchSeriesById } from "@/api/vehicle-series";
+import VehicleSeriesForm from "@/components/form/VehicleSeriesForm";
 
 export default function EditBrandPage() {
-  const { brandId } = useParams<{
-    brandId: string;
+  const { vehicleSeriesId } = useParams<{
+    vehicleSeriesId: string;
   }>();
 
   const navigate = useNavigate();
 
-  const { data: brandData, isLoading } = useQuery({
-    queryKey: ["brands", brandId],
-    queryFn: () => fetchBrandById(brandId as string),
+  const { data, isLoading } = useQuery({
+    queryKey: ["vehicle-series-by-id", vehicleSeriesId],
+    queryFn: () => fetchSeriesById(vehicleSeriesId as string),
   });
+
+  const formData = data?.result;
 
   return (
     <section className="container min-h-screen pb-32 pt-5">
@@ -31,7 +33,7 @@ export default function EditBrandPage() {
       {isLoading ? (
         <FormSkelton />
       ) : (
-        <BrandForm type="Update" formData={brandData?.result} />
+        <VehicleSeriesForm type="Update" formData={formData} />
       )}
     </section>
   );

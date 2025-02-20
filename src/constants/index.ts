@@ -7,6 +7,7 @@ import {
   CompanyFormType,
   CompanyStatusFormType,
   StateFormType,
+  VehicleSeriesType,
   VehicleTypeFormType,
 } from "@/types/types";
 import {
@@ -121,8 +122,8 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   vehicleCategoryId: "",
   vehicleTypeId: "", //'luxury' for example
   vehicleBrandId: "",
-  vehicleSeriesLabel: "",
   vehicleSeries: "",
+  vehicleSeriesLabel: "",
   vehicleSeriesPageHeading: "",
   vehicleSeriesPageSubheading: "",
   vehicleSeriesInfoTitle: "",
@@ -183,6 +184,8 @@ export const CompanyFormDefaultValues: CompanyFormType = {
   email: "",
   companyAddress: "", // Default empty value
   companyLanguages: [],
+  companyMetaTitle: "",
+  companyMetaDescription: "",
 };
 
 // Company registration phase 2 form default values
@@ -213,3 +216,17 @@ export const categoryTags = [
   { label: "News", value: "news" },
   { label: "Travel", value: "travel" },
 ];
+
+export const VehicleSeriesFormDefaultValues: VehicleSeriesType = {
+  stateId: "",
+  vehicleCategoryId: "",
+  vehicleBrandId: "",
+  vehicleSeries: "",
+  vehicleSeriesLabel: "",
+  vehicleSeriesPageHeading: "",
+  vehicleSeriesPageSubheading: "",
+  vehicleSeriesInfoTitle: "",
+  vehicleSeriesInfoDescription: "",
+  vehicleSeriesMetaTitle: "",
+  vehicleSeriesMetaDescription: "",
+};

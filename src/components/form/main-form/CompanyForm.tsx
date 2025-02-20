@@ -88,7 +88,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           title: `Company ${type}ed successfully`,
           className: "bg-yellow text-white",
         });
-        navigate("/registrations");
+        navigate("/registrations/live");
       }
     } catch (error) {
       console.error(error);
@@ -124,16 +124,16 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-[800px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8 border-t shadow-md"
+        className="mx-auto flex w-full max-w-[800px] flex-col gap-5 rounded-3xl border-t bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
-        <div className="flex flex-col gap-5 p-3 mx-auto w-full rounded-3xl">
+        <div className="mx-auto flex w-full flex-col gap-5 rounded-3xl p-3">
           {/* Agent ID */}
           {initialValues?.agentId && (
-            <div className="flex mb-2 w-full max-sm:flex-col">
-              <div className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+            <div className="mb-2 flex w-full max-sm:flex-col">
+              <div className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
                 Your Agent ID <span className="mr-5 max-sm:hidden">:</span>
               </div>
-              <div className="flex items-center mt-4 w-full text-lg font-semibold text-gray-500 cursor-default">
+              <div className="mt-4 flex w-full cursor-default items-center text-lg font-semibold text-gray-500">
                 {initialValues.agentId}{" "}
                 <ShieldCheck className="ml-3 text-green-500" size={20} />
                 <Button
@@ -141,9 +141,9 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                   onClick={() =>
                     handleCopy(initialValues.agentId as string, "Agent ID")
                   }
-                  className="p-1 ml-8 text-gray-500 h-fit bg-slate-600 hover:bg-slate-900 hover:shadow-md"
+                  className="ml-8 h-fit bg-slate-600 p-1 text-gray-500 hover:bg-slate-900 hover:shadow-md"
                 >
-                  <Copy className="w-5 h-5 text-white" />
+                  <Copy className="h-5 w-5 text-white" />
                 </Button>
               </div>
             </div>
@@ -151,11 +151,11 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
 
           {/* Email */}
           {initialValues?.email && (
-            <div className="flex mb-2 w-full max-sm:flex-col">
-              <div className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+            <div className="mb-2 flex w-full max-sm:flex-col">
+              <div className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
                 Email <span className="mr-5 max-sm:hidden">:</span>
               </div>
-              <div className="flex items-center mt-4 w-full text-lg font-semibold text-gray-500 cursor-pointer">
+              <div className="mt-4 flex w-full cursor-pointer items-center text-lg font-semibold text-gray-500">
                 <a
                   href={`mailto:${initialValues?.email}`}
                   className="underline hover:text-blue-600"
@@ -169,9 +169,9 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                   onClick={() =>
                     handleCopy(initialValues.email as string, "Email")
                   }
-                  className="p-1 ml-8 text-gray-500 h-fit bg-slate-600 hover:bg-slate-900 hover:shadow-md"
+                  className="ml-8 h-fit bg-slate-600 p-1 text-gray-500 hover:bg-slate-900 hover:shadow-md"
                 >
-                  <Copy className="w-5 h-5 text-white" />
+                  <Copy className="h-5 w-5 text-white" />
                 </Button>
               </div>
             </div>
@@ -179,11 +179,11 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
 
           {/* Phone Number */}
           {initialValues?.phoneNumber && (
-            <div className="flex mb-2 w-full max-sm:flex-col">
-              <div className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+            <div className="mb-2 flex w-full max-sm:flex-col">
+              <div className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
                 Phone Number <span className="mr-5 max-sm:hidden">:</span>
               </div>
-              <div className="flex items-center mt-4 w-full text-lg font-semibold tracking-widest text-gray-500 cursor-pointer">
+              <div className="mt-4 flex w-full cursor-pointer items-center text-lg font-semibold tracking-widest text-gray-500">
                 <a
                   href={`tel:+${initialValues?.phoneNumber}`}
                   className="underline hover:text-blue-600"
@@ -197,12 +197,12 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                   onClick={() =>
                     handleCopy(
                       initialValues.phoneNumber as string,
-                      "Phone Number"
+                      "Phone Number",
                     )
                   }
-                  className="p-1 ml-8 text-gray-500 h-fit bg-slate-600 hover:bg-slate-900 hover:shadow-md"
+                  className="ml-8 h-fit bg-slate-600 p-1 text-gray-500 hover:bg-slate-900 hover:shadow-md"
                 >
-                  <Copy className="w-5 h-5 text-white" />
+                  <Copy className="h-5 w-5 text-white" />
                 </Button>
               </div>
             </div>
@@ -213,11 +213,11 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             control={form.control}
             name="companyName"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
                   Company Name <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
                       placeholder="Company Name"
@@ -225,7 +225,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                       className="input-field"
                     />
                   </FormControl>
-                  <FormDescription className="mt-1 ml-1">
+                  <FormDescription className="ml-1 mt-1">
                     Enter your company name.
                   </FormDescription>
                   <FormMessage />
@@ -293,11 +293,11 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             control={form.control}
             name="expireDate"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-52 justify-between text-base max-sm:w-fit lg:text-lg">
                   Expiry Date <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-fit">
+                <div className="w-fit flex-col items-start">
                   <FormControl>
                     <DatePicker
                       selected={field.value}
@@ -306,7 +306,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                       wrapperClassName="datePicker text-base -ml-4 "
                     />
                   </FormControl>
-                  <FormDescription className="mt-1 ml-1">
+                  <FormDescription className="ml-1 mt-1">
                     Enter the expiry of your Commercial License/Trade License.
                   </FormDescription>
                   <FormMessage />
@@ -320,12 +320,12 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             control={form.control}
             name="regNumber"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
                   Registration Number/Trade License Number{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
                       placeholder="Enter company registration number"
@@ -333,7 +333,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                       className="input-field"
                     />
                   </FormControl>
-                  <FormDescription className="mt-1 ml-1">
+                  <FormDescription className="ml-1 mt-1">
                     Enter your company registration number. The number should be
                     a combination of letters and numbers, without any spaces or
                     special characters, up to 15 characters.
@@ -348,12 +348,12 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             control={form.control}
             name="companyLanguages"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base max-sm:w-fit lg:text-lg">
                   Supported Languages{" "}
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <CompanyLanguagesDropdown
                       value={field.value}
@@ -361,7 +361,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                       placeholder="Languages"
                     />
                   </FormControl>
-                  <FormDescription className="mt-1 ml-1">
+                  <FormDescription className="ml-1 mt-1">
                     Select all the languages the staff can speak or understand.
                     These will be displayed on company's public profile page,
                     helping customers feel comfortable with communication.
@@ -377,11 +377,11 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             name="companyAddress"
             render={({ field }) => {
               const [charCount, setCharCount] = useState(
-                field.value?.length || 0
+                field.value?.length || 0,
               ); // To track character count
 
               const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>
+                e: React.ChangeEvent<HTMLTextAreaElement>,
               ) => {
                 const newValue = e.target.value;
                 if (newValue.length <= 150) {
@@ -391,21 +391,21 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
               };
 
               return (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-52 text-base h-fit min-w-52 lg:text-lg">
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex h-fit w-52 min-w-52 justify-between text-base lg:text-lg">
                     Company Address
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
-                  <div className="flex-col items-start w-full">
+                  <div className="w-full flex-col items-start">
                     <FormControl>
                       <Textarea
                         placeholder="Company Address"
                         {...field}
-                        className={`textarea rounded-xl transition-all duration-300 h-28`} // Dynamic height
+                        className={`textarea h-28 rounded-xl transition-all duration-300`} // Dynamic height
                         onChange={handleInputChange} // Handle change to track character count
                       />
                     </FormControl>
-                    <FormDescription className="mt-1 ml-2 w-full flex-between">
+                    <FormDescription className="flex-between ml-2 mt-1 w-full">
                       <span className="w-full max-w-[90%]">
                         Provide company address. This will be showed in the
                         public company profile page. 150 characters max.
@@ -425,7 +425,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full h-12 text-lg font-semibold text-white flex-center bg-yellow hover:bg-yellow hover:text-white hover:shadow-lg"
+          className="flex-center h-12 w-full bg-yellow text-lg font-semibold text-white hover:bg-yellow hover:text-white hover:shadow-lg"
         >
           Update
           {form.formState.isSubmitting && <Spinner />}

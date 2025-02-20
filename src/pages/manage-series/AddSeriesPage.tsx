@@ -1,21 +1,9 @@
-import { fetchCategoryById } from "@/api/vehicle-categories";
-import BrandForm from "@/components/form/BrandForm";
-import FormSkelton from "@/components/skelton/FormSkelton";
-import { useQuery } from "@tanstack/react-query";
-
+import VehicleSeriesForm from "@/components/form/VehicleSeriesForm";
 import { CircleArrowLeft } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function AddBrandPage() {
-  const { vehicleCategoryId } = useParams<{ vehicleCategoryId: string }>();
-
+export default function AddVehicleSeriesPage() {
   const navigate = useNavigate();
-
-  const { isLoading } = useQuery({
-    queryKey: ["category", vehicleCategoryId],
-    queryFn: () => fetchCategoryById(vehicleCategoryId as string),
-    enabled: !!vehicleCategoryId,
-  });
 
   return (
     <section className="container pb-32 pt-5">
@@ -28,7 +16,9 @@ export default function AddBrandPage() {
         </button>
         <h3 className="h3-bold text-center sm:text-left">Add New Series</h3>
       </div>
-      {isLoading ? <FormSkelton /> : <BrandForm type="Add" />}
+
+      {/* vehicle series form  */}
+      <VehicleSeriesForm type="Add" />
     </section>
   );
 }

@@ -2,45 +2,41 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import * as z from "zod";
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-
+import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import Spinner from "@/components/general/Spinner";
 import { VehicleSeriesSchema } from "@/lib/validator";
 import { VehicleSeriesType } from "@/types/types";
+import { FormItemWrapper } from "./form-ui/FormItemWrapper";
+import StatesDropdown from "./dropdowns/StatesDropdown";
+import BrandsDropdown from "./dropdowns/BrandsDropdown";
+import { FormSubmitButton } from "./form-ui/FormSubmitButton";
+import { Textarea } from "../ui/textarea";
+import { sanitizeStringToSlug } from "@/lib/utils";
+import { FormContainer } from "./form-ui/FormContainer";
+import VehicleCategoryDropdown from "./dropdowns/VehicleCategoryDropdown";
+import { VehicleSeriesFormDefaultValues } from "@/constants";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { addVehicleSeries, updateVehicleSeries } from "@/api/vehicle-series";
 // import { addVehicleSeries, updateVehicleSeries } from "@/api/vehicle-series";
 
 type VehicleSeriesFormProps = {
   type: "Add" | "Update";
-  brandId: string;
   formData?: VehicleSeriesType | null;
-  onSuccess: (data: z.infer<typeof VehicleSeriesSchema>) => void;
 };
 
 export default function VehicleSeriesForm({
   type,
   formData,
-  // brandId,
-  onSuccess,
 }: VehicleSeriesFormProps) {
-  const [isEditing, setIsEditing] = useState(type === "Add"); // Initially editable for "Add" type
-  const initialValues = formData || {
-    vehicleSeries: "",
-    vehicleSeriesMetaTitle: "",
-    vehicleSeriesMetaDescription: "",
-    vehicleSeriesPageHeading: "",
-    vehicleSeriesPageSubheading: "",
-  };
+  const initialValues = formData || VehicleSeriesFormDefaultValues;
+
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { vehicleSeriesId } = useParams<{
+    vehicleSeriesId: string;
+  }>();
 
   const form = useForm<z.infer<typeof VehicleSeriesSchema>>({
     resolver: zodResolver(VehicleSeriesSchema),
@@ -49,20 +45,22 @@ export default function VehicleSeriesForm({
 
   async function onSubmit(values: z.infer<typeof VehicleSeriesSchema>) {
     try {
-      // if (type === "Add") {
-      //   await addVehicleSeries(values, brandId); // Call API to add vehicle series
-      // } else if (type === "Update") {
-      //   await updateVehicleSeries(values, formData?.vehicleSeriesId as string); // Call API to update vehicle series
-      // }
+      let data;
+      if (type === "Add") {
+        data = await addVehicleSeries(values);
+      } else if (type === "Update") {
+        data = await updateVehicleSeries(values, vehicleSeriesId as string);
+      }
 
-      toast({
-        title: `${type} Vehicle Series successful`,
-        description: `The vehicle series has been ${type === "Add" ? "added" : "updated"} successfully.`,
-        className: "bg-green-500 text-white",
-      });
+      if (data) {
+        toast({
+          title: `${type} Vehicle Series successful`,
+          description: `The vehicle series has been ${type === "Add" ? "added" : "updated"} successfully.`,
+          className: "bg-green-500 text-white",
+        });
 
-      onSuccess(values); // Trigger the onSuccess callback
-      setIsEditing(false); // Exit edit mode after successful submission
+        navigate("/manage-series");
+      }
     } catch (error) {
       console.error(error);
       toast({
@@ -70,157 +68,307 @@ export default function VehicleSeriesForm({
         title: `${type} Vehicle Series failed`,
         description: "Something went wrong. Please try again.",
       });
+    } finally {
+      // invalidating cached data in the series listing page and in form fetch
+      queryClient.invalidateQueries({
+        queryKey: ["vehicle-series", vehicleSeriesId],
+      });
     }
   }
 
   return (
     <Form {...form}>
-      <div className="flex max-w-[600px] flex-col gap-5 rounded-xl bg-white p-4 shadow-lg">
-        {/* Vehicle Series */}
+      <FormContainer onSubmit={form.handleSubmit(onSubmit)}>
+        {/* Location (State) */}
+        <FormField
+          control={form.control}
+          name="stateId"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Location"
+              description="Choose your state/location"
+            >
+              <StatesDropdown
+                onChangeHandler={(value) => {
+                  field.onChange(value);
+                }}
+                value={initialValues.stateId}
+                placeholder="location"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* Location (State) */}
+        <FormField
+          control={form.control}
+          name="vehicleCategoryId"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Location"
+              description="Choose your state/location"
+            >
+              <VehicleCategoryDropdown
+                onChangeHandler={field.onChange}
+                value={field.value}
+                placeholder=" category"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* Brand Name */}
+        <FormField
+          control={form.control}
+          name="vehicleBrandId"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Brand Name"
+              description="Select your vehicle's brand"
+            >
+              <BrandsDropdown
+                vehicleCategoryId={form.watch("vehicleCategoryId")}
+                value={field.value}
+                onChangeHandler={field.onChange}
+                isDisabled={!form.watch("vehicleCategoryId")}
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* Vehicle Series (label) */}
+        <FormField
+          control={form.control}
+          name="vehicleSeriesLabel"
+          render={({ field }) => (
+            <FormItemWrapper
+              label={
+                <span>
+                  Vehicle Series <br />
+                  <span className="text-sm text-gray-500">(label)</span>
+                </span>
+              }
+              description={
+                <span>
+                  Enter or search the vehicle series (max 80 characters).
+                  <br />
+                  {form.watch("vehicleSeries") && (
+                    <span className="mt-2 text-sm text-gray-500">
+                      Public URL will be:{" "}
+                      <span className="font-semibold">
+                        /{sanitizeStringToSlug(form.watch("vehicleSeries"))}
+                      </span>
+                    </span>
+                  )}
+                </span>
+              }
+            >
+              <Input
+                placeholder="e.g., 'Rent BMW S Series'"
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* Series "value" (hidden field)*/}
         <FormField
           control={form.control}
           name="vehicleSeries"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Vehicle Series</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter vehicle series name"
-                  {...field}
-                  readOnly={!isEditing}
-                  className={`input-field ${!isEditing && "bg-gray-100"}`}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <Input type="hidden" {...field} className="hidden" />
           )}
         />
 
-        {/* Meta Title */}
-        <FormField
-          control={form.control}
-          name="vehicleSeriesMetaTitle"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Meta Title</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter meta title"
-                  {...field}
-                  readOnly={!isEditing}
-                  className={`input-field ${!isEditing && "bg-gray-100"}`}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Meta Description */}
-        <FormField
-          control={form.control}
-          name="vehicleSeriesMetaDescription"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Meta Description</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter meta description"
-                  {...field}
-                  readOnly={!isEditing}
-                  className={`input-field ${!isEditing && "bg-gray-100"}`}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Page Heading */}
+        {/* Series Page Heading */}
         <FormField
           control={form.control}
           name="vehicleSeriesPageHeading"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Page Heading</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter page heading"
-                  {...field}
-                  readOnly={!isEditing}
-                  className={`input-field ${!isEditing && "bg-gray-100"}`}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormItemWrapper
+              label="Series Page Heading"
+              description={
+                <span>
+                  This will be displayed as the <strong>heading</strong> of the
+                  series listing page.
+                  <br />
+                  100 characters max.
+                </span>
+              }
+            >
+              <Input
+                placeholder="e.g., 'Rent BMW S Series'"
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
           )}
         />
 
-        {/* Page Subheading */}
+        {/* Series Page Subheading */}
         <FormField
           control={form.control}
           name="vehicleSeriesPageSubheading"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Page Subheading</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter page subheading"
-                  {...field}
-                  readOnly={!isEditing}
-                  className={`input-field ${!isEditing && "bg-gray-100"}`}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormItemWrapper
+              label="Series Page Subheading"
+              description={
+                <span>
+                  This will be displayed as the <strong>sub-heading</strong> of
+                  the series listing page.
+                  <br />
+                  200 characters max.
+                </span>
+              }
+            >
+              <Textarea
+                placeholder="Enter the series page subheading"
+                {...field}
+                className="textarea h-28 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
+              />
+            </FormItemWrapper>
           )}
         />
 
-        {/* Buttons Section */}
-        <div className="flex-center mt-4 w-full">
-          {type === "Update" ? (
-            !isEditing ? (
-              // Show "Edit" button when not in edit mode
-              <Button
-                variant="outline"
-                onClick={() => setIsEditing(true)}
-                className="w-full bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
-              >
-                Edit
-              </Button>
-            ) : (
-              // Show "Cancel" and "Update" buttons when in edit mode
-              <div className="flex w-full gap-3">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsEditing(false)} // Cancel edit mode
-                  className="w-1/2 border-gray-500 text-red-500"
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={form.handleSubmit(onSubmit)} // Submit handler for update
-                  disabled={form.formState.isSubmitting}
-                  className="w-1/2 bg-blue-500 text-white"
-                >
-                  {form.formState.isSubmitting ? "Updating..." : "Update"}
-                  {form.formState.isSubmitting && <Spinner />}
-                </Button>
-              </div>
-            )
-          ) : (
-            // Show "Submit" button for Add type
-            <Button
-              onClick={form.handleSubmit(onSubmit)}
-              disabled={form.formState.isSubmitting}
-              className="w-full bg-blue-500 text-white"
+        {/* Vehicle Series Info Title */}
+        <FormField
+          control={form.control}
+          name="vehicleSeriesInfoTitle"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Series Info Title"
+              description={
+                <span>
+                  Enter the series info title for this series.
+                  <br />
+                  It will be displayed in the info box on the Next.js series
+                  listing page.
+                </span>
+              }
             >
-              {form.formState.isSubmitting ? "Processing..." : "Submit"}
-              {form.formState.isSubmitting && <Spinner />}
-            </Button>
+              <Input
+                placeholder="e.g., 'BMW S Series'"
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
           )}
-        </div>
-      </div>
+        />
+
+        {/* Series Info Description */}
+        <FormField
+          control={form.control}
+          name="vehicleSeriesInfoDescription"
+          render={({ field }) => {
+            const [charCount, setCharCount] = useState(
+              field.value?.length || 0,
+            );
+            const limit = 300;
+
+            const handleInputChange = (
+              e: React.ChangeEvent<HTMLTextAreaElement>,
+            ) => {
+              setCharCount(e.target.value.length);
+              field.onChange(e);
+            };
+
+            return (
+              <FormItemWrapper
+                label="Series Info Description"
+                description={
+                  <span className="flex">
+                    <span>
+                      Enter the series info description for this series. It will
+                      be displayed as the info box description in the Next.js
+                      series listing page.
+                    </span>
+                    <span className="mt-1 text-sm text-gray-500">
+                      {charCount}/{limit}
+                    </span>
+                  </span>
+                }
+              >
+                <Textarea
+                  placeholder="Vehicle Series Info Description"
+                  value={field.value}
+                  onChange={handleInputChange}
+                  className="textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
+                />
+              </FormItemWrapper>
+            );
+          }}
+        />
+
+        {/* Vehicle Series Meta Title */}
+        <FormField
+          control={form.control}
+          name="vehicleSeriesMetaTitle"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Series Meta Title"
+              description={
+                <span>
+                  Enter the meta title for this series.
+                  <br /> Only alphanumeric characters are allowed.
+                </span>
+              }
+            >
+              <Input
+                placeholder="e.g., 'BMW S Series'"
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* Series Meta Description */}
+        <FormField
+          control={form.control}
+          name="vehicleSeriesMetaDescription"
+          render={({ field }) => {
+            const [charCount, setCharCount] = useState(
+              field.value?.length || 0,
+            );
+            const limit = 1000;
+
+            const handleInputChange = (
+              e: React.ChangeEvent<HTMLTextAreaElement>,
+            ) => {
+              setCharCount(e.target.value.length);
+              field.onChange(e);
+            };
+
+            return (
+              <FormItemWrapper
+                label="Series Meta Description"
+                description={
+                  <span className="flex flex-col">
+                    <span>Provide a meta description for this Series.</span>
+                    <span className="mt-1 text-sm text-gray-500">
+                      {charCount}/{limit} characters used
+                    </span>
+                  </span>
+                }
+              >
+                <Textarea
+                  placeholder="Vehicle Series Meta Description"
+                  value={field.value}
+                  onChange={handleInputChange}
+                  className="textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
+                />
+              </FormItemWrapper>
+            );
+          }}
+        />
+
+        {/* Submit */}
+        <FormSubmitButton
+          text={type === "Add" ? "Add Series" : "Update Series"}
+          isLoading={form.formState.isSubmitting}
+        />
+      </FormContainer>
     </Form>
   );
 }

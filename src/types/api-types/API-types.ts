@@ -382,6 +382,9 @@ export interface VehicleSeriesType {
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
   seriesCode: string;
+  stateId: string;
+  vehicleCategoryId: string;
+  vehicleBrandId: string;
 }
 
 //  Get all Vehicle Series Search

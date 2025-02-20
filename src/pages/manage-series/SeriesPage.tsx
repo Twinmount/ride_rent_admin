@@ -4,7 +4,6 @@ import Pagination from "@/components/Pagination";
 import SearchComponent from "@/components/Search";
 import CategoryDropdown from "@/components/VehicleCategoryDropdown";
 import { useCategories } from "@/hooks/useCategories";
-import { BrandGrid } from "@/components/BrandGrid";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import useFetchBrands from "./SeriesPage.hooks";
 import PageHeading from "@/components/general/PageHeading";

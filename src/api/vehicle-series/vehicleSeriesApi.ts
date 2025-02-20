@@ -38,14 +38,12 @@ export const searchVehicleSeries = async (urlParams: {
 // Add a new vehicle series
 export const addVehicleSeries = async (
   seriesData: VehicleSeriesType,
-  brandId: string,
 ): Promise<VehicleSeriesType> => {
   try {
     const slug = Slug.POST_VEHICLE_SERIES;
 
     const requestBody = {
       ...seriesData,
-      brandId,
     };
 
     const data = await API.post<VehicleSeriesType>({
@@ -93,11 +91,11 @@ export const updateVehicleSeries = async (
 
 // fetch specific brand by ID
 export const fetchSeriesById = async (
-  brandId: string,
+  vehicleSeriesId: string,
 ): Promise<FetchSpecificSeriesResponse> => {
   try {
     const data = await API.get<FetchSpecificSeriesResponse>({
-      slug: `${Slug.GET_BRAND}?id=${brandId}`,
+      slug: `${Slug.GET_SERIES_BY_ID}?vehicleSeriesId=${vehicleSeriesId}`,
     });
     if (!data) {
       throw new Error("Failed to fetch brand data ");
