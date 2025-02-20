@@ -103,7 +103,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
         exact: true,
       });
       queryClient.invalidateQueries({
-        queryKey: ["all-companies", "companies"],
+        queryKey: ["companies"],
+        exact: false,
       });
     }
   }
