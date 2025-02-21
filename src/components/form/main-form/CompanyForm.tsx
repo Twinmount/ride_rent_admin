@@ -57,9 +57,6 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
   });
 
   async function onSubmit(values: z.infer<typeof CompanyFormSchema>) {
-    console.log("values", values);
-    return;
-
     if (isFileUploading) {
       showFileUploadInProgressToast();
       return;
