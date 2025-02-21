@@ -144,19 +144,6 @@ const EditListingMetaPage = lazy(
   () => import("./pages/meta-data/listing-meta/EditListingMetaPage"),
 );
 
-const AgentPortfolioPage = lazy(
-  () =>
-    import("./pages/meta-data/agent-portfolio-meta/AgentPortfolioMetaDataPage"),
-);
-const AddAgentPortfolioMetaPage = lazy(
-  () =>
-    import("./pages/meta-data/agent-portfolio-meta/AddAgentPortfolioMetaPage"),
-);
-const EditAgentPortfolioMetaPage = lazy(
-  () =>
-    import("./pages/meta-data/agent-portfolio-meta/EditAgentPortfolioMetaPage"),
-);
-
 export const router = createBrowserRouter([
   {
     element: <Outlet />,
@@ -472,20 +459,6 @@ export const router = createBrowserRouter([
               {
                 path: "/meta-data/listing/edit/:metaDataId",
                 element: <EditListingMetaPage />,
-              },
-
-              // portfolio page meta data routes
-              {
-                path: "/meta-data/agent-portfolio",
-                element: <AgentPortfolioPage />,
-              },
-              {
-                path: "/meta-data/agent-portfolio/add",
-                element: <AddAgentPortfolioMetaPage />,
-              },
-              {
-                path: "/meta-data/agent-portfolio/edit/:agentId",
-                element: <EditAgentPortfolioMetaPage />,
               },
             ],
           },

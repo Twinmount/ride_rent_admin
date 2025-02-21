@@ -291,6 +291,14 @@ export const CompanyFormSchema = z.object({
   companyLanguages: z
     .array(z.string())
     .min(1, "At least one language must be selected"),
+  companyMetaTitle: z
+    .string()
+    .min(1, "Meta title is required")
+    .max(80, "Meta title must be 80 characters or less"),
+  companyMetaDescription: z
+    .string()
+    .min(1, "Meta description is required")
+    .max(500, "Meta description must be 500 characters or less"),
 });
 
 // Company Status Form Schema

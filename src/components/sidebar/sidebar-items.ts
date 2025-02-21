@@ -145,7 +145,6 @@ export const sidebarContent: SidebarItem[] = [
     items: [
       { label: "Home Page", link: "/meta-data/home" },
       { label: "Listings Page", link: "/meta-data/listing" },
-      { label: "Agent Portfolio Page", link: "/meta-data/agent-portfolio" },
     ],
   },
 ];
