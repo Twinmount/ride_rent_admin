@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { companyColumns } from "../../components/table/company-registrations/GeneralCompanyColumn";
-import { CompanyTable } from "@/components/table/company-registrations/CompanyTable";
+import { companyColumns } from "../../components/table/company-listing-table/GeneralCompanyColumn";
+import { CompanyTable } from "@/components/table/company-listing-table/CompanyTable";
 import { getAllCompany, updateCompanyStatus } from "@/api/company";
 import { SortDropdown } from "@/components/SortDropdown";
 import { LimitDropdown } from "@/components/LimitDropdown";
