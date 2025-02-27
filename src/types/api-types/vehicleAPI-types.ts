@@ -148,6 +148,32 @@ export type SingleVehicleType = {
   createdAt: string;
 };
 
+export type GeneralListingVehicleType = {
+  vehicleId: string;
+  vehicleModel: string;
+  vehicleCode: string;
+  approvalStatus: "APPROVED" | "PENDING" | "UNDER_REVIEW" | "REJECTED";
+  rejectionReason?: string;
+  company: {
+    companyId: string;
+    userId: string;
+    companyName: string;
+  };
+};
+
+// Define a simplified type for table data
+export type LiveListingVehicleType = {
+  vehicleId: string;
+  vehicleModel: string;
+  vehicleCode: string;
+  isDisabled: boolean;
+  company: {
+    companyId: string;
+    userId: string;
+    companyName: string;
+  };
+};
+
 // get all vehicles api response
 export interface FetchAllVehiclesResponse {
   result: {

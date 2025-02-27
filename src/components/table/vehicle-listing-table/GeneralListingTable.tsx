@@ -17,20 +17,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { SingleVehicleType } from "@/types/api-types/vehicleAPI-types";
+import { GeneralListingVehicleType } from "@/types/api-types/vehicleAPI-types";
 
-interface AllListingTableProps {
-  columns: ColumnDef<SingleVehicleType>[];
-  data: SingleVehicleType[];
+interface GeneralListingTableProps {
+  columns: ColumnDef<GeneralListingVehicleType>[]; // ✅ Use simplified type
+  data: GeneralListingVehicleType[]; // ✅ Use simplified type
   loading: boolean;
 }
 
-export function AllListingTable({
+export function GeneralListingTable({
   columns,
   data,
   loading,
-}: AllListingTableProps) {
+}: GeneralListingTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -47,7 +46,7 @@ export function AllListingTable({
 
   return (
     <div>
-      <div className="bg-white rounded-md border">
+      <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -58,7 +57,7 @@ export function AllListingTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -82,24 +81,10 @@ export function AllListingTable({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={`${
-                        cell.column.id !== "isDisabled" && "min-w-44"
-                      } max-w-44`}
-                    >
-                      {cell.column.id === "vehicleModel" ? (
-                        <Link
-                          to={`/listings/edit/${row.original.vehicleId}/${row.original.company.companyId}/${row.original.company.userId}`}
-                          className="font-semibold text-blue-600 hover:underline"
-                        >
-                          {cell.getValue() as string}
-                        </Link>
-                      ) : (
-                        flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )
+                    <TableCell key={cell.id} className="min-w-40 max-w-44">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

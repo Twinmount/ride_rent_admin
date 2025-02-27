@@ -7,7 +7,6 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -17,20 +16,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { SingleVehicleType } from "@/types/api-types/vehicleAPI-types";
+import {
+  LiveListingVehicleType,
+  SingleVehicleType,
+} from "@/types/api-types/vehicleAPI-types";
 
-interface GeneralListingTableProps {
-  columns: ColumnDef<SingleVehicleType>[];
+interface AllListingTableProps {
+  columns: ColumnDef<LiveListingVehicleType>[];
   data: SingleVehicleType[];
   loading: boolean;
 }
 
-export function GeneralListingTable({
+export function AllListingTable({
   columns,
   data,
   loading,
-}: GeneralListingTableProps) {
+}: AllListingTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -47,7 +48,7 @@ export function GeneralListingTable({
 
   return (
     <div>
-      <div className="bg-white border rounded-md">
+      <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -58,7 +59,7 @@ export function GeneralListingTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -70,9 +71,9 @@ export function GeneralListingTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-36 text-center italic"
                 >
-                  Loading ...
+                  Fetching Listings ...
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
@@ -82,19 +83,10 @@ export function GeneralListingTable({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="min-w-40 max-w-44">
-                      {cell.column.id === "vehicleModel" ? (
-                        <Link
-                          to={`/listings/edit/${row.original.vehicleId}/${row.original.company?.companyId}/${row.original.company?.userId}`}
-                          className="font-semibold text-blue-600 hover:underline"
-                        >
-                          {cell.getValue() as string}
-                        </Link>
-                      ) : (
-                        flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )
+                    <TableCell key={cell.id} className="max-w-44">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

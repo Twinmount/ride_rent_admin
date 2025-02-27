@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AllListingColumns } from "../../components/table/live-listing/columns/AllListingColumn";
+import { AllListingColumns } from "../../components/table/vehicle-listing-table/columns/AllListingColumn";
 import { fetchAllVehicles, enableOrDisableVehicle } from "@/api/listings";
-import { AllListingTable } from "@/components/table/live-listing/AllListingTable";
+import { AllListingTable } from "@/components/table/vehicle-listing-table/AllListingTable";
 import { toast } from "@/components/ui/use-toast";
 import Pagination from "@/components/Pagination";
 import { LimitDropdown } from "@/components/LimitDropdown";
