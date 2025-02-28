@@ -11,7 +11,7 @@ import { toast } from "@/components/ui/use-toast";
 import { CompanyType } from "@/types/api-types/vehicleAPI-types";
 import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
-import CompanyPageHeading from "./CompanyPageHeading";
+import CompanyPageHeading from "../../components/CompanyPageHeading";
 
 interface CompanyListingPageProps {
   queryKey: string[];

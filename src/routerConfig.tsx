@@ -31,12 +31,14 @@ const VehiclesFormAddPage = lazy(
 );
 
 // company registrations page
-
 const CompanyListingPage = lazy(
   () => import("./pages/company/CompanyListingPage"),
 );
 const CompanyDetailsPage = lazy(
   () => import("./pages/company/CompanyDetailsPage"),
+);
+const CompanyPromotionPage = lazy(
+  () => import("./pages/company/CompanyPromotionPage"),
 );
 // vehicle categories page imports
 const ManageCategoriesPage = lazy(
@@ -231,7 +233,7 @@ export const router = createBrowserRouter([
 
               // Company routes
               {
-                path: "/registrations/live",
+                path: "/company/registrations/live",
                 element: (
                   <CompanyListingPage
                     queryKey={["companies", "all-companies"]}
@@ -241,7 +243,7 @@ export const router = createBrowserRouter([
                 ),
               },
               {
-                path: "/registrations/new",
+                path: "/company/registrations/new",
                 element: (
                   <CompanyListingPage
                     queryKey={["companies", "new-companies"]}
@@ -252,7 +254,7 @@ export const router = createBrowserRouter([
               },
 
               {
-                path: "/registrations/rejected",
+                path: "/company/registrations/rejected",
                 element: (
                   <CompanyListingPage
                     queryKey={["companies", "rejected-companies"]}
@@ -263,8 +265,12 @@ export const router = createBrowserRouter([
               },
 
               {
-                path: "/registrations/view/:companyId",
+                path: "/company/registrations/view/:companyId",
                 element: <CompanyDetailsPage />,
+              },
+              {
+                path: "/company/promotions",
+                element: <CompanyPromotionPage />,
               },
 
               // vehicle category route

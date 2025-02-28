@@ -2,20 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchHomeMetaList } from "@/api/meta-data";
 import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
-import Pagination from "@/components/Pagination";
-import { useState } from "react";
 import { useFetchStates } from "@/hooks/useFetchStates";
 import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
 
 export default function HomeMetaData() {
-  const [page, setPage] = useState(1);
-
   const { isStateLoading, selectedState, statesList, setSelectedState } =
     useFetchStates();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({
-    queryKey: ["home-meta-data", page, selectedState?.stateId],
+    queryKey: ["home-meta-data", selectedState?.stateId],
     queryFn: () =>
       fetchHomeMetaList({
         page: 1,

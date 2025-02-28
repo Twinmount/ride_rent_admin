@@ -67,12 +67,16 @@ export const sidebarContent: SidebarItem[] = [
   {
     type: "accordion",
     label: "Agents",
-    baseLink: "/registrations",
+    baseLink: "/company",
     icon: UserPlus,
     items: [
-      { label: "All Companies", link: "/registrations/live" },
-      { label: "New Registrations", link: "/registrations/new" },
-      { label: "Rejected Registrations", link: "/registrations/rejected" },
+      { label: "All Companies", link: "/company/registrations/live" },
+      { label: "New Registrations", link: "/company/registrations/new" },
+      {
+        label: "Rejected Registrations",
+        link: "/company/registrations/rejected",
+      },
+      { label: "Promotions", link: "/company/promotions" },
     ],
   },
   // Categories and types routes

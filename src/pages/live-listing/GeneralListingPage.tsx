@@ -16,7 +16,7 @@ import { toast } from "@/components/ui/use-toast";
 import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
-import ListingPageHeading from "./ListingPageHeading";
+import ListingPageHeading from "../../components/ListingPageHeading";
 
 interface GeneralListingPageProps {
   queryKey: any[];

@@ -73,7 +73,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           title: `Company ${type}ed successfully`,
           className: "bg-yellow text-white",
         });
-        navigate("/registrations/live");
+        navigate("/company/registrations/live");
       }
     } catch (error) {
       console.error(error);
