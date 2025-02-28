@@ -4,6 +4,8 @@ import { API } from "../ApiService";
 import {
   FetchSpecificCompanyResponse,
   FetchCompaniesResponse,
+  FetchPromotedCompanyListResponse,
+  FetchPromotedCompaniesSearchResponse,
 } from "@/types/api-types/API-types";
 
 export interface CompanyType {
@@ -195,3 +197,130 @@ export const getCompanyListingsCount =
       throw error;
     }
   };
+
+// fetch all promotions
+export const fetchPromotedCompanyList = async (urlParams: {
+  stateId: string;
+}): Promise<FetchPromotedCompanyListResponse> => {
+  try {
+    const queryParams = new URLSearchParams({
+      state: urlParams.stateId,
+    }).toString();
+
+    const slugWithParams = `${Slug.GET_PROMOTED_COMPANIES_LIST}?${queryParams}`;
+
+    const data = await API.get<FetchPromotedCompanyListResponse>({
+      slug: slugWithParams,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch promoted company data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching promoted company:", error);
+    throw error;
+  }
+};
+
+// Add a promoted company
+export const addPromotedCompany = async (params: {
+  companyId: string;
+  stateId: string;
+  categoryId: string;
+}): Promise<boolean> => {
+  try {
+    const response = await API.post({
+      slug: Slug.POST_PROMOTED_COMPANY,
+      body: {
+        companyId: params.companyId,
+        stateId: params.stateId,
+        categoryId: params.categoryId,
+      },
+    });
+
+    if (!response) {
+      throw new Error("Failed to add promoted company");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error adding promoted company:", error);
+    throw error;
+  }
+};
+
+// Remove a promoted company
+export const removePromotedCompany = async (params: {
+  companyId: string;
+  stateId: string;
+  categoryId: string;
+}): Promise<boolean> => {
+  try {
+    const queryParams = new URLSearchParams({
+      companyId: params.companyId,
+      stateId: params.stateId,
+      categoryId: params.categoryId,
+    }).toString();
+
+    const slugWithParams = `${Slug.DELETE_PROMOTED_COMPANY}?${queryParams}`;
+
+    const response = await API.delete({
+      slug: slugWithParams,
+    });
+
+    if (!response) {
+      throw new Error("Failed to remove promoted company");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error removing promoted company:", error);
+    throw error;
+  }
+};
+
+export const fetchSearchCompanies = async (
+  search: string,
+): Promise<FetchPromotedCompaniesSearchResponse> => {
+  try {
+    // const data = await API.get<FetchPromotedCompaniesSearchResponse>({
+    //   slug: `${Slug.GET_PROMOTED_COMPANIES_SEARCH}?search=${search}`,
+    // });
+
+    const mockData: FetchPromotedCompaniesSearchResponse = {
+      result: [
+        {
+          companyId: "comp-001",
+          agentId: "agent-1234",
+          companyName: "Elite Rides",
+          companyLogo: "https://via.placeholder.com/50",
+        },
+        {
+          companyId: "comp-002",
+          agentId: "agent-5678",
+          companyName: "Speedster Cars",
+          companyLogo: "https://via.placeholder.com/50",
+        },
+        {
+          companyId: "comp-003",
+          agentId: "agent-9101",
+          companyName: "Luxury Motors",
+          companyLogo: "https://via.placeholder.com/50",
+        },
+      ],
+      status: "success",
+      statusCode: 200,
+    };
+
+    // if (!data) {
+    //   throw new Error("Failed to fetch promoted company");
+    // }
+
+    return mockData;
+  } catch (error) {
+    console.error("Error fetching promoted company:", error);
+    throw error;
+  }
+};

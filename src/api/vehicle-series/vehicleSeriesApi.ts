@@ -11,12 +11,14 @@ import { VehicleSeriesType } from "@/types/types";
 export const searchVehicleSeries = async (urlParams: {
   vehicleSeries: string;
   brandId: string;
+  stateId: string;
 }): Promise<VehicleSeriesSearch> => {
   try {
     // generating query params
     const queryParams = new URLSearchParams({
       vehicleSeries: urlParams.vehicleSeries,
       brandId: urlParams.brandId,
+      stateId: urlParams.stateId,
     }).toString();
 
     const slugWithParams = `${Slug.GET_SEARCH_VEHICLE_SERIES}?${queryParams}`;

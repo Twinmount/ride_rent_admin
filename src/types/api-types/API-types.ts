@@ -256,6 +256,19 @@ export interface FetchSpecificCompanyResponse {
   statusCode: number;
 }
 
+export interface promotedCompanyType {
+  companyId: string;
+  agentId: string;
+  companyName: string;
+  companyLogo: string;
+}
+
+export interface FetchPromotedCompaniesSearchResponse {
+  result: promotedCompanyType[];
+  status: string;
+  statusCode: number;
+}
+
 // single data type
 export interface HomeMetaListData {
   metaDataId: string;
@@ -437,6 +450,34 @@ export interface FetchCompanyPortfolioMetaResponse {
     total: number;
     totalNumberOfPages: number;
   };
+  status: string;
+  statusCode: number;
+}
+
+// individual agent type
+export interface PromotedAgent {
+  companyId: string;
+  agentId: string; //that short code eg: rd-1234
+  companyName: string;
+  companyLogo: string;
+}
+
+// individual agent promotion card type
+export interface PromotedCompanyCardType {
+  state: {
+    stateId: string;
+    stateName: string;
+  };
+  category: {
+    categoryId: string;
+    categoryName: string;
+  };
+  agents: PromotedAgent[];
+}
+
+// agent promotion response
+export interface FetchPromotedCompanyListResponse {
+  result: PromotedCompanyCardType[];
   status: string;
   statusCode: number;
 }
