@@ -19,7 +19,7 @@ export default function PromotedCompaniesList() {
   if (isLoading) {
     return (
       <div className="flex-center h-40 w-full">
-        <p className="text-sm font-semibold text-gray-600">Loading...</p>
+        <p className="text-sm font-semibold text-gray-600">Fetching...</p>
       </div>
     );
   }

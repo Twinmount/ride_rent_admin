@@ -49,6 +49,10 @@ export default function PromotedCompanySearchDropdown({ onSelect }: PropType) {
         className="w-full rounded border px-3 py-2 text-sm"
       />
 
+      <p className="text-sm text-gray-500">
+        Search with company name, agent id, email or phone number
+      </p>
+
       {isFetching && <p className="text-sm text-gray-500">Searching...</p>}
 
       {/* Search Results Dropdown */}

@@ -1,5 +1,6 @@
 import { PromotedCompanyCardType } from "@/types/api-types/API-types";
 import AgentSubCard from "./AgentSubCard";
+import { toast } from "../ui/use-toast";
 
 type PropType = {
   data: PromotedCompanyCardType;
@@ -16,6 +17,18 @@ export default function PromotedCompanyCard({
   onDeleteAgent,
   onAddAgent,
 }: PropType) {
+  const handler = () => {
+    if (data.agents.length === 4) {
+      toast({
+        variant: "destructive",
+        title: "Agent limit reached",
+        description: "You can only add 4 agents, remove some to add more",
+      });
+      return;
+    }
+    onAddAgent(data.state.stateId, data.category.categoryId);
+  };
+
   return (
     <div className="mx-auto mb-6 w-full max-w-3xl rounded-lg bg-white p-4 shadow-md">
       {/* Header Section */}
@@ -39,12 +52,10 @@ export default function PromotedCompanyCard({
         ))}
 
         {/* Add Agent Button */}
+
         <button
-          onClick={() =>
-            onAddAgent(data.state.stateId, data.category.categoryId)
-          }
+          onClick={handler}
           className="flex h-20 w-20 items-center justify-center rounded-lg border border-gray-300 bg-gray-100 hover:bg-gray-200"
-          disabled={data.agents.length === 4}
         >
           ➕
         </button>

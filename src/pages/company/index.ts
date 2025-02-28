@@ -29,6 +29,12 @@ export const promotedCompanies: PromotedCompanyCardType[] = [
         companyName: "Budget Cars",
         companyLogo: "https://via.placeholder.com/100",
       },
+      {
+        companyId: "comp-103",
+        agentId: "rd-9101",
+        companyName: "Budget Cars",
+        companyLogo: "https://via.placeholder.com/100",
+      },
     ],
   },
   {

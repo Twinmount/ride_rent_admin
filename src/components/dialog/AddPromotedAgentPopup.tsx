@@ -4,6 +4,7 @@ import { addPromotedCompany } from "@/api/company";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -66,6 +67,9 @@ export default function AddPromotedAgentPopup({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add New Agent to Promoted List</DialogTitle>
+          <DialogDescription>
+            Search and Select a company to add to the promotion list.
+          </DialogDescription>
         </DialogHeader>
 
         {/* Search Input & Dropdown */}

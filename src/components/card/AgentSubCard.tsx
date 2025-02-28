@@ -7,17 +7,25 @@ type PropType = {
 
 export default function AgentSubCard({ agent, onDelete }: PropType) {
   return (
-    <div className="group relative flex h-20 w-32 flex-col items-center justify-center rounded-lg border border-gray-300 bg-white shadow-sm">
-      <img
-        src={agent.companyLogo}
-        alt={agent.companyName}
-        className="h-10 w-10 rounded-full object-cover"
-      />
-      <p className="mt-1 text-xs font-medium text-gray-700">
-        {agent.companyName}
-      </p>
+    <div className="group relative flex h-20 w-40 items-center overflow-hidden rounded-lg border border-gray-300 bg-white shadow-sm">
+      {/* Left Section: Image */}
+      <div className="flex h-full w-16 min-w-16 items-center justify-center bg-gray-100">
+        <img
+          src={agent.companyLogo}
+          alt={agent.companyName}
+          className="h-10 w-10 rounded-full object-cover"
+        />
+      </div>
 
-      {/* Delete Button */}
+      {/* Right Section: Text */}
+      <div className="flex w-full flex-col justify-center px-3">
+        <p className="line-clamp-1 truncate text-xs font-medium text-gray-700">
+          {agent.companyName}
+        </p>
+        <p className="text-[10px] text-gray-500">ID: {agent.agentId}</p>
+      </div>
+
+      {/* Delete Button (Visible on Hover) */}
       <button
         onClick={() =>
           onDelete(agent.companyId, "some-state-id", "some-category-id")
