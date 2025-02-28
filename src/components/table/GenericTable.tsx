@@ -17,19 +17,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { GeneralListingVehicleType } from "@/types/api-types/vehicleAPI-types";
 
-interface GeneralListingTableProps {
-  columns: ColumnDef<GeneralListingVehicleType>[]; // ✅ Use simplified type
-  data: GeneralListingVehicleType[]; // ✅ Use simplified type
+interface GenericTableProps<TData> {
+  columns: ColumnDef<TData>[]; // Generic columns type
+  data: TData[]; // Generic data type
   loading: boolean;
+  loadingText?: string;
+  noDataText?: string;
 }
 
-export function GeneralListingTable({
+export function GenericTable<TData>({
   columns,
   data,
   loading,
-}: GeneralListingTableProps) {
+  loadingText = "Loading ...",
+  noDataText = "No data found.",
+}: GenericTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -71,7 +74,7 @@ export function GeneralListingTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Loading ...
+                  {loadingText}
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
@@ -96,7 +99,7 @@ export function GeneralListingTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No data found.
+                  {noDataText}
                 </TableCell>
               </TableRow>
             )}

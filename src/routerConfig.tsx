@@ -32,8 +32,8 @@ const VehiclesFormAddPage = lazy(
 
 // company registrations page
 
-const GeneralCompaniesPage = lazy(
-  () => import("./pages/company/GeneralCompaniesPage"),
+const CompanyListingPage = lazy(
+  () => import("./pages/company/CompanyListingPage"),
 );
 const CompanyDetailsPage = lazy(
   () => import("./pages/company/CompanyDetailsPage"),
@@ -233,7 +233,7 @@ export const router = createBrowserRouter([
               {
                 path: "/registrations/live",
                 element: (
-                  <GeneralCompaniesPage
+                  <CompanyListingPage
                     queryKey={["companies", "all-companies"]}
                     approvalStatus="APPROVED"
                     title="All Registrations"
@@ -243,7 +243,7 @@ export const router = createBrowserRouter([
               {
                 path: "/registrations/new",
                 element: (
-                  <GeneralCompaniesPage
+                  <CompanyListingPage
                     queryKey={["companies", "new-companies"]}
                     approvalStatus="PENDING"
                     title="New Registrations"
@@ -254,7 +254,7 @@ export const router = createBrowserRouter([
               {
                 path: "/registrations/rejected",
                 element: (
-                  <GeneralCompaniesPage
+                  <CompanyListingPage
                     queryKey={["companies", "rejected-companies"]}
                     approvalStatus="REJECTED"
                     title="Rejected Registrations"

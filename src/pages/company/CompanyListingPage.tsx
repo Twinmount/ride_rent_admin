@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { companyColumns } from "../../components/table/company-listing-table/GeneralCompanyColumn";
-import { CompanyTable } from "@/components/table/company-listing-table/CompanyTable";
+import { companyColumns } from "../../components/table/columns/GeneralCompanyColumn";
+import { CompanyTable } from "@/components/table/CompanyTable";
 import { getAllCompany, updateCompanyStatus } from "@/api/company";
 import { SortDropdown } from "@/components/SortDropdown";
 import { LimitDropdown } from "@/components/LimitDropdown";
@@ -13,18 +13,18 @@ import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
 import CompanyPageHeading from "./CompanyPageHeading";
 
-interface GeneralCompaniesPageProps {
+interface CompanyListingPageProps {
   queryKey: string[];
   approvalStatus?: "APPROVED" | "PENDING" | "REJECTED" | "UNDER_REVIEW";
   isModified?: boolean;
   title: string;
 }
 
-export default function GeneralCompaniesPage({
+export default function CompanyListingPage({
   queryKey,
   approvalStatus,
   isModified = false,
-}: GeneralCompaniesPageProps) {
+}: CompanyListingPageProps) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10);
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
@@ -127,7 +127,7 @@ export default function GeneralCompaniesPage({
 
       {/* search component */}
       <div className="mb-6">
-        <SearchComponent placeholder="Search company" isBrandSearch={false} />
+        <SearchComponent placeholder="Search company" />
         <p className="ml-2 text-left text-sm italic text-gray-500">
           <span className="font-semibold text-gray-600">
             company name or agent id
@@ -140,16 +140,13 @@ export default function GeneralCompaniesPage({
         columns={companyColumns(handleOpenModal)}
         data={data?.result?.list || []}
         loading={isLoading}
-        onOpenModal={handleOpenModal} // Pass the handleOpenModal function to the table
       />
 
-      {data?.result && data?.result.totalNumberOfPages > 0 && (
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={data?.result.totalNumberOfPages as number}
-        />
-      )}
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={data?.result.totalNumberOfPages as number}
+      />
 
       {selectedCompany && (
         <CompanyStatusModal

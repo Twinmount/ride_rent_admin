@@ -3,7 +3,7 @@ import { Switch } from "@/components/ui/switch";
 import { Link } from "react-router-dom";
 import { LiveListingVehicleType } from "@/types/api-types/vehicleAPI-types";
 
-export const AllListingColumns: (
+export const LiveListingColumns: (
   onToggle: (vehicleId: string, isDisabled: boolean) => void,
   isPending?: boolean,
 ) => ColumnDef<LiveListingVehicleType>[] = (onToggle, isPending) => [
@@ -32,11 +32,6 @@ export const AllListingColumns: (
   {
     accessorKey: "company.companyName",
     header: "Company Name",
-    cell: ({ row }) => (
-      <span className="whitespace-nowrap">
-        {row.original.company.companyName}
-      </span>
-    ),
   },
   {
     accessorKey: "isDisabled",
@@ -48,7 +43,7 @@ export const AllListingColumns: (
           checked={!isDisabled}
           onCheckedChange={(checked) => onToggle(vehicleId, !checked)}
           disabled={isPending}
-          className={`${isPending && "!cursor-wait"}`}
+          className={`${isPending && "!cursor-wait"} ml-3`}
         />
       );
     },
