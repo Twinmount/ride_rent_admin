@@ -173,21 +173,21 @@ export const PrimaryFormSchema = z
       .max(200, "Page subheading cannot exceed 200 characters"),
     vehicleSeriesInfoTitle: z
       .string()
-      .min(1, "Meta title is required")
-      .max(80, "Meta title cannot exceed 80 characters"),
+      .min(1, "Series Info title is required")
+      .max(80, "Series Info title cannot exceed 80 characters"),
     vehicleSeriesInfoDescription: z
       .string()
-      .min(1, "Meta description is required")
-      .max(300, "Meta description cannot exceed 300 characters"),
+      .min(1, "Series Info description is required")
+      .max(300, "Series Info description cannot exceed 300 characters"),
     vehicleSeriesMetaTitle: z
       .string()
-      .min(1, "Meta title is required")
-      .max(80, "Meta title cannot exceed 80 characters"),
+      .min(1, "Series Meta title is required")
+      .max(80, "Series Meta title cannot exceed 80 characters"),
     vehicleSeriesMetaDescription: z
       .string()
-      .min(1, "Meta description is required")
-      .max(5000, "Meta description cannot exceed 5000 characters"),
-    vehicleModel: z.string().min(1, "Model is required"),
+      .min(1, "Series Meta description is required")
+      .max(5000, "Series Meta description cannot exceed 5000 characters"),
+    vehicleModel: z.string().min(1, "Vehicle Model is required"),
     vehicleRegistrationNumber: z
       .string()
       .min(1, "Vehicle registration number is required")
@@ -232,6 +232,14 @@ export const PrimaryFormSchema = z
     }),
     isCreditOrDebitCardsSupported: z.boolean().default(false),
     isTabbySupported: z.boolean().default(false),
+    vehicleMetaTitle: z
+      .string()
+      .min(1, "Vehicle Meta title is required")
+      .max(80, "Vehicle Meta title cannot exceed 80 characters"),
+    vehicleMetaDescription: z
+      .string()
+      .min(1, "Vehicle Meta description is required")
+      .max(5000, "Vehicle Meta description cannot exceed 5000 characters"),
   })
   .refine(
     (data) => {
@@ -283,6 +291,14 @@ export const CompanyFormSchema = z.object({
   companyLanguages: z
     .array(z.string())
     .min(1, "At least one language must be selected"),
+  companyMetaTitle: z
+    .string()
+    .min(1, "Meta title is required")
+    .max(80, "Meta title must be 80 characters or less"),
+  companyMetaDescription: z
+    .string()
+    .min(1, "Meta description is required")
+    .max(500, "Meta description must be 500 characters or less"),
 });
 
 // Company Status Form Schema
@@ -390,11 +406,45 @@ export const BlogFormSchema = z.object({
 });
 
 export const VehicleSeriesSchema = z.object({
-  vehicleSeries: z.string().min(1, "Vehicle series is required"),
-  vehicleSeriesMetaTitle: z.string().min(1, "Meta title is required"),
+  stateId: z.string().min(1, "State  is required"),
+  vehicleCategoryId: z.string().min(1, "Category is required"),
+  vehicleBrandId: z.string().min(1, "Brand is required"),
+  vehicleSeriesLabel: z
+    .string()
+    .min(1, "Series is required")
+    .regex(
+      /^[a-zA-Z0-9\s-]+$/,
+      "Series must only contain alphanumeric characters, hyphens, and spaces",
+    ),
+  vehicleSeries: z
+    .string()
+    .min(1, "Series is required")
+    .regex(
+      /^[a-z0-9-]+$/,
+      "Series value must be lowercase, hyphen-separated, and alphanumeric",
+    ),
+  vehicleSeriesPageHeading: z
+    .string()
+    .min(1, "Page heading is required")
+    .max(100, "Page heading cannot exceed 100 characters"),
+  vehicleSeriesPageSubheading: z
+    .string()
+    .min(1, "Page subheading is required")
+    .max(200, "Page subheading cannot exceed 200 characters"),
+  vehicleSeriesInfoTitle: z
+    .string()
+    .min(1, "Series Info title is required")
+    .max(80, "Series Info title cannot exceed 80 characters"),
+  vehicleSeriesInfoDescription: z
+    .string()
+    .min(1, "Series Info description is required")
+    .max(300, "Series Info description cannot exceed 300 characters"),
+  vehicleSeriesMetaTitle: z
+    .string()
+    .min(1, "Series Meta title is required")
+    .max(80, "Series Meta title cannot exceed 80 characters"),
   vehicleSeriesMetaDescription: z
     .string()
-    .min(1, "Meta description is required"),
-  vehicleSeriesPageHeading: z.string().min(1, "Page heading is required"),
-  vehicleSeriesPageSubheading: z.string().min(1, "Page subheading is required"),
+    .min(1, "Series Meta description is required")
+    .max(5000, "Series Meta description cannot exceed 5000 characters"),
 });

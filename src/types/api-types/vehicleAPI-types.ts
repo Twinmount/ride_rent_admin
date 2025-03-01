@@ -14,6 +14,8 @@ export type CompanyType = {
   email: string;
   companyAddress: string;
   companyLanguages: string[];
+  companyMetaTitle: string;
+  companyMetaDescription: string;
 };
 
 // type of single brand
@@ -335,6 +337,8 @@ export type GetPrimaryForm = {
   };
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
+  vehicleMetaTitle: string;
+  vehicleMetaDescription: string;
 };
 
 // Specification form get all response

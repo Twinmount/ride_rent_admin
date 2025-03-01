@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AllListingColumns } from "../../components/table/vehicle-listing-table/columns/AllListingColumn";
+import { LiveListingColumns } from "@/components/table/columns/LiveListingColumn";
 import { fetchAllVehicles, enableOrDisableVehicle } from "@/api/listings";
-import { AllListingTable } from "@/components/table/vehicle-listing-table/AllListingTable";
+import { AllListingTable } from "@/components/table/LiveListingTable";
 import { toast } from "@/components/ui/use-toast";
 import Pagination from "@/components/Pagination";
 import { LimitDropdown } from "@/components/LimitDropdown";
@@ -10,7 +10,7 @@ import { SortDropdown } from "@/components/SortDropdown";
 import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
-import ListingHeader from "./ListingHeader";
+import ListingPageHeading from "../../components/ListingPageHeading";
 
 export default function AllListingPage() {
   const [page, setPage] = useState(1);
@@ -91,7 +91,7 @@ export default function AllListingPage() {
     <section className="container mx-auto min-h-screen py-5 md:py-7">
       <div className="flex-between my-2 mb-6 max-md:flex-col">
         {/* heading */}
-        <ListingHeader />
+        <ListingPageHeading />
         <div className="flex-between w-fit gap-x-2 max-sm:mt-3">
           <SortDropdown
             sortOrder={sortOrder}
@@ -108,7 +108,7 @@ export default function AllListingPage() {
 
       {/* search component */}
       <div className="mb-8">
-        <SearchComponent placeholder="Search vehicle" isBrandSearch={false} />
+        <SearchComponent placeholder="Search vehicle" />
         <p className="ml-2 text-left text-sm italic text-gray-500">
           <span className="font-semibold text-gray-600">
             vehicle model,vehicle registration number, vehicle code, registered
@@ -119,7 +119,7 @@ export default function AllListingPage() {
       </div>
 
       <AllListingTable
-        columns={AllListingColumns(handleToggle, isPending)}
+        columns={LiveListingColumns(handleToggle, isPending)}
         data={data?.result?.list || []}
         loading={isLoading}
       />

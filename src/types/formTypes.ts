@@ -69,4 +69,8 @@ export type PrimaryFormType = {
   };
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
+  vehicleMetaTitle: string;
+  vehicleMetaDescription: string;
 };
+
+export type CompanyFormType = {};

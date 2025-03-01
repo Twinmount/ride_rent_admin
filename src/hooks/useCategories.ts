@@ -4,7 +4,7 @@ import { fetchAllCategories } from "@/api/vehicle-categories";
 import { CategoryType } from "@/types/api-types/vehicleAPI-types";
 import { useAdminContext } from "@/context/AdminContext";
 
-export const useCategorySelection = () => {
+export const useCategories = () => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
     null,
   );
@@ -25,6 +25,8 @@ export const useCategorySelection = () => {
       );
       if (defaultCategory) {
         setSelectedCategory(defaultCategory);
+      } else {
+        setSelectedCategory(categoryData.result.list[0]);
       }
     }
   }, [categoryData]);

@@ -13,6 +13,7 @@ import {
   VehicleListingResponse,
 } from "@/types/api-types/vehicleAPI-types";
 import { PrimaryFormType } from "@/types/formTypes";
+import { buildCommonPrimaryDetails } from ".";
 
 export const addPrimaryDetailsForm = async (
   values: PrimaryFormType,
@@ -27,46 +28,16 @@ export const addPrimaryDetailsForm = async (
       .trim();
 
     // Prepare the request body as a regular object (no FormData)
-    const requestBody: Record<string, any> = {
+    // Build the common request body using the helper
+    const requestBody = {
       userId,
-      countryCode,
-      vehicleCategoryId: values.vehicleCategoryId,
-      vehicleTypeId: values.vehicleTypeId,
-      vehicleBrandId: values.vehicleBrandId,
-      vehicleSeriesLabel: values.vehicleSeriesLabel,
-      vehicleSeries: values.vehicleSeries,
-      vehicleSeriesPageHeading: values.vehicleSeriesPageHeading,
-      vehicleSeriesPageSubheading: values.vehicleSeriesPageSubheading,
-      vehicleSeriesInfoTitle: values.vehicleSeriesInfoTitle,
-      vehicleSeriesInfoDescription: values.vehicleSeriesInfoDescription,
-      vehicleSeriesMetaTitle: values.vehicleSeriesMetaTitle,
-      vehicleSeriesMetaDescription: values.vehicleSeriesMetaDescription,
-      vehicleModel: values.vehicleModel,
-      vehicleRegistrationNumber: values.vehicleRegistrationNumber,
-      vehicleRegisteredYear: values.vehicleRegisteredYear,
-      commercialLicenseExpireDate:
-        values.commercialLicenseExpireDate!.toISOString(),
-      isLease: values.isLease.toString(), // Convert boolean to string
-      isCryptoAccepted: values.isCryptoAccepted.toString(), // Convert boolean to string
-      isSpotDeliverySupported: values.isSpotDeliverySupported.toString(), // Convert boolean to string
-      description: values.description,
-      vehicleTitle: values.vehicleTitle,
-      specification: values.specification,
-      phoneNumber,
-      stateId: values.stateId,
-      cityIds: values.cityIds,
-      rentalDetails: JSON.stringify(values.rentalDetails),
-      vehiclePhotos: values.vehiclePhotos,
-      commercialLicenses: values.commercialLicenses,
-      securityDeposit: values.securityDeposit,
-      isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
-      isTabbySupported: values.isTabbySupported,
+      ...buildCommonPrimaryDetails(
+        values,
+        countryCode,
+        phoneNumber,
+        isCarsCategory,
+      ),
     };
-
-    // Include additionalVehicleTypes only if isCarsCategory is true
-    if (isCarsCategory) {
-      requestBody.additionalVehicleTypes = values.additionalVehicleTypes || [];
-    }
 
     // Send the request as a JSON object
     const data = await API.post<AddPrimaryFormResponse>({
@@ -104,46 +75,16 @@ export const updatePrimaryDetailsForm = async (
       .trim();
 
     // Prepare the request body as a regular object (no FormData)
-    const requestBody: Record<string, any> = {
+    // Build the common request body using the helper
+    const requestBody = {
       vehicleId,
-      countryCode,
-      vehicleCategoryId: values.vehicleCategoryId,
-      vehicleTypeId: values.vehicleTypeId,
-      vehicleBrandId: values.vehicleBrandId,
-      vehicleSeriesLabel: values.vehicleSeriesLabel,
-      vehicleSeries: values.vehicleSeries,
-      vehicleSeriesPageHeading: values.vehicleSeriesPageHeading,
-      vehicleSeriesPageSubheading: values.vehicleSeriesPageSubheading,
-      vehicleSeriesInfoTitle: values.vehicleSeriesInfoTitle,
-      vehicleSeriesInfoDescription: values.vehicleSeriesInfoDescription,
-      vehicleSeriesMetaTitle: values.vehicleSeriesMetaTitle,
-      vehicleSeriesMetaDescription: values.vehicleSeriesMetaDescription,
-      vehicleModel: values.vehicleModel,
-      vehicleRegistrationNumber: values.vehicleRegistrationNumber,
-      vehicleRegisteredYear: values.vehicleRegisteredYear,
-      commercialLicenseExpireDate:
-        values.commercialLicenseExpireDate!.toISOString(),
-      isLease: values.isLease.toString(), // Convert boolean to string
-      isCryptoAccepted: values.isCryptoAccepted.toString(), // Convert boolean to string
-      isSpotDeliverySupported: values.isSpotDeliverySupported.toString(), // Convert boolean to string
-      description: values.description,
-      vehicleTitle: values.vehicleTitle,
-      specification: values.specification,
-      phoneNumber,
-      stateId: values.stateId,
-      cityIds: values.cityIds,
-      rentalDetails: JSON.stringify(values.rentalDetails),
-      vehiclePhotos: values.vehiclePhotos,
-      commercialLicenses: values.commercialLicenses,
-      securityDeposit: values.securityDeposit,
-      isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
-      isTabbySupported: values.isTabbySupported,
+      ...buildCommonPrimaryDetails(
+        values,
+        countryCode,
+        phoneNumber,
+        isCarsCategory,
+      ),
     };
-
-    // Include additionalVehicleTypes only if isCarsCategory is true
-    if (isCarsCategory) {
-      requestBody.additionalVehicleTypes = values.additionalVehicleTypes || [];
-    }
 
     // Send the request as a JSON object
     const data = await API.put<AddPrimaryFormResponse>({

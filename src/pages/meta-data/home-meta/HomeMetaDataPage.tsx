@@ -1,25 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchHomeMetaList } from "@/api/meta-data";
-
 import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
-import Pagination from "@/components/Pagination";
-import { useState } from "react";
 import { useFetchStates } from "@/hooks/useFetchStates";
 import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
 
 export default function HomeMetaData() {
-  const [page, setPage] = useState(1);
-
   const { isStateLoading, selectedState, statesList, setSelectedState } =
     useFetchStates();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({
-    queryKey: ["home-meta-data", page, selectedState?.stateId],
+    queryKey: ["home-meta-data", selectedState?.stateId],
     queryFn: () =>
       fetchHomeMetaList({
-        page,
+        page: 1,
         limit: 20,
         sortOrder: "DESC",
         stateId: selectedState?.stateId as string,
@@ -63,23 +58,6 @@ export default function HomeMetaData() {
           ))
         )}
       </div>
-
-      {seoData.length > 0 && (
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={data?.result.totalNumberOfPages || 1}
-        />
-      )}
-
-      {/* <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
-        <Link
-          className="flex-center flex-center gap-x-1 bg-yellow px-3 py-2 text-white shadow-xl transition-all hover:scale-[1.02]"
-          to={`/meta-data/home/add`}
-        >
-          New Home Meta <Plus />
-        </Link>
-      </button> */}
     </section>
   );
 }

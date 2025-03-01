@@ -95,6 +95,7 @@ const SidebarItemContainerWrapper = ({
       className={`flex h-full max-h-full min-h-full flex-col items-center gap-y-2 pb-3 pl-[0.6rem] ${
         !isSmallScreen && "shadow-md"
       }`}
+      type="auto"
     >
       {/* shadcn accordion wrapper for all the child accordion items elements */}
       <Accordion

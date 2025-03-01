@@ -1,4 +1,8 @@
-import { VehicleSeriesSearch } from "@/types/api-types/API-types";
+import {
+  FetchAllSeriesResponse,
+  FetchSpecificSeriesResponse,
+  VehicleSeriesSearch,
+} from "@/types/api-types/API-types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import { VehicleSeriesType } from "@/types/types";
@@ -7,12 +11,14 @@ import { VehicleSeriesType } from "@/types/types";
 export const searchVehicleSeries = async (urlParams: {
   vehicleSeries: string;
   brandId: string;
+  stateId: string;
 }): Promise<VehicleSeriesSearch> => {
   try {
     // generating query params
     const queryParams = new URLSearchParams({
       vehicleSeries: urlParams.vehicleSeries,
       brandId: urlParams.brandId,
+      stateId: urlParams.stateId,
     }).toString();
 
     const slugWithParams = `${Slug.GET_SEARCH_VEHICLE_SERIES}?${queryParams}`;
@@ -34,14 +40,12 @@ export const searchVehicleSeries = async (urlParams: {
 // Add a new vehicle series
 export const addVehicleSeries = async (
   seriesData: VehicleSeriesType,
-  brandId: string,
 ): Promise<VehicleSeriesType> => {
   try {
     const slug = Slug.POST_VEHICLE_SERIES;
 
     const requestBody = {
       ...seriesData,
-      brandId,
     };
 
     const data = await API.post<VehicleSeriesType>({
@@ -83,6 +87,59 @@ export const updateVehicleSeries = async (
     return data;
   } catch (error) {
     console.error("Error updating vehicle series:", error);
+    throw error;
+  }
+};
+
+// fetch specific brand by ID
+export const fetchSeriesById = async (
+  vehicleSeriesId: string,
+): Promise<FetchSpecificSeriesResponse> => {
+  try {
+    const data = await API.get<FetchSpecificSeriesResponse>({
+      slug: `${Slug.GET_SERIES_BY_ID}?vehicleSeriesId=${vehicleSeriesId}`,
+    });
+    if (!data) {
+      throw new Error("Failed to fetch brand data ");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching brand:", error);
+    throw error;
+  }
+};
+
+// fetch all brands
+export const fetchAllSeries = async (urlParams: {
+  page: number;
+  limit: number;
+  sortOrder: string;
+  vehicleCategoryId: string;
+  search: string;
+}): Promise<FetchAllSeriesResponse> => {
+  try {
+    // generating query params
+    const queryParams = new URLSearchParams({
+      page: urlParams.page.toString(),
+      limit: urlParams.limit.toString(),
+      sortOrder: urlParams.sortOrder,
+      vehicleCategoryId: urlParams.vehicleCategoryId,
+      search: urlParams.search,
+    }).toString();
+
+    const slugWithParams = `${Slug.GET_ALL_BRANDS}?${queryParams}`;
+
+    const data = await API.get<FetchAllSeriesResponse>({
+      slug: slugWithParams,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch brands data");
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching brands:", error);
     throw error;
   }
 };

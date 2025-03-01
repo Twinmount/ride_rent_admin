@@ -7,18 +7,31 @@ import { getCompany } from "@/api/company";
 export default function CompanyDetailsPage() {
   const { companyId } = useParams<{ companyId: string }>();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["company-details-page", companyId],
     queryFn: () => getCompany(companyId as string),
     enabled: !!companyId,
   });
 
+  if (isError) {
+    throw new Error("error fetching company info");
+  }
+
+  const formData = data?.result
+    ? {
+        ...data?.result,
+        expireDate: data?.result?.expireDate
+          ? new Date(data.result.expireDate)
+          : undefined,
+      }
+    : null;
+
   return (
     <section className="py-5 pt-10">
-      <h1 className="mb-4 text-3xl font-bold text-center">Company Details</h1>
+      <h1 className="mb-4 text-center text-3xl font-bold">Company Details</h1>
 
       {data?.result.approvalStatus === "REJECTED" && (
-        <div className="p-2 text-white bg-red-400 rounded-2xl mb-4 w-full  max-w-[800px] mx-auto ">
+        <div className="mx-auto mb-4 w-full max-w-[800px] rounded-2xl bg-red-400 p-2 text-white">
           <h4 className="font-semibold">
             Company status is currently REJECTED,
           </h4>
@@ -29,11 +42,11 @@ export default function CompanyDetailsPage() {
       {isLoading ? (
         <FormSkelton />
       ) : (
-        <CompanyForm type="Update" formData={data?.result} />
+        <CompanyForm type="Update" formData={formData} />
       )}
 
       {data?.result.approvalStatus === "APPROVED" && (
-        <div className="mt-5 mb-10 ml-12 text-lg font-semibold text-blue-500 hover:underline">
+        <div className="mb-10 ml-12 mt-5 text-lg font-semibold text-blue-500 hover:underline">
           <Link
             to={`/listings/add/${data?.result.userId}/${data?.result.companyId}`}
           >

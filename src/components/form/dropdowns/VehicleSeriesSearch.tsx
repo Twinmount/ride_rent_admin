@@ -55,6 +55,7 @@ const VehicleSeriesSearch = ({
       await searchVehicleSeries({
         vehicleSeries: debouncedSearchTerm,
         brandId: vehicleBrandId,
+        stateId,
       }),
     enabled:
       !!vehicleBrandId && !!stateId && !!(debouncedSearchTerm.length > 2), // Only fetch if valid search term , as well as brandId and stateId are provided

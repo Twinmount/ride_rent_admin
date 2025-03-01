@@ -1,1 +1,52 @@
-export * from './vehicleApi.ts'
+import { PrimaryFormType } from "@/types/formTypes.ts";
+
+export * from "./vehicleApi.ts";
+
+// Helper to build the shared request body fields
+export const buildCommonPrimaryDetails = (
+  values: PrimaryFormType,
+  countryCode: string,
+  phoneNumber: string,
+  isCarsCategory: boolean,
+): Record<string, any> => {
+  return {
+    countryCode,
+    vehicleCategoryId: values.vehicleCategoryId,
+    vehicleTypeId: values.vehicleTypeId,
+    vehicleBrandId: values.vehicleBrandId,
+    vehicleSeriesLabel: values.vehicleSeriesLabel,
+    vehicleSeries: values.vehicleSeries,
+    vehicleSeriesPageHeading: values.vehicleSeriesPageHeading,
+    vehicleSeriesPageSubheading: values.vehicleSeriesPageSubheading,
+    vehicleSeriesInfoTitle: values.vehicleSeriesInfoTitle,
+    vehicleSeriesInfoDescription: values.vehicleSeriesInfoDescription,
+    vehicleSeriesMetaTitle: values.vehicleSeriesMetaTitle,
+    vehicleSeriesMetaDescription: values.vehicleSeriesMetaDescription,
+    vehicleModel: values.vehicleModel,
+    vehicleRegistrationNumber: values.vehicleRegistrationNumber,
+    vehicleRegisteredYear: values.vehicleRegisteredYear,
+    commercialLicenseExpireDate:
+      values.commercialLicenseExpireDate?.toISOString(),
+    isLease: values.isLease.toString(),
+    isCryptoAccepted: values.isCryptoAccepted.toString(),
+    isSpotDeliverySupported: values.isSpotDeliverySupported.toString(),
+    description: values.description,
+    vehicleTitle: values.vehicleTitle,
+    specification: values.specification,
+    phoneNumber,
+    stateId: values.stateId,
+    cityIds: values.cityIds,
+    rentalDetails: JSON.stringify(values.rentalDetails),
+    vehiclePhotos: values.vehiclePhotos,
+    commercialLicenses: values.commercialLicenses,
+    securityDeposit: values.securityDeposit,
+    isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
+    isTabbySupported: values.isTabbySupported,
+    vehicleMetaTitle: values.vehicleMetaTitle,
+    vehicleMetaDescription: values.vehicleMetaDescription,
+    // Include additionalVehicleTypes only if isCarsCategory is true
+    ...(isCarsCategory && {
+      additionalVehicleTypes: values.additionalVehicleTypes || [],
+    }),
+  };
+};
