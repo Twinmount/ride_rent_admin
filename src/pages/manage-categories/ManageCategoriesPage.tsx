@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Plus } from "lucide-react";
 import GridSkelton from "@/components/skelton/GridSkelton";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllCategories } from "@/api/vehicle-categories";

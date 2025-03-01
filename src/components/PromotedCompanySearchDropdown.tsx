@@ -34,7 +34,7 @@ export default function PromotedCompanySearchDropdown({ onSelect }: PropType) {
   // Fetch search results
   const { data, isFetching } = useQuery({
     queryKey: ["search-companies", search],
-    queryFn: () => fetchSearchCompanies(search),
+    queryFn: () => fetchSearchCompanies(),
     enabled: search.length > 1, // Only fetch if input has 3+ chars
     staleTime: 1000 * 60 * 5, // Cache results for 5 minutes
   });

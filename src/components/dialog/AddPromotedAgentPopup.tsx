@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { promotedCompanyType } from "@/types/api-types/API-types";
 import PromotedCompanySearchDropdown from "../PromotedCompanySearchDropdown";
-import { set } from "date-fns";
 
 type PropType = {
   isOpen: boolean;

@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { CompanyType } from "@/types/api-types/vehicleAPI-types";
+import { Link } from "react-router-dom";
 
 // Define function type for handleOpenModal
 type HandleOpenModalType = (company: CompanyType) => void;
@@ -12,9 +13,12 @@ export const companyColumns = (
     accessorKey: "companyName",
     header: "Company Name",
     cell: ({ row }) => (
-      <span className="font-semibold text-blue-600">
+      <Link
+        to={`/company/registrations/view/${row.original.companyId}`}
+        className="font-semibold text-blue-600"
+      >
         {row.original.companyName}
-      </span>
+      </Link>
     ),
   },
   {

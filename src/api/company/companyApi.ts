@@ -281,9 +281,8 @@ export const removePromotedCompany = async (params: {
   }
 };
 
-export const fetchSearchCompanies = async (
-  search: string,
-): Promise<FetchPromotedCompaniesSearchResponse> => {
+export const fetchSearchCompanies = async () // search: string,
+: Promise<FetchPromotedCompaniesSearchResponse> => {
   try {
     // const data = await API.get<FetchPromotedCompaniesSearchResponse>({
     //   slug: `${Slug.GET_PROMOTED_COMPANIES_SEARCH}?search=${search}`,
