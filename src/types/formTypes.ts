@@ -72,3 +72,5 @@ export type PrimaryFormType = {
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
 };
+
+export type CompanyFormType = {};

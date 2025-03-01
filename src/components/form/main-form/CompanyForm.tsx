@@ -14,7 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { updateCompany } from "@/api/company";
 import { useState } from "react";
-import { CompanyType } from "@/types/api-types/vehicleAPI-types";
+
 import { useQueryClient } from "@tanstack/react-query";
 import { GcsFilePaths } from "@/constants/enum";
 import { deleteMultipleFiles } from "@/helpers/form";
@@ -26,10 +26,11 @@ import { FormContainer } from "../form-ui/FormContainer";
 import { AgentContactInfo } from "../AgentContactInfo";
 import { FormItemWrapper } from "../form-ui/FormItemWrapper";
 import { FormSubmitButton } from "../form-ui/FormSubmitButton";
+import { CompanyFormType } from "@/types/types";
 
 type CompanyFormProps = {
   type: "Update";
-  formData?: CompanyType | null;
+  formData?: CompanyFormType | null;
 };
 
 export default function CompanyForm({ type, formData }: CompanyFormProps) {

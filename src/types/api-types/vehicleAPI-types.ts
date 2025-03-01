@@ -14,6 +14,8 @@ export type CompanyType = {
   email: string;
   companyAddress: string;
   companyLanguages: string[];
+  companyMetaTitle: string;
+  companyMetaDescription: string;
 };
 
 // type of single brand

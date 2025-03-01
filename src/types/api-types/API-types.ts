@@ -234,6 +234,8 @@ export interface companyType {
   email: string;
   companyAddress: string;
   companyLanguages: string[];
+  companyMetaTitle: string;
+  companyMetaDescription: string;
 }
 
 //  interface for the get-all-companies  API response

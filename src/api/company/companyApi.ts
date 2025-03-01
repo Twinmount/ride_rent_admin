@@ -1,4 +1,4 @@
-import { CompanyListingResponse } from "@/types/types";
+import { CompanyFormType, CompanyListingResponse } from "@/types/types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
@@ -7,14 +7,6 @@ import {
   FetchPromotedCompanyListResponse,
   FetchPromotedCompaniesSearchResponse,
 } from "@/types/api-types/API-types";
-
-export interface CompanyType {
-  companyName?: string;
-  companyLogo?: string;
-  commercialLicense?: string;
-  expireDate?: Date;
-  regNumber?: string;
-}
 
 export interface CompanyStatusType {
   approvalStatus: "APPROVED" | "PENDING" | "REJECTED";
@@ -31,17 +23,7 @@ export interface GetAllCompanyType {
   search?: string;
 }
 
-export interface CompanyType {
-  companyName?: string;
-  companyLogo?: string;
-  commercialLicense?: string;
-  expireDate?: Date;
-  regNumber?: string;
-  companyAddress?: string;
-  companyLanguages?: string[];
-}
-
-export const addCompany = async (values: CompanyType, userId: string) => {
+export const addCompany = async (values: CompanyFormType, userId: string) => {
   try {
     const data = await API.post({
       slug: Slug.POST_COMPANY,
@@ -56,6 +38,8 @@ export const addCompany = async (values: CompanyType, userId: string) => {
         commercialLicense: values.commercialLicense, // Assuming this is a URL or string
         companyAddress: values.companyAddress,
         companyLanguages: values.companyLanguages,
+        companyMetaTitle: values.companyMetaTitle,
+        companyMetaDescription: values.companyMetaDescription,
       },
     });
 
@@ -66,7 +50,10 @@ export const addCompany = async (values: CompanyType, userId: string) => {
   }
 };
 
-export const updateCompany = async (values: CompanyType, companyId: string) => {
+export const updateCompany = async (
+  values: CompanyFormType,
+  companyId: string,
+) => {
   try {
     const data = await API.put({
       slug: Slug.PUT_COMPANY,
@@ -81,6 +68,8 @@ export const updateCompany = async (values: CompanyType, companyId: string) => {
         commercialLicense: values.commercialLicense, // Assuming this is a URL or string
         companyAddress: values.companyAddress,
         companyLanguages: values.companyLanguages,
+        companyMetaTitle: values.companyMetaTitle,
+        companyMetaDescription: values.companyMetaDescription,
       },
     });
 

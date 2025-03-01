@@ -130,7 +130,7 @@ export type CompanyFormType = {
   companyName: string;
   companyLogo: string;
   commercialLicense: string;
-  expireDate: Date;
+  expireDate: Date | undefined;
   regNumber: string;
   agentId?: string;
   approvalStatus?: string;
