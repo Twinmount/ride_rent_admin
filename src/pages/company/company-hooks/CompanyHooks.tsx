@@ -7,7 +7,7 @@ export default function usePromotedCompanies() {
     stateId: string;
     categoryId: string;
   } | null>(null);
-  const [selectedCategoryForAdd, setSelectedCategoryForAdd] = useState<{
+  const [selectedInfoForAdd, setSelectedInfoForAdd] = useState<{
     stateId: string;
     categoryId: string;
   } | null>(null);
@@ -15,14 +15,28 @@ export default function usePromotedCompanies() {
   // fetching company promotion list
   const { data, isLoading } = useFetchCompanyPromotionList();
 
-  const promotedCompanies = data?.result;
+  const promotedCompaniesList = data?.result.list || [];
+
+  const handleCloseDeleteModal = () => {
+    setTimeout(() => {
+      setSelectedAgentForDelete(null);
+    }, 200); // Small delay to prevent premature clearing
+  };
+
+  const handleCloseAddModal = () => {
+    setTimeout(() => {
+      setSelectedInfoForAdd(null);
+    }, 200); // Small delay to prevent premature clearing
+  };
 
   return {
     selectedAgentForDelete,
     setSelectedAgentForDelete,
-    selectedCategoryForAdd,
-    setSelectedCategoryForAdd,
-    promotedCompanies,
+    selectedInfoForAdd,
+    setSelectedInfoForAdd,
+    promotedCompaniesList,
     isLoading,
+    handleCloseDeleteModal,
+    handleCloseAddModal,
   };
 }

@@ -2,13 +2,19 @@ import { PromotedCompanyCardType } from "@/types/api-types/API-types";
 import AgentSubCard from "./AgentSubCard";
 import { toast } from "../ui/use-toast";
 
+export type DeleteAgentType = ({
+  companyId,
+  stateId,
+  categoryId,
+}: {
+  companyId: string;
+  stateId: string;
+  categoryId: string;
+}) => void;
+
 type PropType = {
   data: PromotedCompanyCardType;
-  onDeleteAgent: (
-    companyId: string,
-    stateId: string,
-    categoryId: string,
-  ) => void;
+  onDeleteAgent: DeleteAgentType;
   onAddAgent: (stateId: string, categoryId: string) => void;
 };
 
@@ -47,6 +53,8 @@ export default function PromotedCompanyCard({
           <AgentSubCard
             key={agent.agentId}
             agent={agent}
+            stateId={data.state.stateId}
+            categoryId={data.category.categoryId}
             onDelete={onDeleteAgent}
           />
         ))}

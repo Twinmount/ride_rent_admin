@@ -262,7 +262,8 @@ export interface promotedCompanyType {
   companyId: string;
   agentId: string;
   companyName: string;
-  companyLogo: string;
+  companyLogo: string; //pass actual image url here
+  companyShortId: string;
 }
 
 export interface FetchPromotedCompaniesSearchResponse {
@@ -462,6 +463,7 @@ export interface PromotedAgent {
   agentId: string; //that short code eg: rd-1234
   companyName: string;
   companyLogo: string;
+  companyLogoUrl: string;
 }
 
 // individual agent promotion card type
@@ -479,7 +481,13 @@ export interface PromotedCompanyCardType {
 
 // agent promotion response
 export interface FetchPromotedCompanyListResponse {
-  result: PromotedCompanyCardType[];
+  result: {
+    list: PromotedCompanyCardType[];
+    page: string;
+    limit: string;
+    total: number;
+    totalNumberOfPages: number;
+  };
   status: string;
   statusCode: number;
 }

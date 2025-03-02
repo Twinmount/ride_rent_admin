@@ -74,10 +74,10 @@ export enum Slug {
   DELETE_COMPANY = "/company",
   GET_ALL_COMPANY = "/company/list",
   GET_COMPANY_LISTINGS_COUNT = "/company/dashboard/count",
-  GET_PROMOTED_COMPANIES_LIST = "/company/promoted",
-  GET_PROMOTED_COMPANIES_SEARCH = "/company/promoted/search",
-  DELETE_PROMOTED_COMPANY = "/company/promoted",
-  POST_PROMOTED_COMPANY = "/company/promoted",
+  GET_PROMOTED_COMPANIES_LIST = "/company-promotion/list",
+  GET_PROMOTED_COMPANIES_SEARCH = "/company/search",
+  POST_PROMOTED_COMPANY = "/company-promotion",
+  DELETE_PROMOTED_COMPANY = "/company-promotion",
 
   // vehicles end points
   POST_VEHICLE = "/vehicle",

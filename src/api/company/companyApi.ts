@@ -194,6 +194,9 @@ export const fetchPromotedCompanyList = async (urlParams: {
   try {
     const queryParams = new URLSearchParams({
       state: urlParams.stateId,
+      page: "1",
+      limit: "15",
+      sortOrder: "DESC",
     }).toString();
 
     const slugWithParams = `${Slug.GET_PROMOTED_COMPANIES_LIST}?${queryParams}`;
@@ -216,16 +219,16 @@ export const fetchPromotedCompanyList = async (urlParams: {
 // Add a promoted company
 export const addPromotedCompany = async (params: {
   companyId: string;
-  stateId: string;
-  categoryId: string;
+  state: string;
+  category: string;
 }): Promise<boolean> => {
   try {
     const response = await API.post({
       slug: Slug.POST_PROMOTED_COMPANY,
       body: {
         companyId: params.companyId,
-        stateId: params.stateId,
-        categoryId: params.categoryId,
+        state: params.state,
+        category: params.category,
       },
     });
 
@@ -249,8 +252,8 @@ export const removePromotedCompany = async (params: {
   try {
     const queryParams = new URLSearchParams({
       companyId: params.companyId,
-      stateId: params.stateId,
-      categoryId: params.categoryId,
+      state: params.stateId,
+      category: params.categoryId,
     }).toString();
 
     const slugWithParams = `${Slug.DELETE_PROMOTED_COMPANY}?${queryParams}`;
@@ -270,43 +273,19 @@ export const removePromotedCompany = async (params: {
   }
 };
 
-export const fetchSearchCompanies = async () // search: string,
-: Promise<FetchPromotedCompaniesSearchResponse> => {
+export const fetchSearchCompanies = async (
+  search: string,
+): Promise<FetchPromotedCompaniesSearchResponse> => {
   try {
-    // const data = await API.get<FetchPromotedCompaniesSearchResponse>({
-    //   slug: `${Slug.GET_PROMOTED_COMPANIES_SEARCH}?search=${search}`,
-    // });
+    const data = await API.get<FetchPromotedCompaniesSearchResponse>({
+      slug: `${Slug.GET_PROMOTED_COMPANIES_SEARCH}?search=${search}`,
+    });
 
-    const mockData: FetchPromotedCompaniesSearchResponse = {
-      result: [
-        {
-          companyId: "comp-001",
-          agentId: "agent-1234",
-          companyName: "Elite Rides",
-          companyLogo: "https://via.placeholder.com/50",
-        },
-        {
-          companyId: "comp-002",
-          agentId: "agent-5678",
-          companyName: "Speedster Cars",
-          companyLogo: "https://via.placeholder.com/50",
-        },
-        {
-          companyId: "comp-003",
-          agentId: "agent-9101",
-          companyName: "Luxury Motors",
-          companyLogo: "https://via.placeholder.com/50",
-        },
-      ],
-      status: "success",
-      statusCode: 200,
-    };
+    if (!data) {
+      throw new Error("Failed to fetch promoted company");
+    }
 
-    // if (!data) {
-    //   throw new Error("Failed to fetch promoted company");
-    // }
-
-    return mockData;
+    return data;
   } catch (error) {
     console.error("Error fetching promoted company:", error);
     throw error;

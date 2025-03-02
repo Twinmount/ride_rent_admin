@@ -76,7 +76,7 @@ export const sidebarContent: SidebarItem[] = [
         label: "Rejected Registrations",
         link: "/company/registrations/rejected",
       },
-      // { label: "Promotions", link: "/company/promotions" },
+      { label: "Promotions", link: "/company/promotions" },
     ],
   },
   // Categories and types routes
