@@ -1,41 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSearchCompanies } from "@/api/company";
 import { promotedCompanyType } from "@/types/api-types/API-types";
 
 type PropType = {
   onSelect: (company: promotedCompanyType) => void;
+  selectedCompanyId: string | null | undefined;
 };
 
-export default function PromotedCompanySearchDropdown({ onSelect }: PropType) {
-  const [search, setSearch] = useState("");
-  const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
-    null,
-  );
+export default function PromotedCompanySearchDropdown({
+  onSelect,
+  selectedCompanyId,
+}: PropType) {
+  const [search, setSearch] = useState(""); // Updates instantly as user types
+  const [debouncedSearch, setDebouncedSearch] = useState(""); // Updates after debounce delay
 
-  // Handle Debounced Input Change
+  // Handle input change (updates instantly)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearch(value); // Update input immediately
-
-    if (debounceTimeout) {
-      clearTimeout(debounceTimeout);
-    }
-
-    const timeoutId = setTimeout(() => {
-      if (value.length > 1) {
-        // The state is already updated before the timeout, so no need to set it again
-      }
-    }, 700); // 700ms debounce delay
-
-    setDebounceTimeout(timeoutId);
+    setSearch(e.target.value);
   };
 
-  // Fetch search results
+  // Debounce logic: Updates `debouncedSearch` after 700ms delay
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 700);
+
+    return () => clearTimeout(timeoutId); // Cleanup previous timeout
+  }, [search]);
+
+  // Fetch search results using `debouncedSearch`
   const { data, isFetching } = useQuery({
-    queryKey: ["search-companies", search],
-    queryFn: () => fetchSearchCompanies(),
-    enabled: search.length > 1, // Only fetch if input has 3+ chars
+    queryKey: ["search-companies", debouncedSearch],
+    queryFn: () => fetchSearchCompanies(debouncedSearch),
+    enabled: debouncedSearch.length > 1, // Fetch only if input has 2+ chars
     staleTime: 1000 * 60 * 5, // Cache results for 5 minutes
   });
 
@@ -61,24 +59,29 @@ export default function PromotedCompanySearchDropdown({ onSelect }: PropType) {
           {data.result.map((company) => (
             <li
               key={company.companyId}
-              className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+              className={`h-16 cursor-pointer rounded-md border px-4 py-2 hover:bg-gray-100 ${
+                selectedCompanyId === company.companyId ? "border-black" : ""
+              }`}
               onClick={() => onSelect(company)}
             >
               <div className="flex items-center gap-3">
                 <img
                   src={company.companyLogo}
                   alt={company.companyName}
-                  className="h-6 w-6 rounded-full"
+                  className="h-6 w-1/6 rounded-full"
                 />
-                <span className="text-sm">{company.companyName}</span>
+                <div className="flex flex-col">
+                  <span className="text-sm">{company.companyName}</span>
+                  <span>{company.agentId}</span>
+                </div>
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        search.length > 1 &&
+        debouncedSearch.length > 1 &&
         !isFetching && (
-          <p className="text-sm text-gray-500">No companies found.</p>
+          <p className="text-sm text-red-400">No companies found.</p>
         )
       )}
     </div>

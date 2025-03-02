@@ -1,4 +1,3 @@
-import { promotedCompanies as Data } from "@/pages/company";
 import PromotedCompanyCard from "./card/PromotedCompanyCard";
 import DeletePromotedAgentPopup from "./dialog/DeletePromotedAgentPopup";
 import AddPromotedAgentPopup from "./dialog/AddPromotedAgentPopup";
@@ -8,13 +7,13 @@ export default function PromotedCompaniesList() {
   const {
     selectedAgentForDelete,
     setSelectedAgentForDelete,
-    selectedCategoryForAdd,
-    setSelectedCategoryForAdd,
-    promotedCompanies,
+    selectedInfoForAdd,
+    setSelectedInfoForAdd,
+    promotedCompaniesList,
     isLoading,
+    handleCloseDeleteModal,
+    handleCloseAddModal,
   } = usePromotedCompanies();
-
-  const list = promotedCompanies || Data;
 
   if (isLoading) {
     return (
@@ -24,7 +23,7 @@ export default function PromotedCompaniesList() {
     );
   }
 
-  if (list.length === 0) {
+  if (promotedCompaniesList.length === 0) {
     return (
       <div className="flex-center h-40 w-full">
         <p className="text-sm font-semibold text-gray-600">
@@ -36,16 +35,16 @@ export default function PromotedCompaniesList() {
 
   return (
     <>
-      {/* Render Company Cards */}
-      {list.map((data) => (
+      {/*maps over the list */}
+      {promotedCompaniesList.map((data) => (
         <PromotedCompanyCard
           key={data.category.categoryId}
           data={data}
-          onDeleteAgent={(companyId, stateId, categoryId) =>
-            setSelectedAgentForDelete({ companyId, stateId, categoryId })
-          }
+          onDeleteAgent={({ companyId, stateId, categoryId }) => {
+            setSelectedAgentForDelete({ companyId, stateId, categoryId });
+          }}
           onAddAgent={(stateId, categoryId) =>
-            setSelectedCategoryForAdd({ stateId, categoryId })
+            setSelectedInfoForAdd({ stateId, categoryId })
           }
         />
       ))}
@@ -53,18 +52,15 @@ export default function PromotedCompaniesList() {
       {/* Render Delete Dialog */}
       <DeletePromotedAgentPopup
         isOpen={!!selectedAgentForDelete}
-        onClose={() => setSelectedAgentForDelete(null)}
-        companyId={selectedAgentForDelete?.companyId ?? ""}
-        stateId={selectedAgentForDelete?.stateId ?? ""}
-        categoryId={selectedAgentForDelete?.categoryId ?? ""}
+        selectedAgentForDelete={selectedAgentForDelete}
+        onClose={handleCloseDeleteModal}
       />
 
       {/* Render Add Dialog */}
       <AddPromotedAgentPopup
-        isOpen={!!selectedCategoryForAdd}
-        onClose={() => setSelectedCategoryForAdd(null)}
-        stateId={selectedCategoryForAdd?.stateId ?? ""}
-        categoryId={selectedCategoryForAdd?.categoryId ?? ""}
+        isOpen={!!selectedInfoForAdd}
+        onClose={handleCloseAddModal}
+        stateCategoryInfo={selectedInfoForAdd}
       />
     </>
   );

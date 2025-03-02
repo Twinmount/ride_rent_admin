@@ -8,25 +8,36 @@ import {
 } from "@/components/ui/dialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+type SelectedAgentType = {
+  companyId: string;
+  stateId: string;
+  categoryId: string;
+} | null;
 
 type PropType = {
   isOpen: boolean;
   onClose: () => void;
-  companyId: string;
-  stateId: string;
-  categoryId: string;
+  selectedAgentForDelete: SelectedAgentType;
 };
 
 export default function DeletePromotedAgentPopup({
   isOpen,
   onClose,
-  companyId,
-  stateId,
-  categoryId,
+  selectedAgentForDelete,
 }: PropType) {
+  const [isDialogVisible, setIsDialogVisible] = useState(isOpen);
   const [error, setError] = useState<string | null>(null);
   const queryClient = useQueryClient();
+
+  const companyId = selectedAgentForDelete?.companyId || "";
+  const stateId = selectedAgentForDelete?.stateId || "";
+  const categoryId = selectedAgentForDelete?.categoryId || "";
+
+  useEffect(() => {
+    setIsDialogVisible(isOpen); // Sync with external state when it changes
+  }, [isOpen]);
 
   // React Query mutation for delete operation
   const mutation = useMutation({
@@ -45,7 +56,15 @@ export default function DeletePromotedAgentPopup({
   });
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog
+      open={isDialogVisible}
+      onOpenChange={(open) => {
+        if (!open) {
+          setIsDialogVisible(false);
+          setTimeout(onClose, 300); // Delay clearing state
+        }
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
@@ -54,12 +73,13 @@ export default function DeletePromotedAgentPopup({
           <DialogDescription>This action cannot be undone.</DialogDescription>
         </DialogHeader>
 
+        <div></div>
+
         {error && <p className="text-sm text-red-500">{error}</p>}
 
         <button
           onClick={() => {
             mutation.mutate();
-            console.log("Removing", { companyId, stateId, categoryId });
           }}
           className="rounded bg-red-500 px-4 py-2 text-white disabled:bg-gray-400"
           disabled={mutation.isPending}
