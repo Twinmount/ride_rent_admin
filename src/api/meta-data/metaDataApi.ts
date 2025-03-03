@@ -60,16 +60,16 @@ export const fetchListingMetaList = async (urlParams: {
   page: number;
   limit: number;
   sortOrder: string;
-  state: string;
-  category: string;
+  stateId: string;
+  categoryId: string;
 }): Promise<FetchListingMetaListResponse> => {
   try {
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
-      state: urlParams.state,
-      category: urlParams.category,
+      stateId: urlParams.stateId,
+      categoryId: urlParams.categoryId,
     }).toString();
 
     const slugWithParams = `${Slug.GET_ADMIN_LISTING_META_ALL}?${queryParams}`;

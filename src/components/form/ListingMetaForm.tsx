@@ -25,6 +25,7 @@ import { Textarea } from "../ui/textarea";
 import StatesDropdown from "./dropdowns/StatesDropdown";
 import VehicleTypesDropdown from "./dropdowns/VehicleTypesDropdown";
 import MetaCategoryDropdownField from "./dropdowns/MetaCategoryDropdownField";
+import { useQueryClient } from "@tanstack/react-query";
 
 type ListingMetaFormProps = {
   type: "Add" | "Update";
@@ -40,6 +41,8 @@ export default function ListingMetaForm({
 
   const navigate = useNavigate();
   const { metaDataId } = useParams<{ metaDataId: string }>();
+
+  const queryClient = useQueryClient();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof ListingMetaFormSchema>>({
@@ -70,6 +73,13 @@ export default function ListingMetaForm({
         variant: "destructive",
         title: `${type} meta data failed`,
         description: "Something went wrong",
+      });
+    } finally {
+      queryClient.invalidateQueries({
+        queryKey: ["listing-meta-data", metaDataId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["listing-meta-data"],
       });
     }
   }
