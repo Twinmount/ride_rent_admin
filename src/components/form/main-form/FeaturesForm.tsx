@@ -62,9 +62,8 @@ export default function FeaturesForm({
 
     data?.result.forEach((feature) => {
       if (!values[feature.name] || values[feature.name]?.length === 0) {
-        updatedErrors[
-          feature.name
-        ] = `Please select at least one option for ${feature.name}`;
+        updatedErrors[feature.name] =
+          `Please select at least one option for ${feature.name}`;
         isValid = false;
       }
     });
@@ -149,7 +148,7 @@ export default function FeaturesForm({
       .flatMap((feature) =>
         feature.values
           .filter((value) => value.selected)
-          .map((value) => value.name)
+          .map((value) => value.name),
       )
       .join(", "); // Join them as a comma-separated string
 
@@ -170,9 +169,9 @@ export default function FeaturesForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-5 p-2 py-8 pb-64 mx-auto w-full bg-white rounded-3xl"
+        className="mx-auto flex w-full flex-col gap-5 rounded-3xl bg-white p-2 py-8 pb-64"
       >
-        <div className="flex flex-col gap-5 w-full max-w-full md:max-w-[800px] mx-auto">
+        <div className="mx-auto flex w-full max-w-full flex-col gap-5 md:max-w-[800px]">
           {fields.length > 0 ? (
             fields.map((feature) => (
               <FormField
@@ -181,12 +180,12 @@ export default function FeaturesForm({
                 name={feature.name}
                 render={({ field }) => {
                   return (
-                    <FormItem className="flex overflow-hidden mb-2 w-full max-sm:flex-col">
-                      <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                    <FormItem className="mb-2 flex w-full overflow-hidden max-sm:flex-col">
+                      <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                         {feature.name}
                         <span className="mr-5 max-sm:hidden">:</span>
                       </FormLabel>
-                      <div className="flex-col items-start w-full">
+                      <div className="w-full flex-col items-start">
                         <FormControl>
                           <MultiSelectDropdown
                             onChangeHandler={field.onChange}
@@ -217,7 +216,7 @@ export default function FeaturesForm({
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-darkYellow"
+          className="flex-center button hover:bg-darkYellow col-span-2 mx-auto mt-3 w-full bg-yellow !text-lg !font-semibold md:w-10/12 lg:w-8/12"
         >
           {isAddOrIncomplete ? "List Vehicle" : "Update Features"}
           {form.formState.isSubmitting && <Spinner />}
@@ -228,12 +227,12 @@ export default function FeaturesForm({
             type="button"
             size="lg"
             onClick={handleCopySelectedValues}
-            className="w-full md:w-10/12 lg:w-8/12 mx-auto flex-center col-span-2  !text-lg !font-semibold button gap-x-1  text-white"
+            className="flex-center button col-span-2 mx-auto w-full gap-x-1 !text-lg !font-semibold text-white md:w-10/12 lg:w-8/12"
           >
             {isCopied ? (
-              <Check className="w-4 h-4 text-green-500" />
+              <Check className="h-4 w-4 text-green-500" />
             ) : (
-              <Copy className="w-4 h-4 text-yellow" />
+              <Copy className="h-4 w-4 text-yellow" />
             )}
             {isCopied ? "Copied" : "Copy selected features"}
           </Button>

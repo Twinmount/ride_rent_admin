@@ -17,20 +17,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { SingleVehicleType } from "@/types/api-types/vehicleAPI-types";
 
-interface AllListingTableProps {
-  columns: ColumnDef<SingleVehicleType>[];
-  data: SingleVehicleType[];
+interface GenericTableProps<TData> {
+  columns: ColumnDef<TData>[]; // Generic columns type
+  data: TData[]; // Generic data type
   loading: boolean;
+  loadingText?: string;
+  noDataText?: string;
 }
 
-export function AllListingTable({
+export function GenericTable<TData>({
   columns,
   data,
   loading,
-}: AllListingTableProps) {
+  loadingText = "Loading ...",
+  noDataText = "No data found.",
+}: GenericTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -47,7 +49,7 @@ export function AllListingTable({
 
   return (
     <div>
-      <div className="bg-white rounded-md border">
+      <div className="rounded-md border bg-white">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -58,7 +60,7 @@ export function AllListingTable({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 ))}
@@ -72,7 +74,7 @@ export function AllListingTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Loading ...
+                  {loadingText}
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
@@ -82,24 +84,10 @@ export function AllListingTable({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={`${
-                        cell.column.id !== "isDisabled" && "min-w-44"
-                      } max-w-44`}
-                    >
-                      {cell.column.id === "vehicleModel" ? (
-                        <Link
-                          to={`/listings/edit/${row.original.vehicleId}/${row.original.company.companyId}/${row.original.company.userId}`}
-                          className="font-semibold text-blue-600 hover:underline"
-                        >
-                          {cell.getValue() as string}
-                        </Link>
-                      ) : (
-                        flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )
+                    <TableCell key={cell.id} className="min-w-40 max-w-44">
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -111,7 +99,7 @@ export function AllListingTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No data found.
+                  {noDataText}
                 </TableCell>
               </TableRow>
             )}

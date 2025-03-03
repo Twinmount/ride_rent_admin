@@ -1,23 +1,20 @@
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
 import LazyLoader from "@/components/skelton/LazyLoader";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import FormSkelton from "@/components/skelton/FormSkelton";
-import { getLevelsFilled, getPrimaryDetailsFormData } from "@/api/vehicle";
-import { mapGetPrimaryFormToPrimaryFormType } from "@/helpers/form";
-import { save, StorageKeys } from "@/utils/storage";
+import { useVehicleUpdateForm } from "@/hooks/useVehicleUpdateForm";
 
 // Lazy-loaded components
 const PrimaryDetailsForm = lazy(
-  () => import("@/components/form/main-form/PrimaryDetailsForm")
+  () => import("@/components/form/main-form/PrimaryDetailsForm"),
 );
 const SpecificationsForm = lazy(
-  () => import("@/components/form/main-form/SpecificationsForm")
+  () => import("@/components/form/main-form/SpecificationsForm"),
 );
 const FeaturesForm = lazy(
-  () => import("@/components/form/main-form/FeaturesForm")
+  () => import("@/components/form/main-form/FeaturesForm"),
 );
 
 type TabsTypes = "primary" | "specifications" | "features";
@@ -27,74 +24,35 @@ export default function VehiclesFormUpdatePage() {
   const { vehicleId } = useParams<{
     vehicleId: string;
   }>();
-  const [activeTab, setActiveTab] = useState<TabsTypes>("primary");
-
-  const queryClient = useQueryClient();
 
   const handleTabChange = (value: string) => {
     setActiveTab(value as TabsTypes);
   };
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["primary-details-form", vehicleId],
-    queryFn: () => getPrimaryDetailsFormData(vehicleId as string),
-    staleTime: 60000,
-  });
-
-  // Fetch levelsFilled only if the type is "Update"
+  // Using custom hook
   const {
-    data: levelsData,
-    refetch: refetchLevels,
-    isFetching: isLevelsFetching,
-  } = useQuery({
-    queryKey: ["getLevelsFilled", vehicleId],
-    queryFn: () => getLevelsFilled(vehicleId as string),
-    enabled: !!vehicleId,
-  });
-
-  const levelsFilled = levelsData
-    ? parseInt(levelsData.result.levelsFilled, 10)
-    : 1;
-
-  const isAddOrIncompleteSpecifications = levelsFilled < 2; // true if only level 1 is filled
-  const isAddOrIncompleteFeatures = levelsFilled < 3;
-
-  // formatted formdata to match primary details form type
-  const formData = data
-    ? mapGetPrimaryFormToPrimaryFormType(data.result)
-    : null;
-
-  const vehicleCategoryId = data?.result?.vehicleCategoryId;
-  const vehicleTypeId = data?.result?.vehicleTypeId;
-
-  const initialCountryCode = data?.result?.countryCode;
-
-  // Store vehicleCategoryId in localStorage if levelsFilled < 3
-  useEffect(() => {
-    if (levelsFilled < 3 && vehicleCategoryId && vehicleTypeId) {
-      save(StorageKeys.CATEGORY_ID, vehicleCategoryId);
-      save(StorageKeys.VEHICLE_TYPE_ID, vehicleTypeId);
-    }
-  }, [levelsFilled, vehicleCategoryId]);
-
-  // prefetching levelsFilled
-  useEffect(() => {
-    queryClient.prefetchQuery({
-      queryKey: ["getLevelsFilled", vehicleId],
-      queryFn: () => getLevelsFilled(vehicleId as string),
-    });
-  }, [vehicleId]);
+    activeTab,
+    setActiveTab,
+    formData,
+    isLoading,
+    levelsFilled,
+    isLevelsFetching,
+    refetchLevels,
+    isAddOrIncompleteSpecifications,
+    isAddOrIncompleteFeatures,
+    initialCountryCode,
+  } = useVehicleUpdateForm(vehicleId);
 
   return (
-    <section className="container pb-10 h-auto min-h-screen bg-white">
-      <div className="gap-x-4 mb-5 ml-5 flex-center w-fit">
+    <section className="container h-auto min-h-screen py-8 pb-10">
+      <div className="flex-center mb-5 ml-5 w-fit gap-x-4">
         <button
           onClick={() => navigate(-1)}
-          className="border-none transition-colors outline-none w-fit flex-center hover:text-yellow"
+          className="flex-center w-fit border-none outline-none transition-colors hover:text-yellow"
         >
           <CircleArrowLeft />
         </button>
-        <h1 className="text-center h3-bold sm:text-left">
+        <h1 className="h3-bold text-center sm:text-left">
           Vehicle Details Form
         </h1>
       </div>
@@ -105,10 +63,10 @@ export default function VehiclesFormUpdatePage() {
           onValueChange={handleTabChange}
           className="w-full"
         >
-          <TabsList className="gap-x-2 bg-white flex-center">
+          <TabsList className="flex-center mb-6 gap-x-2">
             <TabsTrigger
               value="primary"
-              className="h-9 max-sm:text-sm max-sm:px-2"
+              className="h-9 max-sm:px-2 max-sm:text-sm"
             >
               Primary Details
             </TabsTrigger>

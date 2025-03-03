@@ -10,14 +10,12 @@ import VehicleSeriesForm from "@/components/form/VehicleSeriesForm";
 
 type VehicleSeriesDialogProps = {
   series: any;
-  brandId: string;
   onClose: () => void; // Callback to handle dialog close
   open: boolean; // State to control dialog visibility
 };
 
 const VehicleSeriesDialog = ({
   series,
-  brandId,
   onClose,
   open,
 }: VehicleSeriesDialogProps) => {
@@ -32,12 +30,7 @@ const VehicleSeriesDialog = ({
         </DialogHeader>
         {series && (
           <ScrollArea className="h-full max-h-[90vh]">
-            <VehicleSeriesForm
-              type="Update"
-              formData={series}
-              onSuccess={onClose} // Call `onClose` after form success
-              brandId={brandId}
-            />
+            <VehicleSeriesForm type="Update" formData={series} />
           </ScrollArea>
         )}
       </DialogContent>

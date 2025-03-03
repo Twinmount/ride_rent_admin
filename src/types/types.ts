@@ -130,7 +130,7 @@ export type CompanyFormType = {
   companyName: string;
   companyLogo: string;
   commercialLicense: string;
-  expireDate: Date;
+  expireDate: Date | undefined;
   regNumber: string;
   agentId?: string;
   approvalStatus?: string;
@@ -139,6 +139,8 @@ export type CompanyFormType = {
   email?: string;
   companyAddress: string;
   companyLanguages: string[];
+  companyMetaTitle: string;
+  companyMetaDescription: string;
 };
 
 export type CompanyStatusFormType = {
@@ -199,12 +201,15 @@ export type CategoryType =
   | "travel";
 
 export type VehicleSeriesType = {
-  vehicleSeriesId?: string;
+  stateId: string;
+  vehicleCategoryId: string;
+  vehicleBrandId: string;
   vehicleSeries: string;
-  vehicleSeriesInfoTitle: string;
-  vehicleSeriesInfoDescription: string;
+  vehicleSeriesLabel: string;
   vehicleSeriesPageHeading: string;
   vehicleSeriesPageSubheading: string;
+  vehicleSeriesInfoTitle: string;
+  vehicleSeriesInfoDescription: string;
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
 };

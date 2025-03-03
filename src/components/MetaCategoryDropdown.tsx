@@ -31,10 +31,12 @@ export default function MetaCategoryDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="mx-auto my-4 !h-8 w-fit max-w-fit cursor-pointer !rounded-lg bg-slate-800 text-lg text-white outline-none transition-colors hover:bg-slate-900 hover:text-yellow md:mr-20"
+        className={`w-fit min-w-32 cursor-pointer !border-none !outline-none ${
+          isLoading ? "pointer-events-none opacity-50" : ""
+        }`}
         disabled={isLoading || categories.length === 0}
       >
-        <div className="flex items-center whitespace-nowrap rounded-lg pl-2 font-bold tracking-wider">
+        <div className="relative flex h-10 items-center whitespace-nowrap rounded-2xl bg-slate-800 pl-4 pr-1 font-semibold tracking-wider text-white outline">
           {isLoading
             ? "Loading..."
             : categories.length > 0

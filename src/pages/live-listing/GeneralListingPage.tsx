@@ -7,16 +7,16 @@ import {
   fetchNewOrModifiedVehicles,
   updateVehicleStatus,
 } from "@/api/listings";
-import { GeneralListingTable } from "@/components/table/live-listing/GeneralListingTable";
+import { GeneralListingTable } from "@/components/table/GeneralListingTable";
 import { VehicleStatusType } from "@/types/formTypes";
-import { GeneralListingColumns } from "@/components/table/live-listing/columns/GeneralListingsColumn";
-import { SingleVehicleType } from "@/types/api-types/vehicleAPI-types";
+import { GeneralListingColumns } from "@/components/table/columns/GeneralListingsColumn";
+import { GeneralListingVehicleType } from "@/types/api-types/vehicleAPI-types";
 import VehicleStatusModal from "@/components/VehicleStatusModal";
 import { toast } from "@/components/ui/use-toast";
 import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
-import ListingHeader from "./ListingHeader";
+import ListingPageHeading from "../../components/ListingPageHeading";
 
 interface GeneralListingPageProps {
   queryKey: any[];
@@ -36,7 +36,7 @@ export default function GeneralListingPage({
   const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10);
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
   const [selectedVehicle, setSelectedVehicle] =
-    useState<SingleVehicleType | null>(null);
+    useState<GeneralListingVehicleType | null>(null);
 
   const { state } = useAdminContext();
 
@@ -61,7 +61,7 @@ export default function GeneralListingPage({
     staleTime: 10 * 1000,
   });
 
-  const handleOpenModal = (vehicle: SingleVehicleType) => {
+  const handleOpenModal = (vehicle: GeneralListingVehicleType) => {
     setSelectedVehicle(vehicle);
   };
 
@@ -132,7 +132,7 @@ export default function GeneralListingPage({
     <section className="container mx-auto min-h-screen py-5 md:py-7">
       <div className="flex-between my-2 mb-6 max-sm:flex-col">
         {/* Heading */}
-        <ListingHeader />
+        <ListingPageHeading />
         <div className="flex-between w-fit gap-x-2 max-sm:mt-3">
           <SortDropdown
             sortOrder={sortOrder}
@@ -149,7 +149,7 @@ export default function GeneralListingPage({
 
       {/* search component */}
       <div className="mb-8">
-        <SearchComponent placeholder="Search vehicle" isBrandSearch={false} />
+        <SearchComponent placeholder="Search vehicle" />
         <p className="ml-2 text-left text-sm italic text-gray-500">
           <span className="font-semibold text-gray-600">
             vehicle model,vehicle registration number, vehicle code, registered

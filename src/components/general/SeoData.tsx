@@ -8,11 +8,14 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { truncateText } from "@/helpers";
-import { HomeMetaListData } from "@/types/api-types/API-types";
+import {
+  HomeMetaListData,
+  ListingMetaListData,
+} from "@/types/api-types/API-types";
 
 // Define props for the SeoData component
 interface SeoDataProps {
-  item: HomeMetaListData;
+  item: HomeMetaListData | ListingMetaListData;
   link: string;
 }
 
@@ -38,6 +41,11 @@ export default function SeoData({ item, link }: SeoDataProps) {
         <span className="rounded-[0.5rem] bg-gray-800 px-3 py-0 text-sm text-white">
           {item.category}
         </span>
+        {(item as ListingMetaListData).type && (
+          <span className="rounded-[0.5rem] bg-gray-800 px-3 py-0 text-sm text-white">
+            {(item as ListingMetaListData).type}
+          </span>
+        )}
       </div>
 
       {/* meta title and meta description */}

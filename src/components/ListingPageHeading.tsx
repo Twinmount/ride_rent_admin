@@ -7,7 +7,7 @@ type PathStatusMap = {
   };
 };
 
-export default function ListingHeader() {
+export default function ListingPageHeading() {
   const location = useLocation();
 
   // Map paths to their corresponding statuses and titles

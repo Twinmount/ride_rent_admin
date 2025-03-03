@@ -25,6 +25,7 @@ import { Textarea } from "../ui/textarea";
 import StatesDropdown from "./dropdowns/StatesDropdown";
 import VehicleTypesDropdown from "./dropdowns/VehicleTypesDropdown";
 import MetaCategoryDropdownField from "./dropdowns/MetaCategoryDropdownField";
+import { useQueryClient } from "@tanstack/react-query";
 
 type ListingMetaFormProps = {
   type: "Add" | "Update";
@@ -40,6 +41,8 @@ export default function ListingMetaForm({
 
   const navigate = useNavigate();
   const { metaDataId } = useParams<{ metaDataId: string }>();
+
+  const queryClient = useQueryClient();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof ListingMetaFormSchema>>({
@@ -71,6 +74,13 @@ export default function ListingMetaForm({
         title: `${type} meta data failed`,
         description: "Something went wrong",
       });
+    } finally {
+      queryClient.invalidateQueries({
+        queryKey: ["listing-meta-data", metaDataId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["listing-meta-data"],
+      });
     }
   }
 
@@ -97,6 +107,7 @@ export default function ListingMetaForm({
                       }}
                       value={initialValues.stateId}
                       placeholder="state"
+                      isDisabled={type === "Update"}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -125,6 +136,7 @@ export default function ListingMetaForm({
                         form.setValue("typeId", "");
                       }}
                       value={initialValues.categoryId}
+                      isDisabled={type === "Update"}
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
@@ -152,7 +164,9 @@ export default function ListingMetaForm({
                       vehicleCategoryId={form.watch("categoryId")}
                       value={field.value}
                       onChangeHandler={field.onChange}
-                      isDisabled={!form.watch("categoryId")}
+                      isDisabled={
+                        !form.watch("categoryId") || type === "Update"
+                      }
                     />
                   </FormControl>
                   <FormDescription className="ml-2">

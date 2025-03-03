@@ -1,4 +1,5 @@
 import {
+  FetchCompanyPortfolioMetaResponse,
   FetchHomeMetaListResponse,
   FetchListingMetaListResponse,
   FetchSingleHomeMetaData,
@@ -59,14 +60,16 @@ export const fetchListingMetaList = async (urlParams: {
   page: number;
   limit: number;
   sortOrder: string;
-  state: string;
-  category: string;
+  stateId: string;
+  categoryId: string;
 }): Promise<FetchListingMetaListResponse> => {
   try {
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
+      stateId: urlParams.stateId,
+      categoryId: urlParams.categoryId,
     }).toString();
 
     const slugWithParams = `${Slug.GET_ADMIN_LISTING_META_ALL}?${queryParams}`;
@@ -201,7 +204,44 @@ export const updateListingMetaData = async (
 
     return data;
   } catch (error) {
-    console.error("Error updating home meta data:", error);
+    console.error("Error updating listing meta data:", error);
+    throw error;
+  }
+};
+
+// fetch all promotions
+export const fetchCompanyPortfolioMetaList = async (urlParams: {
+  page: number;
+  limit: number;
+  sortOrder: string;
+  search: string;
+}): Promise<FetchCompanyPortfolioMetaResponse> => {
+  try {
+    const queryParams = new URLSearchParams({
+      page: urlParams.page.toString(),
+      limit: urlParams.limit.toString(),
+      sortOrder: urlParams.sortOrder,
+    });
+
+    if (urlParams.search) {
+      queryParams.append("search", urlParams.search);
+    }
+
+    const params = queryParams.toString();
+
+    const slugWithParams = `${Slug.GET_COMPANY_META_ALL}?${params}`;
+
+    const data = await API.get<FetchCompanyPortfolioMetaResponse>({
+      slug: slugWithParams,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch company meta data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching company meta:", error);
     throw error;
   }
 };

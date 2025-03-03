@@ -234,6 +234,8 @@ export interface companyType {
   email: string;
   companyAddress: string;
   companyLanguages: string[];
+  companyMetaTitle: string;
+  companyMetaDescription: string;
 }
 
 //  interface for the get-all-companies  API response
@@ -252,6 +254,20 @@ export interface FetchCompaniesResponse {
 //  interface for the company (by id)  API response
 export interface FetchSpecificCompanyResponse {
   result: companyType;
+  status: string;
+  statusCode: number;
+}
+
+export interface promotedCompanyType {
+  companyId: string;
+  agentId: string;
+  companyName: string;
+  companyLogo: string; //pass actual image url here
+  companyShortId: string;
+}
+
+export interface FetchPromotedCompaniesSearchResponse {
+  result: promotedCompanyType[];
   status: string;
   statusCode: number;
 }
@@ -382,6 +398,9 @@ export interface VehicleSeriesType {
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
   seriesCode: string;
+  stateId: string;
+  vehicleCategoryId: string;
+  vehicleBrandId: string;
 }
 
 //  Get all Vehicle Series Search
@@ -389,5 +408,86 @@ export interface VehicleSeriesSearch {
   status: string;
   result: VehicleSeriesType[]; // Array of brands
 
+  statusCode: number;
+}
+
+// interface for the  Brand (GET BY ID) response
+export interface FetchSpecificSeriesResponse {
+  result: VehicleSeriesType;
+  status: string;
+  statusCode: number;
+}
+
+//  interface for the Series GET ALL) API response
+export interface FetchAllSeriesResponse {
+  status: string;
+  result: {
+    list: VehicleSeriesType[]; // Array of brands
+    page: number; // Current page number
+    total: number; // Total number of categories
+  };
+  statusCode: number;
+}
+
+// single listing data type
+export interface CompanyPortfolioMetaData {
+  companyName: string;
+  companyLogo: string;
+  countryCode: string;
+  phoneNumber: string;
+  email: string;
+  companyAddress: string;
+  companyLanguages: string[];
+  regNumber: string;
+  agentId: string;
+  agentMetaTitle: string;
+  agentMetaDescription: string;
+}
+
+//  fetch listing all meta data
+export interface FetchCompanyPortfolioMetaResponse {
+  result: {
+    list: CompanyPortfolioMetaData[];
+    page: string;
+    limit: string;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  status: string;
+  statusCode: number;
+}
+
+// individual agent type
+export interface PromotedAgent {
+  companyId: string;
+  agentId: string; //that short code eg: rd-1234
+  companyName: string;
+  companyLogo: string;
+  companyLogoUrl: string;
+}
+
+// individual agent promotion card type
+export interface PromotedCompanyCardType {
+  state: {
+    stateId: string;
+    stateName: string;
+  };
+  category: {
+    categoryId: string;
+    categoryName: string;
+  };
+  agents: PromotedAgent[];
+}
+
+// agent promotion response
+export interface FetchPromotedCompanyListResponse {
+  result: {
+    list: PromotedCompanyCardType[];
+    page: string;
+    limit: string;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  status: string;
   statusCode: number;
 }

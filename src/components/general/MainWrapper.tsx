@@ -13,12 +13,14 @@ export default function MainWrapper({
     <main
       style={{
         marginTop: "4.84rem",
-        marginLeft: isSmallScreen ? "" : "14rem",
         padding: "0.1rem",
+        paddingLeft: isSmallScreen ? "0rem" : "14rem",
       }}
-      className="h-full bg-gray_bg"
+      className="wrapper h-full w-full bg-gray_bg"
     >
-      <Suspense fallback={<LazyLoader />}>{children}</Suspense>
+      <Suspense fallback={<LazyLoader />}>
+        <div className="mx-auto">{children}</div>
+      </Suspense>
     </main>
   );
 }

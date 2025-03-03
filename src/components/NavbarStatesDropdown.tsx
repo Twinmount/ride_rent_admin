@@ -31,8 +31,8 @@ const NavbarStatesDropdown = ({ options, isLoading }: DropdownProps) => {
 
   const handleSelect = (option: NavbarStateType) => {
     const { stateName, stateValue, stateId } = option;
-
     setState({ stateName, stateValue, stateId });
+    localStorage.setItem("selectedState", JSON.stringify(option)); // Store in localStorage
   };
 
   return (

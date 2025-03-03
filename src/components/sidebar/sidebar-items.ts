@@ -8,6 +8,7 @@ import {
   Megaphone,
   FileText,
   FileSearch,
+  // Group,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -66,12 +67,16 @@ export const sidebarContent: SidebarItem[] = [
   {
     type: "accordion",
     label: "Agents",
-    baseLink: "/registrations",
+    baseLink: "/company",
     icon: UserPlus,
     items: [
-      { label: "All Companies", link: "/registrations/live" },
-      { label: "New Registrations", link: "/registrations/new" },
-      { label: "Rejected Registrations", link: "/registrations/rejected" },
+      { label: "All Companies", link: "/company/registrations/live" },
+      { label: "New Registrations", link: "/company/registrations/new" },
+      {
+        label: "Rejected Registrations",
+        link: "/company/registrations/rejected",
+      },
+      { label: "Promotions", link: "/company/promotions" },
     ],
   },
   // Categories and types routes
@@ -92,6 +97,13 @@ export const sidebarContent: SidebarItem[] = [
     icon: Star,
     link: "/manage-brands",
   },
+  // Vehicle Series route
+  // {
+  //   type: "link",
+  //   label: "Vehicle Series",
+  //   icon: Group,
+  //   link: "/manage-series",
+  // },
   // Locations routes
   {
     type: "accordion",

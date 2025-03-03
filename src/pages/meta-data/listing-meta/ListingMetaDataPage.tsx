@@ -5,51 +5,73 @@ import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
 import { useState } from "react";
 import MetaCategoryDropdown from "@/components/MetaCategoryDropdown";
-import { useAdminContext } from "@/context/AdminContext";
-import { Link } from "react-router-dom";
-import { Plus } from "lucide-react";
 import Pagination from "@/components/Pagination";
-import { useCategorySelection } from "@/hooks/useCategorySelection";
+import { useCategories } from "@/hooks/useCategories";
+import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
+import { useFetchStates } from "@/hooks/useFetchStates";
 
 export default function ListingMetaDataPage() {
   const [page, setPage] = useState(1);
 
-  const { state } = useAdminContext();
+  const { isStateLoading, selectedState, statesList, setSelectedState } =
+    useFetchStates();
 
   const {
     selectedCategory,
     setSelectedCategory,
     categoryList,
     isCategoryLoading,
-  } = useCategorySelection();
+  } = useCategories();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({
-    queryKey: ["listing-meta-data", selectedCategory?.value, page],
+    queryKey: [
+      "listing-meta-data",
+      selectedCategory?.categoryId,
+      selectedState?.stateId,
+      page,
+    ],
     queryFn: () =>
       fetchListingMetaList({
         page,
         limit: 20,
-        sortOrder: "ASC",
-        category: selectedCategory?.value || "",
-        state: state.stateValue,
+        sortOrder: "DESC",
+        categoryId: selectedCategory?.categoryId || "",
+        stateId: selectedState?.stateId as string,
       }),
     enabled: !!selectedCategory, // Fetch only when category is selected
   });
 
   const seoData = data?.result?.list || [];
+  const totalNumberOfPages = data?.result?.totalNumberOfPages || 1;
 
   return (
-    <section className="h-auto min-h-screen w-full bg-gray-100 py-10">
-      {/* category dropdown */}
-      <MetaCategoryDropdown
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        categories={categoryList || []}
-        isLoading={isCategoryLoading}
-      />
+    <div className="h-auto min-h-screen w-full bg-gray-100 py-10">
+      <div className="mb-6 flex flex-col">
+        <h1 className="mb-5 text-center text-2xl font-semibold lg:ml-6 lg:text-left">
+          Listing Page MetaData for all Vehicle Types under{" "}
+          {selectedState?.stateName}/ {selectedCategory?.name}{" "}
+        </h1>
 
-      <div className="container mx-auto max-w-4xl space-y-3">
+        <div className="ml-auto mr-6 flex w-fit items-center gap-x-2 md:mr-10 lg:mr-16">
+          <GeneralStatesDropdown
+            isLoading={isStateLoading}
+            options={statesList}
+            selectedState={selectedState}
+            setSelectedState={setSelectedState}
+          />
+
+          {/* category dropdown */}
+          <MetaCategoryDropdown
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            categories={categoryList || []}
+            isLoading={isCategoryLoading}
+          />
+        </div>
+      </div>
+
+      <section className="container mx-auto max-w-4xl space-y-3">
         {isLoading || isCategoryLoading ? (
           <LazyLoader />
         ) : seoData.length === 0 ? (
@@ -65,24 +87,13 @@ export default function ListingMetaDataPage() {
             />
           ))
         )}
-      </div>
+      </section>
 
-      {seoData.length > 0 && (
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={data?.result.totalNumberOfPages || 1}
-        />
-      )}
-
-      <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
-        <Link
-          className="flex-center flex-center gap-x-1 bg-yellow px-3 py-2 text-white shadow-xl transition-all hover:scale-[1.02]"
-          to={`/meta-data/listing/add`}
-        >
-          New Listing Meta <Plus />
-        </Link>
-      </button>
-    </section>
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalNumberOfPages}
+      />
+    </div>
   );
 }

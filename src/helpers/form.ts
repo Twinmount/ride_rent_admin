@@ -353,6 +353,8 @@ export function mapGetPrimaryFormToPrimaryFormType(
     additionalVehicleTypes: data?.additionalVehicleTypes || [],
     isCreditOrDebitCardsSupported: data.isCreditOrDebitCardsSupported,
     isTabbySupported: data.isTabbySupported,
+    vehicleMetaTitle: data.vehicleMetaTitle,
+    vehicleMetaDescription: data.vehicleMetaDescription,
   };
 }
 

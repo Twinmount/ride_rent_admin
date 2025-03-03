@@ -14,6 +14,8 @@ export type CompanyType = {
   email: string;
   companyAddress: string;
   companyLanguages: string[];
+  companyMetaTitle: string;
+  companyMetaDescription: string;
 };
 
 // type of single brand
@@ -146,6 +148,32 @@ export type SingleVehicleType = {
   isTabbySupported: boolean;
   updatedAt: string;
   createdAt: string;
+};
+
+export type GeneralListingVehicleType = {
+  vehicleId: string;
+  vehicleModel: string;
+  vehicleCode: string;
+  approvalStatus: "APPROVED" | "PENDING" | "UNDER_REVIEW" | "REJECTED";
+  rejectionReason?: string;
+  company: {
+    companyId: string;
+    userId: string;
+    companyName: string;
+  };
+};
+
+// Define a simplified type for table data
+export type LiveListingVehicleType = {
+  vehicleId: string;
+  vehicleModel: string;
+  vehicleCode: string;
+  isDisabled: boolean;
+  company: {
+    companyId: string;
+    userId: string;
+    companyName: string;
+  };
 };
 
 // get all vehicles api response
@@ -309,6 +337,8 @@ export type GetPrimaryForm = {
   };
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
+  vehicleMetaTitle: string;
+  vehicleMetaDescription: string;
 };
 
 // Specification form get all response

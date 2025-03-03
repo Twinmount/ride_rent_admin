@@ -1,18 +1,12 @@
-import { CompanyListingResponse } from "@/types/types";
+import { CompanyFormType, CompanyListingResponse } from "@/types/types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
   FetchSpecificCompanyResponse,
   FetchCompaniesResponse,
+  FetchPromotedCompanyListResponse,
+  FetchPromotedCompaniesSearchResponse,
 } from "@/types/api-types/API-types";
-
-export interface CompanyType {
-  companyName?: string;
-  companyLogo?: string;
-  commercialLicense?: string;
-  expireDate?: Date;
-  regNumber?: string;
-}
 
 export interface CompanyStatusType {
   approvalStatus: "APPROVED" | "PENDING" | "REJECTED";
@@ -29,17 +23,7 @@ export interface GetAllCompanyType {
   search?: string;
 }
 
-export interface CompanyType {
-  companyName?: string;
-  companyLogo?: string;
-  commercialLicense?: string;
-  expireDate?: Date;
-  regNumber?: string;
-  companyAddress?: string;
-  companyLanguages?: string[];
-}
-
-export const addCompany = async (values: CompanyType, userId: string) => {
+export const addCompany = async (values: CompanyFormType, userId: string) => {
   try {
     const data = await API.post({
       slug: Slug.POST_COMPANY,
@@ -54,6 +38,8 @@ export const addCompany = async (values: CompanyType, userId: string) => {
         commercialLicense: values.commercialLicense, // Assuming this is a URL or string
         companyAddress: values.companyAddress,
         companyLanguages: values.companyLanguages,
+        companyMetaTitle: values.companyMetaTitle,
+        companyMetaDescription: values.companyMetaDescription,
       },
     });
 
@@ -64,7 +50,10 @@ export const addCompany = async (values: CompanyType, userId: string) => {
   }
 };
 
-export const updateCompany = async (values: CompanyType, companyId: string) => {
+export const updateCompany = async (
+  values: CompanyFormType,
+  companyId: string,
+) => {
   try {
     const data = await API.put({
       slug: Slug.PUT_COMPANY,
@@ -79,6 +68,8 @@ export const updateCompany = async (values: CompanyType, companyId: string) => {
         commercialLicense: values.commercialLicense, // Assuming this is a URL or string
         companyAddress: values.companyAddress,
         companyLanguages: values.companyLanguages,
+        companyMetaTitle: values.companyMetaTitle,
+        companyMetaDescription: values.companyMetaDescription,
       },
     });
 
@@ -92,7 +83,7 @@ export const updateCompany = async (values: CompanyType, companyId: string) => {
 // update company status
 export const updateCompanyStatus = async (
   values: CompanyStatusType,
-  companyId: string
+  companyId: string,
 ) => {
   try {
     // Create the request body, excluding rejectionReason if the status is 'APPROVED'
@@ -119,7 +110,7 @@ export const updateCompanyStatus = async (
 
 // fetch company by company id
 export const getCompany = async (
-  companyId: string
+  companyId: string,
 ): Promise<FetchSpecificCompanyResponse> => {
   try {
     const data = await API.get<FetchSpecificCompanyResponse>({
@@ -195,3 +186,108 @@ export const getCompanyListingsCount =
       throw error;
     }
   };
+
+// fetch all promotions
+export const fetchPromotedCompanyList = async (urlParams: {
+  stateId: string;
+}): Promise<FetchPromotedCompanyListResponse> => {
+  try {
+    const queryParams = new URLSearchParams({
+      state: urlParams.stateId,
+      page: "1",
+      limit: "15",
+      sortOrder: "DESC",
+    }).toString();
+
+    const slugWithParams = `${Slug.GET_PROMOTED_COMPANIES_LIST}?${queryParams}`;
+
+    const data = await API.get<FetchPromotedCompanyListResponse>({
+      slug: slugWithParams,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch promoted company data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching promoted company:", error);
+    throw error;
+  }
+};
+
+// Add a promoted company
+export const addPromotedCompany = async (params: {
+  companyId: string;
+  state: string;
+  category: string;
+}): Promise<boolean> => {
+  try {
+    const response = await API.post({
+      slug: Slug.POST_PROMOTED_COMPANY,
+      body: {
+        companyId: params.companyId,
+        state: params.state,
+        category: params.category,
+      },
+    });
+
+    if (!response) {
+      throw new Error("Failed to add promoted company");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error adding promoted company:", error);
+    throw error;
+  }
+};
+
+// Remove a promoted company
+export const removePromotedCompany = async (params: {
+  companyId: string;
+  stateId: string;
+  categoryId: string;
+}): Promise<boolean> => {
+  try {
+    const queryParams = new URLSearchParams({
+      companyId: params.companyId,
+      state: params.stateId,
+      category: params.categoryId,
+    }).toString();
+
+    const slugWithParams = `${Slug.DELETE_PROMOTED_COMPANY}?${queryParams}`;
+
+    const response = await API.delete({
+      slug: slugWithParams,
+    });
+
+    if (!response) {
+      throw new Error("Failed to remove promoted company");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error removing promoted company:", error);
+    throw error;
+  }
+};
+
+export const fetchSearchCompanies = async (
+  search: string,
+): Promise<FetchPromotedCompaniesSearchResponse> => {
+  try {
+    const data = await API.get<FetchPromotedCompaniesSearchResponse>({
+      slug: `${Slug.GET_PROMOTED_COMPANIES_SEARCH}?search=${search}`,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch promoted company");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching promoted company:", error);
+    throw error;
+  }
+};

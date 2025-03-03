@@ -74,6 +74,10 @@ export enum Slug {
   DELETE_COMPANY = "/company",
   GET_ALL_COMPANY = "/company/list",
   GET_COMPANY_LISTINGS_COUNT = "/company/dashboard/count",
+  GET_PROMOTED_COMPANIES_LIST = "/company-promotion/list",
+  GET_PROMOTED_COMPANIES_SEARCH = "/company/search",
+  POST_PROMOTED_COMPANY = "/company-promotion",
+  DELETE_PROMOTED_COMPANY = "/company-promotion",
 
   // vehicles end points
   POST_VEHICLE = "/vehicle",
@@ -92,6 +96,8 @@ export enum Slug {
   POST_VEHICLE_SERIES = "/vehicle-series",
   GET_SEARCH_VEHICLE_SERIES = "/vehicle-series/search",
   PUT_VEHICLE_SERIES = "/vehicle-series",
+  GET_SERIES_BY_ID = "/vehicle-series",
+  GET_ALL_SERIES = "/vehicle-series/list",
 
   // vehicle primary form endPoints
   POST_PRIMARY_FORM = "/vehicle/level-one",
@@ -121,6 +127,12 @@ export enum Slug {
   GET_ADMIN_LISTING_META = "/metadata/admin/listing",
   PUT_ADMIN_LISTING_META = "/metadata/listing",
   GET_ADMIN_LISTING_META_ALL = "/metadata/admin/listing/all",
+
+  // similar to listing meta, we need "company metadata endpoints "
+  POST_COMPANY_META = "/metadata/company",
+  GET_ADMIN_COMPANY_META = "/metadata/admin/company",
+  PUT_COMPANY_META = "/metadata/company",
+  GET_COMPANY_META_ALL = "/metadata/admin/company/all",
 
   GET_ADMIN_DASHBOARD = "/vehicle/admin/analytics",
 
