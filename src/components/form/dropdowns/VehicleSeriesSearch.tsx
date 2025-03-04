@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { ChevronsUpDown } from "lucide-react";
 import { revertSlugToString } from "@/lib/utils";
 import { searchVehicleSeries } from "@/api/vehicle-series";
-// import VehicleSeriesDialog from "@/components/dialog/VehicleSeriesDialog";
 
 type VehicleSeriesSearchProps = {
   value?: string;
@@ -45,8 +44,6 @@ const VehicleSeriesSearch = ({
   const [searchTerm, setSearchTerm] = useState(value || ""); // Updates instantly
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm); // Delayed state for API call
   const [open, setOpen] = useState(false);
-  // const [selectedSeries, setSelectedSeries] = useState<any | null>(null);
-  // const [dialogOpen, setDialogOpen] = useState(false); // Dialog open state
 
   // Fetch series data when debouncedSearchTerm changes
   const { data, isFetching } = useQuery({
@@ -58,14 +55,15 @@ const VehicleSeriesSearch = ({
         stateId,
       }),
     enabled:
-      !!vehicleBrandId && !!stateId && !!(debouncedSearchTerm.length > 2), // Only fetch if valid search term , as well as brandId and stateId are provided
+      !!vehicleBrandId && !!stateId && !!(debouncedSearchTerm.length > 1), // Only fetch if valid search term , as well as brandId and stateId are provided
+    staleTime: 0,
   });
 
   // Effect to update `debouncedSearchTerm` only after user stops typing for 500ms
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 500); // Debounce delay
+    }, 300); // Debounce delay
 
     return () => {
       clearTimeout(handler); // Clear timeout if user types again
@@ -78,13 +76,6 @@ const VehicleSeriesSearch = ({
     setSearchTerm(sanitizedValue); // Update input field immediately
   };
 
-  // Open dialog and set selected series
-  // const handleEditClick = (series: any) => {
-  //   setSelectedSeries(series);
-  //   setDialogOpen(true);
-  // };
-
-  // Handle series selection
   const handleSelect = (
     seriesLabel: string,
     heading: string = "",
@@ -197,10 +188,6 @@ const VehicleSeriesSearch = ({
                           {series.vehicleSeriesMetaTitle}
                         </span>
                       </div>
-                      {/* <Edit3
-                        className="cursor-pointer text-gray-600 hover:text-gray-800"
-                        onClick={() => handleEditClick(series)}
-                      /> */}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -224,14 +211,6 @@ const VehicleSeriesSearch = ({
           </Command>
         </PopoverContent>
       </Popover>
-
-      {/* Dialog for editing vehicle series */}
-      {/* <VehicleSeriesDialog
-        series={selectedSeries}
-        brandId={vehicleBrandId}
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-      /> */}
     </>
   );
 };
