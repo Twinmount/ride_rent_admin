@@ -48,11 +48,11 @@ const CategoryDropdown = ({
   useEffect(() => {
     if (value && categories.length > 0) {
       const selectedCategory = categories.find(
-        (category) => category.categoryId === value
+        (category) => category.categoryId === value,
       );
       setIsCarsCategory?.(selectedCategory?.value === "cars");
       setHideCommercialLicenses?.(
-        ["bicycles", "buggies"].includes(selectedCategory?.value || "")
+        ["bicycles", "buggies"].includes(selectedCategory?.value || ""),
       );
     }
   }, [value, categories, setIsCarsCategory, setHideCommercialLicenses]);
@@ -62,13 +62,13 @@ const CategoryDropdown = ({
 
     // Find the selected category object
     const selectedCategory = categories.find(
-      (category) => category.categoryId === selectedCategoryId
+      (category) => category.categoryId === selectedCategoryId,
     );
 
     // Update states based on the selected category
     setIsCarsCategory?.(selectedCategory?.value === "cars");
     setHideCommercialLicenses?.(
-      ["bicycles", "buggies"].includes(selectedCategory?.value || "")
+      ["bicycles", "buggies"].includes(selectedCategory?.value || ""),
     );
   };
 
@@ -78,10 +78,10 @@ const CategoryDropdown = ({
       defaultValue={value}
       disabled={isDisabled || isLoading}
     >
-      <SelectTrigger className="ring-0 select-field focus:ring-0 input-fields">
+      <SelectTrigger className="select-field input-fields ring-0 focus:ring-0">
         <SelectValue
           className="!font-bold !text-black"
-          placeholder="Choose category"
+          placeholder={`${isLoading ? "Loading..." : "Select Category"}`}
         />
       </SelectTrigger>
       <SelectContent>

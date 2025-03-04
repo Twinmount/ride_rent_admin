@@ -76,7 +76,6 @@ export default function PrimaryDetailsForm({
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [isCarsCategory, setIsCarsCategory] = useState(false);
   const [hideCommercialLicenses, setHideCommercialLicenses] = useState(false);
-  const [isSeriesAutoFilled, setIsSeriesAutoFilled] = useState(false);
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string;
@@ -322,7 +321,6 @@ export default function PrimaryDetailsForm({
             const [charCount, setCharCount] = useState(
               field.value?.length || 0,
             );
-
             const handleInputChange = (
               e: React.ChangeEvent<HTMLInputElement>,
             ) => {
@@ -368,7 +366,18 @@ export default function PrimaryDetailsForm({
               <StatesDropdown
                 onChangeHandler={(value) => {
                   field.onChange(value);
-                  form.setValue("cityIds", []); // Reset cities when state changes
+                  // when state changes, reset cities and all the seven fields thats under "vehicleSeries" and metadata fields
+                  form.setValue("cityIds", []);
+                  form.setValue("vehicleSeriesLabel", "");
+                  form.setValue("vehicleSeries", "");
+                  form.setValue("vehicleSeriesPageHeading", "");
+                  form.setValue("vehicleSeriesPageSubheading", "");
+                  form.setValue("vehicleSeriesInfoTitle", "");
+                  form.setValue("vehicleSeriesInfoDescription", "");
+                  form.setValue("vehicleSeriesMetaTitle", "");
+                  form.setValue("vehicleSeriesMetaDescription", "");
+                  form.setValue("vehicleMetaTitle", "");
+                  form.setValue("vehicleMetaDescription", "");
                 }}
                 value={initialValues.stateId}
                 placeholder="location"
@@ -445,27 +454,12 @@ export default function PrimaryDetailsForm({
                     metaTitle,
                     metaDescription,
                   }) => {
-                    field.onChange(seriesLabel); // Set vehicleSeries
+                    field.onChange(seriesLabel);
 
                     const sanitizedSeries = seriesLabel
                       .replace(/[^a-zA-Z0-9-\s]/g, "") // Remove invalid characters
                       .replace(/\s+/g, " ") // Normalize spaces
                       .trim(); // Trim leading/trailing spaces
-
-                    // If auto filled, set the fields and disable editing
-                    if (
-                      heading ||
-                      subHeading ||
-                      infoTitle ||
-                      infoDescription ||
-                      metaTitle ||
-                      metaDescription
-                    ) {
-                      setIsSeriesAutoFilled(true);
-                    } else {
-                      setIsSeriesAutoFilled(false);
-                    }
-
                     // Reset or set meta fields to empty strings if not provided
                     form.setValue(
                       "vehicleSeries",
@@ -522,7 +516,6 @@ export default function PrimaryDetailsForm({
                   placeholder="e.g., 'Rent BMW S Series'"
                   {...field}
                   className="input-field"
-                  readOnly={isSeriesAutoFilled}
                 />
               </FormItemWrapper>
             )}
@@ -548,7 +541,6 @@ export default function PrimaryDetailsForm({
                   placeholder="Enter the series page subheading"
                   {...field}
                   className="textarea h-28 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
-                  readOnly={isSeriesAutoFilled}
                 />
               </FormItemWrapper>
             )}
@@ -574,7 +566,6 @@ export default function PrimaryDetailsForm({
                   placeholder="e.g., 'BMW S Series'"
                   {...field}
                   className="input-field"
-                  readOnly={isSeriesAutoFilled}
                 />
               </FormItemWrapper>
             )}
@@ -618,7 +609,6 @@ export default function PrimaryDetailsForm({
                     value={field.value}
                     onChange={handleInputChange}
                     className="textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
-                    readOnly={isSeriesAutoFilled}
                   />
                 </FormItemWrapper>
               );
@@ -643,7 +633,6 @@ export default function PrimaryDetailsForm({
                   placeholder="e.g., 'BMW S Series'"
                   {...field}
                   className="input-field"
-                  readOnly={isSeriesAutoFilled}
                 />
               </FormItemWrapper>
             )}
@@ -683,7 +672,6 @@ export default function PrimaryDetailsForm({
                     value={field.value}
                     onChange={handleInputChange}
                     className="textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
-                    readOnly={isSeriesAutoFilled}
                   />
                 </FormItemWrapper>
               );
