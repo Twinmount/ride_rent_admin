@@ -1,23 +1,30 @@
 import { Link } from "react-router-dom";
 import GridSkelton from "@/components/skelton/GridSkelton";
 import { BrandType } from "@/types/api-types/API-types";
+import { useFetchSeries } from "@/pages/manage-series/SeriesPage.hooks";
 
 type SeriesListProps = {
-  brandList: BrandType[];
-  isSeriesLoading: boolean;
+  stateId: string;
   search: string;
-  categoryValue: string | null | undefined;
+  brand: BrandType | null;
+  page: number;
 };
 
 export const SeriesList: React.FC<SeriesListProps> = ({
-  brandList,
-  isSeriesLoading,
+  stateId,
   search,
-  categoryValue,
+  brand,
+  page = 1,
 }) => {
   const baseAssetsUrl = import.meta.env.VITE_ASSETS_URL;
+  const { seriesList, isLoading } = useFetchSeries({
+    stateId,
+    searchTerm: search,
+    vehicleBrandId: brand?.id,
+    page,
+  });
 
-  if (isSeriesLoading) {
+  if (isLoading) {
     return (
       <div className="grid grid-cols-3 place-items-center gap-2 gap-y-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7">
         <GridSkelton type="brand" />
@@ -25,27 +32,20 @@ export const SeriesList: React.FC<SeriesListProps> = ({
     );
   }
 
-  if (brandList.length === 0) {
+  if (seriesList.length === 0) {
     return <NoSeriesFound search={search || ""} />;
   }
 
   return (
     <div className="mt-6 grid grid-cols-2 place-items-center gap-2 gap-y-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7">
-      {brandList.map((data) => (
+      {seriesList.map((data) => (
         <Link
-          to={`/manage-brands/edit/${data.id}`}
-          key={data.id}
+          to={`/manage-series/edit/${data.vehicleSeriesId}`}
+          key={data.vehicleSeriesId}
           className="h-36 w-full min-w-32 rounded-xl border bg-white"
         >
-          <div className="flex-center h-[6rem] w-auto p-2">
-            <img
-              src={`${baseAssetsUrl}/icons/brands/${categoryValue}/${data.brandValue}.png`}
-              alt={data.brandValue}
-              className="h-full w-full max-w-[90%] object-contain"
-            />
-          </div>
           <div className="max-w-full text-center text-sm font-semibold">
-            {data.brandName}
+            {data.vehicleSeriesLabel}
           </div>
         </Link>
       ))}

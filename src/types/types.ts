@@ -122,7 +122,7 @@ export type ListingMetaFormType = {
 export type BrandType = {
   id: number | string;
   label: string;
-  value: VehicleCategoryType;
+  value: string;
   link: string;
 };
 

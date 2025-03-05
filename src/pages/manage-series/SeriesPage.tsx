@@ -1,70 +1,62 @@
-import { useSearchParams, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "@/components/Pagination";
 import SearchComponent from "@/components/Search";
-import CategoryDropdown from "@/components/VehicleCategoryDropdown";
-import { useCategories } from "@/hooks/useCategories";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
-import useFetchBrands from "./SeriesPage.hooks";
 import PageHeading from "@/components/general/PageHeading";
+import SeriesCategoryDropdown from "@/components/SeriesCategoryDropdown";
+import { BrandType, CategoryType } from "@/types/api-types/API-types";
+import { useGetSearchParams } from "@/hooks/useGetSearchParams";
+import SeriesBrandDropdown from "@/components/SeriesBrandDropdown";
 import { SeriesList } from "@/components/SeriesList";
+import { useAdminContext } from "@/context/AdminContext";
 
 export default function BrandsPage() {
-  const { vehicleCategoryId } = useParams<{ vehicleCategoryId: string }>();
   const [page, setPage] = useState(1);
-  const [searchParams] = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
+    null,
+  );
+  const [selectedBrand, setSelectedBrand] = useState<BrandType | null>(null);
+  const { state } = useAdminContext();
 
-  // ✅ Use the existing useCategories hook
-  const {
-    selectedCategory,
-    setSelectedCategory,
-    categoryList,
-    isCategoryLoading,
-  } = useCategories();
+  const searchQuery = useGetSearchParams({ key: "search" });
 
-  const searchQuery = searchParams.get("search") || "";
-
-  // Fetch brands after category is selected
-  const { brandData, isBrandsLoading } = useFetchBrands({
-    vehicleCategoryId: vehicleCategoryId as string,
-    searchQuery,
-    page,
-    isCategoryLoading,
-  });
-
-  // Extract brand list
-  const brandList = brandData?.result?.list || [];
+  const totalNumberOfPages = 1;
 
   return (
     <section className="container h-auto min-h-screen py-6">
-      <PageHeading heading={`Manage Vehicle Series`} />
+      <PageHeading
+        heading={`Manage Vehicle Series Under ${state.stateName}/${selectedCategory?.name}/${selectedBrand?.brandName}`}
+      />
 
-      <div className="flex items-center gap-3 pl-2 pr-10">
+      <div className="flex flex-col items-center gap-3 pl-2 pr-10 md:flex-row">
         {/* search component */}
         <SearchComponent placeholder="search series name or brand" />
 
-        {/* category dropdown */}
-        <CategoryDropdown
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          categories={categoryList}
-          isLoading={isCategoryLoading}
-          type="series"
-        />
+        <div className="flex items-center gap-x-2">
+          {/* category dropdown */}
+          <SeriesCategoryDropdown
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+          <SeriesBrandDropdown
+            selectedCategory={selectedCategory}
+            selectedBrand={selectedBrand}
+            setSelectedBrand={setSelectedBrand}
+          />
+        </div>
       </div>
 
-      {/* brand grid and loading skeleton */}
       <SeriesList
-        brandList={brandList}
-        isSeriesLoading={isBrandsLoading}
+        stateId={state.stateId}
+        brand={selectedBrand}
         search={searchQuery}
-        categoryValue={selectedCategory?.value}
+        page={page}
       />
 
       <Pagination
         page={page}
         setPage={setPage}
-        totalPages={brandData?.result.total as number}
+        totalPages={totalNumberOfPages}
       />
 
       <FloatingActionButton
