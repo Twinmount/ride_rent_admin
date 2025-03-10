@@ -32,14 +32,7 @@ export type PrimaryFormType = {
   vehicleCategoryId: string;
   vehicleTypeId: string;
   vehicleBrandId: string;
-  vehicleSeries: string;
-  vehicleSeriesLabel: string;
-  vehicleSeriesPageHeading: string;
-  vehicleSeriesPageSubheading: string;
-  vehicleSeriesInfoTitle: string;
-  vehicleSeriesInfoDescription: string;
-  vehicleSeriesMetaTitle: string;
-  vehicleSeriesMetaDescription: string;
+  vehicleSeriesId: string;
   vehicleModel: string;
   vehiclePhotos: string[]; // Array of  URLs
   vehicleRegistrationNumber: string;

@@ -43,7 +43,7 @@ export const useFetchSeries = ({
   page: number;
 }) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["searchSeries", page, vehicleBrandId, searchTerm],
+    queryKey: ["searchSeries", stateId, page, vehicleBrandId, searchTerm],
     queryFn: async () =>
       await fetchAllSeries({
         search: searchTerm,
@@ -51,14 +51,16 @@ export const useFetchSeries = ({
         stateId,
         page,
       }),
-    enabled: !!vehicleBrandId && !!stateId && !!(searchTerm.length > 1),
+    enabled: !!stateId,
     staleTime: 0,
   });
 
   const seriesList = data?.result?.list || [];
+  const totalNumberOfPages = data?.result?.totalNumberOfPages || 1;
 
   return {
     seriesList,
     isLoading,
+    totalNumberOfPages,
   };
 };

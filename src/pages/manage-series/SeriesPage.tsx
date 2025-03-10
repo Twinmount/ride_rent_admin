@@ -1,32 +1,34 @@
-import { useEffect, useState } from "react";
-import Pagination from "@/components/Pagination";
+import { useState } from "react";
 import SearchComponent from "@/components/Search";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import PageHeading from "@/components/general/PageHeading";
 import SeriesCategoryDropdown from "@/components/SeriesCategoryDropdown";
 import { BrandType, CategoryType } from "@/types/api-types/API-types";
-import { useGetSearchParams } from "@/hooks/useGetSearchParams";
 import SeriesBrandDropdown from "@/components/SeriesBrandDropdown";
 import { SeriesList } from "@/components/SeriesList";
 import { useAdminContext } from "@/context/AdminContext";
 
 export default function BrandsPage() {
-  const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
     null,
   );
   const [selectedBrand, setSelectedBrand] = useState<BrandType | null>(null);
   const { state } = useAdminContext();
 
-  const searchQuery = useGetSearchParams({ key: "search" });
+  // page heading
+  let heading = `Manage Vehicle Series Under ${state.stateName}`;
 
-  const totalNumberOfPages = 1;
+  if (selectedCategory?.name) {
+    heading += ` / ${selectedCategory?.name}`;
+  }
+
+  if (selectedBrand?.brandName) {
+    heading += ` / ${selectedBrand?.brandName}`;
+  }
 
   return (
     <section className="container h-auto min-h-screen py-6">
-      <PageHeading
-        heading={`Manage Vehicle Series Under ${state.stateName}/${selectedCategory?.name}/${selectedBrand?.brandName}`}
-      />
+      <PageHeading heading={heading} />
 
       <div className="flex flex-col items-center gap-3 pl-2 pr-10 md:flex-row">
         {/* search component */}
@@ -46,23 +48,9 @@ export default function BrandsPage() {
         </div>
       </div>
 
-      <SeriesList
-        stateId={state.stateId}
-        brand={selectedBrand}
-        search={searchQuery}
-        page={page}
-      />
+      <SeriesList stateId={state.stateId} brand={selectedBrand} />
 
-      <Pagination
-        page={page}
-        setPage={setPage}
-        totalPages={totalNumberOfPages}
-      />
-
-      <FloatingActionButton
-        href={`/manage-series/${selectedCategory?.categoryId}/add-brand`}
-        label="New Series"
-      />
+      <FloatingActionButton href={`/manage-series/add`} label="New Series" />
     </section>
   );
 }

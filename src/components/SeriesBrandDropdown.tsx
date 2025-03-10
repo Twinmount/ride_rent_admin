@@ -21,7 +21,7 @@ import {
 interface SeriesBrandDropdownProps {
   selectedCategory?: CategoryType | null;
   selectedBrand: BrandType | null;
-  setSelectedBrand: (brand: BrandType) => void;
+  setSelectedBrand: (brand: BrandType | null) => void;
 }
 
 export default function SeriesBrandDropdown({
@@ -71,7 +71,7 @@ export default function SeriesBrandDropdown({
           <ChevronDown className="ml-2 h-5 w-5 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64 overflow-y-auto p-0">
+      <PopoverContent className="w-64 min-w-64 max-w-64 overflow-y-auto p-0">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder="Search Brand..."
@@ -88,6 +88,18 @@ export default function SeriesBrandDropdown({
               <CommandEmpty>No Brands Found</CommandEmpty>
             ) : (
               <CommandGroup>
+                {/* clear selection */}
+                {selectedBrand && (
+                  <button
+                    onClick={() => {
+                      setSearchTerm("");
+                      setSelectedBrand(null);
+                    }}
+                    className="mb-2 w-full cursor-pointer rounded-md border border-red-400/50 px-2 py-1 text-sm font-semibold text-red-400 hover:bg-red-100 hover:text-red-600"
+                  >
+                    Clear Selection
+                  </button>
+                )}
                 {brands.map((brand) => (
                   <CommandItem
                     key={brand.id}

@@ -201,9 +201,9 @@ export type CategoryType =
   | "travel";
 
 export type VehicleSeriesType = {
-  stateId: string;
+  state: string;
   vehicleCategoryId: string;
-  vehicleBrandId: string;
+  brandId: string;
   vehicleSeries: string;
   vehicleSeriesLabel: string;
   vehicleSeriesPageHeading: string;

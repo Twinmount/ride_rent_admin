@@ -122,14 +122,7 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   vehicleCategoryId: "",
   vehicleTypeId: "", //'luxury' for example
   vehicleBrandId: "",
-  vehicleSeries: "",
-  vehicleSeriesLabel: "",
-  vehicleSeriesPageHeading: "",
-  vehicleSeriesPageSubheading: "",
-  vehicleSeriesInfoTitle: "",
-  vehicleSeriesInfoDescription: "",
-  vehicleSeriesMetaTitle: "",
-  vehicleSeriesMetaDescription: "",
+  vehicleSeriesId: "",
   vehicleModel: "",
   vehiclePhotos: [], //upto 8 photos of the vehicle
   vehicleRegistrationNumber: "",
@@ -218,9 +211,9 @@ export const categoryTags = [
 ];
 
 export const VehicleSeriesFormDefaultValues: VehicleSeriesType = {
-  stateId: "",
+  state: "",
   vehicleCategoryId: "",
-  vehicleBrandId: "",
+  brandId: "",
   vehicleSeries: "",
   vehicleSeriesLabel: "",
   vehicleSeriesPageHeading: "",

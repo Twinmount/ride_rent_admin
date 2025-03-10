@@ -333,7 +333,7 @@ export const router = createBrowserRouter([
                 element: <AddSeriesPage />,
               },
               {
-                path: "/manage-series/edit/:seriesId",
+                path: "/manage-series/edit/:vehicleSeriesId",
                 element: <EditSeriesPage />,
               },
 

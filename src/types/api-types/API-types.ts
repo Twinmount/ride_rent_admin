@@ -423,9 +423,9 @@ export interface VehicleSeriesType {
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
   seriesCode: string;
-  stateId: string;
+  state: string;
   vehicleCategoryId: string;
-  vehicleBrandId: string;
+  brandId: string;
 }
 
 // interface for the  Brand (GET BY ID) response

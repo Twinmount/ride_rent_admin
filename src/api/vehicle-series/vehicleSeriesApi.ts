@@ -121,7 +121,7 @@ export const fetchAllSeries = async (urlParams: {
     // generating query params
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
-      limit: "20",
+      limit: "10",
       sortOrder: "DESC",
       stateId: urlParams.stateId,
     });

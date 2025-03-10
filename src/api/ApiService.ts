@@ -223,7 +223,8 @@ export class ApiService {
 
   /**
    * Performs a PATCH request.
-   *
+   * 
+   * 
    * @template T - The expected response data type.
    * @param {APIParameters} param - The API request parameters.
    * @returns {Promise<T | undefined>} - The response data or undefined on error.
