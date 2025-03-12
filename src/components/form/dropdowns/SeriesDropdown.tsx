@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllSeries, fetchSeriesById } from "@/api/vehicle-series";
+import { Link } from "react-router-dom";
 
 type SeriesDropdownProps = {
   value?: string;
@@ -135,12 +136,22 @@ const SeriesDropdown = ({
           />
           <CommandList>
             {!searchTerm ? (
-              <CommandEmpty>Please search the series.</CommandEmpty>
+              <CommandEmpty>
+                Please search the series under selected brand and state.
+              </CommandEmpty>
             ) : isSeriesLoading ? (
               <CommandEmpty>Searching for {searchTerm}...</CommandEmpty>
             ) : seriesData?.result.list.length === 0 ? (
               <CommandEmpty>
-                No {placeholder} found for &apos;{searchTerm}&apos;.
+                No {placeholder} found for{" "}
+                <span className="italic">&apos;{searchTerm}&apos;</span>.
+                <br />
+                <Link
+                  to="/manage-series/add"
+                  className="font-[500] text-blue-500"
+                >
+                  Add new series?
+                </Link>
               </CommandEmpty>
             ) : (
               <CommandGroup>

@@ -182,9 +182,6 @@ export default function VehicleSeriesForm({
                   form.setValue(
                     "vehicleSeries",
                     sanitizeStringToSlug(sanitizedSeries) ?? "",
-                    {
-                      shouldValidate: true,
-                    },
                   );
                 }}
               />

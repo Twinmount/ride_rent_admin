@@ -127,7 +127,7 @@ export const fetchAllSeries = async (urlParams: {
     });
 
     if (urlParams.search) {
-      queryParams.append("searchTerm", urlParams.search);
+      queryParams.append("search", urlParams.search);
     }
 
     if (urlParams.brandId) {

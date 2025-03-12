@@ -18,10 +18,6 @@ export default function BrandsPage() {
   // page heading
   let heading = `Manage Vehicle Series Under ${state.stateName}`;
 
-  if (selectedCategory?.name) {
-    heading += ` / ${selectedCategory?.name}`;
-  }
-
   if (selectedBrand?.brandName) {
     heading += ` / ${selectedBrand?.brandName}`;
   }
@@ -45,6 +41,18 @@ export default function BrandsPage() {
             selectedBrand={selectedBrand}
             setSelectedBrand={setSelectedBrand}
           />
+
+          {(selectedCategory || selectedBrand) && (
+            <button
+              onClick={() => {
+                setSelectedCategory(null);
+                setSelectedBrand(null);
+              }}
+              className="w-full cursor-pointer rounded-md border border-red-400/50 px-2 py-1 text-sm font-semibold text-red-400 hover:bg-red-100 hover:text-red-600"
+            >
+              Clear Filter
+            </button>
+          )}
         </div>
       </div>
 

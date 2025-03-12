@@ -364,7 +364,7 @@ export default function PrimaryDetailsForm({
           name="stateId"
           render={({ field }) => (
             <FormItemWrapper
-              label="Location"
+              label="State / location"
               description="Choose your state/location"
             >
               <StatesDropdown
@@ -416,7 +416,7 @@ export default function PrimaryDetailsForm({
           render={({ field }) => (
             <FormItemWrapper
               label="Vehicle Series"
-              description="Select your vehicle's series"
+              description="Select your vehicle's series under the above vehicle brand and vehicle location."
             >
               <SeriesDropdown
                 value={field.value}

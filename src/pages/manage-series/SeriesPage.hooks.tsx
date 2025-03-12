@@ -1,5 +1,5 @@
 import { fetchAllBrands } from "@/api/brands";
-import { fetchAllSeries, searchVehicleSeries } from "@/api/vehicle-series";
+import { fetchAllSeries } from "@/api/vehicle-series";
 import { useQuery } from "@tanstack/react-query";
 
 export const useFetchSeriesBrands = ({
