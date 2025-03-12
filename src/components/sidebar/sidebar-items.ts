@@ -8,7 +8,7 @@ import {
   Megaphone,
   FileText,
   FileSearch,
-  // Group,
+  Group,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -98,12 +98,12 @@ export const sidebarContent: SidebarItem[] = [
     link: "/manage-brands",
   },
   // Vehicle Series route
-  // {
-  //   type: "link",
-  //   label: "Vehicle Series",
-  //   icon: Group,
-  //   link: "/manage-series",
-  // },
+  {
+    type: "link",
+    label: "Vehicle Series",
+    icon: Group,
+    link: "/manage-series",
+  },
   // Locations routes
   {
     type: "accordion",

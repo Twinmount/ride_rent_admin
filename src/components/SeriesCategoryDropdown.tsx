@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,49 +10,41 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { CategoryType } from "@/types/api-types/API-types";
+import { useCategories } from "@/hooks/useCategories";
 
-interface CategoryDropdownProps {
+interface SeriesCategoryDropdownProps {
   selectedCategory?: CategoryType | null;
   setSelectedCategory: (category: CategoryType) => void;
-  type: "brand" | "type";
-  categories: CategoryType[];
-  isLoading: boolean;
 }
 
-export default function CategoryDropdown({
+export default function SeriesCategoryDropdown({
   selectedCategory,
   setSelectedCategory,
-  type,
-  categories,
-  isLoading,
-}: CategoryDropdownProps) {
+}: SeriesCategoryDropdownProps) {
   const params = useParams();
-  const navigate = useNavigate();
+
+  const { categoryList: categories, isCategoryLoading: isLoading } =
+    useCategories();
 
   // setting selected category and navigating to respective url
   const handleCategorySelect = (category: CategoryType) => {
     setSelectedCategory(category);
-    if (type === "type") {
-      navigate(`/vehicle/manage-types/${category.categoryId}`);
-    } else if (type === "brand") {
-      navigate(`/manage-brands/${category.categoryId}`);
-    }
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         asChild
-        className="!h-9 w-fit max-w-fit cursor-pointer !rounded-lg bg-slate-800 text-2xl text-white outline-none transition-colors hover:bg-slate-900"
+        className="!h-8 w-fit max-w-fit cursor-pointer !rounded-lg bg-slate-800 text-white outline-none transition-colors hover:bg-slate-900"
         disabled={isLoading || categories.length === 0}
       >
-        <div className="flex items-center whitespace-nowrap rounded-lg pl-2 font-bold tracking-wider">
+        <div className="flex items-center whitespace-nowrap rounded-lg pl-2 text-sm tracking-wider">
           {isLoading
             ? "Loading..."
             : categories.length > 0
               ? selectedCategory?.name || "Select Category"
               : "No Categories"}
-          <ChevronDown className="relative top-2 ml-auto" />
+          <ChevronDown className="relative ml-auto" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="ml-8 w-44">

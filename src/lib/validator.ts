@@ -149,44 +149,7 @@ export const PrimaryFormSchema = z
     vehicleCategoryId: z.string().min(1, "Category is required"),
     vehicleTypeId: z.string().min(1, "Type is required"),
     vehicleBrandId: z.string().min(1, "Brand is required"),
-    vehicleSeriesLabel: z
-      .string()
-      .min(1, "Series is required")
-      .regex(
-        /^[a-zA-Z0-9\s-]+$/,
-        "Series must only contain alphanumeric characters, hyphens, and spaces",
-      ),
-    vehicleSeries: z
-      .string()
-      .min(1, "Series is required")
-      .regex(
-        /^[a-z0-9-]+$/,
-        "Series value must be lowercase, hyphen-separated, and alphanumeric",
-      ),
-    vehicleSeriesPageHeading: z
-      .string()
-      .min(1, "Page heading is required")
-      .max(100, "Page heading cannot exceed 100 characters"),
-    vehicleSeriesPageSubheading: z
-      .string()
-      .min(1, "Page subheading is required")
-      .max(200, "Page subheading cannot exceed 200 characters"),
-    vehicleSeriesInfoTitle: z
-      .string()
-      .min(1, "Series Info title is required")
-      .max(80, "Series Info title cannot exceed 80 characters"),
-    vehicleSeriesInfoDescription: z
-      .string()
-      .min(1, "Series Info description is required")
-      .max(300, "Series Info description cannot exceed 300 characters"),
-    vehicleSeriesMetaTitle: z
-      .string()
-      .min(1, "Series Meta title is required")
-      .max(80, "Series Meta title cannot exceed 80 characters"),
-    vehicleSeriesMetaDescription: z
-      .string()
-      .min(1, "Series Meta description is required")
-      .max(5000, "Series Meta description cannot exceed 5000 characters"),
+    vehicleSeriesId: z.string().min(1, "Series is required"),
     vehicleModel: z.string().min(1, "Vehicle Model is required"),
     vehicleRegistrationNumber: z
       .string()
@@ -406,9 +369,9 @@ export const BlogFormSchema = z.object({
 });
 
 export const VehicleSeriesSchema = z.object({
-  stateId: z.string().min(1, "State  is required"),
+  state: z.string().min(1, "State  is required"),
   vehicleCategoryId: z.string().min(1, "Category is required"),
-  vehicleBrandId: z.string().min(1, "Brand is required"),
+  brandId: z.string().min(1, "Brand is required"),
   vehicleSeriesLabel: z
     .string()
     .min(1, "Series is required")

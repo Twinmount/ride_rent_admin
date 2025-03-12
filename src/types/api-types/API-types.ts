@@ -411,6 +411,23 @@ export interface VehicleSeriesSearch {
   statusCode: number;
 }
 
+// individual full series type
+export interface VehicleSeriesType {
+  vehicleSeriesId: string;
+  vehicleSeries: string;
+  vehicleSeriesLabel: string;
+  vehicleSeriesPageHeading: string;
+  vehicleSeriesPageSubheading: string;
+  vehicleSeriesInfoTitle: string;
+  vehicleSeriesInfoDescription: string;
+  vehicleSeriesMetaTitle: string;
+  vehicleSeriesMetaDescription: string;
+  seriesCode: string;
+  state: string;
+  vehicleCategoryId: string;
+  brandId: string;
+}
+
 // interface for the  Brand (GET BY ID) response
 export interface FetchSpecificSeriesResponse {
   result: VehicleSeriesType;
@@ -418,13 +435,21 @@ export interface FetchSpecificSeriesResponse {
   statusCode: number;
 }
 
-//  interface for the Series GET ALL) API response
+// individual series type
+export interface SeriesListType {
+  vehicleSeriesId: string;
+  vehicleSeries: string;
+  vehicleSeriesLabel: string;
+}
+
+// fetch all series type
 export interface FetchAllSeriesResponse {
   status: string;
   result: {
-    list: VehicleSeriesType[]; // Array of brands
-    page: number; // Current page number
-    total: number; // Total number of categories
+    list: SeriesListType[];
+    page: number;
+    total: number;
+    totalNumberOfPages: number;
   };
   statusCode: number;
 }

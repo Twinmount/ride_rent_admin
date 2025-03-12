@@ -37,14 +37,14 @@ function SearchComponent({
         searchParams.delete("search");
         setSearchParams(searchParams); // Remove search param if input is empty
       }
-    }, 700); // 1000ms debounce delay
+    }, 500); // 5000ms debounce delay
 
     setDebounceTimeout(timeoutId); // Save the new timeout ID
   };
 
   return (
     <div
-      className={`mb-2 ml-3 flex w-full max-w-[500px] flex-col justify-start gap-y-2`}
+      className={`ml-3 flex w-full max-w-[500px] flex-col justify-start gap-y-2`}
     >
       <div className="flex items-center justify-start gap-x-1">
         <Input
