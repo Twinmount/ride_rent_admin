@@ -45,13 +45,12 @@ import {
   showSuccessToast,
 } from "@/utils/toastUtils";
 import { handleLevelOneFormSubmission } from "@/utils/form-utils";
-import VehicleSeriesSearch from "../dropdowns/VehicleSeriesSearch";
-import { sanitizeStringToSlug } from "@/lib/utils";
 import VehicleDescriptionTextEditor from "../VehicleDescriptionTextEditor";
 import { FormContainer } from "../form-ui/FormContainer";
 import { FormItemWrapper } from "../form-ui/FormItemWrapper";
 import { FormSubmitButton } from "../form-ui/FormSubmitButton";
 import { FormCheckbox } from "../form-ui/FormCheckbox";
+import SeriesDropdown from "../dropdowns/SeriesDropdown";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -283,7 +282,12 @@ export default function PrimaryDetailsForm({
               <BrandsDropdown
                 vehicleCategoryId={form.watch("vehicleCategoryId")}
                 value={field.value}
-                onChangeHandler={field.onChange}
+                onChangeHandler={(value) => {
+                  field.onChange(value);
+                  form.setValue("vehicleSeriesId", "");
+                  form.setValue("vehicleMetaTitle", "");
+                  form.setValue("vehicleMetaDescription", "");
+                }}
                 isDisabled={!form.watch("vehicleCategoryId")}
               />
             </FormItemWrapper>
@@ -360,22 +364,15 @@ export default function PrimaryDetailsForm({
           name="stateId"
           render={({ field }) => (
             <FormItemWrapper
-              label="Location"
+              label="State / location"
               description="Choose your state/location"
             >
               <StatesDropdown
                 onChangeHandler={(value) => {
                   field.onChange(value);
-                  // when state changes, reset cities and all the seven fields thats under "vehicleSeries" and metadata fields
+                  // when state changes, vehicle series and metadata fields
                   form.setValue("cityIds", []);
-                  form.setValue("vehicleSeriesLabel", "");
-                  form.setValue("vehicleSeries", "");
-                  form.setValue("vehicleSeriesPageHeading", "");
-                  form.setValue("vehicleSeriesPageSubheading", "");
-                  form.setValue("vehicleSeriesInfoTitle", "");
-                  form.setValue("vehicleSeriesInfoDescription", "");
-                  form.setValue("vehicleSeriesMetaTitle", "");
-                  form.setValue("vehicleSeriesMetaDescription", "");
+                  form.setValue("vehicleSeriesId", "");
                   form.setValue("vehicleMetaTitle", "");
                   form.setValue("vehicleMetaDescription", "");
                 }}
@@ -412,272 +409,27 @@ export default function PrimaryDetailsForm({
           )}
         />
 
-        {/* Vehicle Series related 7  fields */}
-        <div className="my-5 border-b border-t border-b-gray-300 border-t-gray-300 py-9">
-          {/* Vehicle Series (label) */}
-          <FormField
-            control={form.control}
-            name="vehicleSeriesLabel"
-            render={({ field }) => (
-              <FormItemWrapper
-                label={
-                  <span>
-                    Vehicle Series <br />
-                    <span className="text-sm text-gray-500">(label)</span>
-                  </span>
+        {/* Vehicle Series */}
+        <FormField
+          control={form.control}
+          name="vehicleSeriesId"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Vehicle Series"
+              description="Select your vehicle's series under the above vehicle brand and vehicle location."
+            >
+              <SeriesDropdown
+                value={field.value}
+                onChangeHandler={field.onChange}
+                isDisabled={
+                  !form.watch("stateId") || !form.watch("vehicleBrandId")
                 }
-                description={
-                  <span>
-                    Enter or search the vehicle series (max 80 characters).
-                    <br />
-                    {form.watch("vehicleSeries") && (
-                      <span className="mt-2 text-sm text-gray-500">
-                        Public URL will be:{" "}
-                        <span className="font-semibold">
-                          /{sanitizeStringToSlug(form.watch("vehicleSeries"))}
-                        </span>
-                      </span>
-                    )}
-                  </span>
-                }
-              >
-                <VehicleSeriesSearch
-                  value={field.value}
-                  vehicleBrandId={form.watch("vehicleBrandId")}
-                  stateId={form.watch("stateId")}
-                  onChangeHandler={({
-                    seriesLabel,
-                    heading,
-                    subHeading,
-                    infoTitle,
-                    infoDescription,
-                    metaTitle,
-                    metaDescription,
-                  }) => {
-                    field.onChange(seriesLabel);
-
-                    const sanitizedSeries = seriesLabel
-                      .replace(/[^a-zA-Z0-9-\s]/g, "") // Remove invalid characters
-                      .replace(/\s+/g, " ") // Normalize spaces
-                      .trim(); // Trim leading/trailing spaces
-                    // Reset or set meta fields to empty strings if not provided
-                    form.setValue(
-                      "vehicleSeries",
-                      sanitizeStringToSlug(sanitizedSeries) ?? "",
-                    );
-
-                    form.setValue("vehicleSeriesPageHeading", heading ?? "");
-                    form.setValue(
-                      "vehicleSeriesPageSubheading",
-                      subHeading ?? "",
-                    );
-                    form.setValue("vehicleSeriesInfoTitle", infoTitle ?? "");
-                    form.setValue(
-                      "vehicleSeriesInfoDescription",
-                      infoDescription ?? "",
-                    );
-                    form.setValue("vehicleSeriesMetaTitle", metaTitle ?? "");
-                    form.setValue(
-                      "vehicleSeriesMetaDescription",
-                      metaDescription ?? "",
-                    );
-                  }}
-                />
-              </FormItemWrapper>
-            )}
-          />
-
-          {/* Series "value" (hidden field)*/}
-          <FormField
-            control={form.control}
-            name="vehicleSeries"
-            render={({ field }) => (
-              <Input type="hidden" {...field} className="hidden" />
-            )}
-          />
-
-          {/* Series Page Heading */}
-          <FormField
-            control={form.control}
-            name="vehicleSeriesPageHeading"
-            render={({ field }) => (
-              <FormItemWrapper
-                label="Series Page Heading"
-                description={
-                  <span>
-                    This will be displayed as the <strong>heading</strong> of
-                    the series listing page.
-                    <br />
-                    100 characters max.
-                  </span>
-                }
-              >
-                <Input
-                  placeholder="e.g., 'Rent BMW S Series'"
-                  {...field}
-                  className="input-field"
-                />
-              </FormItemWrapper>
-            )}
-          />
-
-          {/* Series Page Subheading */}
-          <FormField
-            control={form.control}
-            name="vehicleSeriesPageSubheading"
-            render={({ field }) => (
-              <FormItemWrapper
-                label="Series Page Subheading"
-                description={
-                  <span>
-                    This will be displayed as the <strong>sub-heading</strong>{" "}
-                    of the series listing page.
-                    <br />
-                    200 characters max.
-                  </span>
-                }
-              >
-                <Textarea
-                  placeholder="Enter the series page subheading"
-                  {...field}
-                  className="textarea h-28 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
-                />
-              </FormItemWrapper>
-            )}
-          />
-
-          {/* Vehicle Series Info Title */}
-          <FormField
-            control={form.control}
-            name="vehicleSeriesInfoTitle"
-            render={({ field }) => (
-              <FormItemWrapper
-                label="Series Info Title"
-                description={
-                  <span>
-                    Enter the series info title for this series.
-                    <br />
-                    It will be displayed in the info box on the Next.js series
-                    listing page.
-                  </span>
-                }
-              >
-                <Input
-                  placeholder="e.g., 'BMW S Series'"
-                  {...field}
-                  className="input-field"
-                />
-              </FormItemWrapper>
-            )}
-          />
-
-          {/* Series Info Description */}
-          <FormField
-            control={form.control}
-            name="vehicleSeriesInfoDescription"
-            render={({ field }) => {
-              const [charCount, setCharCount] = useState(
-                field.value?.length || 0,
-              );
-              const limit = 300;
-
-              const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>,
-              ) => {
-                setCharCount(e.target.value.length);
-                field.onChange(e);
-              };
-
-              return (
-                <FormItemWrapper
-                  label="Series Info Description"
-                  description={
-                    <span className="flex">
-                      <span>
-                        Enter the series info description for this series. It
-                        will be displayed as the info box description in the
-                        Next.js series listing page.
-                      </span>
-                      <span className="mt-1 text-sm text-gray-500">
-                        {charCount}/{limit}
-                      </span>
-                    </span>
-                  }
-                >
-                  <Textarea
-                    placeholder="Vehicle Series Info Description"
-                    value={field.value}
-                    onChange={handleInputChange}
-                    className="textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
-                  />
-                </FormItemWrapper>
-              );
-            }}
-          />
-
-          {/* Vehicle Series Meta Title */}
-          <FormField
-            control={form.control}
-            name="vehicleSeriesMetaTitle"
-            render={({ field }) => (
-              <FormItemWrapper
-                label="Series Meta Title"
-                description={
-                  <span>
-                    Enter the meta title for this series.
-                    <br /> Only alphanumeric characters are allowed.
-                  </span>
-                }
-              >
-                <Input
-                  placeholder="e.g., 'BMW S Series'"
-                  {...field}
-                  className="input-field"
-                />
-              </FormItemWrapper>
-            )}
-          />
-
-          {/* Series Meta Description */}
-          <FormField
-            control={form.control}
-            name="vehicleSeriesMetaDescription"
-            render={({ field }) => {
-              const [charCount, setCharCount] = useState(
-                field.value?.length || 0,
-              );
-              const limit = 1000;
-
-              const handleInputChange = (
-                e: React.ChangeEvent<HTMLTextAreaElement>,
-              ) => {
-                setCharCount(e.target.value.length);
-                field.onChange(e);
-              };
-
-              return (
-                <FormItemWrapper
-                  label="Series Meta Description"
-                  description={
-                    <span className="flex flex-col">
-                      <span>Provide a meta description for this Series.</span>
-                      <span className="mt-1 text-sm text-gray-500">
-                        {charCount}/{limit} characters used
-                      </span>
-                    </span>
-                  }
-                >
-                  <Textarea
-                    placeholder="Vehicle Series Meta Description"
-                    value={field.value}
-                    onChange={handleInputChange}
-                    className="textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
-                  />
-                </FormItemWrapper>
-              );
-            }}
-          />
-        </div>
+                stateId={form.watch("stateId")}
+                brandId={form.watch("vehicleBrandId")}
+              />
+            </FormItemWrapper>
+          )}
+        />
 
         {/* Registration Number */}
         <FormField

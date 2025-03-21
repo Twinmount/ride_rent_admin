@@ -55,7 +55,7 @@ export function GenericTable<TData>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="text-black">
+                  <TableHead key={header.id} className="font-[600] text-black">
                     {header.isPlaceholder
                       ? null
                       : flexRender(

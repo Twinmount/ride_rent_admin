@@ -329,15 +329,11 @@ export const router = createBrowserRouter([
                 element: <SeriesPage />,
               },
               {
-                path: "/manage-series/:categoryId",
-                element: <SeriesPage />,
-              },
-              {
-                path: "/manage-series/:categoryId/add-series",
+                path: "/manage-series/add",
                 element: <AddSeriesPage />,
               },
               {
-                path: "/manage-series/edit/:seriesId",
+                path: "/manage-series/edit/:vehicleSeriesId",
                 element: <EditSeriesPage />,
               },
 

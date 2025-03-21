@@ -25,7 +25,7 @@ const VehicleCategoryDropdown = ({
 }: DropdownProps) => {
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
-    null
+    null,
   );
 
   // Fetch categories using react-query
@@ -38,13 +38,18 @@ const VehicleCategoryDropdown = ({
     queryFn: () => fetchAllCategories({ page: 1, limit: 20, sortOrder: "ASC" }),
   });
 
+  const categoryList = categoryData?.result?.list || [];
+
   useEffect(() => {
     if (isSuccess && categoryData) {
-      setCategories(categoryData.result.list);
+      setCategories(categoryList);
 
-      // If initial value exists, use it; otherwise, select the first category
+      // If initial value exists, use it; otherwise, select the "cars" as the default category or simply the first one
       const initialCategoryId =
-        value || categoryData.result.list[0]?.categoryId;
+        value ||
+        categoryList.find((c) => c.value === "cars")?.categoryId ||
+        categoryList[0]?.categoryId;
+
       setSelectedCategoryId(initialCategoryId);
       if (onChangeHandler) {
         onChangeHandler(initialCategoryId);
@@ -54,7 +59,7 @@ const VehicleCategoryDropdown = ({
 
   // Find the selected category's name based on the selectedCategoryId
   const selectedCategoryName = categories.find(
-    (category) => category.categoryId === selectedCategoryId
+    (category) => category.categoryId === selectedCategoryId,
   )?.name;
 
   return (
@@ -62,7 +67,7 @@ const VehicleCategoryDropdown = ({
       onValueChange={(selectedValue) => {
         // Find the selected category by name
         const selectedCategory = categories.find(
-          (category) => category.name === selectedValue
+          (category) => category.name === selectedValue,
         );
         // Pass the categoryId to the form handler
         if (selectedCategory) {
@@ -75,7 +80,7 @@ const VehicleCategoryDropdown = ({
       value={selectedCategoryName || ""}
       disabled={isDisabled || isCategoryLoading}
     >
-      <SelectTrigger className="ring-0 select-field focus:ring-0 input-fields">
+      <SelectTrigger className="select-field input-fields ring-0 focus:ring-0">
         <SelectValue
           className="!font-bold !text-black"
           placeholder={`Choose ${placeholder}`}

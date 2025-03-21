@@ -113,22 +113,28 @@ export const fetchSeriesById = async (
 // fetch all brands
 export const fetchAllSeries = async (urlParams: {
   page: number;
-  limit: number;
-  sortOrder: string;
-  vehicleCategoryId: string;
+  brandId?: string;
+  stateId: string;
   search: string;
 }): Promise<FetchAllSeriesResponse> => {
   try {
     // generating query params
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
-      limit: urlParams.limit.toString(),
-      sortOrder: urlParams.sortOrder,
-      vehicleCategoryId: urlParams.vehicleCategoryId,
-      search: urlParams.search,
-    }).toString();
+      limit: "10",
+      sortOrder: "DESC",
+      stateId: urlParams.stateId,
+    });
 
-    const slugWithParams = `${Slug.GET_ALL_BRANDS}?${queryParams}`;
+    if (urlParams.search) {
+      queryParams.append("search", urlParams.search);
+    }
+
+    if (urlParams.brandId) {
+      queryParams.append("brandId", urlParams.brandId);
+    }
+
+    const slugWithParams = `${Slug.GET_ALL_SERIES}?${queryParams.toString()}`;
 
     const data = await API.get<FetchAllSeriesResponse>({
       slug: slugWithParams,

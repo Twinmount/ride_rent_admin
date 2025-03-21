@@ -122,7 +122,7 @@ export type ListingMetaFormType = {
 export type BrandType = {
   id: number | string;
   label: string;
-  value: VehicleCategoryType;
+  value: string;
   link: string;
 };
 
@@ -201,9 +201,9 @@ export type CategoryType =
   | "travel";
 
 export type VehicleSeriesType = {
-  stateId: string;
+  state: string;
   vehicleCategoryId: string;
-  vehicleBrandId: string;
+  brandId: string;
   vehicleSeries: string;
   vehicleSeriesLabel: string;
   vehicleSeriesPageHeading: string;
