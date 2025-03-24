@@ -57,7 +57,7 @@ const BrandsDropdown = ({
         vehicleCategoryId: vehicleCategoryId as string,
         search: debouncedSearchTerm,
       }),
-    enabled: !!vehicleCategoryId && debouncedSearchTerm.length > 1,
+    enabled: !!vehicleCategoryId && !!debouncedSearchTerm,
     staleTime: 0,
   });
 

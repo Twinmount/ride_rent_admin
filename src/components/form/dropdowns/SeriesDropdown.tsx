@@ -58,7 +58,7 @@ const SeriesDropdown = ({
         stateId,
         page: 1,
       }),
-    enabled: !!stateId && !!brandId && !!(debouncedSearchTerm.length > 1),
+    enabled: !!stateId && !!brandId,
     staleTime: 0,
   });
 
@@ -104,7 +104,7 @@ const SeriesDropdown = ({
   }, [selectedValue, specificSeriesData, isSpecificSeriesLoading]);
 
   const handleSearchTermChange = (value: string) => {
-    if (/^[a-zA-Z\s]*$/.test(value)) {
+    if (/^[a-zA-Z0-9\s-]*$/.test(value)) {
       setSearchTerm(value);
     }
   };
