@@ -12,7 +12,7 @@ export interface StateType {
 }
 
 // add state
-export const addState = async (values: StateType) => {
+export const addState = async (values: StateType, selectedStates: string[]) => {
   try {
     const data = await API.post({
       slug: Slug.ADD_STATE,
@@ -20,6 +20,7 @@ export const addState = async (values: StateType) => {
         stateName: values.stateName,
         stateValue: values.stateValue,
         stateImage: values.stateImage,
+        relatedStates: selectedStates,
       },
     })
 
@@ -31,7 +32,7 @@ export const addState = async (values: StateType) => {
 }
 
 // update state
-export const updateState = async (values: StateType, stateId: string) => {
+export const updateState = async (values: StateType, stateId: string, selectedStates: string[]) => {
   try {
     // Send the FormData object using the API put method
     const data = await API.put({
@@ -41,6 +42,7 @@ export const updateState = async (values: StateType, stateId: string) => {
         stateName: values.stateName,
         stateValue: values.stateValue,
         stateImage: values.stateImage, // String URL of the uploaded image
+        relatedStates: selectedStates,
       },
     })
 

@@ -14,6 +14,7 @@ export default function EditLocationPage() {
   const { data, isLoading } = useQuery({
     queryKey: ['states', stateId],
     queryFn: () => fetchStateById(stateId as string),
+    staleTime: 0,
   })
 
   return (

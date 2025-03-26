@@ -70,6 +70,7 @@ export type StateFormType = {
   stateName: string;
   stateValue: string;
   stateImage: string;
+  relatedStates?: string[];
 };
 
 export type CategoryFormType = {
