@@ -45,18 +45,22 @@ export default function StateForm({ type, formData }: StateFormProps) {
 
   const stateListQuery = useStateListQuery({ enabled: true });
   const { data: stateList } = !!stateListQuery && stateListQuery;
-  const stateOptions = stateList?.result?.filter((c:any)=> c.stateId !== initialValues.stateId).map((state) => ({
-    value: state.stateId,
-    label: state.stateName,
-  }));
+  const stateOptions = stateList?.result
+    ?.filter((c: any) => c.stateId !== initialValues.stateId)
+    .map((state) => ({
+      value: state.stateId,
+      label: state.stateName,
+    }));
 
-  const [selectedStates, setSelectedStates] = useState<string[]>(initialValues?.relatedStates ?? []);
+  const [selectedStates, setSelectedStates] = useState<string[]>(
+    initialValues?.relatedStates ?? [],
+  );
 
-  useEffect(()=>{
-    if(type === "Update"){
-      setSelectedStates(formData?.relatedStates ?? [])
+  useEffect(() => {
+    if (type === "Update") {
+      setSelectedStates(formData?.relatedStates ?? []);
     }
-  },[formData])
+  }, [formData]);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof StateFormSchema>>({
@@ -190,7 +194,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
           <FormField
             control={form.control}
             name="relatedStates"
-            render={({ field }) => (
+            render={() => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
                 <FormLabel className="ml-2 mt-4 flex w-56 justify-between text-base max-sm:w-fit lg:text-lg">
                   Related States <span className="mr-5 max-sm:hidden">:</span>
