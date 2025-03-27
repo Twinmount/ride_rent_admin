@@ -204,12 +204,13 @@ export default function StateForm({ type, formData }: StateFormProps) {
                     <Select
                       isMulti
                       options={stateOptions || []}
-                      value={stateOptions?.filter((opt) =>
-                        selectedStates.includes(opt.value),
-                      )}
+                      value={selectedStates
+                        .map((stateId) => stateOptions?.find((opt) => opt.value === stateId))
+                        .filter(Boolean)}
                       onChange={(selected: any) =>
                         setSelectedStates(selected.map((opt: any) => opt.value))
                       }
+                      menuPlacement="auto"
                       className="basic-multi-select"
                       classNamePrefix="select"
                     />
