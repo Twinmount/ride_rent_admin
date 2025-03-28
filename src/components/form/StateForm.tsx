@@ -21,10 +21,12 @@ import Spinner from "../general/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import { addState, updateState } from "@/api/states";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GcsFilePaths } from "@/constants/enum";
 import { deleteMultipleFiles } from "@/helpers/form";
 import SingleFileUpload from "./file-uploads/SingleFileUpload";
+import { useStateListQuery } from "@/hooks/query/useStateListQuery";
+import Select from "react-select";
 
 type StateFormProps = {
   type: "Add" | "Update";
@@ -40,6 +42,25 @@ export default function StateForm({ type, formData }: StateFormProps) {
 
   const navigate = useNavigate();
   const { stateId } = useParams<{ stateId: string }>();
+
+  const stateListQuery = useStateListQuery({ enabled: true });
+  const { data: stateList } = !!stateListQuery && stateListQuery;
+  const stateOptions = stateList?.result
+    ?.filter((c: any) => c.stateId !== initialValues.stateId)
+    .map((state) => ({
+      value: state.stateId,
+      label: state.stateName,
+    }));
+
+  const [selectedStates, setSelectedStates] = useState<string[]>(
+    initialValues?.relatedStates ?? [],
+  );
+
+  useEffect(() => {
+    if (type === "Update") {
+      setSelectedStates(formData?.relatedStates ?? []);
+    }
+  }, [formData]);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof StateFormSchema>>({
@@ -63,9 +84,9 @@ export default function StateForm({ type, formData }: StateFormProps) {
     try {
       let data;
       if (type === "Add") {
-        data = await addState(values);
+        data = await addState(values, selectedStates);
       } else if (type === "Update") {
-        data = await updateState(values, stateId as string);
+        data = await updateState(values, stateId as string, selectedStates);
       }
 
       if (data) {
@@ -95,21 +116,21 @@ export default function StateForm({ type, formData }: StateFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
+        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
-        <div className="flex flex-col gap-5 r">
+        <div className="r flex flex-col gap-5">
           {/* type title */}
           <FormField
             control={form.control}
             name="stateName"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-56 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-56 justify-between text-base max-sm:w-fit lg:text-lg">
                   State Name
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
                       placeholder="eg: 'Abu Dhabi'"
@@ -131,11 +152,11 @@ export default function StateForm({ type, formData }: StateFormProps) {
             control={form.control}
             name="stateValue"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-56 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-56 justify-between text-base max-sm:w-fit lg:text-lg">
                   State Value<span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
                       placeholder="eg: 'abu-dhabi'"
@@ -169,6 +190,39 @@ export default function StateForm({ type, formData }: StateFormProps) {
               />
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="relatedStates"
+            render={() => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-56 justify-between text-base max-sm:w-fit lg:text-lg">
+                  Related States <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <Select
+                      isMulti
+                      options={stateOptions || []}
+                      value={selectedStates
+                        .map((stateId) => stateOptions?.find((opt) => opt.value === stateId))
+                        .filter(Boolean)}
+                      onChange={(selected: any) =>
+                        setSelectedStates(selected.map((opt: any) => opt.value))
+                      }
+                      menuPlacement="auto"
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Select related states in any order.
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            )}
+          />
         </div>
 
         {/* submit  */}
@@ -176,13 +230,13 @@ export default function StateForm({ type, formData }: StateFormProps) {
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
+          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
         >
           {isFileUploading
             ? "Uploading..."
             : form.formState.isSubmitting
-            ? "Processing..."
-            : `${type} State`}
+              ? "Processing..."
+              : `${type} State`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
       </form>

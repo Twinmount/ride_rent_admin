@@ -63,6 +63,7 @@ export const StateFormDefaultValues: StateFormType = {
   stateName: "",
   stateValue: "",
   stateImage: "",
+  relatedStates:[""]
 };
 export const CityFormDefaultValues: CityFormType = {
   cityName: "",

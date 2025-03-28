@@ -55,6 +55,7 @@ export const StateFormSchema = z.object({
       "State value should only contain lowercase letters and hyphens",
     ),
   stateImage: z.string().min(1, "State image is required"),
+  relatedStates: z.array(z.string()).optional(),
 });
 
 // City Form Schema
