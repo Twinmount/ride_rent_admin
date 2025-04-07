@@ -337,6 +337,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     isSpotDeliverySupported: data.isSpotDeliverySupported,
     description: data.description,
     vehicleTitle: data.vehicleTitle,
+    vehicleTitleH1: data.vehicleTitleH1,
     specification: data.specification as "UAE_SPEC" | "USA_SPEC" | "OTHERS",
     rentalDetails: data.rentalDetails,
     phoneNumber: formattedPhoneNumber, // Set the combined phone number

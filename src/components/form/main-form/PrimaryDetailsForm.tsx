@@ -317,7 +317,7 @@ export default function PrimaryDetailsForm({
           )}
         />
 
-        {/* Vehicle Title */}
+        {/* URL label */}
         <FormField
           control={form.control}
           name="vehicleTitle"
@@ -334,7 +334,46 @@ export default function PrimaryDetailsForm({
 
             return (
               <FormItemWrapper
-                label="Vehicle Title"
+                label="URL Label"
+                description={
+                  <>
+                    <span className="w-full max-w-[90%]">
+                      Provide url label. This will be used for creating url
+                      <strong> of the vehicle details page</strong>
+                    </span>{" "}
+                    <span className="ml-auto"> {`${charCount}/50`}</span>
+                  </>
+                }
+              >
+                <Input
+                  placeholder="e.g., 'URL Label'"
+                  value={field.value}
+                  onChange={handleInputChange}
+                  className="input-field"
+                />
+              </FormItemWrapper>
+            );
+          }}
+        />
+
+        {/* Vehicle Title */}
+        <FormField
+          control={form.control}
+          name="vehicleTitleH1"
+          render={({ field }) => {
+            const [charCount, setCharCount] = useState(
+              field.value?.length || 0,
+            );
+            const handleInputChange = (
+              e: React.ChangeEvent<HTMLInputElement>,
+            ) => {
+              setCharCount(e.target.value.length);
+              field.onChange(e);
+            };
+
+            return (
+              <FormItemWrapper
+                label="Vehicle Title H1"
                 description={
                   <>
                     <span className="w-full max-w-[90%]">
@@ -348,7 +387,7 @@ export default function PrimaryDetailsForm({
                 }
               >
                 <Input
-                  placeholder="e.g., 'Vehicle Title'"
+                  placeholder="e.g., 'Vehicle Title H1'"
                   value={field.value}
                   onChange={handleInputChange}
                   className="input-field"

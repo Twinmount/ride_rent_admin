@@ -187,8 +187,12 @@ export const PrimaryFormSchema = z
       .max(8000, "Description cannot exceed 5000 characters"), //additional 3000 is for to compensate for the text editor html tags strings.
     vehicleTitle: z
       .string()
-      .min(1, "Vehicle title is required")
-      .max(100, "Vehicle title cannot exceed 100 characters"),
+      .min(1, "URL label is required")
+      .max(50, "URL label cannot exceed 50 characters"),
+    vehicleTitleH1: z
+      .string()
+      .min(1, "Vehicle title H1 is required")
+      .max(100, "Vehicle title H1 cannot exceed 100 characters"),
     additionalVehicleTypes: z.array(z.string()).optional(),
     securityDeposit: z.object({
       enabled: z.boolean().default(false),

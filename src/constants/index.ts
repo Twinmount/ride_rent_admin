@@ -63,7 +63,7 @@ export const StateFormDefaultValues: StateFormType = {
   stateName: "",
   stateValue: "",
   stateImage: "",
-  relatedStates:[""]
+  relatedStates: [""],
 };
 export const CityFormDefaultValues: CityFormType = {
   cityName: "",
@@ -150,6 +150,7 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   cityIds: [],
   description: "",
   vehicleTitle: "",
+  vehicleTitleH1: "",
   additionalVehicleTypes: [],
   securityDeposit: {
     enabled: false,
