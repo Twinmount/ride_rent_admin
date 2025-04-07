@@ -234,6 +234,12 @@ export interface GetLevelsFilledResponse {
   statusCode: number;
 }
 
+export interface GetFaqtemplateResponse {
+  result: any;
+  status: string;
+  statusCode: number;
+}
+
 // Features form data
 export type FeaturesFormData = {
   id: string;

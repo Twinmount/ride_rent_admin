@@ -117,6 +117,10 @@ export enum Slug {
   GET_FEATURES_FORM_DATA = "/vehicle/level-three",
   PUT_FEATURES_FORM_DATA = "/vehicle/level-three",
 
+  // vehicle faq form endPoints
+  GET_FAQ_TEMPLATE = "/vehicle-faq",
+  PUT_FAQ_TEMPLATE = "/vehicle-faq",
+
   // meta data endpoints
   POST_ADMIN_HOME_META = "/metadata/homepage",
   GET_ADMIN_HOME_META = "/metadata/admin/homepage",

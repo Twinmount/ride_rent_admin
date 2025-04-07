@@ -17,7 +17,11 @@ const FeaturesForm = lazy(
   () => import("@/components/form/main-form/FeaturesForm"),
 );
 
-type TabsTypes = "primary" | "specifications" | "features";
+const VehicleFaqForm = lazy(
+  () => import("@/components/form/main-form/VehicleFaqForm"),
+);
+
+type TabsTypes = "primary" | "specifications" | "features" | "faq";
 
 export default function VehiclesFormUpdatePage() {
   const navigate = useNavigate();
@@ -41,6 +45,10 @@ export default function VehiclesFormUpdatePage() {
     isAddOrIncompleteSpecifications,
     isAddOrIncompleteFeatures,
     initialCountryCode,
+    isFaqFetching,
+    faqData,
+    updateFaqMutation,
+    resetFaqMutation,
   } = useVehicleUpdateForm(vehicleId);
 
   return (
@@ -86,6 +94,9 @@ export default function VehiclesFormUpdatePage() {
             >
               Features
             </TabsTrigger>
+            <TabsTrigger value="faq" className={`max-sm:px-2`}>
+              FAQ
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="primary" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
@@ -123,6 +134,19 @@ export default function VehiclesFormUpdatePage() {
                   type="Update"
                   refetchLevels={refetchLevels}
                   isAddOrIncomplete={isAddOrIncompleteFeatures}
+                />
+              )}
+            </Suspense>
+          </TabsContent>
+          <TabsContent value="faq" className="flex-center">
+            <Suspense fallback={<LazyLoader />}>
+              {isFaqFetching ? (
+                <FormSkelton />
+              ) : (
+                <VehicleFaqForm
+                  data={faqData?.result?.data}
+                  updateFaqMutation={updateFaqMutation}
+                  resetFaqMutation={resetFaqMutation}
                 />
               )}
             </Suspense>
