@@ -321,6 +321,7 @@ export type GetPrimaryForm = {
   isSpotDeliverySupported: boolean;
   description: string;
   vehicleTitle: string;
+  vehicleTitleH1: string;
   vehiclePhotos: string[];
   commercialLicenses: string[];
   additionalVehicleTypes?: string[];

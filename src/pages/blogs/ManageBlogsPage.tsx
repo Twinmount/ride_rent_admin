@@ -26,7 +26,7 @@ export default function ManageBlogsPage() {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ["blogs", selectedCategory],
+    queryKey: ["blogs", selectedCategory, page],
     queryFn: () => fetchAllBlogs(requestBody),
   });
 

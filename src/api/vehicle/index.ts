@@ -25,6 +25,7 @@ export const buildCommonPrimaryDetails = (
     isSpotDeliverySupported: values.isSpotDeliverySupported.toString(),
     description: values.description,
     vehicleTitle: values.vehicleTitle,
+    vehicleTitleH1: values.vehicleTitleH1,
     specification: values.specification,
     phoneNumber,
     stateId: values.stateId,
