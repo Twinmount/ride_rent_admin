@@ -91,6 +91,7 @@ export default function EditLocationPage() {
                   <StateFaqForm
                     data={faqData?.result}
                     updateFaqMutation={updateFaqMutation}
+                    stateValue={data?.result?.stateValue || ""}
                   />
                 )
               )}

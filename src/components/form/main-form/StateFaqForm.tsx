@@ -110,9 +110,11 @@ const SortableItem = ({
 const StateFaqForm = ({
   data,
   updateFaqMutation,
+  stateValue,
 }: {
   data: StateFAQ;
   updateFaqMutation: any;
+  stateValue: string;
 }) => {
   const [faqs, setFaqs] = useState<FAQItem[]>(data.faqs);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -133,7 +135,11 @@ const StateFaqForm = ({
       .filter((faq) => faq.question.trim() !== "" && faq.answer.trim() !== "")
       .map(({ question, answer }) => ({ question, answer })); // ⬅️ removes _id
 
-    const mutationData = { stateId: data.stateId, faqs: cleanedFaqs };
+    const mutationData = {
+      stateId: data.stateId,
+      stateValue,
+      faqs: cleanedFaqs,
+    };
     updateFaqMutation.mutate(mutationData);
   };
 
