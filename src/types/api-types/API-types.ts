@@ -50,6 +50,27 @@ export interface FetchStatesResponse {
   statusCode: number;
 }
 
+type StateFAQItemWithId = {
+  _id?: string;
+  question: string;
+  answer: string;
+};
+
+type StateFAQDocument = {
+  _id?: string;
+  stateId: string;
+  faqs: StateFAQItemWithId[];
+  updatedAt: string;
+  version: number;
+  __v: number;
+};
+
+export interface GetStateFAQResponse {
+  result: StateFAQDocument;
+  status: string;
+  statusCode: number;
+}
+
 //  interface for the states (by id)  API response
 export interface FetchSpecificStateResponse {
   result: StateType;

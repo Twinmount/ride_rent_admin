@@ -120,6 +120,8 @@ export enum Slug {
   // vehicle faq form endPoints
   GET_FAQ_TEMPLATE = "/vehicle-faq",
   PUT_FAQ_TEMPLATE = "/vehicle-faq",
+  GET_STATE_FAQ = "/state-faq",
+  PUT_STATE_FAQ = "/state-faq",
 
   // meta data endpoints
   POST_ADMIN_HOME_META = "/metadata/homepage",
