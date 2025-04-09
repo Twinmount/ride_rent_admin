@@ -5,6 +5,7 @@ import {
   AllVehicleListingResponse,
   FeaturesFormResponse,
   FetchAllVehiclesResponse,
+  GetFaqtemplateResponse,
   GetFeaturesFormDataResponse,
   GetLevelsFilledResponse,
   GetPrimaryFormResponse,
@@ -125,6 +126,27 @@ export const getLevelsFilled = async (
     const url = `${Slug.GET_LEVELS_FILLED}?vehicleId=${vehicleId}`;
 
     const data = await API.get<GetLevelsFilledResponse>({
+      slug: url,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch levels filled");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching levels filled data:", error);
+    throw error;
+  }
+};
+
+export const getFaqTemplate = async (
+  vehicleId: string,
+): Promise<GetFaqtemplateResponse> => {
+  try {
+    const url = `${Slug.GET_FAQ_TEMPLATE}/${vehicleId}/template`;
+
+    const data = await API.get<GetFaqtemplateResponse>({
       slug: url,
     });
 
@@ -281,6 +303,46 @@ export const updateSpecifications = async (
     const data = await API.put({
       slug: Slug.PUT_SPECIFICATION_FORM,
       body: requestBody,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error updating specification form data:", error);
+    throw error;
+  }
+};
+
+type FAQItem = {
+  question: string;
+  answer: string;
+};
+
+type VehicleFAQ = {
+  vehicleId: string;
+  isCustomized?: boolean;
+  faqList: FAQItem[];
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+};
+
+export const upadteFaqFn = async (requestBody: VehicleFAQ) => {
+  try {
+    const data = await API.post({
+      slug: Slug.PUT_FAQ_TEMPLATE,
+      body: requestBody,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error updating specification form data:", error);
+    throw error;
+  }
+};
+
+export const resetFaqFn = async (vehicleId: string) => {
+  try {
+    const data = await API.delete({
+      slug: `${Slug.PUT_FAQ_TEMPLATE}/${vehicleId}`,
     });
 
     return data;
