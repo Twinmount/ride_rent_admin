@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Pencil, Trash2, GripVertical, RotateCcw, Plus } from "lucide-react";
 import {
   DndContext,
