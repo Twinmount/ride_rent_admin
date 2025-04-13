@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getLevelsFilled, getPrimaryDetailsFormData } from "@/api/vehicle";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getFaqTemplate,
+  getLevelsFilled,
+  getPrimaryDetailsFormData,
+  resetFaqFn,
+  upadteFaqFn,
+} from "@/api/vehicle";
 import { mapGetPrimaryFormToPrimaryFormType } from "@/helpers/form";
 import { save, StorageKeys } from "@/utils/storage";
 
-export type TabsTypes = "primary" | "specifications" | "features";
+export type TabsTypes = "primary" | "specifications" | "features" | "faq";
 
 export const useVehicleUpdateForm = (vehicleId: string | undefined) => {
   const [activeTab, setActiveTab] = useState<TabsTypes>("primary");
@@ -27,6 +33,12 @@ export const useVehicleUpdateForm = (vehicleId: string | undefined) => {
     queryKey: ["getLevelsFilled", vehicleId],
     queryFn: () => getLevelsFilled(vehicleId as string),
     enabled: !!vehicleId,
+  });
+
+  const { data: faqData, isFetching: isFaqFetching } = useQuery({
+    queryKey: ["faq-template", vehicleId],
+    queryFn: () => getFaqTemplate(vehicleId as string),
+    enabled: !!vehicleId && activeTab === "faq",
   });
 
   // Calculate levels filled
@@ -64,6 +76,26 @@ export const useVehicleUpdateForm = (vehicleId: string | undefined) => {
     });
   }, [vehicleId, queryClient]);
 
+  const updateFaqMutation = useMutation({
+    mutationFn: upadteFaqFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["faq-template", vehicleId] });
+    },
+    onError: (err) => {
+      console.error("Error adding agent:", err);
+    },
+  });
+
+  const resetFaqMutation = useMutation({
+    mutationFn: resetFaqFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["faq-template", vehicleId] });
+    },
+    onError: (err) => {
+      console.error("Error adding agent:", err);
+    },
+  });
+
   // Handle tab changes
   const handleTabChange = (value: string) => {
     setActiveTab(value as TabsTypes);
@@ -80,5 +112,9 @@ export const useVehicleUpdateForm = (vehicleId: string | undefined) => {
     isAddOrIncompleteSpecifications,
     isAddOrIncompleteFeatures,
     initialCountryCode,
+    isFaqFetching,
+    faqData,
+    updateFaqMutation,
+    resetFaqMutation,
   };
 };
