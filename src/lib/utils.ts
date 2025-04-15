@@ -48,3 +48,21 @@ export function revertSlugToString(slug: string): string {
     .replace(/-/g, " ") // Replace hyphens with spaces
     .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
 }
+
+export function generateModelDetailsUrl(vehicleTitle?: string): string {
+  // Fallback value for vehicleTitle
+  const fallbackVehicleTitle = "vehicle";
+
+  const cleanText = (text: string): string => {
+    return text
+      .toLowerCase() // Convert to lowercase
+      .replace(/ - /g, "-") // Handle hyphens within the string
+      .replace(/[^a-z0-9-]+/g, "-") // Replace non-alphanumeric characters and spaces with hyphen
+      .replace(/^-+|-+$/g, ""); // Remove any leading or trailing hyphens
+  };
+
+  // Use vehicleTitle if it exists, otherwise use fallbackVehicleTitle
+  const title = cleanText(vehicleTitle || fallbackVehicleTitle);
+
+  return title; // Return the cleaned version of the title
+}
