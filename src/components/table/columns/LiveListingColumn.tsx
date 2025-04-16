@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { LiveListingVehicleType } from "@/types/api-types/vehicleAPI-types";
 import { generateModelDetailsUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
+import { Copy, ExternalLink } from "lucide-react";
 import * as Toast from "@radix-ui/react-toast";
 import { useState } from "react";
 
@@ -90,8 +90,8 @@ export const LiveListingColumns: (
   
       return (
         <div className="flex items-center gap-2">
-          <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-            click here
+          <a href={url} target="_blank" rel="noopener noreferrer" >
+            <ExternalLink />
           </a>
           <CopyButton />
         </div>
