@@ -148,6 +148,9 @@ export type SingleVehicleType = {
   isTabbySupported: boolean;
   updatedAt: string;
   createdAt: string;
+  vehicleStateValue?: string;
+  vehicleCategoryValue?: string;
+  vehicleTitle?: string;
 };
 
 export type GeneralListingVehicleType = {
@@ -167,6 +170,9 @@ export type GeneralListingVehicleType = {
 export type LiveListingVehicleType = {
   vehicleId: string;
   vehicleModel: string;
+  vehicleTitle?: string;
+  vehicleStateValue?: string;
+  vehicleCategoryValue?: string;
   vehicleCode: string;
   isDisabled: boolean;
   company: {
