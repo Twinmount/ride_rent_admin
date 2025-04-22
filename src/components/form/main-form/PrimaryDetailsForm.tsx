@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -51,6 +51,13 @@ import { FormItemWrapper } from "../form-ui/FormItemWrapper";
 import { FormSubmitButton } from "../form-ui/FormSubmitButton";
 import { FormCheckbox } from "../form-ui/FormCheckbox";
 import SeriesDropdown from "../dropdowns/SeriesDropdown";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -325,33 +332,112 @@ export default function PrimaryDetailsForm({
             const [charCount, setCharCount] = useState(
               field.value?.length || 0,
             );
+            const [isDialogOpen, setIsDialogOpen] = useState(false);
+            const [pendingValue, setPendingValue] = useState("");
+            const [originalValue] = useState(field.value);
+            const inputRef = useRef<HTMLInputElement>(null);
+
+            const focusInputAtEnd = () => {
+              setTimeout(() => {
+                if (inputRef.current) {
+                  inputRef.current.focus();
+                  const length = inputRef.current.value.length;
+                  inputRef.current.setSelectionRange(length, length);
+                }
+              }, 0);
+            };
+
             const handleInputChange = (
               e: React.ChangeEvent<HTMLInputElement>,
             ) => {
-              setCharCount(e.target.value.length);
-              field.onChange(e);
+              const newValue = e.target.value;
+              setCharCount(newValue.length);
+
+              if (
+                originalValue &&
+                originalValue !== newValue &&
+                field.value === originalValue
+              ) {
+                setPendingValue(newValue);
+                setIsDialogOpen(true);
+              } else {
+                field.onChange(e);
+              }
+            };
+
+            const handleConfirm = () => {
+              field.onChange({ target: { value: pendingValue } });
+              setIsDialogOpen(false);
+              focusInputAtEnd();
             };
 
             return (
-              <FormItemWrapper
-                label="URL Label"
-                description={
-                  <>
-                    <span className="w-full max-w-[90%]">
-                      Provide url label. This will be used for creating url
-                      <strong> of the vehicle details page</strong>
-                    </span>{" "}
-                    <span className="ml-auto"> {`${charCount}/50`}</span>
-                  </>
-                }
-              >
-                <Input
-                  placeholder="e.g., 'URL Label'"
-                  value={field.value}
-                  onChange={handleInputChange}
-                  className="input-field"
-                />
-              </FormItemWrapper>
+              <>
+                <FormItemWrapper
+                  label="URL Label"
+                  description={
+                    <>
+                      <span className="w-full max-w-[90%]">
+                        Provide url label. This will be used for creating url
+                        <strong> of the vehicle details page</strong>
+                      </span>{" "}
+                      <span className="ml-auto"> {`${charCount}/50`}</span>
+                    </>
+                  }
+                >
+                  <Input
+                    ref={inputRef}
+                    placeholder="e.g., 'URL Label'"
+                    value={field.value}
+                    onChange={handleInputChange}
+                    className="input-field"
+                    maxLength={50}
+                  />
+                </FormItemWrapper>
+
+                <Dialog
+                  open={isDialogOpen}
+                  onOpenChange={(open) => {
+                    if (!open) {
+                      field.onChange({ target: { value: originalValue } });
+                      focusInputAtEnd();
+                    }
+                    setIsDialogOpen(open);
+                  }}
+                >
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle className="mb-4">
+                        Confirm URL Label Change
+                      </DialogTitle>
+                      <DialogDescription>
+                        Changing this URL label will change existing link. Do
+                        you want to proceed with changes ?
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex justify-end gap-2 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsDialogOpen(false);
+                          field.onChange({ target: { value: originalValue } });
+                          focusInputAtEnd();
+                        }}
+                        className="rounded-md border border-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-100"
+                      >
+                        NO
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleConfirm}
+                        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
+                      >
+                        YES
+                      </button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </>
             );
           }}
         />
