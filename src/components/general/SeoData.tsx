@@ -74,6 +74,28 @@ export default function SeoData({ item, link }: SeoDataProps) {
                 : truncateText(item.metaDescription, 100)}{" "}
             </p>
           </div>
+
+          {!!item.h1 && (
+            <div className="mt-3 flex items-center justify-start">
+              <div className="w-6 text-black">H1</div>
+              <p
+                className={`text-wrap text-sm text-gray-600 ${!isExpanded && "line-clamp-1"}`}
+              >
+                {item.h1}
+              </p>
+            </div>
+          )}
+
+          {!!item.h2 && (
+            <div className="mt-2 flex items-center justify-start">
+              <div className="w-6">H2</div>
+              <p
+                className={`text-wrap text-sm text-gray-600 ${!isExpanded && "line-clamp-1"}`}
+              >
+                {isExpanded ? item.h2 : truncateText(item.h2, 100)}{" "}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Expand/Collapse Button */}

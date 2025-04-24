@@ -26,6 +26,7 @@ import StatesDropdown from "./dropdowns/StatesDropdown";
 import VehicleTypesDropdown from "./dropdowns/VehicleTypesDropdown";
 import MetaCategoryDropdownField from "./dropdowns/MetaCategoryDropdownField";
 import { useQueryClient } from "@tanstack/react-query";
+import { Input } from "../ui/input";
 
 type ListingMetaFormProps = {
   type: "Add" | "Update";
@@ -255,6 +256,56 @@ export default function ListingMetaForm({
                 </FormItem>
               );
             }}
+          />
+
+          <FormField
+            control={form.control}
+            name="h1"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  H1 <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <Input
+                      placeholder="Best Affordable vehicle in  Dubai"
+                      {...field}
+                      className="rounded-xl"
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Provide the meta title for the selected state home page
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="h2"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+                  H2 <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <Input
+                      placeholder="Best Affordable vehicle in  Dubai"
+                      {...field}
+                      className="rounded-xl"
+                    />
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Provide the meta title for the selected state home page
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
+            )}
           />
         </div>
 
