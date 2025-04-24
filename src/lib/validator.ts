@@ -332,6 +332,8 @@ export const ListingMetaFormSchema = z.object({
     .string()
     .min(1, "Meta description is required")
     .max(5000, "Meta description must be 5000 characters or less"),
+  h1: z.string().max(60, "H1 can be maximum 60 characters long"),
+  h2: z.string().max(160, "H2 can be maximum 160 characters long"),
 });
 
 // blog form schema
