@@ -269,13 +269,13 @@ export default function ListingMetaForm({
                 <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
-                      placeholder="Best Affordable vehicle in  Dubai"
+                      placeholder="Best Affordable vehicle in Dubai"
                       {...field}
                       className="rounded-xl"
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    Provide the meta title for the selected state home page
+                    Provide the H1 for the selected listing page
                   </FormDescription>
                   <FormMessage className="ml-2" />
                 </div>
@@ -294,13 +294,13 @@ export default function ListingMetaForm({
                 <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
-                      placeholder="Best Affordable vehicle in  Dubai"
+                      placeholder="Best Affordable vehicle in Dubai"
                       {...field}
                       className="rounded-xl"
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    Provide the meta title for the selected state home page
+                    Provide the H2 for the selected listing page
                   </FormDescription>
                   <FormMessage className="ml-2" />
                 </div>
