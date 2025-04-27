@@ -9,6 +9,7 @@ import Pagination from "@/components/Pagination";
 import { useCategories } from "@/hooks/useCategories";
 import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
 import { useFetchStates } from "@/hooks/useFetchStates";
+import FloatingActionButton from "@/components/general/FloatingActionButton";
 
 export default function ListingMetaDataPage() {
   const [page, setPage] = useState(1);
@@ -88,6 +89,11 @@ export default function ListingMetaDataPage() {
           ))
         )}
       </section>
+
+      <FloatingActionButton
+        href={`/meta-data/listing/add`}
+        label="New Listing Meta Data"
+      />
 
       <Pagination
         page={page}
