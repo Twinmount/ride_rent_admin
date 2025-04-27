@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import * as z from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import {
   Form,
@@ -10,23 +10,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from "@/components/ui/form";
 
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { VehicleTypeFormType } from '@/types/types'
-import { VehicleTypeFormSchema } from '@/lib/validator'
-import { VehicleTypeFormDefaultValues } from '@/constants'
-import Spinner from '../general/Spinner'
-import { addVehicleType, updateVehicleType } from '@/api/vehicle-types'
-import { toast } from '../ui/use-toast'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { VehicleTypeFormType } from "@/types/types";
+import { VehicleTypeFormSchema } from "@/lib/validator";
+import { VehicleTypeFormDefaultValues } from "@/constants";
+import Spinner from "../general/Spinner";
+import { addVehicleType, updateVehicleType } from "@/api/vehicle-types";
+import { toast } from "../ui/use-toast";
+import { useNavigate, useParams } from "react-router-dom";
 
 type VehicleTypeFormProps = {
-  type: 'Add' | 'Update'
-  category?: string | undefined
-  formData?: VehicleTypeFormType | null
-}
+  type: "Add" | "Update";
+  category?: string | undefined;
+  formData?: VehicleTypeFormType | null;
+};
 
 export default function VehicleTypeForm({
   type,
@@ -34,48 +34,48 @@ export default function VehicleTypeForm({
   formData,
 }: VehicleTypeFormProps) {
   const initialValues =
-    formData && type === 'Update' ? formData : VehicleTypeFormDefaultValues
+    formData && type === "Update" ? formData : VehicleTypeFormDefaultValues;
 
   const { vehicleCategoryId, vehicleTypeId } = useParams<{
-    vehicleCategoryId: string
-    vehicleTypeId: string
-  }>()
-  const navigate = useNavigate()
+    vehicleCategoryId: string;
+    vehicleTypeId: string;
+  }>();
+  const navigate = useNavigate();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof VehicleTypeFormSchema>>({
     resolver: zodResolver(VehicleTypeFormSchema),
     defaultValues: initialValues,
-  })
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof VehicleTypeFormSchema>) {
     try {
-      let data
-      if (type === 'Add') {
-        data = await addVehicleType(values, vehicleCategoryId as string)
-      } else if (type === 'Update') {
-        data = await updateVehicleType(values, vehicleTypeId as string)
+      let data;
+      if (type === "Add") {
+        data = await addVehicleType(values, vehicleCategoryId as string);
+      } else if (type === "Update") {
+        data = await updateVehicleType(values, vehicleTypeId as string);
       }
 
       if (data) {
         toast({
           title: `${type} Vehicle type successfully`,
-          className: 'bg-yellow text-white',
-        })
-        if (type === 'Add') {
-          navigate(`/manage-types/${vehicleCategoryId}`)
+          className: "bg-yellow text-white",
+        });
+        if (type === "Add") {
+          navigate(`/vehicle/manage-types/${vehicleCategoryId}`);
         } else {
-          navigate(`/manage-types/`)
+          navigate(`/vehicle/manage-types/`);
         }
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
-        variant: 'destructive',
+        variant: "destructive",
         title: `${type} Vehicle type failed`,
-        description: 'Something went wrong',
-      })
+        description: "Something went wrong",
+      });
     }
   }
 
@@ -83,16 +83,16 @@ export default function VehicleTypeForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
+        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
-        <div className="flex flex-col gap-5 r ">
+        <div className="r flex flex-col gap-5">
           {/* type title */}
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Vehicle Type Name</FormLabel>
+              <FormItem className="mb-2 w-full">
+                <FormLabel className="ml-2">Vehicle Type Name</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg: 'Airport Pickup'"
@@ -101,7 +101,7 @@ export default function VehicleTypeForm({
                   />
                 </FormControl>
                 <FormDescription className="ml-2">
-                  Add your new <span className="font-semibold">{category}</span>{' '}
+                  Add your new <span className="font-semibold">{category}</span>{" "}
                   type name.
                 </FormDescription>
                 <FormMessage className="ml-2" />
@@ -114,8 +114,8 @@ export default function VehicleTypeForm({
             control={form.control}
             name="value"
             render={({ field }) => (
-              <FormItem className="w-full mb-2 ">
-                <FormLabel className="ml-2 ">Vehicle Type Value</FormLabel>
+              <FormItem className="mb-2 w-full">
+                <FormLabel className="ml-2">Vehicle Type Value</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="eg: 'airport_pickup'"
@@ -138,18 +138,18 @@ export default function VehicleTypeForm({
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
+          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
         >
           {form.formState.isSubmitting
-            ? 'Submitting...'
-            : `${type} ${category} type `}{' '}
+            ? "Submitting..."
+            : `${type} ${category} type `}{" "}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
-        <p className="p-0 m-0 -mt-3 text-xs text-center text-red-500">
+        <p className="m-0 -mt-3 p-0 text-center text-xs text-red-500">
           Make sure appropriate vehicle category is selected before adding a
           type. Currently adding type under {category} vehicle category
         </p>
       </form>
     </Form>
-  )
+  );
 }

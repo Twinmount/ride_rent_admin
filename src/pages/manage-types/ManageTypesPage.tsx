@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import CategoryDropdown from "@/components/VehicleCategoryDropdown";
 import { fetchAllCategories } from "@/api/vehicle-categories";
 import { fetchAllVehicleTypes } from "@/api/vehicle-types";
-import { CategoryType } from "@/types/api-types/API-types";
+import { CategoryType, VehicleTypeType } from "@/types/api-types/API-types";
 import GridSkelton from "@/components/skelton/GridSkelton";
-import { Plus } from "lucide-react";
 import Pagination from "@/components/Pagination";
+import FloatingActionButton from "@/components/general/FloatingActionButton";
 
 export default function ManageTypesPage() {
   const [page, setPage] = useState(1);
@@ -69,8 +69,6 @@ export default function ManageTypesPage() {
     }
   }, [vehicleCategoryId, categories]);
 
-  const baseAssetsUrl = import.meta.env.VITE_ASSETS_URL;
-
   return (
     <section className="container h-auto min-h-screen pb-10">
       <div className="flex-between mb-6 h-20 px-10">
@@ -94,23 +92,12 @@ export default function ManageTypesPage() {
       ) : list && list.length > 0 ? (
         <div className="grid grid-cols-2 place-items-center gap-4 gap-y-4 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {list.map((data) => (
-            <Link
+            <VehicleTypeCard
               key={data.typeId}
-              to={`/vehicle/manage-types/${vehicleCategoryId}/edit/${data.typeId}`}
-              className="flex-center flex h-36 w-full flex-col overflow-hidden rounded-lg border bg-white text-xl font-semibold capitalize shadow-md transition-all hover:border-yellow hover:text-yellow"
-            >
-              <div className="mx-auto h-[80%] w-[90%]">
-                <img
-                  src={`${baseAssetsUrl}/icons/vehicle-types/${selectedCategory?.value}/${data.value}.webp`}
-                  alt={`${data.name} logo`}
-                  className="h-full w-full object-contain"
-                />
-              </div>
-              <span className="w-[95%] truncate text-center text-sm">
-                {" "}
-                {data.name}
-              </span>
-            </Link>
+              data={data}
+              selectedCategory={selectedCategory!}
+              vehicleCategoryId={vehicleCategoryId!}
+            />
           ))}
         </div>
       ) : (
@@ -120,14 +107,10 @@ export default function ManageTypesPage() {
       )}
 
       {/* add new category */}
-      <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
-        <Link
-          className="flex-center flex-center gap-x-1 bg-yellow px-3 py-2 text-white shadow-xl transition-all hover:scale-[1.02]"
-          to={`/vehicle/manage-types/${selectedCategory?.categoryId}/add`}
-        >
-          New Type <Plus />
-        </Link>
-      </button>
+      <FloatingActionButton
+        href={`/vehicle/manage-types/${selectedCategory?.categoryId}/add`}
+        label="New Type"
+      />
 
       {list.length > 0 && (
         <div className="mt-auto">
@@ -141,3 +124,33 @@ export default function ManageTypesPage() {
     </section>
   );
 }
+
+// individual vehicle type card
+const VehicleTypeCard = ({
+  data,
+  selectedCategory,
+  vehicleCategoryId,
+}: {
+  data: VehicleTypeType;
+  selectedCategory: CategoryType;
+  vehicleCategoryId: string;
+}) => {
+  const baseAssetsUrl = import.meta.env.VITE_ASSETS_URL;
+
+  return (
+    <Link
+      key={data.typeId}
+      to={`/vehicle/manage-types/${vehicleCategoryId}/edit/${data.typeId}`}
+      className="flex-center flex h-36 w-full flex-col overflow-hidden rounded-lg border bg-white text-xl font-semibold capitalize shadow-md transition-all hover:border-yellow hover:text-yellow"
+    >
+      <div className="mx-auto h-[80%] w-[90%]">
+        <img
+          src={`${baseAssetsUrl}/icons/vehicle-types/${selectedCategory?.value}/${data.value}.webp`}
+          alt={`${data.name} logo`}
+          className="h-full w-full object-contain"
+        />
+      </div>
+      <span className="w-[95%] truncate text-center text-sm"> {data.name}</span>
+    </Link>
+  );
+};
