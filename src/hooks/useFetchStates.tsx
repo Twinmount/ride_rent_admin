@@ -1,37 +1,41 @@
-import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { StateType } from "@/types/api-types/vehicleAPI-types";
 import { fetchAllStates } from "@/api/states";
+import { useAdminContext } from "@/context/AdminContext";
+import { useImmer } from "use-immer";
 
-export const useFetchStates = () => {
-  const [selectedState, setSelectedState] = useState<StateType | null>(null);
+type filterType = {
+  count: number | null;
+  searchTerm: string | null;
+  stateId: string | null;
+};
 
+export const useFetchStates = (parentStateId: string | null = null) => {
+  const [filter, setFilter] = useImmer<filterType>({
+    count: 4,
+    searchTerm: null,
+    stateId: null,
+  });
+
+  const { country } = useAdminContext();
   // Fetch categories
   const { data, isLoading: isStateLoading } = useQuery({
-    queryKey: ["states"],
-    queryFn: fetchAllStates,
+    queryKey: ["states", country.countryId, parentStateId, filter],
+    queryFn: () =>
+      fetchAllStates(
+        country.countryId,
+        parentStateId,
+        filter.count,
+        filter.searchTerm,
+        filter.stateId,
+      ),
   });
 
   const statesResult = data?.result || [];
 
-  // Set default category to "cars"
-  useEffect(() => {
-    if (statesResult) {
-      const defaultState = statesResult.find(
-        (state) => state.stateValue === "dubai",
-      );
-      if (defaultState) {
-        setSelectedState(defaultState);
-      } else {
-        setSelectedState(statesResult[0]);
-      }
-    }
-  }, [statesResult]);
-
   return {
-    selectedState,
-    setSelectedState,
     statesList: statesResult,
     isStateLoading,
+    filter,
+    setFilter,
   };
 };

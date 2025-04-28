@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSearchCompanies } from "@/api/company";
 import { promotedCompanyType } from "@/types/api-types/API-types";
+import { useAdminContext } from "@/context/AdminContext";
 
 type PropType = {
   onSelect: (company: promotedCompanyType) => void;
@@ -14,6 +15,9 @@ export default function PromotedCompanySearchDropdown({
 }: PropType) {
   const [search, setSearch] = useState(""); // Updates instantly as user types
   const [debouncedSearch, setDebouncedSearch] = useState(""); // Updates after debounce delay
+  const {
+    country: { countryId },
+  } = useAdminContext();
 
   // Handle input change (updates instantly)
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +36,7 @@ export default function PromotedCompanySearchDropdown({
   // Fetch search results using `debouncedSearch`
   const { data, isFetching } = useQuery({
     queryKey: ["search-companies", debouncedSearch],
-    queryFn: () => fetchSearchCompanies(debouncedSearch),
+    queryFn: () => fetchSearchCompanies(debouncedSearch, countryId),
     enabled: debouncedSearch.length > 1, // Fetch only if input has 2+ chars
     staleTime: 1000 * 60 * 5, // Cache results for 5 minutes
   });

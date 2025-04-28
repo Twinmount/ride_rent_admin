@@ -21,6 +21,7 @@ export interface GetAllCompanyType {
   edited?: boolean;
   approvalStatus?: "APPROVED" | "PENDING" | "REJECTED" | "UNDER_REVIEW";
   search?: string;
+  countryId: string;
 }
 
 export const addCompany = async (values: CompanyFormType, userId: string) => {
@@ -137,6 +138,7 @@ export const getAllCompany = async ({
   edited,
   approvalStatus,
   search,
+  countryId,
 }: GetAllCompanyType): Promise<FetchCompaniesResponse> => {
   try {
     const params = new URLSearchParams();
@@ -149,6 +151,7 @@ export const getAllCompany = async ({
       params.append("newRegistration", newRegistration.toString());
     if (edited) params.append("edited", edited.toString());
     if (approvalStatus) params.append("approvalStatus", approvalStatus);
+    if (countryId) params.append("countryId", countryId);
 
     const queryString = params.toString();
     const url = `${Slug.GET_ALL_COMPANY}?${queryString}`;
@@ -275,10 +278,11 @@ export const removePromotedCompany = async (params: {
 
 export const fetchSearchCompanies = async (
   search: string,
+  countryId: string,
 ): Promise<FetchPromotedCompaniesSearchResponse> => {
   try {
     const data = await API.get<FetchPromotedCompaniesSearchResponse>({
-      slug: `${Slug.GET_PROMOTED_COMPANIES_SEARCH}?search=${search}`,
+      slug: `${Slug.GET_PROMOTED_COMPANIES_SEARCH}?search=${search}&countryId=${countryId}`,
     });
 
     if (!data) {

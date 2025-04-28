@@ -41,6 +41,9 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
 
   const queryClient = useQueryClient();
 
+  const isIndividual = formData?.accountType === "individual";
+  const isIndia = formData?.countryName === "India";
+
   const initialValues =
     formData && type === "Update"
       ? {
@@ -111,11 +114,11 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           name="companyName"
           render={({ field }) => (
             <FormItemWrapper
-              label="Company Name"
-              description="Enter your company name."
+              label={`${!isIndividual ? "Company" : ""} Name`}
+              description={`Enter your ${!isIndividual ? "company" : ""} name`}
             >
               <Input
-                placeholder="Company Name"
+                placeholder={`${!isIndividual ? "Company" : ""} Name`}
                 {...field}
                 className="input-field"
               />
@@ -130,8 +133,12 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           render={({ field }) => (
             <SingleFileUpload
               name={field.name}
-              label="Company Logo"
-              description="Company logo can have a maximum size of 5MB."
+              label={isIndividual ? "Photo" : "Company Logo"}
+              description={
+                isIndividual
+                  ? "Photo can have a maximum size of 5MB."
+                  : "Company Logo can have a maximum size of 5MB."
+              }
               existingFile={formData?.companyLogo}
               maxSizeMB={5}
               setIsFileUploading={setIsFileUploading}
@@ -154,11 +161,23 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           render={({ field }) => (
             <SingleFileUpload
               name={field.name}
-              label="Commercial License"
+              label={
+                isIndia && !isIndividual
+                  ? "Registration Detail"
+                  : isIndia && isIndividual
+                    ? "Commercial Registration"
+                    : "Commercial License"
+              }
               description={
                 <>
                   Please upload a <strong>PHOTO</strong> or a{" "}
-                  <strong>SCREENSHOT</strong> of your commercial license,
+                  <strong>SCREENSHOT</strong> of your{" "}
+                  {isIndia && !isIndividual
+                    ? `Company Registration / GST Registration / Trade License,`
+                    : isIndia && isIndividual
+                      ? "Commercial Registration / Tourist Permit"
+                      : `commercial license,
+                  `}{" "}
                   maximum file size 5MB.
                 </>
               }
@@ -184,7 +203,15 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           render={({ field }) => (
             <FormItemWrapper
               label="Expiry Date"
-              description="Enter the expiry of your Commercial License/Trade License."
+              description={`Enter the expiry of your
+                ${
+                  isIndia && !isIndividual
+                    ? " Commercial License / GST Registration / Trade License"
+                    : isIndia && isIndividual
+                      ? " Commercial Registration / Tourist Permit"
+                      : " Commercial License / Trade License"
+                }{" "}
+                &#40;DD/MM/YYYY&#41;.`}
             >
               <DatePicker
                 selected={field.value}
@@ -202,11 +229,27 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           name="regNumber"
           render={({ field }) => (
             <FormItemWrapper
-              label="Registration Number/Trade License Number"
-              description="Enter your company registration number. The number should be a combination of letters and numbers, without any spaces or special characters, up to 15 characters."
+              label={`${
+                isIndia && !isIndividual
+                  ? "GST Number"
+                  : isIndia && isIndividual
+                    ? "PAN Number"
+                    : "Registration Number / Trade License Number"
+              }`}
+              description={`${
+                isIndia && !isIndividual
+                  ? `Enter your company GST number. The number should be a combination of letters and numbers, without any spaces or special characters.`
+                  : isIndia && isIndividual
+                    ? "Enter your company PAN. The number should be a combination of letters and numbers, without any spaces or special characters."
+                    : `Enter your company registration number. The number should be a combination of letters and numbers, without any spaces or special characters, up to 15 characters.`
+              }`}
             >
               <Input
-                placeholder="Enter company registration number"
+                placeholder={
+                  isIndia
+                    ? "Enter your company GST number"
+                    : "Enter your company registration number"
+                }
                 {...field}
                 className="input-field"
               />
@@ -221,9 +264,11 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           render={({ field }) => (
             <FormItemWrapper
               label="Supported Languages"
-              description="Select all the languages the staff can speak or understand.
-                  These will be displayed on company's public profile page,
-                  helping customers feel comfortable with communication."
+              description={`${
+                isIndividual
+                  ? "Select all the languages you can speak or understand. These will be shown on your public profile to help customers communicate comfortably with you."
+                  : "Select all the languages your staff can speak or understand. These will be displayed on your company's public profile page, helping customers feel comfortable with communication."
+              }`}
             >
               <CompanyLanguagesDropdown
                 value={field.value}
@@ -254,12 +299,13 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
 
             return (
               <FormItemWrapper
-                label="Company Address"
+                label={isIndividual ? "Address" : "Company Address"}
                 description={
                   <>
                     <span className="w-full max-w-[90%]">
-                      Provide company address. This will be showed in the public
-                      company profile page. 150 characters max.
+                      {isIndividual
+                        ? "Provide your address. It will appear on your public profile and must match your registered details"
+                        : "Provide company address. This will be showed in your public company profile page. 150 characters max."}
                     </span>{" "}
                     <span className="ml-auto"> {`${charCount}/150`}</span>
                   </>

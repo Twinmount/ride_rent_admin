@@ -118,6 +118,7 @@ const StateFaqForm = ({
 }) => {
   const [faqs, setFaqs] = useState<FAQItem[]>(data.faqs);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  console.log(data);
 
   const handleChange = (index: number, field: keyof FAQItem, value: string) => {
     setFaqs((prev) =>
@@ -163,7 +164,7 @@ const StateFaqForm = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="min-w-[650px] space-y-4">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

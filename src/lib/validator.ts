@@ -56,6 +56,8 @@ export const StateFormSchema = z.object({
     ),
   stateImage: z.string().min(1, "State image is required"),
   relatedStates: z.array(z.string()).optional(),
+  parentStateId: z.string().optional(),
+  isParentState: z.boolean().optional(),
 });
 
 // City Form Schema

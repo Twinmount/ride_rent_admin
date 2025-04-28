@@ -494,7 +494,7 @@ export default function PrimaryDetailsForm({
             >
               <StatesDropdown
                 onChangeHandler={(value) => {
-                  field.onChange(value);
+                  field.onChange(value.stateId);
                   // when state changes, vehicle series and metadata fields
                   form.setValue("cityIds", []);
                   form.setValue("vehicleSeriesId", "");

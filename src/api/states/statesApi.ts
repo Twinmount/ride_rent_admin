@@ -1,6 +1,7 @@
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
+  FetchCountryResponse,
   FetchSpecificStateResponse,
   FetchStatesResponse,
   GetStateFAQResponse,
@@ -10,10 +11,17 @@ export interface StateType {
   stateName: string;
   stateValue: string;
   stateImage: string;
+  parentStateId?: string | null;
+  countryId?: string | null;
+  isParentState?: boolean | null;
 }
 
 // add state
-export const addState = async (values: StateType, selectedStates: string[]) => {
+export const addState = async (
+  values: StateType,
+  selectedStates: string[],
+  countryId?: string | null,
+) => {
   try {
     const data = await API.post({
       slug: Slug.ADD_STATE,
@@ -21,7 +29,10 @@ export const addState = async (values: StateType, selectedStates: string[]) => {
         stateName: values.stateName,
         stateValue: values.stateValue,
         stateImage: values.stateImage,
+        parentStateId: values.parentStateId,
+        countryId: countryId,
         relatedStates: selectedStates,
+        isParentState: values.isParentState,
       },
     });
 
@@ -79,10 +90,38 @@ export const fetchStateById = async (
 };
 
 // fetch all States
-export const fetchAllStates = async (): Promise<FetchStatesResponse> => {
+export const fetchAllStates = async (
+  countryId?: string | null,
+  parentStateId?: string | null,
+  count?: number | null,
+  searchTerm?: string | null,
+  stateId?: string | null,
+): Promise<FetchStatesResponse> => {
   try {
+    let params = new URLSearchParams();
+
+    if (countryId) {
+      params.append("countryId", countryId);
+    }
+    if (parentStateId) {
+      params.append("parentStateId", parentStateId);
+    }
+    if (stateId) {
+      params.append("stateId", stateId);
+    }
+    if (count) {
+      params.append("count", JSON.stringify(count));
+    }
+    if (searchTerm) {
+      params.append("searchTerm", searchTerm);
+    }
+
+    const slug = params.toString()
+      ? `${Slug.GET_ALL_STATES}?${params.toString()}`
+      : `${Slug.GET_ALL_STATES}`;
+
     const data = await API.get<FetchStatesResponse>({
-      slug: Slug.GET_ALL_STATES,
+      slug: slug,
     });
 
     if (!data) {
@@ -92,6 +131,48 @@ export const fetchAllStates = async (): Promise<FetchStatesResponse> => {
     return data;
   } catch (error) {
     console.error("Error fetching States:", error);
+    throw error;
+  }
+};
+
+export const fetchAllParentStatesByCountryId = async (
+  countryId: string,
+): Promise<FetchStatesResponse> => {
+  try {
+    let slug = `${Slug.GET_ALL_PARENT_STATES}`;
+
+    if (!!countryId) {
+      slug = slug + `?countryId=${countryId}`;
+    }
+
+    const data = await API.get<FetchStatesResponse>({
+      slug: slug,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch state data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching States:", error);
+    throw error;
+  }
+};
+
+export const fetchAllCountry = async (): Promise<FetchCountryResponse> => {
+  try {
+    const data = await API.get<FetchCountryResponse>({
+      slug: Slug.GET_ALL_COUNTRY,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch country data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching Country:", error);
     throw error;
   }
 };

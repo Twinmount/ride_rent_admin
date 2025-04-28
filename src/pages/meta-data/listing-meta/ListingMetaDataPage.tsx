@@ -9,12 +9,15 @@ import Pagination from "@/components/Pagination";
 import { useCategories } from "@/hooks/useCategories";
 import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
 import { useFetchStates } from "@/hooks/useFetchStates";
+import { Link } from "react-router-dom";
+import { Plus } from "lucide-react";
+import { StateType } from "@/types/api-types/vehicleAPI-types";
 
 export default function ListingMetaDataPage() {
   const [page, setPage] = useState(1);
+  const [selectedState, setSelectedState] = useState<StateType | null>(null);
 
-  const { isStateLoading, selectedState, statesList, setSelectedState } =
-    useFetchStates();
+  const { isStateLoading, statesList, setFilter } = useFetchStates();
 
   const {
     selectedCategory,
@@ -39,7 +42,7 @@ export default function ListingMetaDataPage() {
         categoryId: selectedCategory?.categoryId || "",
         stateId: selectedState?.stateId as string,
       }),
-    enabled: !!selectedCategory, // Fetch only when category is selected
+    enabled: !!selectedCategory && !!selectedState?.stateId, // Fetch only when category is selected
   });
 
   const seoData = data?.result?.list || [];
@@ -59,6 +62,7 @@ export default function ListingMetaDataPage() {
             options={statesList}
             selectedState={selectedState}
             setSelectedState={setSelectedState}
+            setFilter={setFilter}
           />
 
           {/* category dropdown */}
@@ -88,7 +92,14 @@ export default function ListingMetaDataPage() {
           ))
         )}
       </section>
-
+      <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
+        <Link
+          className="flex-center gap-x-1 bg-yellow px-3 py-2 text-white"
+          to="add"
+        >
+          Add New <Plus />
+        </Link>
+      </button>
       <Pagination
         page={page}
         setPage={setPage}

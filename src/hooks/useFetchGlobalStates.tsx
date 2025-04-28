@@ -2,40 +2,67 @@ import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { useAdminContext } from "@/context/AdminContext";
-import { NavbarStateType } from "@/types/types";
+import { countryType, NavbarStateType } from "@/types/types";
 import { getAllVehicleListingCount } from "@/api/vehicle";
+import { useCountryListQuery } from "./query/useCountryListQuery";
 
 const LOCAL_STORAGE_KEY = "selectedState";
+const LOCAL_STORAGE_COUNTRY_KEY = "selectedCountry";
 
 export function useFetchGlobalStates() {
-  const { state, setState } = useAdminContext();
+  const { state, setState, setCountry, country } = useAdminContext();
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["states-with-listing-count"],
-    queryFn: getAllVehicleListingCount,
+  const stateListQuery = useCountryListQuery({ enabled: true });
+  const { data: countryList, isLoading: isCountryLoading } =
+    !!stateListQuery && stateListQuery;
+
+  const {
+    data,
+    isLoading: isStateLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["states-with-listing-count", country.countryId],
+    queryFn: () => getAllVehicleListingCount(country.countryId),
+    enabled: !!country.countryValue && !isCountryLoading,
     staleTime: 0,
   });
 
   const options: NavbarStateType[] = data?.result || [];
+  const countryOption: countryType[] = countryList?.result || [];
+  const isLoading = isCountryLoading || isStateLoading;
 
-  // Sync selected state with localStorage
   useEffect(() => {
-    if (!isLoading && options.length) {
-      // Try to get stored state from localStorage
+    if (!isCountryLoading && countryOption.length) {
+      const storedCountry = localStorage.getItem(LOCAL_STORAGE_COUNTRY_KEY);
+      const parsedCountry = storedCountry ? JSON.parse(storedCountry) : null;
+
+      if (parsedCountry) {
+        setCountry(parsedCountry);
+      } else {
+        const uaeCountry = countryOption.find(
+          (s) => s.countryValue.toLowerCase() === "UAE",
+        );
+        setCountry(uaeCountry || countryOption[0]);
+      }
+    }
+  }, [isCountryLoading, countryOption, setCountry]);
+
+  useEffect(() => {
+    if (!isStateLoading && options.length) {
       const storedState = localStorage.getItem(LOCAL_STORAGE_KEY);
       const parsedState = storedState ? JSON.parse(storedState) : null;
 
       if (parsedState) {
-        setState(parsedState); // Restore user's selection
+        setState(parsedState);
       } else {
-        // Default to Dubai if no previous selection
         const dubaiState = options.find(
           (s) => s.stateValue.toLowerCase() === "dubai",
         );
-        setState(dubaiState || options[0]); // Default to Dubai or first option
+        setState(dubaiState || options[0]);
       }
     }
-  }, [isLoading, options, setState]);
+  }, [isStateLoading, options, setState]);
 
   // Save selected state to localStorage when it changes
   useEffect(() => {
@@ -44,5 +71,11 @@ export function useFetchGlobalStates() {
     }
   }, [state]);
 
-  return { options, isLoading, isError, error };
+  useEffect(() => {
+    if (country.countryId) {
+      localStorage.setItem(LOCAL_STORAGE_COUNTRY_KEY, JSON.stringify(country));
+    }
+  }, [country]);
+
+  return { options, countryOption, isLoading, isError, error };
 }

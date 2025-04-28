@@ -3,13 +3,15 @@ import { useAdminContext } from "@/context/AdminContext";
 import { Menu } from "lucide-react";
 
 import NavbarStatesDropdown from "../NavbarStatesDropdown";
-import { NavbarStateType } from "@/types/types";
+import { countryType, NavbarStateType } from "@/types/types";
+import NavbarCountryDropdown from "../NavbarCountryDropdown";
 
 type NavbarProps = {
   options: NavbarStateType[];
+  countryOption: countryType[];
   isLoading: boolean;
 };
-const Navbar = ({ options, isLoading }: NavbarProps) => {
+const Navbar = ({ options, countryOption, isLoading }: NavbarProps) => {
   const { isSidebarOpen, toggleSidebar, isSmallScreen } = useAdminContext();
 
   return (
@@ -51,8 +53,11 @@ const Navbar = ({ options, isLoading }: NavbarProps) => {
             onClick={toggleSidebar}
           />
         )}
-
-        <div className="flex-center mr-6 gap-x-4">
+        <div className="flex-center mr-6 gap-x-1">
+          <NavbarCountryDropdown
+            options={countryOption}
+            isLoading={isLoading}
+          />
           <NavbarStatesDropdown options={options} isLoading={isLoading} />
         </div>
       </nav>

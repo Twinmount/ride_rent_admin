@@ -27,23 +27,46 @@ import { deleteMultipleFiles } from "@/helpers/form";
 import SingleFileUpload from "./file-uploads/SingleFileUpload";
 import { useStateListQuery } from "@/hooks/query/useStateListQuery";
 import Select from "react-select";
+import { useAdminContext } from "@/context/AdminContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 type StateFormProps = {
   type: "Add" | "Update";
   formData?: StateFormType | null;
+  parentStateId?: string | null;
 };
 
-export default function StateForm({ type, formData }: StateFormProps) {
+export default function StateForm({
+  type,
+  formData,
+  parentStateId,
+}: StateFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
+  const queryClient = useQueryClient();
+
+  const { country } = useAdminContext();
+  const countryName = country.countryValue;
+  const isIndia = countryName === "India";
+
   const initialValues =
-    formData && type === "Update" ? formData : StateFormDefaultValues;
+    formData && type === "Update"
+      ? formData
+      : {
+          ...StateFormDefaultValues,
+          ...(parentStateId ? { parentStateId } : {}),
+          ...(!parentStateId && isIndia ? { isParentState: true } : {}),
+        };
 
   const navigate = useNavigate();
   const { stateId } = useParams<{ stateId: string }>();
 
-  const stateListQuery = useStateListQuery({ enabled: true });
+  const { query: stateListQuery } = useStateListQuery({
+    enabled: true,
+    parentStateId,
+  });
+
   const { data: stateList } = !!stateListQuery && stateListQuery;
   const stateOptions = stateList?.result
     ?.filter((c: any) => c.stateId !== initialValues.stateId)
@@ -84,7 +107,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
     try {
       let data;
       if (type === "Add") {
-        data = await addState(values, selectedStates);
+        data = await addState(values, selectedStates, country.countryId);
       } else if (type === "Update") {
         data = await updateState(values, stateId as string, selectedStates);
       }
@@ -99,6 +122,25 @@ export default function StateForm({ type, formData }: StateFormProps) {
           title: `${type} State successfully`,
           className: "bg-yellow text-white",
         });
+
+        try {
+          await queryClient.invalidateQueries({
+            queryKey: [
+              "states",
+              country.countryId,
+              isIndia && parentStateId ? parentStateId : null,
+            ],
+            exact: true,
+          });
+
+          if (parentStateId) {
+            await queryClient.invalidateQueries({
+              queryKey: ["parent-states", country.countryId],
+            });
+          }
+        } catch (error) {
+          console.error("Query invalidation failed:", error);
+        }
 
         navigate("/locations/manage-states");
       }
@@ -126,7 +168,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
                 <FormLabel className="ml-2 mt-4 flex w-56 justify-between text-base max-sm:w-fit lg:text-lg">
-                  State Name
+                  {!!parentStateId ? "Location" : "State"} Name
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
@@ -139,7 +181,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
                     />
                   </FormControl>
                   <FormDescription className="ml-2">
-                    Add your State Name
+                    Add your {!!parentStateId ? "Location" : "State"} Name
                   </FormDescription>
                   <FormMessage className="ml-2" />
                 </div>
@@ -154,7 +196,8 @@ export default function StateForm({ type, formData }: StateFormProps) {
             render={({ field }) => (
               <FormItem className="mb-2 flex w-full max-sm:flex-col">
                 <FormLabel className="ml-2 mt-4 flex w-56 justify-between text-base max-sm:w-fit lg:text-lg">
-                  State Value<span className="mr-5 max-sm:hidden">:</span>
+                  {!!parentStateId ? "Location" : "State"} Value
+                  <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div className="w-full flex-col items-start">
                   <FormControl>
@@ -180,7 +223,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
             render={({ field }) => (
               <SingleFileUpload
                 name={field.name}
-                label="State Image"
+                label={`${!!parentStateId ? "Location" : "State"} Image`}
                 description="Upload an image with a maximum file size of 1mb."
                 isDownloadable
                 existingFile={formData?.stateImage || null}
@@ -191,38 +234,46 @@ export default function StateForm({ type, formData }: StateFormProps) {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="relatedStates"
-            render={() => (
-              <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-56 justify-between text-base max-sm:w-fit lg:text-lg">
-                  Related States <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="w-full flex-col items-start">
-                  <FormControl>
-                    <Select
-                      isMulti
-                      options={stateOptions || []}
-                      value={selectedStates
-                        .map((stateId) => stateOptions?.find((opt) => opt.value === stateId))
-                        .filter(Boolean)}
-                      onChange={(selected: any) =>
-                        setSelectedStates(selected.map((opt: any) => opt.value))
-                      }
-                      menuPlacement="auto"
-                      className="basic-multi-select"
-                      classNamePrefix="select"
-                    />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Select related states in any order.
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
+          {!(!parentStateId && isIndia) && (
+            <FormField
+              control={form.control}
+              name="relatedStates"
+              render={() => (
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-56 justify-between text-base max-sm:w-fit lg:text-lg">
+                    Related {!!parentStateId ? "Locations" : "States"}{" "}
+                    <span className="mr-5 max-sm:hidden">:</span>
+                  </FormLabel>
+                  <div className="w-full flex-col items-start">
+                    <FormControl>
+                      <Select
+                        isMulti
+                        options={stateOptions || []}
+                        value={selectedStates
+                          .map((stateId) =>
+                            stateOptions?.find((opt) => opt.value === stateId),
+                          )
+                          .filter(Boolean)}
+                        onChange={(selected: any) =>
+                          setSelectedStates(
+                            selected.map((opt: any) => opt.value),
+                          )
+                        }
+                        menuPlacement="auto"
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                      />
+                    </FormControl>
+                    <FormDescription className="ml-2">
+                      Select related {!!parentStateId ? "locations" : "states"}{" "}
+                      in any order.
+                    </FormDescription>
+                    <FormMessage className="ml-2" />
+                  </div>
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         {/* submit  */}
@@ -236,7 +287,7 @@ export default function StateForm({ type, formData }: StateFormProps) {
             ? "Uploading..."
             : form.formState.isSubmitting
               ? "Processing..."
-              : `${type} State`}
+              : `${type} ${!!parentStateId ? "Location" : "State"}`}
           {form.formState.isSubmitting && <Spinner />}
         </Button>
       </form>

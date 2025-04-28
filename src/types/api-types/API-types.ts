@@ -43,9 +43,21 @@ export interface StateType {
   stateImage: any;
 }
 
+export interface CountryType {
+  countryId: string;
+  countryName: string;
+  countryValue: string;
+}
+
 //  interface for the get-all-states  API response
 export interface FetchStatesResponse {
   result: StateType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchCountryResponse {
+  result: CountryType[];
   status: string;
   statusCode: number;
 }
@@ -257,6 +269,7 @@ export interface companyType {
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;
+  accountType: string;
 }
 
 //  interface for the get-all-companies  API response
@@ -302,8 +315,8 @@ export interface HomeMetaListData {
   categoryId: string;
   metaTitle: string;
   metaDescription: string;
-  h1?: string; 
-  h2?: string; 
+  h1?: string;
+  h2?: string;
 }
 
 export interface FetchSingleHomeMetaData {
@@ -336,8 +349,8 @@ export interface ListingMetaListData {
   typeId: string;
   metaTitle: string;
   metaDescription: string;
-  h1?: string; 
-  h2?: string; 
+  h1?: string;
+  h2?: string;
 }
 
 //  fetch listing all meta data

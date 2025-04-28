@@ -12,6 +12,7 @@ import { CompanyType } from "@/types/api-types/vehicleAPI-types";
 import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
 import CompanyPageHeading from "../../components/CompanyPageHeading";
+import { useAdminContext } from "@/context/AdminContext";
 
 interface CompanyListingPageProps {
   queryKey: string[];
@@ -33,11 +34,12 @@ export default function CompanyListingPage({
   );
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
+  const { country } = useAdminContext();
 
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
-    queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
+    queryKey: [...queryKey, page, limit, sortOrder, searchTerm, country],
     queryFn: () =>
       getAllCompany({
         page,
@@ -46,7 +48,9 @@ export default function CompanyListingPage({
         approvalStatus,
         edited: isModified,
         search: searchTerm.trim(),
+        countryId: country.countryId,
       }),
+    enabled: !!country.countryId,
   });
 
   const handleOpenModal = (company: CompanyType) => {

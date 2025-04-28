@@ -1,5 +1,10 @@
-import useIsSmallScreen from '@/hooks/useIsSmallScreen'
-import { AdminContextType, orgType, stateType } from '@/types/types'
+import useIsSmallScreen from "@/hooks/useIsSmallScreen";
+import {
+  AdminContextType,
+  countryType,
+  orgType,
+  stateType,
+} from "@/types/types";
 
 import {
   createContext,
@@ -7,48 +12,52 @@ import {
   useState,
   ReactNode,
   useEffect,
-} from 'react'
+} from "react";
 
-const AdminContext = createContext<AdminContextType | null>(null)
+const AdminContext = createContext<AdminContextType | null>(null);
 
 const useAdminContext = () => {
-  const context = useContext(AdminContext)
+  const context = useContext(AdminContext);
   if (!context) {
-    throw new Error('useAdminContext must be used within an AppProvider')
+    throw new Error("useAdminContext must be used within an AppProvider");
   }
-  return context
-}
+  return context;
+};
 
 type AdminProviderProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 const AdminProvider = ({ children }: AdminProviderProps) => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false)
-  const [org, setOrg] = useState<orgType>({ label: 'UAE', value: 'uae' })
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [country, setCountry] = useState<countryType>({
+    countryId: "",
+    countryName: "",
+    countryValue: "",
+  });
   const [state, setState] = useState<stateType>({
-    stateId: '',
-    stateName: '',
-    stateValue: '',
-  })
+    stateId: "",
+    stateName: "",
+    stateValue: "",
+  });
 
-  const isSmallScreen = useIsSmallScreen(1100)
+  const isSmallScreen = useIsSmallScreen(1100);
 
   const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen)
-  }
+    setSidebarOpen(!isSidebarOpen);
+  };
 
   useEffect(() => {
     const handleResize = () => {
-      setSidebarOpen(false)
-    }
+      setSidebarOpen(false);
+    };
 
-    window.addEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <AdminContext.Provider
@@ -56,15 +65,15 @@ const AdminProvider = ({ children }: AdminProviderProps) => {
         isSidebarOpen,
         toggleSidebar,
         isSmallScreen,
-        org,
-        setOrg,
         state,
         setState,
+        country,
+        setCountry,
       }}
     >
       {children}
     </AdminContext.Provider>
-  )
-}
+  );
+};
 
-export { useAdminContext, AdminProvider }
+export { useAdminContext, AdminProvider };

@@ -12,6 +12,18 @@ export type stateType = {
   stateValue: string;
 };
 
+export type countryType = {
+  countryId: string;
+  countryName: string;
+  countryValue: string;
+};
+
+export type ParentState = {
+  stateName: string;
+  stateValue: string;
+  stateId: string;
+};
+
 export type NavbarStateType = {
   stateName: string;
   stateValue: string;
@@ -26,10 +38,10 @@ export type AdminContextType = {
   setSidebarOpen?: (value: boolean) => void;
   toggleSidebar: () => void;
   isSmallScreen: boolean;
-  org: orgType;
-  setOrg: (origin: orgType) => void;
   state: stateType;
   setState: (state: stateType) => void;
+  country: countryType;
+  setCountry: (state: countryType) => void;
 };
 
 export type VehicleCategoryType =
@@ -142,6 +154,8 @@ export type CompanyFormType = {
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;
+  accountType?: string;
+  countryName?: string;
 };
 
 export type CompanyStatusFormType = {

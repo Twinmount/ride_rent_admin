@@ -41,6 +41,7 @@ export default function AllListingPage() {
         search: searchTerm.trim(),
         stateId: state.stateId as string,
       }),
+    enabled: !!state.stateId,
     staleTime: 10000,
   });
 

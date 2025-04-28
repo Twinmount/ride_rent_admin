@@ -8,7 +8,8 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { useFetchGlobalStates } from "@/hooks/useFetchGlobalStates";
 
 export default function Layout() {
-  const { options, isLoading, isError, error } = useFetchGlobalStates();
+  const { options, countryOption, isLoading, isError, error } =
+    useFetchGlobalStates();
 
   if (isError) {
     return (
@@ -21,7 +22,11 @@ export default function Layout() {
 
   return (
     <MantineProvider>
-      <Navbar options={options} isLoading={isLoading} />
+      <Navbar
+        options={options}
+        countryOption={countryOption}
+        isLoading={isLoading}
+      />
 
       <Sidebar />
 
