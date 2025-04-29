@@ -9,8 +9,6 @@ import Pagination from "@/components/Pagination";
 import { useCategories } from "@/hooks/useCategories";
 import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
 import { useFetchStates } from "@/hooks/useFetchStates";
-import { Link } from "react-router-dom";
-import { Plus } from "lucide-react";
 import { StateType } from "@/types/api-types/vehicleAPI-types";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 
