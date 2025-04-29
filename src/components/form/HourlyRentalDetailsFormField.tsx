@@ -11,7 +11,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const HourlyRentalDetailFormField = () => {
+const HourlyRentalDetailFormField = ({
+  isIndia = false,
+}: {
+  isIndia: boolean;
+}) => {
   const { control, watch, clearErrors } = useFormContext();
   const isEnabled = watch("rentalDetails.hour.enabled");
 
@@ -96,11 +100,15 @@ const HourlyRentalDetailFormField = () => {
             control={control}
             render={({ field }) => (
               <div className="mt-4 flex items-center space-x-2">
-                <label className="w-36 font-medium">Rent in AED:</label>
+                <label className="w-36 font-medium">
+                  Rent in {isIndia ? "INR" : "AED"}:
+                </label>
                 <div className="flex w-full flex-col">
                   <Input
                     {...field}
-                    placeholder="Enter rent in AED"
+                    placeholder={
+                      isIndia ? "Enter rent in INR" : "Enter rent in AED"
+                    }
                     className="input-field"
                     type="text"
                     inputMode="numeric"
@@ -123,7 +131,8 @@ const HourlyRentalDetailFormField = () => {
                     }}
                   />
                   <FormDescription>
-                    Specify the hourly rental price in AED.
+                    Specify the hourly rental price in{" "}
+                    {isIndia ? "INR." : "AED."}
                   </FormDescription>
                 </div>
               </div>

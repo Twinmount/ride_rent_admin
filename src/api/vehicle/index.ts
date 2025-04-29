@@ -36,6 +36,7 @@ export const buildCommonPrimaryDetails = (
     securityDeposit: values.securityDeposit,
     isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
     isTabbySupported: values.isTabbySupported,
+    isCashSupported: values.isCashSupported,
     vehicleMetaTitle: values.vehicleMetaTitle,
     vehicleMetaDescription: values.vehicleMetaDescription,
     // Include additionalVehicleTypes only if isCarsCategory is true

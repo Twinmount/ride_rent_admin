@@ -22,6 +22,7 @@ export const useStateListQuery = ({
       queryFn: () =>
         fetchAllStates(
           country.countryId,
+          false,
           parentStateId,
           filter.count,
           filter.searchTerm,

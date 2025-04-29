@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { PrimaryFormDefaultValues } from "@/constants";
+import { getPrimaryFormDefaultValues } from "@/constants";
 import { PrimaryFormSchema } from "@/lib/validator";
 import { PrimaryFormType } from "@/types/formTypes";
 import YearPicker from "../YearPicker";
@@ -29,7 +29,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import CitiesDropdown from "../dropdowns/CitiesDropdown";
 import CategoryDropdown from "../dropdowns/CategoryDropdown";
 import VehicleTypesDropdown from "../dropdowns/VehicleTypesDropdown";
-import StatesDropdown from "../dropdowns/StatesDropdown";
 import { save, StorageKeys } from "@/utils/storage";
 import { toast } from "@/components/ui/use-toast";
 import { useParams } from "react-router-dom";
@@ -58,6 +57,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import StatesDropdownForVehicleForm from "../dropdowns/StatesDropdownForVehicleForm";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -65,6 +65,8 @@ type PrimaryFormProps = {
   onNextTab?: () => void;
   initialCountryCode?: string;
   levelsFilled?: number;
+  isIndia?: boolean;
+  countryId: string;
 };
 
 export default function PrimaryDetailsForm({
@@ -73,9 +75,11 @@ export default function PrimaryDetailsForm({
   formData,
   levelsFilled,
   initialCountryCode,
+  isIndia = false,
+  countryId,
 }: PrimaryFormProps) {
   const [countryCode, setCountryCode] = useState<string>(
-    initialCountryCode || "971",
+    initialCountryCode || isIndia ? "+91" : "+971",
   );
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
   const [isLicenseUploading, setIsLicenseUploading] = useState(false);
@@ -90,7 +94,9 @@ export default function PrimaryDetailsForm({
 
   const queryClient = useQueryClient();
 
-  const initialValues = formData ? formData : PrimaryFormDefaultValues;
+  const initialValues = formData
+    ? formData
+    : getPrimaryFormDefaultValues(isIndia);
 
   // Define your form.
   const form = useForm<z.infer<typeof PrimaryFormSchema>>({
@@ -489,12 +495,16 @@ export default function PrimaryDetailsForm({
           name="stateId"
           render={({ field }) => (
             <FormItemWrapper
-              label="State / location"
-              description="Choose your state/location"
+              label="Location"
+              description={
+                isIndia
+                  ? "Choose your state and location"
+                  : "Choose your state/location"
+              }
             >
-              <StatesDropdown
+              <StatesDropdownForVehicleForm
                 onChangeHandler={(value) => {
-                  field.onChange(value.stateId);
+                  field.onChange(value);
                   // when state changes, vehicle series and metadata fields
                   form.setValue("cityIds", []);
                   form.setValue("vehicleSeriesId", "");
@@ -503,6 +513,8 @@ export default function PrimaryDetailsForm({
                 }}
                 value={initialValues.stateId}
                 placeholder="location"
+                isIndia={isIndia}
+                countryId={countryId}
               />
             </FormItemWrapper>
           )}
@@ -632,16 +644,20 @@ export default function PrimaryDetailsForm({
                 name="commercialLicenses"
                 label={
                   isCustomCommercialLicenseLabel
-                    ? "Registration Card / Certificate"
-                    : "Registration Card / Mulkia"
+                    ? `Registration Card ${isIndia ? "" : "/ Certificate"}`
+                    : `Registration Card  ${isIndia ? "" : "/ Mulkia"}`
                 }
                 existingFiles={initialValues.commercialLicenses || []}
                 description={
                   <>
                     Upload <span className="font-bold text-yellow">front</span>{" "}
                     & <span className="font-bold text-yellow">back</span> images
-                    of the Registration Card /{" "}
-                    {isCustomCommercialLicenseLabel ? "Certificate" : "Mulkia"}
+                    of the Registration Card{" "}
+                    {!isIndia
+                      ? isCustomCommercialLicenseLabel
+                        ? "/ Certificate"
+                        : "/ Mulkia"
+                      : ""}
                   </>
                 }
                 maxSizeMB={15}
@@ -667,11 +683,14 @@ export default function PrimaryDetailsForm({
             <FormItemWrapper
               label={
                 <span>
-                  Registration Card / Mulkia Expiry Date <br />
+                  {`Registration Card ${isIndia ? "" : "/ Mulkia"} Expiry Date`}{" "}
+                  <br />
                   <span className="text-sm text-gray-500">(DD/MM/YYYY)</span>
                 </span>
               }
-              description="Enter the expiry date for the Registration Card/Mulkia in the format DD/MM/YYYY."
+              description={`Enter the expiry date for the Registration Card ${
+                isIndia ? "" : "/ Mulkia"
+              } in the format DD/MM/YYYY.`}
             >
               <DatePicker
                 selected={field.value}
@@ -716,8 +735,13 @@ export default function PrimaryDetailsForm({
                   value={field.value}
                   onValueChange={field.onChange}
                   className="flex items-center gap-x-5"
-                  defaultValue="UAE_SPEC"
                 >
+                  {isIndia && (
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="India_SPEC" id="India_SPEC" />
+                      <Label htmlFor="India">India</Label>
+                    </div>
+                  )}
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="UAE_SPEC" id="UAE_SPEC" />
                     <Label htmlFor="UAE">UAE</Label>
@@ -728,7 +752,7 @@ export default function PrimaryDetailsForm({
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="OTHERS" id="others" />
-                    <Label htmlFor="others">Others</Label>
+                    <Label htmlFor="others">Modified</Label>
                   </div>
                 </RadioGroup>
               </div>
@@ -753,7 +777,7 @@ export default function PrimaryDetailsForm({
               }
             >
               <PhoneInput
-                defaultCountry="ae"
+                defaultCountry={isIndia ? "in" : "ae"}
                 value={field.value}
                 onChange={(value, country) => {
                   field.onChange(value);
@@ -787,7 +811,7 @@ export default function PrimaryDetailsForm({
                 </FormLabel>
                 <div className="w-full flex-col items-start">
                   <FormControl>
-                    <RentalDetailsFormField />
+                    <RentalDetailsFormField isIndia={isIndia} />
                   </FormControl>
                   <FormDescription className="ml-2">
                     Provide rent details. At least one of "day," "week," or
@@ -969,6 +993,28 @@ export default function PrimaryDetailsForm({
                   </div>
                 )}
               />
+
+              {/* Cash */}
+              {isIndia && (
+                <FormField
+                  control={form.control}
+                  name="isCashSupported"
+                  render={({ field }) => (
+                    <div className="mb-2">
+                      <FormCheckbox
+                        id="isCash"
+                        label="Cash"
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormDescription className="ml-7 mt-1">
+                        Select if your accepts payments via Cash.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
+                    </div>
+                  )}
+                />
+              )}
             </div>
           </FormItemWrapper>
         </div>

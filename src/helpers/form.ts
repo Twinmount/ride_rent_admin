@@ -347,6 +347,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     additionalVehicleTypes: data?.additionalVehicleTypes || [],
     isCreditOrDebitCardsSupported: data.isCreditOrDebitCardsSupported,
     isTabbySupported: data.isTabbySupported,
+    isCashSupported: data.isCashSupported,
     vehicleMetaTitle: data.vehicleMetaTitle,
     vehicleMetaDescription: data.vehicleMetaDescription,
   };

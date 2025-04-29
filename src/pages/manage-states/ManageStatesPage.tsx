@@ -28,7 +28,7 @@ export default function ManageStatesPage() {
     ],
     queryFn: () =>
       IsIndia && parentState.stateId
-        ? fetchAllStates(country.countryId, parentState.stateId)
+        ? fetchAllStates(country.countryId, false, parentState.stateId)
         : fetchAllStates(country.countryId),
     enabled: IsIndia
       ? !!country.countryId && !!parentState.stateId

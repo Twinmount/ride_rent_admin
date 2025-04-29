@@ -6,6 +6,7 @@ import {
   FetchCompaniesResponse,
   FetchPromotedCompanyListResponse,
   FetchPromotedCompaniesSearchResponse,
+  FetchCompanyByIdResponse,
 } from "@/types/api-types/API-types";
 
 export interface CompanyStatusType {
@@ -283,6 +284,25 @@ export const fetchSearchCompanies = async (
   try {
     const data = await API.get<FetchPromotedCompaniesSearchResponse>({
       slug: `${Slug.GET_PROMOTED_COMPANIES_SEARCH}?search=${search}&countryId=${countryId}`,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch promoted company");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching promoted company:", error);
+    throw error;
+  }
+};
+
+export const getCompanyById = async (
+  companyId: string,
+): Promise<FetchCompanyByIdResponse> => {
+  try {
+    const data = await API.get<FetchCompanyByIdResponse>({
+      slug: `/company?companyId=${companyId}`,
     });
 
     if (!data) {

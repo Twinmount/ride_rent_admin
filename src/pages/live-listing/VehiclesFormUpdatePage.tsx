@@ -5,6 +5,8 @@ import { lazy, Suspense } from "react";
 import LazyLoader from "@/components/skelton/LazyLoader";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import { useVehicleUpdateForm } from "@/hooks/useVehicleUpdateForm";
+import { useQuery } from "@tanstack/react-query";
+import { getCompanyById } from "@/api/company";
 
 // Lazy-loaded components
 const PrimaryDetailsForm = lazy(
@@ -25,13 +27,23 @@ type TabsTypes = "primary" | "specifications" | "features" | "faq";
 
 export default function VehiclesFormUpdatePage() {
   const navigate = useNavigate();
-  const { vehicleId } = useParams<{
+  const { vehicleId, companyId } = useParams<{
     vehicleId: string;
+    companyId: string;
   }>();
 
   const handleTabChange = (value: string) => {
     setActiveTab(value as TabsTypes);
   };
+
+  const { data: companyData, isLoading: isCompanyLoading } = useQuery({
+    queryKey: ["company", companyId],
+    queryFn: () => getCompanyById(companyId as string),
+    enabled: !!companyId,
+  });
+
+  const isIndia = companyData?.result?.countryName === "India";
+  const countryId = companyData?.result?.countryId || "";
 
   // Using custom hook
   const {
@@ -79,7 +91,7 @@ export default function VehiclesFormUpdatePage() {
               Primary Details
             </TabsTrigger>
             <TabsTrigger
-              disabled={isLoading || isLevelsFetching}
+              disabled={isLoading || isLevelsFetching || isCompanyLoading}
               value="specifications"
               className="max-sm:px-2"
             >
@@ -88,7 +100,10 @@ export default function VehiclesFormUpdatePage() {
             <TabsTrigger
               value="features"
               disabled={
-                isLoading || isLevelsFetching || isAddOrIncompleteSpecifications
+                isLoading ||
+                isLevelsFetching ||
+                isAddOrIncompleteSpecifications ||
+                isCompanyLoading
               }
               className={`max-sm:px-2`}
             >
@@ -100,7 +115,7 @@ export default function VehiclesFormUpdatePage() {
           </TabsList>
           <TabsContent value="primary" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
-              {isLoading ? (
+              {isLoading || isCompanyLoading ? (
                 <FormSkelton />
               ) : (
                 <PrimaryDetailsForm
@@ -108,6 +123,8 @@ export default function VehiclesFormUpdatePage() {
                   formData={formData}
                   levelsFilled={levelsFilled}
                   initialCountryCode={initialCountryCode}
+                  isIndia={isIndia}
+                  countryId={countryId}
                 />
               )}
             </Suspense>

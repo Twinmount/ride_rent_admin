@@ -2,6 +2,7 @@ import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
   FetchCountryResponse,
+  FetchParentStatesResponse,
   FetchSpecificStateResponse,
   FetchStatesResponse,
   GetStateFAQResponse,
@@ -92,12 +93,15 @@ export const fetchStateById = async (
 // fetch all States
 export const fetchAllStates = async (
   countryId?: string | null,
+  isParent: boolean = false,
   parentStateId?: string | null,
   count?: number | null,
   searchTerm?: string | null,
   stateId?: string | null,
 ): Promise<FetchStatesResponse> => {
   try {
+    let needParentStateApi = !!parentStateId ? false : isParent ? true : false;
+
     let params = new URLSearchParams();
 
     if (countryId) {
@@ -116,12 +120,35 @@ export const fetchAllStates = async (
       params.append("searchTerm", searchTerm);
     }
 
+    let apiPath = needParentStateApi
+      ? Slug.GET_ALL_PARENT_STATES
+      : Slug.GET_ALL_STATES;
+
     const slug = params.toString()
-      ? `${Slug.GET_ALL_STATES}?${params.toString()}`
-      : `${Slug.GET_ALL_STATES}`;
+      ? `${apiPath}?${params.toString()}`
+      : `${apiPath}`;
 
     const data = await API.get<FetchStatesResponse>({
       slug: slug,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch state data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching States:", error);
+    throw error;
+  }
+};
+
+export const fetchParentStates = async (
+  stateId: string,
+): Promise<FetchParentStatesResponse> => {
+  try {
+    const data = await API.get<FetchParentStatesResponse>({
+      slug: "/states/parent-state-by-stateId?stateId=" + stateId,
     });
 
     if (!data) {

@@ -23,6 +23,7 @@ export const useFetchStates = (parentStateId: string | null = null) => {
     queryFn: () =>
       fetchAllStates(
         country.countryId,
+        false,
         parentStateId,
         filter.count,
         filter.searchTerm,

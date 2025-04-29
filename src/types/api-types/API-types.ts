@@ -56,6 +56,12 @@ export interface FetchStatesResponse {
   statusCode: number;
 }
 
+export interface FetchParentStatesResponse {
+  result: StateType;
+  status: string;
+  statusCode: number;
+}
+
 export interface FetchCountryResponse {
   result: CountryType[];
   status: string;
@@ -270,6 +276,8 @@ export interface companyType {
   companyMetaTitle: string;
   companyMetaDescription: string;
   accountType: string;
+  countryName?: string;
+  countryId: string;
 }
 
 //  interface for the get-all-companies  API response
@@ -302,6 +310,12 @@ export interface promotedCompanyType {
 
 export interface FetchPromotedCompaniesSearchResponse {
   result: promotedCompanyType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchCompanyByIdResponse {
+  result: companyType;
   status: string;
   statusCode: number;
 }

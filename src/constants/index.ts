@@ -119,7 +119,9 @@ export const ListingMetaFormDefaultValue = {
 export const orgs = [{ id: "1", label: "UAE", value: "uae" }];
 
 // primary details form default values
-export const PrimaryFormDefaultValues: PrimaryFormType = {
+export const getPrimaryFormDefaultValues = (
+  isIndia: boolean,
+): PrimaryFormType => ({
   vehicleCategoryId: "",
   vehicleTypeId: "", //'luxury' for example
   vehicleBrandId: "",
@@ -133,7 +135,7 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   isLease: false,
   isCryptoAccepted: false,
   isSpotDeliverySupported: false,
-  specification: "UAE_SPEC",
+  specification: isIndia ? "India_SPEC" : "UAE_SPEC",
   rentalDetails: {
     day: { enabled: false, rentInAED: "", mileageLimit: "" },
     week: { enabled: false, rentInAED: "", mileageLimit: "" },
@@ -158,9 +160,10 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   },
   isCreditOrDebitCardsSupported: false,
   isTabbySupported: false,
+  isCashSupported: false,
   vehicleMetaTitle: "",
   vehicleMetaDescription: "",
-};
+});
 
 // login page default value
 export const LoginPageDefaultValues = {

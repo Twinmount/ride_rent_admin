@@ -168,7 +168,7 @@ export const PrimaryFormSchema = z
     isCryptoAccepted: z.boolean().default(false),
     isSpotDeliverySupported: z.boolean().default(false),
     specification: z
-      .enum(["USA_SPEC", "UAE_SPEC", "OTHERS"], {
+      .enum(["India_SPEC", "USA_SPEC", "UAE_SPEC", "OTHERS"], {
         required_error: "Specification is required",
       })
       .default("UAE_SPEC"),
@@ -202,6 +202,7 @@ export const PrimaryFormSchema = z
     }),
     isCreditOrDebitCardsSupported: z.boolean().default(false),
     isTabbySupported: z.boolean().default(false),
+    isCashSupported: z.boolean().default(false),
     vehicleMetaTitle: z
       .string()
       .min(1, "Vehicle Meta title is required")

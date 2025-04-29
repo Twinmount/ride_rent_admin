@@ -12,6 +12,7 @@ export default function ManageCitiesPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["cities", state],
     queryFn: () => fetchAllCities(state.stateId as string),
+    enabled: !!state.stateId,
   });
 
   const cities = data?.result || [];
