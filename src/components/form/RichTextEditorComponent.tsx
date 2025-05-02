@@ -3,6 +3,8 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
+import { Color } from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
 
 interface RichTextEditorProps {
   content?: string; // Initial content
@@ -21,6 +23,8 @@ export default function RichTextEditorComponent({
       Underline,
       Link,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      TextStyle,
+      Color,
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -34,6 +38,34 @@ export default function RichTextEditorComponent({
   return (
     <RichTextEditor editor={editor} className="min-h-36 shadow-lg">
       <RichTextEditor.Toolbar sticky stickyOffset={75} className="shadow-lg">
+        <RichTextEditor.ColorPicker
+          colors={[
+            "#25262b",
+            "#868e96",
+            "#fa5252",
+            "#e64980",
+            "#be4bdb",
+            "#7950f2",
+            "#4c6ef5",
+            "#228be6",
+            "#15aabf",
+            "#12b886",
+            "#40c057",
+            "#82c91e",
+            "#fab005",
+            "#fd7e14",
+          ]}
+        />
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Color color="#F03E3E" />
+          <RichTextEditor.Color color="#7048E8" />
+          <RichTextEditor.Color color="#1098AD" />
+          <RichTextEditor.Color color="#37B24D" />
+          <RichTextEditor.Color color="#F59F00" />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.UnsetColor />
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
           <RichTextEditor.Italic />
