@@ -11,6 +11,21 @@ export type CitiesType = {
   cityValue: string;
 };
 
+interface Location {
+  lat: number;
+  lng: number;
+  address?: string;
+}
+
+type CityType = {
+  _id?: string;
+  stateId: string;
+  cityId: string;
+  cityName: string;
+  cityValue: string;
+};
+
+
 // Rental detail type for day, week, and month
 type RentalDetailType = {
   enabled: boolean;
@@ -66,6 +81,8 @@ export type PrimaryFormType = {
   isCashSupported: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
+  tempCitys?: CityType[];
+  location?: Location
 };
 
 export type CompanyFormType = {};

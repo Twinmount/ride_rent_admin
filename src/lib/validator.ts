@@ -211,6 +211,23 @@ export const PrimaryFormSchema = z
       .string()
       .min(1, "Vehicle Meta description is required")
       .max(5000, "Vehicle Meta description cannot exceed 5000 characters"),
+    tempCitys: z
+      .array(
+        z.object({
+          stateId: z.string(),
+          cityId: z.string(),
+          cityName: z.string(),
+          cityValue: z.string(),
+        })
+      )
+      .optional(),
+      location: z
+      .object({
+        lat: z.number(),
+        lng: z.number(),
+        address: z.string(),
+      })
+      .optional(),
   })
   .refine(
     (data) => {
@@ -270,6 +287,13 @@ export const CompanyFormSchema = z.object({
     .string()
     .min(1, "Meta description is required")
     .max(500, "Meta description must be 500 characters or less"),
+    location: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+      address: z.string(),
+    })
+    .optional(),
 });
 
 // Company Status Form Schema

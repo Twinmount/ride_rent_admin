@@ -27,6 +27,7 @@ import { AgentContactInfo } from "../AgentContactInfo";
 import { FormItemWrapper } from "../form-ui/FormItemWrapper";
 import { FormSubmitButton } from "../form-ui/FormSubmitButton";
 import { CompanyFormType } from "@/types/types";
+import LocationPicker from "../LocationPicker";
 
 type CompanyFormProps = {
   type: "Update";
@@ -274,6 +275,29 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 value={field.value}
                 onChangeHandler={field.onChange}
                 placeholder="Languages"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="location"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="GPS Location"
+              description={
+                <span>
+                  Enter the GSP location where the company is registered or
+                  operates.
+                </span>
+              }
+            >
+              <LocationPicker
+                onChangeHandler={field.onChange}
+                initialLocation={field.value}
+                buttonText="Choose Location"
+                buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
               />
             </FormItemWrapper>
           )}

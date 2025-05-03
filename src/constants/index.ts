@@ -163,6 +163,8 @@ export const getPrimaryFormDefaultValues = (
   isCashSupported: false,
   vehicleMetaTitle: "",
   vehicleMetaDescription: "",
+  tempCitys: [],
+  location: undefined,
 });
 
 // login page default value
@@ -184,6 +186,7 @@ export const CompanyFormDefaultValues: CompanyFormType = {
   companyLanguages: [],
   companyMetaTitle: "",
   companyMetaDescription: "",
+  location: undefined,
 };
 
 // Company registration phase 2 form default values

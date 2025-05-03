@@ -39,9 +39,11 @@ export const buildCommonPrimaryDetails = (
     isCashSupported: values.isCashSupported,
     vehicleMetaTitle: values.vehicleMetaTitle,
     vehicleMetaDescription: values.vehicleMetaDescription,
+    location: values.location,
     // Include additionalVehicleTypes only if isCarsCategory is true
     ...(isCarsCategory && {
       additionalVehicleTypes: values.additionalVehicleTypes || [],
     }),
+    tempCitys: values.tempCitys,
   };
 };

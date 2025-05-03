@@ -350,6 +350,8 @@ export function mapGetPrimaryFormToPrimaryFormType(
     isCashSupported: data.isCashSupported,
     vehicleMetaTitle: data.vehicleMetaTitle,
     vehicleMetaDescription: data.vehicleMetaDescription,
+    tempCitys: data.tempCitys || [],
+    location: data.location || undefined,
   };
 }
 

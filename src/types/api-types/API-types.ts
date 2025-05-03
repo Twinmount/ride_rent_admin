@@ -1,3 +1,6 @@
+import { BannerType } from "@/api/states";
+import { Location } from "../types";
+
 // register response
 export interface RegisterResponse {
   result: {
@@ -52,6 +55,12 @@ export interface CountryType {
 //  interface for the get-all-states  API response
 export interface FetchStatesResponse {
   result: StateType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface BannerTypeResponse {
+  result: BannerType[];
   status: string;
   statusCode: number;
 }
@@ -278,6 +287,7 @@ export interface companyType {
   accountType: string;
   countryName?: string;
   countryId: string;
+  location: Location;
 }
 
 //  interface for the get-all-companies  API response

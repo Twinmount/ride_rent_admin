@@ -5,6 +5,12 @@ export type orgType = {
   value: string;
 };
 
+export interface Location {
+  lat: number;
+  lng: number;
+  address?: string;
+}
+
 // admin context  state type
 export type stateType = {
   stateId: string;
@@ -156,6 +162,7 @@ export type CompanyFormType = {
   companyMetaDescription: string;
   accountType?: string;
   countryName?: string;
+  location?: Location;
 };
 
 export type CompanyStatusFormType = {

@@ -4,14 +4,20 @@ import FormSkelton from "@/components/skelton/FormSkelton";
 import StateForm from "@/components/form/StateForm";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { fetchStateById, getStateFaqFn, upadteStateFaqFn } from "@/api/states";
+import {
+  fetchStateById,
+  getHomePageBanner,
+  getStateFaqFn,
+  upadteStateFaqFn,
+} from "@/api/states";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense, useState } from "react";
 import LazyLoader from "@/components/skelton/LazyLoader";
 import StateFaqForm from "@/components/form/main-form/StateFaqForm";
 import { useAdminContext } from "@/context/AdminContext";
+import HomepageBannerForm from "@/components/form/HomepageBannerForm";
 
-type TabsTypes = "primary" | "faq";
+type TabsTypes = "primary" | "faq" | "banner";
 
 export default function EditLocationPage() {
   const navigate = useNavigate();
@@ -36,6 +42,14 @@ export default function EditLocationPage() {
     queryKey: ["faq-state", stateId],
     queryFn: () => getStateFaqFn(stateId as string),
     enabled: !!stateId && activeTab === "faq",
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+  const bannerFor = !!parentStateId ? "state" : "parentState";
+  const { data: bannerData, isFetching: isBannerFetching } = useQuery({
+    queryKey: ["banner-state", stateId],
+    queryFn: () => getHomePageBanner(stateId as string, bannerFor as string),
+    enabled: !!stateId && activeTab === "banner",
     retry: false,
     refetchOnWindowFocus: false,
   });
@@ -90,6 +104,12 @@ export default function EditLocationPage() {
             >
               {!!parentStateId ? "Location" : "State"} Details
             </TabsTrigger>
+            <TabsTrigger
+              value="banner"
+              className="h-9 max-sm:px-2 max-sm:text-sm"
+            >
+              Homepage Banner
+            </TabsTrigger>
             {!(!parentStateId && isIndia) && (
               <TabsTrigger value="faq" className={`max-sm:px-2`}>
                 FAQ
@@ -106,6 +126,19 @@ export default function EditLocationPage() {
                   type="Update"
                   formData={data?.result}
                   parentStateId={parentStateId}
+                />
+              )}
+            </Suspense>
+          </TabsContent>
+          <TabsContent value="banner" className="flex-center">
+            <Suspense fallback={<LazyLoader />}>
+              {isBannerFetching ? (
+                <FormSkelton />
+              ) : (
+                <HomepageBannerForm
+                  id={stateId as string}
+                  bannerFor={bannerFor}
+                  data={bannerData?.result || []}
                 />
               )}
             </Suspense>

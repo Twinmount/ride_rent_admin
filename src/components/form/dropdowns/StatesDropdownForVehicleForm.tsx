@@ -9,6 +9,13 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
+type CityType = {
+  stateId: string;
+  cityId: string;
+  cityName: string;
+  cityValue: string;
+};
+
 type StatesDropdownProps = {
   value?: string;
   onChangeHandler: (value: string) => void;
@@ -16,6 +23,8 @@ type StatesDropdownProps = {
   isDisabled?: boolean;
   isIndia: boolean;
   countryId: string;
+  setSelectedCities: React.Dispatch<React.SetStateAction<string[]>>;
+  setCities: React.Dispatch<React.SetStateAction<CityType[]>>;
 };
 
 type StateType = {
@@ -35,6 +44,8 @@ const StatesDropdownForVehicleForm = ({
   isDisabled = false,
   isIndia = false,
   countryId,
+  setCities,
+  setSelectedCities,
 }: StatesDropdownProps) => {
   const [selectedFirstState, setSelectedFirstState] = useState<string>("");
 
@@ -82,10 +93,20 @@ const StatesDropdownForVehicleForm = ({
   const handleFirstStateChange = (value: string) => {
     if (value) {
       setSelectedFirstState(value);
-      // You might want to reset the main value when first selection changes
       onChangeHandler("");
+      setCities([]);
+      setSelectedCities([]);
     }
   };
+
+  const handleSecondStateChange = (value: string) => {
+    if (value) {
+      onChangeHandler(value);
+      setCities([]);
+      setSelectedCities([]);
+    }
+  };
+
 
   return (
     <div className="flex gap-4">
@@ -118,7 +139,7 @@ const StatesDropdownForVehicleForm = ({
       )}
 
       <Select
-        onValueChange={onChangeHandler}
+        onValueChange={handleSecondStateChange}
         defaultValue={value ? value : undefined}
         disabled={
           isDisabled ||

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -58,6 +58,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import StatesDropdownForVehicleForm from "../dropdowns/StatesDropdownForVehicleForm";
+import LocationPicker from "../LocationPicker";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -67,6 +68,14 @@ type PrimaryFormProps = {
   levelsFilled?: number;
   isIndia?: boolean;
   countryId: string;
+};
+
+type CityType = {
+  _id?: string;
+  stateId: string;
+  cityId: string;
+  cityName: string;
+  cityValue: string;
 };
 
 export default function PrimaryDetailsForm({
@@ -86,6 +95,10 @@ export default function PrimaryDetailsForm({
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [isCarsCategory, setIsCarsCategory] = useState(false);
   const [hideCommercialLicenses, setHideCommercialLicenses] = useState(false);
+  
+  const [cities, setCities] = useState<CityType[]>([]);
+  const [selectedCities, setSelectedCities] = useState<string[]>([]);
+  const [temoraryCities, setTemoraryCities] = useState<CityType[]>([]);
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string;
@@ -104,9 +117,31 @@ export default function PrimaryDetailsForm({
     defaultValues: initialValues as PrimaryFormType,
     shouldFocusError: true,
   });
+  
+  useEffect(() => {
+    if (formData?.tempCitys && Array.isArray(formData.tempCitys)) {
+      setCities((prevCities) => {
+        const newCities = formData.tempCitys?.filter(
+          (newCity: CityType) =>
+            !prevCities.some((city) => city.cityId === newCity.cityId)
+        );
+        return [...prevCities, ...(newCities || [])];
+      });
+
+      setTemoraryCities(formData.tempCitys);
+
+      setSelectedCities((prevSelected) => {
+        const newCityIds = formData?.tempCitys
+          ?.map((city: CityType) => city.cityId)
+          .filter((id) => !prevSelected.includes(id));
+        return [...prevSelected, ...(newCityIds || [])];
+      });
+    }
+  }, [formData?.tempCitys]);
 
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
+    
     const validationError = validateRentalDetailsAndSecurityDeposit(values);
 
     if (validationError) {
@@ -122,12 +157,18 @@ export default function PrimaryDetailsForm({
       showFileUploadInProgressToast();
       return;
     }
+    
+    const cityIds = selectedCities.filter((city) => !city.includes("temp-"));
+    const tempCitys = cities.filter(
+      (city) =>
+        city.cityId.includes("temp-") && selectedCities.includes(city.cityId)
+    );
 
     // Append other form data
     try {
       const data = await handleLevelOneFormSubmission(
         type,
-        values as PrimaryFormType,
+        { ...values, cityIds, tempCitys } as PrimaryFormType,
         {
           countryCode,
           userId,
@@ -139,6 +180,34 @@ export default function PrimaryDetailsForm({
 
       if (data) {
         showSuccessToast(type);
+
+        if (data.result) {
+          setCities((prev) => {
+            let approvedCities = prev.filter(
+              (city) => !city.cityId.includes("temp-") && !city._id
+            );
+
+            return [...approvedCities, ...data.result.tempCitys || []];
+          });
+          setSelectedCities([
+            ...data.result.city?.map((city: CityType) => city.cityId),
+            ...data.result.tempCitys?.map((city: CityType) => city.cityId) ?? [],
+          ]);
+          setTemoraryCities(data.result.tempCitys || []);
+        }
+
+        setCities((prev) =>
+          prev.map((city) => {
+            if (
+              city.cityId.includes("temp-") &&
+              !selectedCities.includes(city.cityId)
+            ) {
+              const { _id, ...rest } = city; // remove _id
+              return rest;
+            }
+            return city;
+          })
+        );
 
         if (type === "Add") {
           save(StorageKeys.VEHICLE_ID, data.result.vehicleId);
@@ -507,6 +576,7 @@ export default function PrimaryDetailsForm({
                   field.onChange(value);
                   // when state changes, vehicle series and metadata fields
                   form.setValue("cityIds", []);
+                  form.setValue("tempCitys", []); //
                   form.setValue("vehicleSeriesId", "");
                   form.setValue("vehicleMetaTitle", "");
                   form.setValue("vehicleMetaDescription", "");
@@ -515,6 +585,8 @@ export default function PrimaryDetailsForm({
                 placeholder="location"
                 isIndia={isIndia}
                 countryId={countryId}
+                setCities={setCities}
+                setSelectedCities={setSelectedCities}
               />
             </FormItemWrapper>
           )}
@@ -526,21 +598,35 @@ export default function PrimaryDetailsForm({
           name="cityIds"
           render={({ field }) => (
             <FormItemWrapper
-              label={
-                <span>
-                  City / Serving Areas <br />
-                  <span className="text-xs text-gray-500">
-                    (multiple selection allowed)
-                  </span>
+            label={
+              <span>
+                {isIndia
+                  ? "Available Places / Areas"
+                  : "City / Serving Areas"}{" "}
+                <br />
+                <span className="text-xs text-gray-500">
+                  (multiple selection allowed)
                 </span>
-              }
-              description="Select all the cities of operation/serving areas."
+              </span>
+            }
+            description={
+              isIndia
+                ? "Select / Create all operation/serving areas."
+                : "Select all the cities of operation/serving areas."
+            }
             >
               <CitiesDropdown
                 stateId={form.watch("stateId")}
                 value={field.value}
                 onChangeHandler={field.onChange}
                 placeholder="cities"
+                setSelectedCities={setSelectedCities}
+                selectedCities={selectedCities}
+                cities={cities}
+                setCities={setCities}
+                setTemoraryCities={setTemoraryCities}
+                temoraryCities={temoraryCities}
+                isTempCreatable={!!isIndia}
               />
             </FormItemWrapper>
           )}
@@ -617,9 +703,9 @@ export default function PrimaryDetailsForm({
           render={() => (
             <MultipleFileUpload
               name="vehiclePhotos"
-              label="Vehicle Photos"
+              label="Vehicle Photos & videos"
               existingFiles={initialValues.vehiclePhotos || []}
-              description="Add Vehicle Photos. Up to 8 photos can be added."
+              description="Add Vehicle Photos / Videos. Up to 8 photos / videos can be added."
               maxSizeMB={30}
               setIsFileUploading={setIsPhotosUploading}
               bucketFilePath={GcsFilePaths.IMAGE_VEHICLES}
@@ -794,6 +880,29 @@ export default function PrimaryDetailsForm({
                   buttonClassName:
                     "!border-none outline-none !h-[52px] !w-[50px] !rounded-xl !bg-gray-100",
                 }}
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="location"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="GPS Location"
+              description={
+                <span>
+                  Enter the GSP location where the company is registered or
+                  operates.
+                </span>
+              }
+            >
+              <LocationPicker
+                onChangeHandler={field.onChange}
+                initialLocation={field.value}
+                buttonText="Choose Location"
+                buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
               />
             </FormItemWrapper>
           )}

@@ -18,6 +18,12 @@ export type CompanyType = {
   companyMetaDescription: string;
 };
 
+interface Location {
+  lat: number;
+  lng: number;
+  address?: string;
+}
+
 // type of single brand
 export interface BrandType {
   id: string;
@@ -227,6 +233,7 @@ export interface AddPrimaryFormResponse {
     vehicleRegistrationNumber: string;
     createdAt: string;
     updatedAt: string;
+    tempCitys?:[]
   };
   status: string;
   statusCode: number;
@@ -347,6 +354,8 @@ export type GetPrimaryForm = {
   isCashSupported: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
+  tempCitys: CityType[];
+  location: Location
 };
 
 // Specification form get all response

@@ -118,7 +118,6 @@ const StateFaqForm = ({
 }) => {
   const [faqs, setFaqs] = useState<FAQItem[]>(data.faqs);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  console.log(data);
 
   const handleChange = (index: number, field: keyof FAQItem, value: string) => {
     setFaqs((prev) =>

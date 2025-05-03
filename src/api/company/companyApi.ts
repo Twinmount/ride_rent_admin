@@ -72,6 +72,7 @@ export const updateCompany = async (
         companyLanguages: values.companyLanguages,
         companyMetaTitle: values.companyMetaTitle,
         companyMetaDescription: values.companyMetaDescription,
+        location: values.location,
       },
     });
 

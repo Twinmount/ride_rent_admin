@@ -1,6 +1,7 @@
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
+  BannerTypeResponse,
   FetchCountryResponse,
   FetchParentStatesResponse,
   FetchSpecificStateResponse,
@@ -15,6 +16,15 @@ export interface StateType {
   parentStateId?: string | null;
   countryId?: string | null;
   isParentState?: boolean | null;
+}
+
+export interface BannerType {
+  sectionName: string;
+  desktopImage: string;
+  mobileImage: string;
+  isEnabled: boolean;
+  bannerForId: string;
+  bannerFor: string;
 }
 
 // add state
@@ -86,6 +96,78 @@ export const fetchStateById = async (
     return data;
   } catch (error) {
     console.error("Error fetching State:", error);
+    throw error;
+  }
+};
+
+export const addHomePageBanner = async (values: BannerType) => {
+  try {
+    const data = await API.post({
+      slug: Slug.ADD_HOME_PAGE_BANNER,
+      body: { values },
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error adding state:", error);
+    throw error;
+  }
+};
+
+export const updateHomePageBanner = async (values: BannerType, id: string) => {
+  try {
+    const data = await API.put({
+      slug: `${Slug.ADD_HOME_PAGE_BANNER}/${id}`,
+      body: { values },
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error adding state:", error);
+    throw error;
+  }
+};
+
+export const deleteHomePageBanner = async (id: string) => {
+  try {
+    const response = await API.delete({
+      slug: `${Slug.ADD_HOME_PAGE_BANNER}/${id}`,
+    });
+
+    if (!response) {
+      throw new Error("Failed to delete item");
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error deleting file:", error);
+    throw error;
+  }
+};
+
+export const getHomePageBanner = async (
+  bannerForId: string,
+  bannerFor: string,
+) => {
+  try {
+    let params = new URLSearchParams();
+
+    if (bannerForId) {
+      params.append("bannerForId", bannerForId);
+    }
+    if (bannerFor) {
+      params.append("bannerFor", bannerFor);
+    }
+
+    const slug = params.toString()
+      ? `${Slug.ADD_HOME_PAGE_BANNER}?${params.toString()}`
+      : `${Slug.ADD_HOME_PAGE_BANNER}`;
+
+    const data = await API.get<BannerTypeResponse>({ slug });
+
+    return data;
+  } catch (error) {
+    console.error("Error adding state:", error);
     throw error;
   }
 };
