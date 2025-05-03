@@ -1,0 +1,56 @@
+/* EditorStyles.module.css */
+.editorContent {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 16px;
+  color: #333;
+  background-color: white;
+}
+
+.editorContent h1 {
+  font-size: 2.25rem; /* 36px */
+  font-weight: bold;
+  margin: 0.67em 0;
+}
+
+.editorContent h2 {
+  font-size: 1.75rem; /* 28px */
+  font-weight: bold;
+  margin: 0.75em 0;
+}
+
+.editorContent h3 {
+  font-size: 1.5rem; /* 24px */
+  font-weight: bold;
+  margin: 0.83em 0;
+}
+
+.editorContent ul {
+  list-style-type: disc;
+  margin: 0 0 1em 1.5em;
+  padding-left: 1.5em;
+}
+
+.editorContent ol {
+  list-style-type: decimal;
+  margin: 0 0 1em 1.5em;
+  padding-left: 1.5em;
+}
+
+.editorContent li {
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
+}
+
+.editorContent p {
+  font-size: 1rem; /* 16px */
+  margin: 0 0 1em;
+}
+
+.editorContent a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.editorContent a:hover {
+  text-decoration: underline;
+}

@@ -118,20 +118,20 @@ export default function BlogForm({ type, formData }: StateFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-5xl mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
+        className="mx-auto flex w-full max-w-5xl flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
-        <div className="flex flex-col gap-5 r">
+        <div className="r flex flex-col gap-5">
           {/* type title */}
           <FormField
             control={form.control}
             name="blogTitle"
             render={({ field }) => {
               const [charCount, setCharCount] = useState(
-                field.value?.length || 0
+                field.value?.length || 0,
               );
 
               const handleInputChange = (
-                e: React.ChangeEvent<HTMLInputElement>
+                e: React.ChangeEvent<HTMLInputElement>,
               ) => {
                 const newValue = e.target.value;
 
@@ -143,13 +143,13 @@ export default function BlogForm({ type, formData }: StateFormProps) {
               };
 
               return (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base max-sm:w-fit lg:text-lg">
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base max-sm:w-fit lg:text-lg">
                     Blog Title
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
 
-                  <div className="flex-col items-start w-full">
+                  <div className="w-full flex-col items-start">
                     <FormControl>
                       <Input
                         placeholder="e.g., 'Exploring Abu Dhabi: A Traveler's Guide'"
@@ -158,7 +158,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                         onChange={handleInputChange} // Handle change to track character count
                       />
                     </FormControl>
-                    <FormDescription className="ml-2 w-full flex-between">
+                    <FormDescription className="flex-between ml-2 w-full">
                       <span className="w-full max-w-[90%]">
                         Add your Blog Title. 120 characters max. Less is better.
                       </span>{" "}
@@ -181,11 +181,11 @@ export default function BlogForm({ type, formData }: StateFormProps) {
             name="blogDescription"
             render={({ field }) => {
               const [charCount, setCharCount] = useState(
-                field.value?.length || 0
+                field.value?.length || 0,
               );
 
               const handleInputChange = (
-                e: React.ChangeEvent<HTMLInputElement>
+                e: React.ChangeEvent<HTMLInputElement>,
               ) => {
                 const newValue = e.target.value;
 
@@ -197,13 +197,13 @@ export default function BlogForm({ type, formData }: StateFormProps) {
               };
 
               return (
-                <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base max-sm:w-fit lg:text-lg">
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base max-sm:w-fit lg:text-lg">
                     Description
                     <span className="mr-5 max-sm:hidden">:</span>
                   </FormLabel>
 
-                  <div className="flex-col items-start w-full">
+                  <div className="w-full flex-col items-start">
                     <FormControl>
                       <Input
                         placeholder="e.g., 'This blog provides an overview of the top attractions in Abu Dhabi.'"
@@ -212,7 +212,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                         onChange={handleInputChange} // Handle change to track character count
                       />
                     </FormControl>
-                    <FormDescription className="ml-2 w-full flex-between">
+                    <FormDescription className="flex-between ml-2 w-full">
                       <span className="w-full max-w-[90%]">
                         This value will be used to show the "description" in
                         each blog card on the frontend. Up to 120 characters are
@@ -253,11 +253,11 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           control={form.control}
           name="blogCategory"
           render={({ field }) => (
-            <FormItem className="flex mb-2 w-full max-sm:flex-col">
-              <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base lg:text-lg">
+            <FormItem className="mb-2 flex w-full max-sm:flex-col">
+              <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base lg:text-lg">
                 Blog Category <span className="mr-5 max-sm:hidden">:</span>
               </FormLabel>
-              <div className="flex-col items-start w-full">
+              <div className="w-full flex-col items-start">
                 <FormControl>
                   <BlogCategoriesDropdown
                     value={field.value}
@@ -279,11 +279,11 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           control={form.control}
           name="authorName"
           render={({ field }) => (
-            <FormItem className="flex mb-2 w-full max-sm:flex-col">
-              <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base max-sm:w-fit lg:text-lg">
+            <FormItem className="mb-2 flex w-full max-sm:flex-col">
+              <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base max-sm:w-fit lg:text-lg">
                 Blog Author<span className="mr-5 max-sm:hidden">:</span>
               </FormLabel>
-              <div className="flex-col items-start w-full">
+              <div className="w-full flex-col items-start">
                 <FormControl>
                   <Input
                     placeholder="e.g., 'John Wick'"
@@ -306,11 +306,11 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           name="metaTitle"
           render={({ field }) => {
             const [charCount, setCharCount] = useState(
-              field.value?.length || 0
+              field.value?.length || 0,
             );
 
             const handleInputChange = (
-              e: React.ChangeEvent<HTMLInputElement>
+              e: React.ChangeEvent<HTMLInputElement>,
             ) => {
               const newValue = e.target.value;
 
@@ -322,13 +322,13 @@ export default function BlogForm({ type, formData }: StateFormProps) {
             };
 
             return (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base max-sm:w-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base max-sm:w-fit lg:text-lg">
                   Meta Title
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
 
-                <div className="flex-col items-start w-full">
+                <div className="w-full flex-col items-start">
                   <FormControl>
                     <Input
                       placeholder="e.g., 'Top Attractions in Abu Dhabi'"
@@ -337,7 +337,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                       onChange={handleInputChange} // Handle change to track character count
                     />
                   </FormControl>
-                  <FormDescription className="ml-2 w-full flex-between">
+                  <FormDescription className="flex-between ml-2 w-full">
                     <span className="w-full max-w-[90%]">
                       Provide the meta title. 150 characters max.
                     </span>
@@ -360,14 +360,14 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           render={({ field }) => {
             const [isFocused, setIsFocused] = useState(false); // To manage focus state
             const [charCount, setCharCount] = useState(
-              field.value?.length || 0
+              field.value?.length || 0,
             );
 
             const handleFocus = () => setIsFocused(true);
             const handleBlur = () => setIsFocused(false);
 
             const handleInputChange = (
-              e: React.ChangeEvent<HTMLTextAreaElement>
+              e: React.ChangeEvent<HTMLTextAreaElement>,
             ) => {
               const newValue = e.target.value;
 
@@ -379,13 +379,13 @@ export default function BlogForm({ type, formData }: StateFormProps) {
             };
 
             return (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base h-fit lg:text-lg">
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex h-fit w-64 justify-between text-base lg:text-lg">
                   Meta Description
                   <span className="mr-5 max-sm:hidden">:</span>
                 </FormLabel>
                 <div
-                  className="flex-col items-start w-full"
+                  className="w-full flex-col items-start"
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                 >
@@ -393,13 +393,13 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                     <Textarea
                       placeholder="e.g., 'Discover the top attractions in Abu Dhabi, from the Sheikh Zayed Mosque to the Corniche.'"
                       {...field}
-                      className={`textarea rounded-2xl transition-all duration-300 outline-none border-none focus:ring-0 ring-0 ${
+                      className={`textarea rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0 ${
                         isFocused ? "h-96" : "h-20"
                       }`}
                       onChange={handleInputChange} // Handle change to track character count
                     />
                   </FormControl>
-                  <FormDescription className="ml-2 w-full flex-between">
+                  <FormDescription className="flex-between ml-2 w-full">
                     <span className="w-full max-w-[90%]">
                       Provide meta description.500 characters max.
                     </span>{" "}
@@ -421,7 +421,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
 
         <hr className="my-3 border" />
 
-        {/* blog content text editor */}
+        {/* blog content text editor field*/}
         <FormField
           control={form.control}
           name="blogContent"
@@ -438,7 +438,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
+          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
         >
           {isFileUploading
             ? "Uploading..."
