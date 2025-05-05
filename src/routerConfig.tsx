@@ -69,6 +69,17 @@ const EditSeriesPage = lazy(
   () => import("./pages/manage-series/EditSeriesPage"),
 );
 
+// country page pages
+const ManageCountryPage = lazy(
+  () => import("./pages/manage-countries/ManageCountryPage"),
+);
+const AddCountryPage = lazy(
+  () => import("./pages/manage-countries/AddCountryPage"),
+);
+const EditCountryPage = lazy(
+  () => import("./pages/manage-countries/EditCountryPage"),
+);
+
 // states page pages
 const ManageStatesPage = lazy(
   () => import("./pages/manage-states/ManageStatesPage"),
@@ -349,6 +360,20 @@ export const router = createBrowserRouter([
               {
                 path: "/locations/manage-states/edit/:stateId",
                 element: <EditStatePage />,
+              },
+
+              // country route
+              {
+                path: "/locations/manage-countries",
+                element: <ManageCountryPage />,
+              },
+              {
+                path: "/locations/manage-countries/add",
+                element: <AddCountryPage />,
+              },
+              {
+                path: "/locations/manage-countries/edit/:countryId",
+                element: <EditCountryPage />,
               },
 
               // cities route

@@ -39,7 +39,7 @@ export interface BannerType {
   mobileImage: string;
   isEnabled: boolean;
   bannerForId: string;
-  bannerFor: string;
+  bannerFor: "state" | "country" | "parentState";
 }
 
 const HomepageBannerSchema = z.object({
@@ -54,7 +54,7 @@ export default function HomepageBannerForm({
   data = [],
 }: {
   id: string;
-  bannerFor: string;
+  bannerFor: "state" | "country" | "parentState";
   data: BannerType[];
 }) {
   const [isFileUploading, setIsFileUploading] = useState(false);
@@ -126,7 +126,11 @@ export default function HomepageBannerForm({
 
       const response = formData?._id
         ? await updateHomePageBanner(formData, formData._id)
-        : await addHomePageBanner(formData);
+        : ((await addHomePageBanner(formData)) as any);
+
+      if (response && response?.result?._id && !formData._id) {
+        form.setValue(`sections.${sectionIndex}._id`, response?.result?._id);
+      }
 
       if (response) {
         await deleteMultipleFiles(deletedImages);
@@ -164,48 +168,6 @@ export default function HomepageBannerForm({
       });
     }
   };
-
-  //   const onSubmit = async (values: FormValues) => {
-  //     if (isFileUploading) {
-  //       toast({
-  //         title: "File Upload in Progress",
-  //         description: "Please wait until the file upload completes.",
-  //         duration: 3000,
-  //         className: "bg-orange",
-  //       });
-  //       return;
-  //     }
-
-  //     try {
-  //       const formData: BannerType[] = values.sections.map((section) => ({
-  //         sectionName: section.sectionName,
-  //         desktopImage: section.desktopImage,
-  //         mobileImage: section.mobileImage,
-  //         isEnabled: section.isEnabled,
-  //         bannerForId: id,
-  //         bannerFor,
-  //       }));
-
-  //       const response = await addHomePageBanner(formData);
-  //       console.log("Submitted data:", response);
-
-  //       if (response) {
-  //         await deleteMultipleFiles(deletedImages);
-  //       }
-
-  //       toast({
-  //         title: "Homepage Banners Saved",
-  //         className: "bg-yellow text-white",
-  //       });
-  //     } catch (error) {
-  //       console.error(error);
-  //       toast({
-  //         variant: "destructive",
-  //         title: "Save Failed",
-  //         description: "Something went wrong.",
-  //       });
-  //     }
-  //   };
 
   return (
     <Form {...form}>

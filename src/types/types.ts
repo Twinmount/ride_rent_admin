@@ -91,6 +91,12 @@ export type StateFormType = {
   relatedStates?: string[];
 };
 
+export type CountryFormType = {
+  countryId?: string;
+  countryName: string;
+  countryValue: string;
+};
+
 export type CategoryFormType = {
   name: string;
   value: string;

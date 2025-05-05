@@ -59,6 +59,12 @@ export interface FetchStatesResponse {
   statusCode: number;
 }
 
+export interface FetchCountriesResponse {
+  result: CountryType[];
+  status: string;
+  statusCode: number;
+}
+
 export interface BannerTypeResponse {
   result: BannerType[];
   status: string;
@@ -101,6 +107,12 @@ export interface GetStateFAQResponse {
 //  interface for the states (by id)  API response
 export interface FetchSpecificStateResponse {
   result: StateType;
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchSpecificCountryResponse {
+  result: CountryType;
   status: string;
   statusCode: number;
 }

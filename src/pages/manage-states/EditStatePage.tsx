@@ -45,10 +45,19 @@ export default function EditLocationPage() {
     retry: false,
     refetchOnWindowFocus: false,
   });
-  const bannerFor = !!parentStateId ? "state" : "parentState";
+
+  let bannerFor: "state" | "country" | "parentState" = "state";
+  if (isIndia) {
+    bannerFor = parentStateId ? "state" : "parentState";
+  }
+
   const { data: bannerData, isFetching: isBannerFetching } = useQuery({
     queryKey: ["banner-state", stateId],
-    queryFn: () => getHomePageBanner(stateId as string, bannerFor as string),
+    queryFn: () =>
+      getHomePageBanner(
+        stateId as string,
+        bannerFor as "state" | "country" | "parentState",
+      ),
     enabled: !!stateId && activeTab === "banner",
     retry: false,
     refetchOnWindowFocus: false,

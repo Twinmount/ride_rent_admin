@@ -6,6 +6,7 @@ import {
   CityFormType,
   CompanyFormType,
   CompanyStatusFormType,
+  CountryFormType,
   StateFormType,
   VehicleSeriesType,
   VehicleTypeFormType,
@@ -65,6 +66,13 @@ export const StateFormDefaultValues: StateFormType = {
   stateImage: "",
   relatedStates: [""],
 };
+
+export const CountryFormDefaultValues: CountryFormType = {
+  countryId: "",
+  countryName: "",
+  countryValue: "",
+};
+
 export const CityFormDefaultValues: CityFormType = {
   cityName: "",
   cityValue: "",

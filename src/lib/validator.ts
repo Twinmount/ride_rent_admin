@@ -1,3 +1,4 @@
+import { count } from "console";
 import * as z from "zod";
 
 // Vehicle Type Form Schema
@@ -36,6 +37,24 @@ export const BrandFormSchema = z.object({
     ),
   brandLogo: z.string().min(1, "Brand logo is required"),
   vehicleCategoryId: z.string().min(1, "Category is required"),
+});
+
+// Country Form Schema
+export const CountryFormSchema = z.object({
+  countryName: z
+    .string()
+    .min(3, "Country title should be at least 3 characters long")
+    .regex(
+      /^[A-Za-z\s]+$/,
+      "Country title should only contain letters and spaces",
+    ),
+  countryValue: z
+    .string()
+    .min(3, "Country value should be at least 3 characters long")
+    .regex(
+      /^[a-z-]+$/,
+      "Country value should only contain lowercase letters and hyphens",
+    ),
 });
 
 // State Form Schema
@@ -218,10 +237,10 @@ export const PrimaryFormSchema = z
           cityId: z.string(),
           cityName: z.string(),
           cityValue: z.string(),
-        })
+        }),
       )
       .optional(),
-      location: z
+    location: z
       .object({
         lat: z.number(),
         lng: z.number(),
@@ -287,7 +306,7 @@ export const CompanyFormSchema = z.object({
     .string()
     .min(1, "Meta description is required")
     .max(500, "Meta description must be 500 characters or less"),
-    location: z
+  location: z
     .object({
       lat: z.number(),
       lng: z.number(),

@@ -2,8 +2,10 @@ import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
   BannerTypeResponse,
+  FetchCountriesResponse,
   FetchCountryResponse,
   FetchParentStatesResponse,
+  FetchSpecificCountryResponse,
   FetchSpecificStateResponse,
   FetchStatesResponse,
   GetStateFAQResponse,
@@ -18,13 +20,19 @@ export interface StateType {
   isParentState?: boolean | null;
 }
 
+export interface CountryType {
+  countryName: string;
+  countryValue: string;
+}
+
 export interface BannerType {
+  _id?: string;
   sectionName: string;
   desktopImage: string;
   mobileImage: string;
   isEnabled: boolean;
   bannerForId: string;
-  bannerFor: string;
+  bannerFor: "state" | "country" | "parentState";
 }
 
 // add state
@@ -100,6 +108,25 @@ export const fetchStateById = async (
   }
 };
 
+export const fetchCountryById = async (
+  countryId: string,
+): Promise<FetchSpecificCountryResponse> => {
+  try {
+    const data = await API.get<FetchSpecificCountryResponse>({
+      slug: `${Slug.GET_COUNTRY}?countryId=${countryId}`,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch country data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching Country:", error);
+    throw error;
+  }
+};
+
 export const addHomePageBanner = async (values: BannerType) => {
   try {
     const data = await API.post({
@@ -147,7 +174,7 @@ export const deleteHomePageBanner = async (id: string) => {
 
 export const getHomePageBanner = async (
   bannerForId: string,
-  bannerFor: string,
+  bannerFor: "state" | "country" | "parentState",
 ) => {
   try {
     let params = new URLSearchParams();
@@ -168,6 +195,25 @@ export const getHomePageBanner = async (
     return data;
   } catch (error) {
     console.error("Error adding state:", error);
+    throw error;
+  }
+};
+
+export const fetchAllCountries = async (): Promise<FetchCountriesResponse> => {
+  try {
+    const slug = Slug.GET_ALL_COUNTRY;
+
+    const data = await API.get<FetchCountriesResponse>({
+      slug: slug,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch country data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching Countries:", error);
     throw error;
   }
 };
@@ -339,6 +385,44 @@ export const upadteStateFaqFn = async (requestBody: UpdateStateFAQPayload) => {
     return data;
   } catch (error) {
     console.error("Error updating specification form data:", error);
+    throw error;
+  }
+};
+
+// add country
+export const addCountry = async (values: CountryType) => {
+  try {
+    const data = await API.post({
+      slug: Slug.ADD_STATE,
+      body: {
+        countryName: values.countryName,
+        countryValue: values.countryValue,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error adding country:", error);
+    throw error;
+  }
+};
+
+// update country
+export const updateCountry = async (values: CountryType, countryId: string) => {
+  try {
+    // Send the FormData object using the API put method
+    const data = await API.put({
+      slug: Slug.PUT_STATE, // Use the correct slug
+      body: {
+        countryId: countryId,
+        countryName: values.countryName,
+        countryValue: values.countryValue,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error updating state:", error);
     throw error;
   }
 };
