@@ -5,11 +5,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import RichTextEditorComponent from "./RichTextEditorComponent";
+import JoditRichTextEditor from "./text-editor/JoditTextEditor";
 
 interface BlogContentEditorProps {
-  content?: string; // initial content if any
-  onUpdate: (content: string) => void; // callback to update the HTML string
+  content?: string;
+  onUpdate: (content: string) => void;
 }
 
 export default function BlogContentEditor({
@@ -17,30 +17,31 @@ export default function BlogContentEditor({
   onUpdate,
 }: BlogContentEditorProps) {
   return (
-    <FormItem className="flex flex-col w-full mb-2 max-sm:flex-col">
-      <FormLabel className="w-full mt-4 ml-2 text-lg !font-bold text-left lg:text-xl">
+    <FormItem className="mb-2 flex w-full flex-col max-sm:flex-col">
+      <FormLabel className="ml-2 mt-4 w-full text-left text-lg !font-bold lg:text-xl">
         Body Of The Blog
       </FormLabel>
-      <FormDescription className="w-full ml-2">
+      <FormDescription className="ml-2 w-full">
         Make sure appropriate page structure is maintained here as it will be
         directly reflected in the Frontend UI. <br />
         &#8226; use{" "}
-        <span className="px-1 font-semibold rounded-md bg-slate-300">
+        <span className="rounded-md bg-slate-300 px-1 font-semibold">
           ctrl+shift+v
         </span>{" "}
         or{" "}
-        <span className="px-1 font-semibold rounded-md bg-slate-300">
+        <span className="rounded-md bg-slate-300 px-1 font-semibold">
           cmd+shift+v
         </span>{" "}
         to paste a copied text <br />
       </FormDescription>
-      <FormControl>
-        {/* Render the RichTextEditor component */}
-        <RichTextEditorComponent
+      <FormControl className="">
+        {/* <RichTextEditorComponent
           content={content}
           onUpdate={onUpdate}
           isBlog={true}
-        />
+        /> */}
+
+        <JoditRichTextEditor content={content} onChange={onUpdate} />
       </FormControl>
 
       <FormMessage />
