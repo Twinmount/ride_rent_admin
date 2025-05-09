@@ -13,7 +13,7 @@ import { AxiosProgressEvent } from "axios";
 export const uploadSingleFile = async (
   fileCategory: GcsFilePaths,
   file: File,
-  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void
+  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void,
 ): Promise<SingleFileUploadResponse> => {
   try {
     const formData = new FormData();
@@ -47,7 +47,7 @@ export const uploadSingleFile = async (
 export const uploadMultipleFiles = async (
   fileCategory: GcsFilePaths,
   files: File[],
-  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void
+  onUploadProgress?: (progressEvent: AxiosProgressEvent) => void,
 ): Promise<MultipleFileUploadResponse> => {
   try {
     const formData = new FormData();
@@ -84,7 +84,7 @@ export const uploadMultipleFiles = async (
 };
 
 export const getSingleImage = async (
-  path: string
+  path: string,
 ): Promise<GetSingleImageResponse> => {
   try {
     const response = await API.get<GetSingleImageResponse>({
@@ -92,19 +92,19 @@ export const getSingleImage = async (
     });
 
     if (!response) {
-      throw new Error("Failed to delete image");
+      throw new Error("Failed to get image");
     }
 
     return response;
   } catch (error) {
-    console.error("Error deleting file:", error);
+    console.error("Error getting file:", error);
     throw error;
   }
 };
 
 // File delete function
 export const deleteFile = async (
-  path: string
+  path: string,
 ): Promise<DeleteSingleImageResponse> => {
   try {
     const response = await API.delete<DeleteSingleImageResponse>({
