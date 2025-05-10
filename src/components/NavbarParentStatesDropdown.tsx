@@ -9,25 +9,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { useAdminContext } from "@/context/AdminContext";
-import { countryType } from "@/types/types";
+import { stateType } from "@/types/types";
 
-import { ChevronDown, Globe } from "lucide-react";
+import { ChevronDown, MapPin } from "lucide-react";
 
 type DropdownProps = {
-  options: countryType[];
+  options: stateType[];
   isLoading: boolean;
 };
 
-const NavbarCountryDropdown = ({ options, isLoading }: DropdownProps) => {
-  const { country, setCountry } = useAdminContext();
+const NavbarParentStatesDropdown = ({ options, isLoading }: DropdownProps) => {
+  const { parentState, setParentState } = useAdminContext();
 
-  const handleSelect = (option: countryType) => {
-    const { countryName, countryValue, countryId } = option;
-    setCountry({ countryName, countryValue, countryId });
-    localStorage.setItem("selectedCountry", JSON.stringify(country));
-    localStorage.removeItem("selectedParentState");
+  const handleSelect = (option: stateType) => {
+    const { stateName, stateValue, stateId } = option;
+    setParentState({ stateName, stateValue, stateId });
+    localStorage.setItem("selectedParentState", JSON.stringify(parentState));
     localStorage.removeItem("selectedState");
-    window.location.reload();
   };
 
   return (
@@ -39,34 +37,33 @@ const NavbarCountryDropdown = ({ options, isLoading }: DropdownProps) => {
         }`}
         disabled={isLoading}
       >
-        <div className="relative flex h-10 items-center whitespace-nowrap rounded-3xl pl-4 pr-1 font-semibold tracking-wider outline">
-          <Globe className="mr-2 text-yellow" size={20} />
+        <div className="relative flex h-10 items-center whitespace-nowrap rounded-3xl pr-1 font-semibold tracking-wider outline">
+          <MapPin className="mr-2 text-yellow" size={20} />
           {isLoading
             ? "Loading..."
-            : country?.countryName || "Select a country"}
+            : parentState?.stateName || "Select a state"}
           {!isLoading && (
             <ChevronDown className="relative top-1 ml-1" width={15} />
           )}
-          {/* Render NotificationIndicator in DropdownMenuTrigger */}
         </div>
       </DropdownMenuTrigger>
 
       {!isLoading && options?.length > 0 && (
         <DropdownMenuContent className="ml-8 w-40">
           <DropdownMenuLabel className="mb-2 bg-slate-100 font-bold">
-            Choose country
+            Choose parentState
           </DropdownMenuLabel>
           {options.map((option) => (
-            <DropdownMenuGroup key={option.countryId}>
+            <DropdownMenuGroup key={option.stateId}>
               <DropdownMenuItem
                 onClick={() => handleSelect(option)}
                 className={`relative flex cursor-pointer items-center justify-between font-semibold ${
-                  option.countryValue === country?.countryValue
+                  option.stateValue === parentState?.stateValue
                     ? "bg-slate-900 !text-white hover:!bg-slate-900"
                     : "text-black hover:!bg-gray-300"
                 }`}
               >
-                {option.countryName}
+                {option.stateName}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
             </DropdownMenuGroup>
@@ -77,4 +74,4 @@ const NavbarCountryDropdown = ({ options, isLoading }: DropdownProps) => {
   );
 };
 
-export default NavbarCountryDropdown;
+export default NavbarParentStatesDropdown;

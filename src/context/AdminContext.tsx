@@ -1,10 +1,5 @@
 import useIsSmallScreen from "@/hooks/useIsSmallScreen";
-import {
-  AdminContextType,
-  countryType,
-  orgType,
-  stateType,
-} from "@/types/types";
+import { AdminContextType, countryType, stateType } from "@/types/types";
 
 import {
   createContext,
@@ -34,6 +29,11 @@ const AdminProvider = ({ children }: AdminProviderProps) => {
     countryId: "",
     countryName: "",
     countryValue: "",
+  });
+  const [parentState, setParentState] = useState<stateType>({
+    stateId: "",
+    stateName: "",
+    stateValue: "",
   });
   const [state, setState] = useState<stateType>({
     stateId: "",
@@ -69,6 +69,8 @@ const AdminProvider = ({ children }: AdminProviderProps) => {
         setState,
         country,
         setCountry,
+        parentState,
+        setParentState,
       }}
     >
       {children}

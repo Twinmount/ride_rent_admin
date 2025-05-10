@@ -18,9 +18,14 @@ import { useEffect, useRef, useState } from "react";
 type DropdownProps = {
   options: NavbarStateType[];
   isLoading: boolean;
+  isIndia: boolean;
 };
 
-const NavbarStatesDropdown = ({ options, isLoading }: DropdownProps) => {
+const NavbarStatesDropdown = ({
+  options,
+  isLoading,
+  isIndia = false,
+}: DropdownProps) => {
   const { state, setState } = useAdminContext();
   const [searchInput, setSearchInput] = useState("");
   const [filteredOptions, setFilteredOptions] =
@@ -75,7 +80,13 @@ const NavbarStatesDropdown = ({ options, isLoading }: DropdownProps) => {
       >
         <div className="relative flex h-10 items-center whitespace-nowrap rounded-3xl pr-1 font-semibold tracking-wider outline">
           <MapPin className="mr-2 text-yellow" size={20} />
-          {isLoading ? "Loading..." : state?.stateName || "Select a state"}
+          {isLoading
+            ? "Loading..."
+            : state?.stateName
+              ? state?.stateName
+              : isIndia
+                ? "Select a location"
+                : "Select a state"}
           {!isLoading && (
             <ChevronDown className="relative top-1 ml-1" width={15} />
           )}

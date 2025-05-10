@@ -48,6 +48,8 @@ export type AdminContextType = {
   setState: (state: stateType) => void;
   country: countryType;
   setCountry: (state: countryType) => void;
+  parentState: stateType;
+  setParentState: (state: stateType) => void;
 };
 
 export type VehicleCategoryType =

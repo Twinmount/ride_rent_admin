@@ -8,8 +8,14 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { useFetchGlobalStates } from "@/hooks/useFetchGlobalStates";
 
 export default function Layout() {
-  const { options, countryOption, isLoading, isError, error } =
-    useFetchGlobalStates();
+  const {
+    options,
+    countryOption,
+    isLoading,
+    isError,
+    error,
+    parentSatetOptions,
+  } = useFetchGlobalStates();
 
   if (isError) {
     return (
@@ -26,6 +32,7 @@ export default function Layout() {
         options={options}
         countryOption={countryOption}
         isLoading={isLoading}
+        parentSatetOptions={parentSatetOptions}
       />
 
       <Sidebar />

@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 import { GcsFilePaths } from "@/constants/enum";
 import SingleFileUpload from "./file-uploads/SingleFileUpload";
 import { toast } from "../ui/use-toast";
-import { deleteMultipleFiles } from "@/helpers/form";
 import { Switch } from "../ui/switch";
 import {
   addHomePageBanner,
@@ -133,9 +132,10 @@ export default function HomepageBannerForm({
       }
 
       if (response) {
-        await deleteMultipleFiles(deletedImages);
+        console.log(deletedImages);
+        // commented this line on puprose
+        // await deleteMultipleFiles(deletedImages);
       }
-      //   queryClient.invalidateQueries({ queryKey: ["banner-state", id] });
 
       toast({
         title: "Homepage Banners Saved",
@@ -253,7 +253,7 @@ export default function HomepageBannerForm({
                   description="Recommended aspect ratio: 1600x450 (desktop)"
                   isDownloadable
                   setIsFileUploading={setIsFileUploading}
-                  bucketFilePath={GcsFilePaths.IMAGE}
+                  bucketFilePath={GcsFilePaths.BANNERS}
                   setDeletedImages={setDeletedImages}
                   existingFile={field.value}
                 />
@@ -271,7 +271,7 @@ export default function HomepageBannerForm({
                   description="Recommended aspect ratio: 1600x800 (mobile)"
                   isDownloadable
                   setIsFileUploading={setIsFileUploading}
-                  bucketFilePath={GcsFilePaths.IMAGE}
+                  bucketFilePath={GcsFilePaths.BANNERS}
                   setDeletedImages={setDeletedImages}
                   existingFile={field.value}
                 />

@@ -1,6 +1,7 @@
 export enum GcsFilePaths {
   IMAGE = "/images",
   LOGOS = "/logos",
+  BANNERS = "/banners",
   DOCUMENTS = "/documents",
   PROFILE = "/profile",
   IMAGE_VEHICLES = "/vehicles/images",
