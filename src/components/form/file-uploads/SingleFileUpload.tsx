@@ -86,7 +86,7 @@ const SingleFileUpload = ({
 
   // Handle file upload and setting values
   const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -110,7 +110,7 @@ const SingleFileUpload = ({
                 (progressEvent.loaded / progressEvent.total) * 100;
               setProgress(progress);
             }
-          }
+          },
         );
         const uploadedFilePath = uploadResponse.result.path;
 
@@ -140,7 +140,7 @@ const SingleFileUpload = ({
 
     //  clear the input field memory
     const fileInput = document.getElementById(
-      `file-upload-${name}`
+      `file-upload-${name}`,
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = ""; // Clear the file input field
@@ -175,11 +175,11 @@ const SingleFileUpload = ({
   };
   return (
     <>
-      <FormItem className="flex mb-2 w-full max-sm:flex-col">
-        <FormLabel className="flex justify-between mt-4 ml-2 w-64 text-base max-sm:w-fit lg:text-lg">
+      <FormItem className="mb-2 flex w-full max-sm:flex-col">
+        <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base max-sm:w-fit lg:text-lg">
           {label} <span className="mr-5 max-sm:hidden">:</span>
         </FormLabel>
-        <div className="flex-col items-start w-full">
+        <div className="w-full flex-col items-start">
           <FormControl>
             <Controller
               name={name}
@@ -193,20 +193,20 @@ const SingleFileUpload = ({
                     id={`file-upload-${name}`}
                     disabled={isDisabled || isUploading}
                   />
-                  <div className="flex gap-4 items-center mt-2">
+                  <div className="mt-2 flex items-center gap-4">
                     {imagePath ? (
-                      <div className="relative w-24 group/box">
+                      <div className="group/box relative w-24">
                         {/* Use PreviewImageComponent to handle image fetching */}
                         <PreviewImageComponent imagePath={imagePath} />
-                        <div className="absolute top-0 right-0 bottom-0 left-0 space-x-2">
+                        <div className="absolute bottom-0 left-0 right-0 top-0 space-x-2">
                           {!isDisabled && (
                             <DropdownMenu>
                               <DropdownMenuTrigger
                                 asChild
-                                className="border-none ring-0 outline-none"
+                                className="border-none outline-none ring-0"
                               >
-                                <button className="absolute top-1 right-1 p-1 bg-white rounded-full border ring-0 shadow-md outline-none h-fit">
-                                  <MoreVertical className="w-5 h-5 text-gray-600" />
+                                <button className="absolute right-1 top-1 h-fit rounded-full border bg-white p-1 shadow-md outline-none ring-0">
+                                  <MoreVertical className="h-5 w-5 text-gray-600" />
                                 </button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent className="w-28">
@@ -217,7 +217,7 @@ const SingleFileUpload = ({
                                   } // Open the modal instead of directly calling delete
                                   disabled={isDisabled || isUploading}
                                 >
-                                  <Trash2 className="mr-2 w-5 h-5 text-red-600" />
+                                  <Trash2 className="mr-2 h-5 w-5 text-red-600" />
                                   Delete
                                 </DropdownMenuItem>
 
@@ -226,7 +226,7 @@ const SingleFileUpload = ({
                                   onClick={handlePreviewImage}
                                   disabled={isUploading}
                                 >
-                                  <Eye className="mr-2 w-5 h-5 text-blue-600" />
+                                  <Eye className="mr-2 h-5 w-5 text-blue-600" />
                                   Preview
                                 </DropdownMenuItem>
 
@@ -236,7 +236,7 @@ const SingleFileUpload = ({
                                     onClick={handleDownloadImage}
                                     disabled={isUploading}
                                   >
-                                    <Download className="mr-2 w-5 h-5 text-green-600" />
+                                    <Download className="mr-2 h-5 w-5 text-green-600" />
                                     Download
                                   </DropdownMenuItem>
                                 )}
@@ -248,20 +248,20 @@ const SingleFileUpload = ({
                     ) : (
                       <label
                         htmlFor={`file-upload-${name}`}
-                        className="flex relative justify-center w-24 cursor-pointer"
+                        className="relative flex w-24 cursor-pointer justify-center"
                       >
-                        <div className="flex flex-col justify-center items-center w-24 h-24 bg-gray-50 rounded-lg border cursor-pointer">
+                        <div className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-lg border bg-gray-50">
                           <Upload size={24} className="text-yellow" />
                           <span className="text-sm text-yellow">Upload</span>
                         </div>
 
                         {/* progress bar */}
                         {isUploading && (
-                          <div className="absolute w-[99%] mx-auto mt-2 bottom-1">
+                          <div className="absolute bottom-1 mx-auto mt-2 w-[99%]">
                             {/* progress bar */}
 
                             <div className="mt-2 w-full">
-                              <Progress value={progress} className="w-[95%] " />
+                              <Progress value={progress} className="w-[95%]" />
                             </div>
                           </div>
                         )}

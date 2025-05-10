@@ -8,4 +8,5 @@ export enum GcsFilePaths {
   VIDEO_VEHICLES = "/vehicles/videos",
   VEHICLE_REGISTRATION_CARDS = "/vehicles/registration-cards",
   COMMERCIAL_LICENSES = "/vehicles/commercial-licenses",
+  BLOG = "/blog",
 }
