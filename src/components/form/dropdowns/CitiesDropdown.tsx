@@ -17,6 +17,7 @@ import { ChevronDown } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { fetchAllCities } from "@/api/cities";
+import { toast } from "@/components/ui/use-toast";
 
 type CityType = {
   stateId: string;
@@ -74,7 +75,7 @@ const CitiesDropdown = ({
       setCities((prevCities) => {
         const newCities = data.result.filter(
           (newCity: CityType) =>
-            !prevCities.some((city) => city.cityId === newCity.cityId)
+            !prevCities.some((city) => city.cityId === newCity.cityId),
         );
         return [...prevCities, ...newCities];
       });
@@ -87,7 +88,7 @@ const CitiesDropdown = ({
         let newCities = temoraryCities.filter(
           (city) =>
             city.stateId === stateId &&
-            !prev.some((prevCity) => prevCity.cityId === city.cityId)
+            !prev.some((prevCity) => prevCity.cityId === city.cityId),
         );
         return [...prev, ...newCities];
       });
@@ -109,7 +110,7 @@ const CitiesDropdown = ({
         .filter(
           (id) =>
             id?.startsWith("temp-") &&
-            !cities.some((city) => city?.cityId === id)
+            !cities.some((city) => city?.cityId === id),
         )
         .map((id) => {
           const name = id.replace("temp-", "").replace(/-/g, " ");
@@ -133,7 +134,16 @@ const CitiesDropdown = ({
   }, [value, cities, stateId]);
 
   const handleSelectCity = (cityId: string) => {
-    const updatedSelected = selectedCities.includes(cityId)
+    const isAlreadySelected = selectedCities.includes(cityId);
+
+    if (!isAlreadySelected && selectedCities.length >= 10) {
+      return toast({
+        variant: "destructive",
+        title: "Action Failed",
+        description: "You can only select up to 10 serviceable areas.",
+      });
+    }
+    const updatedSelected = isAlreadySelected
       ? selectedCities.filter((id) => id !== cityId)
       : [...selectedCities, cityId];
     setSelectedCities(updatedSelected);
@@ -141,6 +151,12 @@ const CitiesDropdown = ({
   };
 
   const handleCreateCity = (name: string) => {
+    if (selectedCities.length >= 10)
+      return toast({
+        variant: "destructive",
+        title: `Action Failed`,
+        description: "You can only select up to 10 serviceable areas.",
+      });
     const cityId = generateTempCityId(name);
     const newCity: CityType = {
       cityId,
@@ -149,9 +165,9 @@ const CitiesDropdown = ({
       stateId,
     };
 
-    setCities((prev) => [...prev, newCity]);
-    setTemoraryCities((prev) => [...prev, newCity]);
-    const updatedSelected = [...selectedCities, cityId];
+    setCities((prev) => [newCity, ...prev]);
+    setTemoraryCities((prev) => [newCity, ...prev]);
+    const updatedSelected = [cityId, ...selectedCities];
     setSelectedCities(updatedSelected);
     onChangeHandler(updatedSelected);
     setSearchTerm("");
@@ -169,11 +185,11 @@ const CitiesDropdown = ({
   };
 
   const filteredCities = cities.filter((city) =>
-    city.cityName.toLowerCase().includes(searchTerm.toLowerCase())
+    city.cityName.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const cityExists = filteredCities.some(
-    (city) => city.cityName.toLowerCase() === searchTerm.toLowerCase()
+    (city) => city.cityName.toLowerCase() === searchTerm.toLowerCase(),
   );
 
   return (
@@ -184,19 +200,19 @@ const CitiesDropdown = ({
           role="combobox"
           aria-expanded={false}
           disabled={isDisabled || isLoading || !stateId}
-          className="justify-between w-full font-normal"
+          className="w-full justify-between font-normal"
         >
           {!stateId
             ? "choose a state first"
             : isLoading
-            ? "fetching cities..."
-            : selectedCities.length > 0
-            ? `${selectedCities.length} cities selected`
-            : `Choose ${placeholder}`}
-          <ChevronDown className="w-6 h-6 opacity-50" />
+              ? "fetching cities..."
+              : selectedCities.length > 0
+                ? `${selectedCities.length} cities selected`
+                : `Choose ${placeholder}`}
+          <ChevronDown className="h-6 w-6 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="md:!w-96 p-0">
+      <PopoverContent className="p-0 md:!w-96">
         <Command shouldFilter={false}>
           <CommandInput
             value={searchTerm}
@@ -211,7 +227,7 @@ const CitiesDropdown = ({
                   <br />
                   {!!searchTerm && !!isTempCreatable && (
                     <button
-                      className="text-blue-600 underline mt-2"
+                      className="mt-2 text-blue-600 underline"
                       onClick={() => handleCreateCity(searchTerm)}
                     >
                       Create & Select “{searchTerm}”
@@ -230,13 +246,13 @@ const CitiesDropdown = ({
                       key={city.cityId}
                       value={city.cityId}
                       onSelect={() => handleSelectCity(city.cityId)}
-                      className="flex items-center justify-between gap-2 mt-1"
+                      className="mt-1 flex items-center justify-between gap-2"
                     >
                       <div className="flex items-center gap-x-2">
                         <Checkbox
                           checked={selectedCities.includes(city.cityId)}
                           onCheckedChange={() => handleSelectCity(city.cityId)}
-                          className="bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                          className="bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
                         />
                         {editingCityId === city.cityId ? (
                           <input
@@ -252,13 +268,13 @@ const CitiesDropdown = ({
                                         cityName: editingCityName,
                                         cityValue: editingCityName,
                                       }
-                                    : c
-                                )
+                                    : c,
+                                ),
                               );
                               setEditingCityId(null);
                             }}
                             autoFocus
-                            className="border px-1 py-0.5 text-sm rounded"
+                            className="rounded border px-1 py-0.5 text-sm"
                           />
                         ) : (
                           <span>{city.cityName}</span>

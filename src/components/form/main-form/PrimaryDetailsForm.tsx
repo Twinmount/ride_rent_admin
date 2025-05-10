@@ -95,7 +95,7 @@ export default function PrimaryDetailsForm({
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [isCarsCategory, setIsCarsCategory] = useState(false);
   const [hideCommercialLicenses, setHideCommercialLicenses] = useState(false);
-  
+
   const [cities, setCities] = useState<CityType[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [temoraryCities, setTemoraryCities] = useState<CityType[]>([]);
@@ -117,13 +117,13 @@ export default function PrimaryDetailsForm({
     defaultValues: initialValues as PrimaryFormType,
     shouldFocusError: true,
   });
-  
+
   useEffect(() => {
     if (formData?.tempCitys && Array.isArray(formData.tempCitys)) {
       setCities((prevCities) => {
         const newCities = formData.tempCitys?.filter(
           (newCity: CityType) =>
-            !prevCities.some((city) => city.cityId === newCity.cityId)
+            !prevCities.some((city) => city.cityId === newCity.cityId),
         );
         return [...prevCities, ...(newCities || [])];
       });
@@ -141,7 +141,6 @@ export default function PrimaryDetailsForm({
 
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
-    
     const validationError = validateRentalDetailsAndSecurityDeposit(values);
 
     if (validationError) {
@@ -157,11 +156,11 @@ export default function PrimaryDetailsForm({
       showFileUploadInProgressToast();
       return;
     }
-    
+
     const cityIds = selectedCities.filter((city) => !city.includes("temp-"));
     const tempCitys = cities.filter(
       (city) =>
-        city.cityId.includes("temp-") && selectedCities.includes(city.cityId)
+        city.cityId.includes("temp-") && selectedCities.includes(city.cityId),
     );
 
     // Append other form data
@@ -184,14 +183,15 @@ export default function PrimaryDetailsForm({
         if (data.result) {
           setCities((prev) => {
             let approvedCities = prev.filter(
-              (city) => !city.cityId.includes("temp-") && !city._id
+              (city) => !city.cityId.includes("temp-") && !city._id,
             );
 
-            return [...approvedCities, ...data.result.tempCitys || []];
+            return [...approvedCities, ...(data.result.tempCitys || [])];
           });
           setSelectedCities([
             ...data.result.city?.map((city: CityType) => city.cityId),
-            ...data.result.tempCitys?.map((city: CityType) => city.cityId) ?? [],
+            ...(data.result.tempCitys?.map((city: CityType) => city.cityId) ??
+              []),
           ]);
           setTemoraryCities(data.result.tempCitys || []);
         }
@@ -206,7 +206,7 @@ export default function PrimaryDetailsForm({
               return rest;
             }
             return city;
-          })
+          }),
         );
 
         if (type === "Add") {
@@ -598,22 +598,22 @@ export default function PrimaryDetailsForm({
           name="cityIds"
           render={({ field }) => (
             <FormItemWrapper
-            label={
-              <span>
-                {isIndia
-                  ? "Available Places / Areas"
-                  : "City / Serving Areas"}{" "}
-                <br />
-                <span className="text-xs text-gray-500">
-                  (multiple selection allowed)
+              label={
+                <span>
+                  {isIndia
+                    ? "Available Places / Areas"
+                    : "City / Serving Areas"}{" "}
+                  <br />
+                  <span className="text-xs text-gray-500">
+                    (multiple selection allowed)
+                  </span>
                 </span>
-              </span>
-            }
-            description={
-              isIndia
-                ? "Select / Create all operation/serving areas."
-                : "Select all the cities of operation/serving areas."
-            }
+              }
+              description={
+                isIndia
+                  ? "Select / Create serviceable. You can select up to 10 serviceable areas."
+                  : "Select all the cities of operation/serving areas."
+              }
             >
               <CitiesDropdown
                 stateId={form.watch("stateId")}
@@ -664,7 +664,7 @@ export default function PrimaryDetailsForm({
               description={
                 <span>
                   Enter your vehicle registration number (e.g.,{" "}
-                  <strong>ABC12345</strong>).
+                  <strong>{isIndia ? "KL02AB1234" : "ABC12345"}</strong>).
                   <br />
                   The number should be a combination of letters and numbers,
                   without spaces or special characters, up to 15 characters.
@@ -672,7 +672,7 @@ export default function PrimaryDetailsForm({
               }
             >
               <Input
-                placeholder="e.g., ABC12345"
+                placeholder={isIndia ? "e.g., KL02AB1234" : "e.g., ABC12345"}
                 {...field}
                 className="input-field"
                 type="text"
@@ -830,7 +830,7 @@ export default function PrimaryDetailsForm({
                   )}
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="UAE_SPEC" id="UAE_SPEC" />
-                    <Label htmlFor="UAE">UAE</Label>
+                    <Label htmlFor="UAE">GCC</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="USA_SPEC" id="USA_SPEC" />
@@ -838,7 +838,7 @@ export default function PrimaryDetailsForm({
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="OTHERS" id="others" />
-                    <Label htmlFor="others">Modified</Label>
+                    <Label htmlFor="others">Other</Label>
                   </div>
                 </RadioGroup>
               </div>
