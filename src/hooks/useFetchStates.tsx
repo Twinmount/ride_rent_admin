@@ -11,7 +11,7 @@ type filterType = {
 
 export const useFetchStates = (parentStateId: string | null = null) => {
   const [filter, setFilter] = useImmer<filterType>({
-    count: 4,
+    count: 20,
     searchTerm: null,
     stateId: null,
   });
