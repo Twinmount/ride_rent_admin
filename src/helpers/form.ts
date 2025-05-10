@@ -352,6 +352,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     vehicleMetaDescription: data.vehicleMetaDescription,
     tempCitys: data.tempCitys || [],
     location: data.location || undefined,
+    isVehicleModified: data.isVehicleModified,
   };
 }
 

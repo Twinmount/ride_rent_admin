@@ -45,5 +45,6 @@ export const buildCommonPrimaryDetails = (
       additionalVehicleTypes: values.additionalVehicleTypes || [],
     }),
     tempCitys: values.tempCitys,
+    isVehicleModified: values.isVehicleModified.toString(),
   };
 };

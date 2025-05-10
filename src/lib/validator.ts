@@ -1,4 +1,3 @@
-import { count } from "console";
 import * as z from "zod";
 
 // Vehicle Type Form Schema
@@ -222,6 +221,7 @@ export const PrimaryFormSchema = z
     isCreditOrDebitCardsSupported: z.boolean().default(false),
     isTabbySupported: z.boolean().default(false),
     isCashSupported: z.boolean().default(false),
+    isVehicleModified: z.boolean().default(false),
     vehicleMetaTitle: z
       .string()
       .min(1, "Vehicle Meta title is required")

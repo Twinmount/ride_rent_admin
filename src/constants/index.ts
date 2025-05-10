@@ -173,6 +173,7 @@ export const getPrimaryFormDefaultValues = (
   vehicleMetaDescription: "",
   tempCitys: [],
   location: undefined,
+  isVehicleModified: false,
 });
 
 // login page default value

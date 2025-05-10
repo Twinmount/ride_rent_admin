@@ -233,7 +233,7 @@ export interface AddPrimaryFormResponse {
     vehicleRegistrationNumber: string;
     createdAt: string;
     updatedAt: string;
-    tempCitys?:[]
+    tempCitys?: [];
   };
   status: string;
   statusCode: number;
@@ -355,7 +355,8 @@ export type GetPrimaryForm = {
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
   tempCitys: CityType[];
-  location: Location
+  location: Location;
+  isVehicleModified: boolean;
 };
 
 // Specification form get all response

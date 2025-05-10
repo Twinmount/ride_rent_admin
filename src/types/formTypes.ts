@@ -25,7 +25,6 @@ type CityType = {
   cityValue: string;
 };
 
-
 // Rental detail type for day, week, and month
 type RentalDetailType = {
   enabled: boolean;
@@ -82,7 +81,8 @@ export type PrimaryFormType = {
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
   tempCitys?: CityType[];
-  location?: Location
+  location?: Location;
+  isVehicleModified: boolean;
 };
 
 export type CompanyFormType = {};

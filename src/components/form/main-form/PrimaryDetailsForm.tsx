@@ -399,6 +399,25 @@ export default function PrimaryDetailsForm({
           )}
         />
 
+        {/* is Modified */}
+        <FormField
+          control={form.control}
+          name="isVehicleModified"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Modified?"
+              description="Select if this vehicle is modified."
+            >
+              <FormCheckbox
+                id="isVehicleModified"
+                label="Is this vehicle modified?"
+                checked={field.value}
+                onChange={field.onChange}
+              />
+            </FormItemWrapper>
+          )}
+        />
+
         {/* URL label */}
         <FormField
           control={form.control}
