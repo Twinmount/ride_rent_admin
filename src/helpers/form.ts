@@ -326,6 +326,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     vehicleSeriesId: data.vehicleSeriesId,
     vehicleModel: data.vehicleModel,
     vehiclePhotos: data.vehiclePhotos,
+    vehicleVideos: data.vehicleVideos,
     vehicleRegistrationNumber: data.vehicleRegistrationNumber,
     vehicleRegisteredYear: data.vehicleRegisteredYear,
     commercialLicenses: data.commercialLicenses,

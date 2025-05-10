@@ -228,6 +228,7 @@ export interface AddPrimaryFormResponse {
     city: CityType[];
     levelsFilled: number; // Assuming this is a number based on the example response
     vehiclePhotos: string[];
+    vehicleVideos: string[];
     commercialLicences: string[];
     companyId: string;
     vehicleRegistrationNumber: string;
@@ -343,6 +344,7 @@ export type GetPrimaryForm = {
   vehicleTitle: string;
   vehicleTitleH1: string;
   vehiclePhotos: string[];
+  vehicleVideos: string[];
   commercialLicenses: string[];
   additionalVehicleTypes?: string[];
   securityDeposit: {

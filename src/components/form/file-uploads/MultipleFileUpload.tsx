@@ -46,6 +46,8 @@ type MultipleFileUploadProps = {
   bucketFilePath: GcsFilePaths;
   downloadFileName?: string;
   setDeletedFiles: (deletedPaths: (prev: string[]) => string[]) => void;
+  isVideoAccepted?: boolean;
+  isImageAccepted?: boolean;
 };
 
 const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
@@ -60,6 +62,8 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   bucketFilePath,
   downloadFileName,
   setDeletedFiles,
+  isVideoAccepted = false,
+  isImageAccepted = true,
 }) => {
   const { control, setValue, clearErrors } = useFormContext();
   const [files, setFiles] = useState<string[]>(existingFiles);
@@ -73,6 +77,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   const getMaxCount = () => {
     if (name === "vehiclePhotos") return 8;
     if (name === "commercialLicenses") return 2;
+    if (name === "vehicleVideos") return 1;
     return 0;
   };
 
@@ -83,7 +88,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   }, [files, setValue, name]);
 
   const handleFilesChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const selectedFiles = Array.from(event.target.files || []);
     const validFiles: File[] = [];
@@ -100,6 +105,18 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
 
     for (const file of selectedFiles) {
       const isVideo = file.type.startsWith("video/");
+      const isImage = file.type.startsWith("image/");
+
+      // Skip files not matching allowed types
+      if ((isVideo && !isVideoAccepted) || (isImage && !isImageAccepted)) {
+        toast({
+          variant: "destructive",
+          title: "Invalid file type",
+          description: `File ${file.name} is not an accepted type.`,
+        });
+        continue;
+      }
+
       const sizeLimitMB = isVideo ? maxVideoSizeMB : maxSizeMB;
       if (!validateFileSize(file, sizeLimitMB)) {
         toast({
@@ -120,7 +137,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
     try {
       const uploadResponse = await uploadMultipleFiles(
         bucketFilePath,
-        validFiles
+        validFiles,
       );
       const uploadedPaths = uploadResponse.result.paths;
 
@@ -143,7 +160,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   const handleDeleteFile = () => {
     if (fileToDelete) {
       setFiles((prevFiles) =>
-        prevFiles.filter((path) => path !== fileToDelete)
+        prevFiles.filter((path) => path !== fileToDelete),
       );
       setDeletedFiles((prev) => [...prev, fileToDelete]);
       setFileToDelete(null);
@@ -179,22 +196,22 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
 
   return (
     <>
-      <FormItem className="flex mb-2 w-full max-sm:flex-col">
-        <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+      <FormItem className="mb-2 flex w-full max-sm:flex-col">
+        <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
           {label} <span className="mr-5 max-sm:hidden">:</span>
         </FormLabel>
-        <div className="flex-col items-start w-full">
+        <div className="w-full flex-col items-start">
           <FormControl>
             <Controller
               name={name}
               control={control}
               render={() => (
-                <div className="grid grid-cols-4 gap-2 mt-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
+                <div className="mt-4 grid grid-cols-4 gap-2 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8">
                   {files.length > 0 &&
                     files.map((filePath, index) => (
                       <div
                         key={index}
-                        className="overflow-hidden relative w-16 h-16 rounded-lg"
+                        className="relative h-16 w-16 overflow-hidden rounded-lg"
                       >
                         {isVideoFile(filePath) ? (
                           <PreviewVideoComponent videoPath={filePath} />
@@ -203,15 +220,15 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                         )}
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <button className="absolute top-1 right-1 p-1 bg-white rounded-full border ring-0 shadow-md outline-none h-fit">
-                              <MoreVertical className="w-5 h-5 text-gray-600" />
+                            <button className="absolute right-1 top-1 h-fit rounded-full border bg-white p-1 shadow-md outline-none ring-0">
+                              <MoreVertical className="h-5 w-5 text-gray-600" />
                             </button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent className="w-28">
                             <DropdownMenuItem
                               onClick={() => handlePreview(filePath)}
                             >
-                              <Eye className="mr-2 w-5 h-5 text-blue-600" />
+                              <Eye className="mr-2 h-5 w-5 text-blue-600" />
                               Preview
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -219,7 +236,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                                 handleDownloadImage(filePath, index)
                               }
                             >
-                              <Download className="mr-2 w-5 h-5 text-green-600" />
+                              <Download className="mr-2 h-5 w-5 text-green-600" />
                               Download
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -228,7 +245,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                                 setIsDeleteConfirmationOpen(true);
                               }}
                             >
-                              <Trash2 className="mr-2 w-5 h-5 text-red-600" />
+                              <Trash2 className="mr-2 h-5 w-5 text-red-600" />
                               Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
@@ -244,15 +261,15 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
                         isUploading={isFileUploading}
                         uploadingCount={uploadingCount}
                         onFileChange={handleFilesChange}
-                        accept="image/*,video/*"
+                        accept={`${isImageAccepted ? "image/*" : ""}${isImageAccepted && isVideoAccepted ? "," : ""}${isVideoAccepted ? "video/*" : ""}`}
                       />
-                    )
+                    ),
                   )}
                 </div>
               )}
             />
           </FormControl>
-          <FormDescription className="mt-1 ml-2">{description}</FormDescription>
+          <FormDescription className="ml-2 mt-1">{description}</FormDescription>
           <FormMessage />
         </div>
       </FormItem>

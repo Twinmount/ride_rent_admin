@@ -32,6 +32,7 @@ export const buildCommonPrimaryDetails = (
     cityIds: values.cityIds,
     rentalDetails: JSON.stringify(values.rentalDetails),
     vehiclePhotos: values.vehiclePhotos,
+    vehicleVideos: values.vehicleVideos,
     commercialLicenses: values.commercialLicenses,
     securityDeposit: values.securityDeposit,
     isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,

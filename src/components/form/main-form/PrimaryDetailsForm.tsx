@@ -91,6 +91,7 @@ export default function PrimaryDetailsForm({
     initialCountryCode || isIndia ? "+91" : "+971",
   );
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
+  const [isVideoUploading, setIsVideoUploading] = useState(false);
   const [isLicenseUploading, setIsLicenseUploading] = useState(false);
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [isCarsCategory, setIsCarsCategory] = useState(false);
@@ -152,7 +153,7 @@ export default function PrimaryDetailsForm({
       return;
     }
 
-    if (isPhotosUploading || isLicenseUploading) {
+    if (isPhotosUploading || isLicenseUploading || isVideoUploading) {
       showFileUploadInProgressToast();
       return;
     }
@@ -722,9 +723,9 @@ export default function PrimaryDetailsForm({
           render={() => (
             <MultipleFileUpload
               name="vehiclePhotos"
-              label="Vehicle Photos & videos"
+              label="Vehicle Photos"
               existingFiles={initialValues.vehiclePhotos || []}
-              description="Add Vehicle Photos / Videos. Up to 8 photos / videos can be added."
+              description="Add Vehicle Photos. Up to 8 photos can be added."
               maxSizeMB={30}
               setIsFileUploading={setIsPhotosUploading}
               bucketFilePath={GcsFilePaths.IMAGE_VEHICLES}
@@ -735,6 +736,34 @@ export default function PrimaryDetailsForm({
                   : "vehicle-image"
               }
               setDeletedFiles={setDeletedFiles}
+              isVideoAccepted={false}
+              isImageAccepted={true}
+            />
+          )}
+        />
+
+        {/* Vehicle Videos */}
+        <FormField
+          control={form.control}
+          name="vehicleVideos"
+          render={() => (
+            <MultipleFileUpload
+              name="vehicleVideos"
+              label="Vehicle Video"
+              existingFiles={initialValues.vehicleVideos || []}
+              description="Add Vehicle Videos (if any). Up to 1 video can be added."
+              maxVideoSizeMB={100}
+              setIsFileUploading={setIsVideoUploading}
+              bucketFilePath={GcsFilePaths.VIDEO_VEHICLES}
+              isFileUploading={isVideoUploading}
+              downloadFileName={
+                formData?.vehicleModel
+                  ? ` ${formData.vehicleModel}`
+                  : "vehicle-video"
+              }
+              setDeletedFiles={setDeletedFiles}
+              isVideoAccepted={true}
+              isImageAccepted={false}
             />
           )}
         />
