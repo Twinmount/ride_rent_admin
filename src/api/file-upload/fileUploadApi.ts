@@ -22,7 +22,7 @@ export const uploadSingleFile = async (
     formData.append("file", file);
 
     if (isBlog) {
-      formData.append("track", "true");
+      formData.append("track", "false");
     }
 
     const response = await API.post<SingleFileUploadResponse>({

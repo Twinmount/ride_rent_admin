@@ -35,12 +35,6 @@ export default function BlogContentEditor({
         to paste a copied text <br />
       </FormDescription>
       <FormControl className="">
-        {/* <RichTextEditorComponent
-          content={content}
-          onUpdate={onUpdate}
-          isBlog={true}
-        /> */}
-
         <JoditRichTextEditor content={content} onChange={onUpdate} />
       </FormControl>
 
