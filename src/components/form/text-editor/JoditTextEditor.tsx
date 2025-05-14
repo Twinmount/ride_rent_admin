@@ -40,8 +40,6 @@ const JoditRichTextEditor: React.FC<JoditRichTextEditorProps> = ({
         },
 
         process: async (response: any) => {
-          console.log("Response from backend:", response);
-
           if (response.error) {
             console.error("Image upload failed:", response.msg);
             toast({ variant: "destructive", title: "Image upload failed" });
