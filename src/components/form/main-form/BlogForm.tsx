@@ -76,7 +76,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
       }
 
       if (data) {
-        // actually delete the images from the db, if any
+        // delete the images from the db, if any
         await deleteMultipleFiles(deletedImages);
       }
 

@@ -54,6 +54,8 @@ export const BlogFileUploadDialog: React.FC = () => {
               setProgress(progress);
             }
           },
+          // isBlog is set to true
+          true,
         );
         const filePath = uploadResponse.result.path;
 
