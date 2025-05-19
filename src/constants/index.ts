@@ -65,6 +65,8 @@ export const StateFormDefaultValues: StateFormType = {
   stateValue: "",
   stateImage: "",
   relatedStates: [""],
+  isFavorite: false,
+  stateIcon: ""
 };
 
 export const CountryFormDefaultValues: CountryFormType = {

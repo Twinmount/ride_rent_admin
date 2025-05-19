@@ -18,6 +18,8 @@ export interface StateType {
   parentStateId?: string | null;
   countryId?: string | null;
   isParentState?: boolean | null;
+  isFavorite?: boolean;
+  stateIcon?: string;
 }
 
 export interface CountryType {
@@ -52,6 +54,8 @@ export const addState = async (
         countryId: countryId,
         relatedStates: selectedStates,
         isParentState: values.isParentState,
+        isFavorite: values.isFavorite,
+        stateIcon: values.stateIcon,
       },
     });
 
@@ -78,6 +82,8 @@ export const updateState = async (
         stateValue: values.stateValue,
         stateImage: values.stateImage, // String URL of the uploaded image
         relatedStates: selectedStates,
+        isFavorite: values.isFavorite,
+        stateIcon: values.stateIcon,
       },
     });
 

@@ -91,6 +91,8 @@ export type StateFormType = {
   stateValue: string;
   stateImage: string;
   relatedStates?: string[];
+  isFavorite?: boolean;
+  stateIcon?: string;
 };
 
 export type CountryFormType = {

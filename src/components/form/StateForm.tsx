@@ -29,6 +29,7 @@ import { useStateListQuery } from "@/hooks/query/useStateListQuery";
 import Select from "react-select";
 import { useAdminContext } from "@/context/AdminContext";
 import { useQueryClient } from "@tanstack/react-query";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type StateFormProps = {
   type: "Add" | "Update";
@@ -217,6 +218,7 @@ export default function StateForm({
             )}
           />
 
+          {/* State Image */}
           <FormField
             control={form.control}
             name="stateImage"
@@ -231,6 +233,59 @@ export default function StateForm({
                 bucketFilePath={GcsFilePaths.IMAGE}
                 setDeletedImages={setDeletedImages}
               />
+            )}
+          />
+
+          {/* State Icon */}
+          <FormField
+            control={form.control}
+            name="stateIcon"
+            render={({ field }) => (
+              <SingleFileUpload
+                name={field.name}
+                label={`${!!parentStateId ? "Location" : "State"} Icon`}
+                description="Upload an icon image (preferably SVG or small PNG) with a maximum file size of 1mb."
+                isDownloadable
+                existingFile={formData?.stateIcon || null}
+                setIsFileUploading={setIsFileUploading}
+                bucketFilePath={GcsFilePaths.IMAGE}
+                setDeletedImages={setDeletedImages}
+              />
+            )}
+          />
+
+          {/* Is Favorite Checkbox */}
+          <FormField
+            control={form.control}
+            name="isFavorite"
+            render={({ field }) => (
+              <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                <FormLabel className="ml-2 mt-4 flex w-56 justify-between text-base max-sm:w-fit lg:text-lg">
+                  Mark as Favorite
+                  <span className="mr-5 max-sm:hidden">:</span>
+                </FormLabel>
+                <div className="w-full flex-col items-start">
+                  <FormControl>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="isFavorite"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                      <label
+                        htmlFor="isFavorite"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Show this {!!parentStateId ? "location" : "state"} as a favorite
+                      </label>
+                    </div>
+                  </FormControl>
+                  <FormDescription className="ml-2">
+                    Favorite items will be highlighted in the app
+                  </FormDescription>
+                  <FormMessage className="ml-2" />
+                </div>
+              </FormItem>
             )}
           />
 
