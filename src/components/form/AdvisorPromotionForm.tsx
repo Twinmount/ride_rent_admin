@@ -14,12 +14,9 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  BlogPromotionFormType,
-  BlogPromotionPlacementType,
-} from "@/types/types";
-import { BlogPromotionFormDefaultValue } from "@/constants";
-import { BlogPromotionFormSchema } from "@/lib/validator";
+import { AdvisorPromotionFormType } from "@/types/types";
+import { AdvisorPromotionFormDefaultValue } from "@/constants";
+import { AdvisorPromotionFormSchema } from "@/lib/validator";
 import Spinner from "../general/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "../ui/use-toast";
@@ -27,42 +24,42 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import DeleteModal from "../modal/DeleteModal";
 import { useState } from "react";
 import { GcsFilePaths } from "@/constants/enum";
-import {
-  addBlogPromotion,
-  deleteBlogPromotion,
-  updateBlogPromotion,
-} from "@/api/blogs";
-import { deleteMultipleFiles, imageGuidelines } from "@/helpers/form";
-import PromotionFileUpload from "./file-uploads/PromotionsFileUpload";
-import BlogPromotionPlacementDropdown from "./dropdowns/BlogPromotionPlacementDropdown";
 
-type BlogPromotionFormProps = {
+import { deleteMultipleFiles } from "@/helpers/form";
+import PromotionFileUpload from "./file-uploads/PromotionsFileUpload";
+import {
+  addAdvisorBlogPromotion,
+  deleteAdvisorBlogById,
+  updateAdvisorBlogPromotion,
+} from "@/api/advisor";
+
+type AdvisorPromotionFormProps = {
   type: "Add" | "Update";
-  formData?: BlogPromotionFormType | null;
+  formData?: AdvisorPromotionFormType | null;
 };
 
-export default function BlogPromotionForm({
+export default function AdvisorPromotionForm({
   type,
   formData,
-}: BlogPromotionFormProps) {
+}: AdvisorPromotionFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
   const initialValues =
-    formData && type === "Update" ? formData : BlogPromotionFormDefaultValue;
+    formData && type === "Update" ? formData : AdvisorPromotionFormDefaultValue;
 
   const navigate = useNavigate();
   const { promotionId } = useParams<{ promotionId: string }>();
   const queryClient = useQueryClient();
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof BlogPromotionFormSchema>>({
-    resolver: zodResolver(BlogPromotionFormSchema),
+  const form = useForm<z.infer<typeof AdvisorPromotionFormSchema>>({
+    resolver: zodResolver(AdvisorPromotionFormSchema),
     defaultValues: initialValues,
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof BlogPromotionFormSchema>) {
+  async function onSubmit(values: z.infer<typeof AdvisorPromotionFormSchema>) {
     if (isFileUploading) {
       toast({
         title: "File Upload in Progress",
@@ -77,9 +74,9 @@ export default function BlogPromotionForm({
     try {
       let data;
       if (type === "Add") {
-        data = await addBlogPromotion(values);
+        data = await addAdvisorBlogPromotion(values);
       } else if (type === "Update") {
-        data = await updateBlogPromotion(values, promotionId as string);
+        data = await updateAdvisorBlogPromotion(values, promotionId as string);
       }
 
       if (data) {
@@ -92,9 +89,9 @@ export default function BlogPromotionForm({
           title: `${type} Promotion successfully`,
           className: "bg-yellow text-white",
         });
-        navigate("/ride-blogs/promotions");
+        navigate("/advisor/promotions");
         queryClient.invalidateQueries({
-          queryKey: ["blog-promotions"],
+          queryKey: ["advisor-promotions"],
         });
       }
     } catch (error) {
@@ -108,7 +105,7 @@ export default function BlogPromotionForm({
   }
 
   const { mutateAsync: deletePromotionMutation, isPending } = useMutation({
-    mutationFn: () => deleteBlogPromotion(promotionId as string),
+    mutationFn: () => deleteAdvisorBlogById(promotionId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["blog-promotions"],
@@ -117,10 +114,6 @@ export default function BlogPromotionForm({
     },
   });
 
-  const selectedPlacement = form.watch("blogPromotionPlacement");
-  const currentImageDescription =
-    imageGuidelines[selectedPlacement] || "Upload an image. Max size: 5MB.";
-
   return (
     <Form {...form}>
       <form
@@ -128,30 +121,6 @@ export default function BlogPromotionForm({
         className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
         <div className="flex flex-col gap-5">
-          <FormField
-            control={form.control}
-            name="blogPromotionPlacement"
-            render={({ field }) => (
-              <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base lg:text-lg">
-                  Blog Category <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="w-full flex-col items-start">
-                  <FormControl>
-                    <BlogPromotionPlacementDropdown
-                      value={field.value}
-                      onChangeHandler={field.onChange}
-                    />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Select the category in which the blog belongs to.
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
-
           {/* type title */}
           <FormField
             control={form.control}
@@ -160,13 +129,12 @@ export default function BlogPromotionForm({
               <PromotionFileUpload
                 name={field.name}
                 label="Promotion Image"
-                description={currentImageDescription}
+                description="Upload an image or GIF with a maximum file size of 5MB. Vertical (portrait) aspect ratio is preferred"
                 existingFile={formData?.promotionImage}
                 maxSizeMB={5}
                 setIsFileUploading={setIsFileUploading}
                 bucketFilePath={GcsFilePaths.IMAGE}
                 setDeletedImages={setDeletedImages}
-                isDisabled={!selectedPlacement}
               />
             )}
           />
@@ -220,12 +188,12 @@ export default function BlogPromotionForm({
             confirmText="Delete"
             cancelText="Cancel"
             isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/ride-blogs/promotions"
+            navigateTo="/advisor/promotions"
           ></DeleteModal>
         )}
 
         <p className="m-0 -mt-3 p-0 text-center text-xs text-red-500">
-          Note that blog promotions are global, not state specific.
+          Note that advisor promotions are global, not state specific.
         </p>
       </form>
     </Form>

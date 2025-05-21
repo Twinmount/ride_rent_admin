@@ -127,6 +127,17 @@ export const BlogPromotionFormSchema = z.object({
     .string()
     .min(1, "Link is required")
     .url("Link must be a valid URL"),
+  blogPromotionPlacement: z.string().min(1, "Placement is required"),
+});
+
+// advisor blog promotion form schema
+export const AdvisorPromotionFormSchema = z.object({
+  promotionImage: z.string().min(1, "Promotion image is required"),
+  promotionLink: z
+    .string()
+    .min(1, "Link is required")
+    .url("Link must be a valid URL"),
+  blogPromotionPlacement: z.string().min(1, "Placement is required"),
 });
 
 // RentalDetailType Schema for day, week, and month rentals )

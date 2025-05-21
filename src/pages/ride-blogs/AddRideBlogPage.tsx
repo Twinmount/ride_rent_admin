@@ -1,9 +1,9 @@
-import BlogForm from "@/components/form/main-form/BlogForm";
+import RideBlogForm from "@/components/form/main-form/RideBlogForm";
 
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function AddLocationPage() {
+export default function AddRideBlogPage() {
   const navigate = useNavigate();
 
   return (
@@ -15,9 +15,9 @@ export default function AddLocationPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h3 className="h3-bold text-center sm:text-left">Add New Blog</h3>
+        <h3 className="h3-bold text-center sm:text-left">Add New Ride Blog</h3>
       </div>
-      <BlogForm type="Add" />
+      <RideBlogForm type="Add" />
     </section>
   );
 }

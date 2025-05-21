@@ -6,18 +6,18 @@ import { Eye, FilePenLine, Plus } from "lucide-react";
 
 import { Link } from "react-router-dom";
 import { PromotionType } from "@/types/api-types/API-types";
-import { fetchAllBlogPromotions } from "@/api/blogs";
 import Pagination from "@/components/Pagination";
+import { fetchAllAdvisorBlogPromotions } from "@/api/advisor";
 
-export default function ManageBlogPromotionsPage() {
+export default function ManageRideBlogPromotionsPage() {
   const [page, setPage] = useState(1);
   const [selectedPromotion, setSelectedPromotion] =
     useState<PromotionType | null>(null);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["blog-promotions"],
+    queryKey: ["advisor-promotions"],
     queryFn: () =>
-      fetchAllBlogPromotions({
+      fetchAllAdvisorBlogPromotions({
         page,
         limit: 10,
         sortOrder: "DESC",
@@ -42,7 +42,7 @@ export default function ManageBlogPromotionsPage() {
           {promotions.map((data) => (
             <div
               key={data.promotionId}
-              className="group relative h-72 w-full overflow-hidden rounded-lg"
+              className="group relative h-72 w-full overflow-hidden rounded-lg border"
             >
               {/* Gradient Background */}
               <div className="flex-center absolute inset-0 z-10 gap-x-4 bg-black/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -57,7 +57,7 @@ export default function ManageBlogPromotionsPage() {
                   <Eye size={25} />
                 </div>
                 <Link
-                  to={`/happenings/promotions/edit/${data.promotionId}`}
+                  to={`/ride-blogs/promotions/edit/${data.promotionId}`}
                   className="flex-center group/edit gap-x-1 text-white hover:text-yellow"
                 >
                   <FilePenLine size={23} />{" "}
@@ -86,7 +86,7 @@ export default function ManageBlogPromotionsPage() {
       <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
         <Link
           className="flex-center gap-x-1 bg-yellow px-3 py-2 text-white"
-          to={`/happenings/promotions/add`}
+          to={`/ride-blogs/promotions/add`}
         >
           New Blog Promotion <Plus />
         </Link>

@@ -30,6 +30,7 @@ import BlogContentEditor from "../BlogContentEditor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteMultipleFiles } from "@/helpers/form";
 import DeleteModal from "@/components/modal/DeleteModal";
+import { addAdvisorBlog, updateAdvisorBlog } from "@/api/advisor";
 
 type StateFormProps = {
   type: "Add" | "Update";
@@ -70,9 +71,9 @@ export default function BlogForm({ type, formData }: StateFormProps) {
     try {
       let data;
       if (type === "Add") {
-        data = await addBlog(values);
+        data = await addAdvisorBlog(values);
       } else if (type === "Update") {
-        data = await updateBlog(values, blogId as string);
+        data = await updateAdvisorBlog(values, blogId as string);
       }
 
       if (data) {
@@ -86,13 +87,9 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           className: "bg-yellow text-white",
         });
         queryClient.invalidateQueries({
-          queryKey: ["blog-by-id", blogId],
-          exact: true,
+          queryKey: ["advisor-blogs"],
         });
-        queryClient.invalidateQueries({
-          queryKey: ["blogs"],
-        });
-        navigate("/happenings/blogs");
+        navigate("/advisor/blogs");
       }
     } catch (error) {
       console.error(error);
@@ -109,7 +106,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
     mutationFn: () => deleteBlogById(blogId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["blogs"],
+        queryKey: ["advisor-blogs"],
       });
     },
   });
@@ -263,6 +260,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                     value={field.value}
                     onChangeHandler={field.onChange}
                     placeholder="category"
+                    type="advisor"
                   />
                 </FormControl>
                 <FormDescription className="ml-2">
@@ -458,7 +456,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
             confirmText="Delete"
             cancelText="Cancel"
             isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/happenings/blogs"
+            navigateTo="/ride-blogs"
           ></DeleteModal>
         )}
       </form>

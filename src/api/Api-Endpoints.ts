@@ -153,10 +153,24 @@ export enum Slug {
   DELETE_BLOG = "/blogs",
   GET_ALL_BLOGS = "/blogs/list",
 
+  // Advisor Blogs Endpoints
+  ADD_ADVISOR_BLOG = "/advisor-blogs",
+  GET_ADVISOR_BLOG = "/advisor-blogs",
+  PUT_ADVISOR_BLOG = "/advisor-blogs",
+  DELETE_ADVISOR_BLOG = "/advisor-blogs",
+  GET_ALL_ADVISOR_BLOGS = "/advisor-blogs/list",
+
   // Blog Promotions Endpoints
   ADD_BLOG_PROMOTION = "/blogs-promotions",
   GET_BLOG_PROMOTION = "/blogs-promotions",
   PUT_BLOG_PROMOTION = "/blogs-promotions",
   DELETE_BLOG_PROMOTION = "/blogs-promotions",
   GET_ALL_BLOG_PROMOTIONS = "/blogs-promotions/list",
+
+  // Advisor Blog Promotions Endpoints
+  ADD_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
+  GET_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
+  PUT_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
+  DELETE_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
+  GET_ALL_ADVISOR_BLOG_PROMOTIONS = "/advisor-blogs-promotions/list",
 }

@@ -128,15 +128,27 @@ export const sidebarContent: SidebarItem[] = [
     ],
   },
 
-  // Blogs routes
+  // Ride Rent Blogs routes
   {
     type: "accordion",
-    label: "Blogs",
-    baseLink: "/happenings",
+    label: "Ride Blogs",
+    baseLink: "/ride",
     icon: FileText,
     items: [
-      { label: "Blogs", link: "/happenings/blogs" },
-      { label: "Blog Promotions", link: "/happenings/promotions" },
+      { label: "Ride Blogs", link: "/ride-blogs/list" },
+      { label: "Ride Blog Promotions", link: "/ride-blogs/promotions" },
+    ],
+  },
+
+  // Advisor Blogs routes
+  {
+    type: "accordion",
+    label: "Advisor Blogs",
+    baseLink: "/advisor",
+    icon: FileText,
+    items: [
+      { label: "Advisor Blogs", link: "/advisor/blogs" },
+      { label: "Advisor Promotions", link: "/advisor/promotions" },
     ],
   },
 
