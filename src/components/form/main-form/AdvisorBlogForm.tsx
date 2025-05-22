@@ -13,28 +13,31 @@ import {
 } from "@/components/ui/form";
 import "@mantine/tiptap/styles.css";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { BlogFormType } from "@/types/types";
-import { BlogFormSchema } from "@/lib/validator";
-import { BlogFormDefaultValues } from "@/constants";
+import { AdvisorBlogFormType } from "@/types/types";
+import { AdvisorBlogFormSchema } from "@/lib/validator";
+import { AdvisorBlogFormDefaultValues } from "@/constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { GcsFilePaths } from "@/constants/enum";
-import Spinner from "@/components/general/Spinner";
 import { toast } from "@/components/ui/use-toast";
 import SingleFileUpload from "../file-uploads/SingleFileUpload";
-import { addBlog, deleteBlogById, updateBlog } from "@/api/blogs";
+
 import BlogCategoriesDropdown from "../dropdowns/BlogCategoryDropdown";
 import { Textarea } from "@/components/ui/textarea";
 import BlogContentEditor from "../BlogContentEditor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteMultipleFiles } from "@/helpers/form";
 import DeleteModal from "@/components/modal/DeleteModal";
-import { addAdvisorBlog, updateAdvisorBlog } from "@/api/advisor";
+import {
+  addAdvisorBlog,
+  deleteAdvisorBlogById,
+  updateAdvisorBlog,
+} from "@/api/advisor";
+import { FormSubmitButton } from "../form-ui/FormSubmitButton";
 
 type StateFormProps = {
   type: "Add" | "Update";
-  formData?: BlogFormType | null;
+  formData?: AdvisorBlogFormType | null;
 };
 
 export default function BlogForm({ type, formData }: StateFormProps) {
@@ -42,7 +45,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
   const initialValues =
-    formData && type === "Update" ? formData : BlogFormDefaultValues;
+    formData && type === "Update" ? formData : AdvisorBlogFormDefaultValues;
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -50,13 +53,13 @@ export default function BlogForm({ type, formData }: StateFormProps) {
   const { blogId } = useParams<{ blogId: string }>();
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof BlogFormSchema>>({
-    resolver: zodResolver(BlogFormSchema),
+  const form = useForm<z.infer<typeof AdvisorBlogFormSchema>>({
+    resolver: zodResolver(AdvisorBlogFormSchema),
     defaultValues: initialValues,
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof BlogFormSchema>) {
+  async function onSubmit(values: z.infer<typeof AdvisorBlogFormSchema>) {
     if (isFileUploading) {
       toast({
         title: "File Upload in Progress",
@@ -83,7 +86,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
 
       if (data) {
         toast({
-          title: `${type} Blog successfully`,
+          title: `${type} Advisor Blog successfully`,
           className: "bg-yellow text-white",
         });
         queryClient.invalidateQueries({
@@ -95,7 +98,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
       console.error(error);
       toast({
         variant: "destructive",
-        title: `${type} Blog failed`,
+        title: `${type} Advisor Blog failed`,
         description: "Something went wrong",
       });
     }
@@ -103,7 +106,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
 
   // delete mutation
   const { mutateAsync: deletePromotionMutation, isPending } = useMutation({
-    mutationFn: () => deleteBlogById(blogId as string),
+    mutationFn: () => deleteAdvisorBlogById(blogId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["advisor-blogs"],
@@ -431,20 +434,17 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           )}
         />
 
-        {/* submit  */}
-        <Button
-          type="submit"
-          size="lg"
-          disabled={form.formState.isSubmitting}
-          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
-        >
-          {isFileUploading
-            ? "Uploading..."
-            : form.formState.isSubmitting
-              ? "Processing..."
-              : `${type} Blog`}
-          {form.formState.isSubmitting && <Spinner />}
-        </Button>
+        {/* Submit */}
+        <FormSubmitButton
+          text={
+            isFileUploading
+              ? "Uploading..."
+              : form.formState.isSubmitting
+                ? "Processing..."
+                : `${type} Advisor Blog`
+          }
+          isLoading={form.formState.isSubmitting}
+        />
 
         {/* delete modal */}
         {type === "Update" && (
@@ -457,7 +457,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
             cancelText="Cancel"
             isLoading={isPending || form.formState.isSubmitting}
             navigateTo="/ride-blogs"
-          ></DeleteModal>
+          />
         )}
       </form>
     </Form>

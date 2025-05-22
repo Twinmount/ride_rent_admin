@@ -1,4 +1,5 @@
 import {
+  FetchAdvisorBlogPromotionsResponse,
   FetchBlogPromotionsResponse,
   FetchBlogsResponse,
   FetchSpecificBlogPromotionResponse,
@@ -6,32 +7,11 @@ import {
 } from "@/types/api-types/blogApi-types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
-
-export interface BlogType {
-  blogTitle: string;
-  blogDescription: string;
-  blogImage: string;
-  blogCategory: string;
-  authorName: string;
-  metaTitle: string;
-  metaDescription: string;
-  blogContent: string;
-}
-
-export interface FetchAllBlogsRequest {
-  page: string;
-  limit: string;
-  sortOrder: "ASC" | "DESC";
-  blogCategory?: string[];
-}
-
-export interface PromotionType {
-  promotionImage: string;
-  promotionLink: string;
-}
+import { AdvisorBlogFormType, AdvisorPromotionFormType } from "@/types/types";
+import { FetchAllBlogsRequest } from "@/types/api-types/API-types";
 
 // add state
-export const addAdvisorBlog = async (values: BlogType) => {
+export const addAdvisorBlog = async (values: AdvisorBlogFormType) => {
   try {
     const data = await API.post({
       slug: Slug.ADD_ADVISOR_BLOG,
@@ -46,7 +26,10 @@ export const addAdvisorBlog = async (values: BlogType) => {
 };
 
 // update state
-export const updateAdvisorBlog = async (values: BlogType, blogId: string) => {
+export const updateAdvisorBlog = async (
+  values: AdvisorBlogFormType,
+  blogId: string,
+) => {
   try {
     const requestBody = {
       ...values,
@@ -120,10 +103,12 @@ export const deleteAdvisorBlogById = async (blogId: string) => {
 };
 
 // add blog promotion
-export const addAdvisorBlogPromotion = async (values: PromotionType) => {
+export const addAdvisorBlogPromotion = async (
+  values: AdvisorPromotionFormType,
+) => {
   try {
     const data = await API.post({
-      slug: Slug.ADD_ADVISOR_BLOG,
+      slug: Slug.ADD_ADVISOR_BLOG_PROMOTION,
       body: {
         promotionLink: values.promotionLink,
         promotionImage: values.promotionImage,
@@ -139,12 +124,12 @@ export const addAdvisorBlogPromotion = async (values: PromotionType) => {
 
 // update promotion
 export const updateAdvisorBlogPromotion = async (
-  values: PromotionType,
+  values: AdvisorPromotionFormType,
   promotionId: string,
 ) => {
   try {
     const data = await API.put({
-      slug: `${Slug.PUT_ADVISOR_BLOG}`,
+      slug: `${Slug.PUT_ADVISOR_BLOG_PROMOTION}`,
       body: {
         promotionId: promotionId,
         promotionLink: values.promotionLink,
@@ -165,7 +150,7 @@ export const fetchAdvisorBlogPromotionById = async (
 ): Promise<FetchSpecificBlogPromotionResponse> => {
   try {
     const data = await API.get<FetchSpecificBlogPromotionResponse>({
-      slug: `${Slug.GET_ADVISOR_BLOG}?promotionId=${promotionId}`, //
+      slug: `${Slug.GET_ADVISOR_BLOG_PROMOTION}?promotionId=${promotionId}`, //
     });
 
     if (!data) {
@@ -184,7 +169,7 @@ export const fetchAllAdvisorBlogPromotions = async (urlParams: {
   page: number;
   limit: number;
   sortOrder: string;
-}): Promise<FetchBlogPromotionsResponse> => {
+}): Promise<FetchAdvisorBlogPromotionsResponse> => {
   try {
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
@@ -192,7 +177,7 @@ export const fetchAllAdvisorBlogPromotions = async (urlParams: {
       sortOrder: urlParams.sortOrder,
     }).toString();
 
-    const slugWithParams = `${Slug.GET_ALL_ADVISOR_BLOGS}?${queryParams}`;
+    const slugWithParams = `${Slug.GET_ALL_ADVISOR_BLOG_PROMOTIONS}?${queryParams}`;
 
     const data = await API.get<FetchBlogPromotionsResponse>({
       slug: slugWithParams,
@@ -213,7 +198,7 @@ export const fetchAllAdvisorBlogPromotions = async (urlParams: {
 export const deleteAdvisorBlogPromotion = async (promotionId: string) => {
   try {
     const data = await API.delete({
-      slug: `${Slug.DELETE_ADVISOR_BLOG}?promotionId=${promotionId}`,
+      slug: `${Slug.DELETE_ADVISOR_BLOG_PROMOTION}?promotionId=${promotionId}`,
     });
 
     return data;

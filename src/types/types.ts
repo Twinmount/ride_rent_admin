@@ -202,6 +202,20 @@ export type BlogFormType = {
   blogContent: string;
   updatedAt?: string;
 };
+
+export type AdvisorBlogFormType = {
+  blogTitle: string;
+  blogDescription: string;
+  blogImage: string;
+  blogImagePath?: string;
+  blogCategory: string;
+  authorName: string;
+  metaTitle: string;
+  metaDescription: string;
+  blogContent: string;
+  updatedAt?: string;
+};
+
 export type CategoryType =
   | "all"
   | "design"

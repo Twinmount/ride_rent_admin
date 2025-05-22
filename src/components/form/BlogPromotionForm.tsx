@@ -2,25 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  BlogPromotionFormType,
-  BlogPromotionPlacementType,
-} from "@/types/types";
+import { BlogPromotionFormType } from "@/types/types";
 import { BlogPromotionFormDefaultValue } from "@/constants";
 import { BlogPromotionFormSchema } from "@/lib/validator";
-import Spinner from "../general/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -35,6 +22,9 @@ import {
 import { deleteMultipleFiles, imageGuidelines } from "@/helpers/form";
 import PromotionFileUpload from "./file-uploads/PromotionsFileUpload";
 import BlogPromotionPlacementDropdown from "./dropdowns/BlogPromotionPlacementDropdown";
+import { FormSubmitButton } from "./form-ui/FormSubmitButton";
+import { FormContainer } from "./form-ui/FormContainer";
+import { FormItemWrapper } from "./form-ui/FormItemWrapper";
 
 type BlogPromotionFormProps = {
   type: "Add" | "Update";
@@ -83,7 +73,7 @@ export default function BlogPromotionForm({
       }
 
       if (data) {
-        // actually delete the images from the db, if any
+        //  delete the images from the db, if any
         await deleteMultipleFiles(deletedImages);
       }
 
@@ -123,92 +113,68 @@ export default function BlogPromotionForm({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
-      >
-        <div className="flex flex-col gap-5">
-          <FormField
-            control={form.control}
-            name="blogPromotionPlacement"
-            render={({ field }) => (
-              <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base lg:text-lg">
-                  Blog Category <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-                <div className="w-full flex-col items-start">
-                  <FormControl>
-                    <BlogPromotionPlacementDropdown
-                      value={field.value}
-                      onChangeHandler={field.onChange}
-                    />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Select the category in which the blog belongs to.
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
-
-          {/* type title */}
-          <FormField
-            control={form.control}
-            name="promotionImage"
-            render={({ field }) => (
-              <PromotionFileUpload
-                name={field.name}
-                label="Promotion Image"
-                description={currentImageDescription}
-                existingFile={formData?.promotionImage}
-                maxSizeMB={5}
-                setIsFileUploading={setIsFileUploading}
-                bucketFilePath={GcsFilePaths.IMAGE}
-                setDeletedImages={setDeletedImages}
-                isDisabled={!selectedPlacement}
+      <FormContainer onSubmit={form.handleSubmit(onSubmit)}>
+        {/* blog promotion placement */}
+        <FormField
+          control={form.control}
+          name="blogPromotionPlacement"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Blog Placement"
+              description="Choose where the blog will be placed."
+            >
+              <BlogPromotionPlacementDropdown
+                value={field.value}
+                onChangeHandler={field.onChange}
               />
-            )}
-          />
+            </FormItemWrapper>
+          )}
+        />
 
-          {/* type value */}
-          <FormField
-            control={form.control}
-            name="promotionLink"
-            render={({ field }) => (
-              <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base max-sm:w-fit lg:text-lg">
-                  Promotion Link <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
+        {/* type title */}
+        <FormField
+          control={form.control}
+          name="promotionImage"
+          render={({ field }) => (
+            <PromotionFileUpload
+              name={field.name}
+              label="Promotion Image"
+              description={currentImageDescription}
+              existingFile={formData?.promotionImage}
+              maxSizeMB={5}
+              setIsFileUploading={setIsFileUploading}
+              bucketFilePath={GcsFilePaths.IMAGE}
+              setDeletedImages={setDeletedImages}
+              isDisabled={!selectedPlacement}
+            />
+          )}
+        />
 
-                <div className="w-full flex-col items-start">
-                  <FormControl>
-                    <Input
-                      placeholder="eg: 'https://example.com'"
-                      {...field}
-                      className="input-field"
-                    />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Provide the link associated with this blog promotion
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
-        </div>
+        {/* promotion link */}
+        <FormField
+          control={form.control}
+          name="promotionLink"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Promotion Link"
+              description=" Provide the link associated with this blog promotion"
+            >
+              <Input
+                placeholder="eg: 'https://example.com'"
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
+          )}
+        />
 
-        {/* submit  */}
-        <Button
-          type="submit"
-          size="lg"
-          disabled={form.formState.isSubmitting}
-          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
-        >
-          {form.formState.isSubmitting ? "Processing..." : `${type} Promotion`}
-          {form.formState.isSubmitting && <Spinner />}
-        </Button>
+        {/* Submit */}
+        <FormSubmitButton
+          text={
+            form.formState.isSubmitting ? "Processing..." : `${type} Promotion`
+          }
+          isLoading={form.formState.isSubmitting}
+        />
 
         {/* delete modal */}
         {type === "Update" && (
@@ -227,7 +193,7 @@ export default function BlogPromotionForm({
         <p className="m-0 -mt-3 p-0 text-center text-xs text-red-500">
           Note that blog promotions are global, not state specific.
         </p>
-      </form>
+      </FormContainer>
     </Form>
   );
 }

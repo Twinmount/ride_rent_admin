@@ -1,4 +1,4 @@
-import BlogPromotionForm from "@/components/form/BlogPromotionForm";
+import AdvisorPromotionForm from "@/components/form/AdvisorPromotionForm";
 
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +19,7 @@ export default function AddRideBlogPromotionPage() {
           Add New Blog Promotion
         </h3>
       </div>
-      <BlogPromotionForm type="Add" />
+      <AdvisorPromotionForm type="Add" />
     </section>
   );
 }

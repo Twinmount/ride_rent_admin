@@ -6,7 +6,7 @@ import {
   SpecificationFormData,
 } from "@/types/api-types/vehicleAPI-types";
 import { PrimaryFormType } from "@/types/formTypes";
-import { BlogPromotionPlacementType, TabsTypes } from "@/types/types";
+import { TabsTypes } from "@/types/types";
 import imageCompression from "browser-image-compression";
 import { deleteFile } from "@/api/file-upload";
 import { PrimaryFormSchema } from "@/lib/validator";
@@ -500,9 +500,9 @@ export const deleteMultipleFiles = async (
 
 export const imageGuidelines: Record<string, string> = {
   "recommended-deals":
-    "Upload a vertical (portrait) image or GIF. Ideal for sidebar display. Suggested size: 600x800px. Max size: 5MB.",
+    "Upload a vertical (portrait) image or GIF. Ideal for sidebar display. Suggested size: 400x450px. Max size: 5MB.",
   "popular-list":
-    "Upload a small landscape (horizontal) image. Suitable for list items. Suggested size: 400x300px. Max size: 5MB.",
+    "Upload a small landscape (horizontal) image. Suitable for list items. Suggested size: 400x150px. Max size: 5MB.",
   "bottom-banner":
-    "Upload an ultra-wide banner image. Should span full width of screen. Suggested size: 1920x480px. Max size: 5MB.",
+    "Upload an ultra-wide banner image. Should span full width of screen. Suggested size: 1800x500px. Max size: 5MB.",
 };

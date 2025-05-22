@@ -6,6 +6,7 @@ import {
 } from "@/types/api-types/blogApi-types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
+import { BlogPromotionFormType } from "@/types/types";
 
 export interface BlogType {
   blogTitle: string;
@@ -23,11 +24,6 @@ export interface FetchAllBlogsRequest {
   limit: string;
   sortOrder: "ASC" | "DESC";
   blogCategory?: string[];
-}
-
-export interface PromotionType {
-  promotionImage: string;
-  promotionLink: string;
 }
 
 // add state
@@ -120,13 +116,14 @@ export const deleteBlogById = async (blogId: string) => {
 };
 
 // add blog promotion
-export const addBlogPromotion = async (values: PromotionType) => {
+export const addBlogPromotion = async (values: BlogPromotionFormType) => {
   try {
     const data = await API.post({
       slug: Slug.ADD_BLOG_PROMOTION,
       body: {
         promotionLink: values.promotionLink,
         promotionImage: values.promotionImage,
+        blogPromotionPlacement: values.blogPromotionPlacement,
       },
     });
 
@@ -139,7 +136,7 @@ export const addBlogPromotion = async (values: PromotionType) => {
 
 // update promotion
 export const updateBlogPromotion = async (
-  values: PromotionType,
+  values: BlogPromotionFormType,
   promotionId: string,
 ) => {
   try {
@@ -148,7 +145,8 @@ export const updateBlogPromotion = async (
       body: {
         promotionId: promotionId,
         promotionLink: values.promotionLink,
-        promotionImage: values.promotionImage, // Assuming this is a URL or string
+        promotionImage: values.promotionImage,
+        blogPromotionPlacement: values.blogPromotionPlacement,
       },
     });
 
@@ -184,15 +182,23 @@ export const fetchAllBlogPromotions = async (urlParams: {
   page: number;
   limit: number;
   sortOrder: string;
+  blogPromotionPlacement?: string;
 }): Promise<FetchBlogPromotionsResponse> => {
   try {
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
-    }).toString();
+    });
 
-    const slugWithParams = `${Slug.GET_ALL_BLOG_PROMOTIONS}?${queryParams}`;
+    if (urlParams.blogPromotionPlacement) {
+      queryParams.append(
+        "blogPromotionPlacement",
+        urlParams.blogPromotionPlacement,
+      );
+    }
+
+    const slugWithParams = `${Slug.GET_ALL_BLOG_PROMOTIONS}?${queryParams.toString()}`;
 
     const data = await API.get<FetchBlogPromotionsResponse>({
       slug: slugWithParams,

@@ -2,22 +2,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { AdvisorPromotionFormType } from "@/types/types";
 import { AdvisorPromotionFormDefaultValue } from "@/constants";
 import { AdvisorPromotionFormSchema } from "@/lib/validator";
-import Spinner from "../general/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "../ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -32,6 +22,9 @@ import {
   deleteAdvisorBlogById,
   updateAdvisorBlogPromotion,
 } from "@/api/advisor";
+import { FormContainer } from "./form-ui/FormContainer";
+import { FormItemWrapper } from "./form-ui/FormItemWrapper";
+import { FormSubmitButton } from "./form-ui/FormSubmitButton";
 
 type AdvisorPromotionFormProps = {
   type: "Add" | "Update";
@@ -86,7 +79,7 @@ export default function AdvisorPromotionForm({
 
       if (data) {
         toast({
-          title: `${type} Promotion successfully`,
+          title: `${type} Advisor Promotion successfully`,
           className: "bg-yellow text-white",
         });
         navigate("/advisor/promotions");
@@ -98,7 +91,7 @@ export default function AdvisorPromotionForm({
       console.error(error);
       toast({
         variant: "destructive",
-        title: `${type} promotion failed`,
+        title: `${type} advisor promotion failed`,
         description: "Something went wrong",
       });
     }
@@ -116,67 +109,54 @@ export default function AdvisorPromotionForm({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
-      >
-        <div className="flex flex-col gap-5">
-          {/* type title */}
-          <FormField
-            control={form.control}
-            name="promotionImage"
-            render={({ field }) => (
-              <PromotionFileUpload
-                name={field.name}
-                label="Promotion Image"
-                description="Upload an image or GIF with a maximum file size of 5MB. Vertical (portrait) aspect ratio is preferred"
-                existingFile={formData?.promotionImage}
-                maxSizeMB={5}
-                setIsFileUploading={setIsFileUploading}
-                bucketFilePath={GcsFilePaths.IMAGE}
-                setDeletedImages={setDeletedImages}
+      <FormContainer onSubmit={form.handleSubmit(onSubmit)}>
+        {/* type title */}
+        <FormField
+          control={form.control}
+          name="promotionImage"
+          render={({ field }) => (
+            <PromotionFileUpload
+              name={field.name}
+              label="Promotion Image"
+              description={
+                "Upload promotion image of vertical ration. Max size: 5MB"
+              }
+              existingFile={formData?.promotionImage}
+              maxSizeMB={5}
+              setIsFileUploading={setIsFileUploading}
+              bucketFilePath={GcsFilePaths.IMAGE}
+              setDeletedImages={setDeletedImages}
+            />
+          )}
+        />
+
+        {/* promotion link */}
+        <FormField
+          control={form.control}
+          name="promotionLink"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Promotion Link"
+              description=" Provide the link associated with this blog promotion"
+            >
+              <Input
+                placeholder="eg: 'https://example.com'"
+                {...field}
+                className="input-field"
               />
-            )}
-          />
+            </FormItemWrapper>
+          )}
+        />
 
-          {/* type value */}
-          <FormField
-            control={form.control}
-            name="promotionLink"
-            render={({ field }) => (
-              <FormItem className="mb-2 flex w-full max-sm:flex-col">
-                <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base max-sm:w-fit lg:text-lg">
-                  Promotion Link <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
-
-                <div className="w-full flex-col items-start">
-                  <FormControl>
-                    <Input
-                      placeholder="eg: 'https://example.com'"
-                      {...field}
-                      className="input-field"
-                    />
-                  </FormControl>
-                  <FormDescription className="ml-2">
-                    Provide the link associated with this blog promotion
-                  </FormDescription>
-                  <FormMessage className="ml-2" />
-                </div>
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* submit  */}
-        <Button
-          type="submit"
-          size="lg"
-          disabled={form.formState.isSubmitting}
-          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
-        >
-          {form.formState.isSubmitting ? "Processing..." : `${type} Promotion`}
-          {form.formState.isSubmitting && <Spinner />}
-        </Button>
+        {/* Submit */}
+        <FormSubmitButton
+          text={
+            form.formState.isSubmitting
+              ? "Processing..."
+              : `${type} Advisor Promotion`
+          }
+          isLoading={form.formState.isSubmitting}
+        />
 
         {/* delete modal */}
         {type === "Update" && (
@@ -189,13 +169,13 @@ export default function AdvisorPromotionForm({
             cancelText="Cancel"
             isLoading={isPending || form.formState.isSubmitting}
             navigateTo="/advisor/promotions"
-          ></DeleteModal>
+          />
         )}
 
         <p className="m-0 -mt-3 p-0 text-center text-xs text-red-500">
-          Note that advisor promotions are global, not state specific.
+          Note that Advisor blog promotions are global, not state specific.
         </p>
-      </form>
+      </FormContainer>
     </Form>
   );
 }

@@ -21,13 +21,13 @@ const BlogPromotionPlacementDropdown = ({
   return (
     <Select
       onValueChange={onChangeHandler}
-      defaultValue={value || blogPromotionPlacement[0].value}
+      defaultValue={value}
       disabled={isDisabled}
     >
       <SelectTrigger className="select-field input-fields ring-0 focus:ring-0">
         <SelectValue
           className="!font-bold !text-black"
-          placeholder="Choose Blog Category"
+          placeholder="Choose Blog Placement"
         />
       </SelectTrigger>
       <SelectContent>

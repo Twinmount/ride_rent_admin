@@ -136,19 +136,19 @@ export const sidebarContent: SidebarItem[] = [
     icon: FileText,
     items: [
       { label: "Ride Blogs", link: "/ride-blogs/list" },
-      { label: "Ride Blog Promotions", link: "/ride-blogs/promotions" },
+      { label: "Promotions - Ride Blog", link: "/ride-blogs/promotions" },
     ],
   },
 
   // Advisor Blogs routes
   {
     type: "accordion",
-    label: "Advisor Blogs",
+    label: "Advisor",
     baseLink: "/advisor",
     icon: FileText,
     items: [
       { label: "Advisor Blogs", link: "/advisor/blogs" },
-      { label: "Advisor Promotions", link: "/advisor/promotions" },
+      { label: "Promotions - Advisor", link: "/advisor/promotions" },
     ],
   },
 

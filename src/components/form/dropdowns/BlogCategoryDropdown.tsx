@@ -39,7 +39,7 @@ const BlogCategoriesDropdown = ({
   return (
     <Select
       onValueChange={onChangeHandler}
-      defaultValue={value || categories[0].value}
+      defaultValue={value}
       disabled={isDisabled}
     >
       <SelectTrigger className="select-field input-fields ring-0 focus:ring-0">

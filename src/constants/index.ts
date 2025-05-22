@@ -1,5 +1,6 @@
 import { PrimaryFormType } from "@/types/formTypes";
 import {
+  AdvisorBlogFormType,
   BlogFormType,
   BrandFormType,
   CategoryFormType,
@@ -168,7 +169,18 @@ export const BlogFormDefaultValues: BlogFormType = {
   blogDescription: "",
   blogImage: "",
   blogImagePath: "",
-  blogCategory: "",
+  blogCategory: "design",
+  authorName: "",
+  metaTitle: "",
+  metaDescription: "",
+  blogContent: "",
+};
+export const AdvisorBlogFormDefaultValues: AdvisorBlogFormType = {
+  blogTitle: "",
+  blogDescription: "",
+  blogImage: "",
+  blogImagePath: "",
+  blogCategory: "discover",
   authorName: "",
   metaTitle: "",
   metaDescription: "",
@@ -199,9 +211,9 @@ export const advisorBlogCategoryTags: CategoryTagsType = [
 ];
 
 export const blogPromotionPlacement = [
-  { label: "Recommended Deals", value: "recommended-deals" },
-  { label: "Popular List", value: "popular-list" },
-  { label: "Bottom Banner", value: "bottom-banner" },
+  { label: "Recommended Deals (Top Right)", value: "recommended-deals" },
+  { label: "Popular List (Side List)", value: "popular-list" },
+  { label: "Bottom Banner (Bottom Wide)", value: "bottom-banner" },
 ];
 
 export const VehicleSeriesFormDefaultValues: VehicleSeriesType = {
