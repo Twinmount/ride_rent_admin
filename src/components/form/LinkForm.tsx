@@ -72,6 +72,10 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
         title: `${type} Link failed`,
         description: "Something went wrong",
       });
+    } finally {
+      queryClient.invalidateQueries({
+        queryKey: ["quick-links"],
+      });
     }
   }
 
@@ -79,8 +83,7 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
     mutationFn: () => deleteLink(linkId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["links", linkId],
-        exact: true,
+        queryKey: ["quick-links"],
       });
     },
   });
@@ -89,7 +92,7 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
+        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
         <div className="flex flex-col gap-5">
           {/* type title */}
@@ -140,7 +143,7 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
+          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
         >
           {form.formState.isSubmitting ? "Processing..." : `${type} Link`}
           {form.formState.isSubmitting && <Spinner />}
@@ -160,7 +163,7 @@ export default function LinkForm({ type, formData }: LinkFormProps) {
           ></DeleteModal>
         )}
 
-        <p className="p-0 m-0 -mt-3 text-xs text-center text-red-500">
+        <p className="m-0 -mt-3 p-0 text-center text-xs text-red-500">
           Make sure appropriate state is selected before adding a link.
           Currently adding link under {state.stateName}
         </p>

@@ -5,37 +5,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  advisorBlogCategoryTags,
-  CategoryTagsType,
-  rideBlogCategoryTags,
-} from "@/constants";
+import { blogPromotionPlacement } from "@/constants";
 
-type BlogCategoriesDropdownProps = {
+type BlogPromotionPlacementDropdownProps = {
   value?: string;
   onChangeHandler: (value: string) => void;
-  placeholder?: string;
   isDisabled?: boolean;
-  type: "ride" | "advisor";
 };
 
-const BlogCategoriesDropdown = ({
+const BlogPromotionPlacementDropdown = ({
   value,
   onChangeHandler,
   isDisabled = false,
-  type,
-}: BlogCategoriesDropdownProps) => {
-  let categories: CategoryTagsType = [];
-
-  if (type === "ride") {
-    categories = rideBlogCategoryTags;
-  } else if (type === "advisor") {
-    categories = advisorBlogCategoryTags;
-  }
-
-  // filter out "all"
-  categories = categories.filter((tag) => tag.value !== "all");
-
+}: BlogPromotionPlacementDropdownProps) => {
   return (
     <Select
       onValueChange={onChangeHandler}
@@ -45,11 +27,11 @@ const BlogCategoriesDropdown = ({
       <SelectTrigger className="select-field input-fields ring-0 focus:ring-0">
         <SelectValue
           className="!font-bold !text-black"
-          placeholder="Choose Blog Category"
+          placeholder="Choose Blog Placement"
         />
       </SelectTrigger>
       <SelectContent>
-        {categories.map((tag, index) => (
+        {blogPromotionPlacement.map((tag, index) => (
           <SelectItem
             key={index}
             value={tag.value} // The value returned to the form
@@ -63,4 +45,4 @@ const BlogCategoriesDropdown = ({
   );
 };
 
-export default BlogCategoriesDropdown;
+export default BlogPromotionPlacementDropdown;

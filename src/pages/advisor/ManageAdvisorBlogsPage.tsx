@@ -1,15 +1,15 @@
-import { Plus } from "lucide-react";
-import { Link } from "react-router-dom";
 import StateSkelton from "@/components/skelton/StateSkelton";
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllBlogs } from "@/api/blogs";
 import BlogCard from "@/components/card/BlogCard";
 import Pagination from "@/components/Pagination";
 import { useState } from "react";
 
 import BlogCategoryTags from "@/components/BlogCategoryTags";
+import FloatingActionButton from "@/components/general/FloatingActionButton";
+import PageHeading from "@/components/general/PageHeading";
+import { fetchAllAdvisorBlogs } from "@/api/advisor";
 
-export default function ManageBlogsPage() {
+export default function ManageAdvisorBlogsPage() {
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
@@ -26,22 +26,21 @@ export default function ManageBlogsPage() {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ["blogs", selectedCategory, page],
-    queryFn: () => fetchAllBlogs(requestBody),
+    queryKey: ["advisor-blogs", selectedCategory, page],
+    queryFn: () => fetchAllAdvisorBlogs(requestBody),
   });
 
   const blogsResult = data?.result.list || [];
 
   return (
     <section className="container h-auto min-h-screen pb-10">
-      <h1 className="mb-4 mt-6 text-center text-2xl font-bold sm:text-left">
-        Manage Blogs
-      </h1>
+      <PageHeading heading={`Manage Advisor Blogs`} />
 
       {/* Category filter component */}
       <BlogCategoryTags
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
+        type="advisor"
       />
 
       {isLoading ? (
@@ -51,29 +50,24 @@ export default function ManageBlogsPage() {
       ) : blogsResult.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
           {blogsResult.map((data) => (
-            <BlogCard blog={data} key={data.blogId} />
+            <BlogCard blog={data} key={data.blogId} type="advisor" />
           ))}
         </div>
       ) : (
         <div className="mt-36 text-center text-2xl">No Blogs Found!</div>
       )}
 
-      {blogsResult.length > 0 && (
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={data?.result.totalNumberOfPages || 1}
-        />
-      )}
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={data?.result.totalNumberOfPages || 1}
+      />
 
-      <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
-        <Link
-          className="flex-center gap-x-1 bg-yellow px-3 py-2 text-white"
-          to={`/happenings/blogs/add`}
-        >
-          New Blog <Plus />
-        </Link>
-      </button>
+      {/* New Blog Link Button */}
+      <FloatingActionButton
+        href={`/advisor/blogs/add`}
+        label="New Advisor Blog"
+      />
     </section>
   );
 }
