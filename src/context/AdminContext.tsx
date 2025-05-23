@@ -23,8 +23,27 @@ type AdminProviderProps = {
   children: ReactNode;
 };
 
+const appSuportedCountries = [
+  {
+    id: "ee8a7c95-303d-4f55-bd6c-85063ff1cf48",
+    name: "UAE",
+    value: "uae",
+    icon: "/assets/icons/country-flags/uae-flag.png",
+  },
+  {
+    id: "68ea1314-08ed-4bba-a2b1-af549946523d",
+    name: "India",
+    value: "in",
+    icon: "/assets/icons/country-flags/india-flag.png",
+  },
+];
+
+
 const AdminProvider = ({ children }: AdminProviderProps) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [appCountry, setAppCountry] = useState<string>(() => {
+    return localStorage.getItem('appCountry') || appSuportedCountries[0].value;
+  });
   const [country, setCountry] = useState<countryType>({
     countryId: "",
     countryName: "",
@@ -41,11 +60,22 @@ const AdminProvider = ({ children }: AdminProviderProps) => {
     stateValue: "",
   });
 
+  const updateAppCountry = (newCountry: string) => {
+    setAppCountry(newCountry);
+    localStorage.setItem('appCountry', newCountry);
+  }
+
   const isSmallScreen = useIsSmallScreen(1100);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
+
+  useEffect(() => {
+    if (!localStorage.getItem("appCountry")) {
+      localStorage.setItem("appCountry", appSuportedCountries[0].value);
+    }
+  }, [appCountry]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -71,6 +101,9 @@ const AdminProvider = ({ children }: AdminProviderProps) => {
         setCountry,
         parentState,
         setParentState,
+        appCountry,
+        updateAppCountry,
+        appSuportedCountries
       }}
     >
       {children}

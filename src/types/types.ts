@@ -5,6 +5,14 @@ export type orgType = {
   value: string;
 };
 
+export type AppSuportedCountries = {
+  id: string;
+  name: string;
+  value: string;
+  icon: string;
+};
+
+
 export interface Location {
   lat: number;
   lng: number;
@@ -50,6 +58,9 @@ export type AdminContextType = {
   setCountry: (state: countryType) => void;
   parentState: stateType;
   setParentState: (state: stateType) => void;
+  appCountry: string;
+  updateAppCountry: (country: string) => void;
+  appSuportedCountries: AppSuportedCountries[];
 };
 
 export type VehicleCategoryType =

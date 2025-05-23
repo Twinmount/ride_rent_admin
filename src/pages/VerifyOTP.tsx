@@ -23,10 +23,18 @@ import { toast } from '@/components/ui/use-toast'
 import { useMutation } from '@tanstack/react-query'
 import { resendOTP, verifyOTP } from '@/api/auth'
 import { save, StorageKeys } from '@/utils/storage'
+import { useAdminContext } from '@/context/AdminContext'
 
-const VerifyOTP = () => {
+const VerifyOTP = ({country}:{country:string}) => {
   const navigate = useNavigate()
   const [timer, setTimer] = useState(60)
+
+  const {updateAppCountry}= useAdminContext()
+  
+  useEffect(() => {
+    updateAppCountry(country);
+  }, []);
+  
 
   const form = useForm<z.infer<typeof OTPFormSchema>>({
     resolver: zodResolver(OTPFormSchema),
