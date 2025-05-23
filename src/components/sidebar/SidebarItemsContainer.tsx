@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { sidebarContent } from "./sidebar-items";
+import { sidebarContent } from "../../constants/sidebar-items";
 import { SidebarItem } from "./SidebarItem";
 import {
   Accordion,

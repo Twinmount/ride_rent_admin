@@ -12,7 +12,7 @@ export default function ManageLinksPage() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["links", state],
+    queryKey: ["quick-links", state],
     queryFn: () =>
       fetchAllLinks({
         page,

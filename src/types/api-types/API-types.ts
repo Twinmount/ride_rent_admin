@@ -302,8 +302,8 @@ export interface HomeMetaListData {
   categoryId: string;
   metaTitle: string;
   metaDescription: string;
-  h1?: string; 
-  h2?: string; 
+  h1?: string;
+  h2?: string;
 }
 
 export interface FetchSingleHomeMetaData {
@@ -336,8 +336,8 @@ export interface ListingMetaListData {
   typeId: string;
   metaTitle: string;
   metaDescription: string;
-  h1?: string; 
-  h2?: string; 
+  h1?: string;
+  h2?: string;
 }
 
 //  fetch listing all meta data
@@ -540,4 +540,22 @@ export interface FetchPromotedCompanyListResponse {
   };
   status: string;
   statusCode: number;
+}
+
+export interface BlogType {
+  blogTitle: string;
+  blogDescription: string;
+  blogImage: string;
+  blogCategory: string;
+  authorName: string;
+  metaTitle: string;
+  metaDescription: string;
+  blogContent: string;
+}
+
+export interface FetchAllBlogsRequest {
+  page: string;
+  limit: string;
+  sortOrder: "ASC" | "DESC";
+  blogCategory?: string[];
 }

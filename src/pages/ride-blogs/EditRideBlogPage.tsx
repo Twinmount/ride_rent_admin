@@ -1,23 +1,20 @@
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import FormSkelton from "@/components/skelton/FormSkelton";
 import { useQuery } from "@tanstack/react-query";
 
-import { fetchLinkById } from "@/api/links";
-import LinkForm from "@/components/form/LinkForm";
+import { fetchBlogById } from "@/api/blogs";
+import LazyLoader from "@/components/skelton/LazyLoader";
+import RideBlogForm from "@/components/form/main-form/RideBlogForm";
 
-export default function EditLinkPage() {
+export default function EditRideBlogPage() {
   const navigate = useNavigate();
 
-  const { linkId } = useParams<{ linkId: string }>();
+  const { blogId } = useParams<{ blogId: string }>();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["quick-links", linkId],
-    queryFn: () => fetchLinkById(linkId as string),
+    queryKey: ["ride-blogs", blogId],
+    queryFn: () => fetchBlogById(blogId as string),
   });
-
-  // Destructure to get the 'list' array from 'data'
-  const linkData = data?.result;
 
   return (
     <section className="container min-h-screen pb-32 pt-5">
@@ -28,12 +25,12 @@ export default function EditLinkPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h1 className="h3-bold text-center sm:text-left">Update Link</h1>
+        <h1 className="h3-bold text-center sm:text-left">Update Ride Blog</h1>
       </div>
       {isLoading ? (
-        <FormSkelton />
+        <LazyLoader />
       ) : (
-        <LinkForm type="Update" formData={linkData} />
+        <RideBlogForm type="Update" formData={data?.result} />
       )}
     </section>
   );

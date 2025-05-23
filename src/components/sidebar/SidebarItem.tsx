@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SidebarSubItemType } from "./sidebar-items";
+import { SidebarSubItemType } from "../../constants/sidebar-items";
 
 type SidebarItemProps = {
   icon?: any; // Optional icon

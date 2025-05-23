@@ -1,28 +1,33 @@
-import { categoryTags } from '@/constants'
+import { rideBlogCategoryTags, advisorBlogCategoryTags } from "@/constants";
 
 type BlogCategoryTagsProps = {
-  selectedCategory: string
-  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>
-}
+  selectedCategory: string;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+  type: "ride" | "advisor";
+};
 
 export default function BlogCategoryTags({
   selectedCategory,
   setSelectedCategory,
+  type,
 }: BlogCategoryTagsProps) {
   // Function to handle category tag click
   const handleTagClick = (value: string) => {
-    setSelectedCategory(value) // Update the selected category state
-  }
+    setSelectedCategory(value); // Update the selected category state
+  };
+
+  // tags array to map over
+  const tags = type === "ride" ? rideBlogCategoryTags : advisorBlogCategoryTags;
 
   return (
-    <div className="flex flex-wrap items-center w-full gap-2 my-6">
-      {categoryTags.map((category, index) => (
+    <div className="my-6 flex w-full flex-wrap items-center gap-2">
+      {tags.map((category, index) => (
         <div
           key={index}
-          className={`px-2 py-[2px] rounded-xl border border-gray-300 cursor-pointer hover:bg-yellow hover:text-white transition-all hover:shadow-lg ${
+          className={`cursor-pointer rounded-xl border border-gray-300 px-2 py-[2px] transition-all hover:bg-yellow hover:text-white hover:shadow-lg ${
             selectedCategory === category.value
-              ? 'bg-yellow text-white'
-              : 'bg-gray-200 border text-black'
+              ? "bg-yellow text-white"
+              : "border bg-gray-200 text-black"
           }`}
           onClick={() => handleTagClick(category.value)}
         >
@@ -30,5 +35,5 @@ export default function BlogCategoryTags({
         </div>
       ))}
     </div>
-  )
+  );
 }

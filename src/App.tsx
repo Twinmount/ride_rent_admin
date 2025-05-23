@@ -12,7 +12,7 @@ import "@mantine/tiptap/styles.css";
 import { toast } from "./components/ui/use-toast";
 import { AdminProvider } from "./context/AdminContext";
 import RouteErrorBoundary from "./layout/RouteErrorBoundary";
-import { router } from "./routerConfig";
+import { router } from "./routes/routerConfig";
 
 const queryClient = new QueryClient({
   defaultOptions: {

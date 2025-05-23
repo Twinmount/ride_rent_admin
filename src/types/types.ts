@@ -100,7 +100,17 @@ export type PromotionFormType = {
   promotionLink: string;
 };
 
+export type BlogPromotionPlacementType =
+  | "recommended-deals"
+  | "popular-list"
+  | "bottom-banner";
+
 export type BlogPromotionFormType = {
+  promotionImage: string;
+  promotionLink: string;
+  blogPromotionPlacement: string;
+};
+export type AdvisorPromotionFormType = {
   promotionImage: string;
   promotionLink: string;
 };
@@ -192,6 +202,20 @@ export type BlogFormType = {
   blogContent: string;
   updatedAt?: string;
 };
+
+export type AdvisorBlogFormType = {
+  blogTitle: string;
+  blogDescription: string;
+  blogImage: string;
+  blogImagePath?: string;
+  blogCategory: string;
+  authorName: string;
+  metaTitle: string;
+  metaDescription: string;
+  blogContent: string;
+  updatedAt?: string;
+};
+
 export type CategoryType =
   | "all"
   | "design"

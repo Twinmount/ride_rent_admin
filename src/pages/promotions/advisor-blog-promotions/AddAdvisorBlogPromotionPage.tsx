@@ -1,9 +1,9 @@
-import BlogForm from "@/components/form/main-form/BlogForm";
+import AdvisorPromotionForm from "@/components/form/AdvisorPromotionForm";
 
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function AddLocationPage() {
+export default function AddRideBlogPromotionPage() {
   const navigate = useNavigate();
 
   return (
@@ -15,9 +15,11 @@ export default function AddLocationPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h3 className="h3-bold text-center sm:text-left">Add New Blog</h3>
+        <h3 className="h3-bold text-center sm:text-left">
+          Add New Blog Promotion
+        </h3>
       </div>
-      <BlogForm type="Add" />
+      <AdvisorPromotionForm type="Add" />
     </section>
   );
 }
