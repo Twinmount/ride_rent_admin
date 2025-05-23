@@ -28,6 +28,7 @@ const BannerSectionSchema = z.object({
   sectionName: z.string().min(1, "Section name is required"),
   desktopImage: z.string().min(1, "Desktop image is required"),
   mobileImage: z.string().min(1, "Mobile image is required"),
+  link: z.string().optional(),
   isEnabled: z.boolean().default(true),
 });
 
@@ -36,6 +37,7 @@ export interface BannerType {
   sectionName: string;
   desktopImage: string;
   mobileImage: string;
+  link?: string;
   isEnabled: boolean;
   bannerForId: string;
   bannerFor: "state" | "country" | "parentState";
@@ -68,6 +70,7 @@ export default function HomepageBannerForm({
             sectionName: item.sectionName,
             desktopImage: item.desktopImage || "",
             mobileImage: item.mobileImage || "",
+            link: item.link || "",
             isEnabled: item.isEnabled,
           }))
         : [
@@ -76,6 +79,7 @@ export default function HomepageBannerForm({
               sectionName: "",
               desktopImage: "",
               mobileImage: "",
+              link: "",
               isEnabled: true,
             },
           ],
@@ -118,6 +122,7 @@ export default function HomepageBannerForm({
         sectionName: section.sectionName,
         desktopImage: section.desktopImage,
         mobileImage: section.mobileImage,
+        link: section.link,
         isEnabled: section.isEnabled,
         bannerForId: id,
         bannerFor,
@@ -277,6 +282,20 @@ export default function HomepageBannerForm({
                 />
               )}
             />
+
+            <FormField
+              control={form.control}
+              name={`sections.${index}.link`}
+              render={({ field }) => (
+                <FormItem className="mt-4">
+                  <FormLabel>Link</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Link" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         ))}
 
@@ -289,6 +308,7 @@ export default function HomepageBannerForm({
               sectionName: "",
               desktopImage: "",
               mobileImage: "",
+              link: "",
               isEnabled: true,
             })
           }

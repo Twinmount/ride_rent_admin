@@ -32,6 +32,7 @@ export interface BannerType {
   sectionName: string;
   desktopImage: string;
   mobileImage: string;
+  link?: string;
   isEnabled: boolean;
   bannerForId: string;
   bannerFor: "state" | "country" | "parentState";
