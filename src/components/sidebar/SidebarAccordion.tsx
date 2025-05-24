@@ -3,7 +3,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-import { SidebarAccordionType } from "./sidebar-items";
+import { SidebarAccordionType } from "../../constants/sidebar-items";
 import { AccordionSidebarItem } from "./SidebarItem";
 
 type SidebarAccordionProps = {

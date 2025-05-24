@@ -1,5 +1,6 @@
 import { PrimaryFormType } from "@/types/formTypes";
 import {
+  AdvisorBlogFormType,
   BlogFormType,
   BrandFormType,
   CategoryFormType,
@@ -11,38 +12,6 @@ import {
   VehicleSeriesType,
   VehicleTypeFormType,
 } from "@/types/types";
-import {
-  CarFront,
-  FileSearch,
-  FileText,
-  LayoutDashboard,
-  List,
-  MapPin,
-  Megaphone,
-  Star,
-  UserPlus,
-} from "lucide-react";
-
-// sidebar content
-export const sidebarContent = [
-  { label: "Dashboard", icon: LayoutDashboard, link: "/" },
-  { label: "Live Listings", icon: List, link: "/listings" },
-  {
-    label: "Agents",
-    icon: UserPlus,
-    link: "/registrations",
-  },
-  {
-    label: "Categories & Types",
-    icon: CarFront,
-    link: "/vehicle",
-  },
-  { label: "Brands", icon: Star, link: "/manage-brands" },
-  { label: "Locations", icon: MapPin, link: "/locations" },
-  { label: "Links & Promotions", icon: Megaphone, link: "/marketing" },
-  { label: "Blogs", icon: FileText, link: "/happenings" },
-  { label: "Meta Data", icon: FileSearch, link: "/meta-data" },
-];
 
 // Vehicle type form default values
 export const VehicleTypeFormDefaultValues: VehicleTypeFormType = {
@@ -106,6 +75,11 @@ export const PromotionFormDefaultValue = {
 
 // blog promotion form default values
 export const BlogPromotionFormDefaultValue = {
+  promotionImage: "",
+  promotionLink: "",
+  blogPromotionPlacement: "",
+};
+export const AdvisorPromotionFormDefaultValue = {
   promotionImage: "",
   promotionLink: "",
 };
@@ -213,21 +187,51 @@ export const BlogFormDefaultValues: BlogFormType = {
   blogDescription: "",
   blogImage: "",
   blogImagePath: "",
-  blogCategory: "",
+  blogCategory: "design",
+  authorName: "",
+  metaTitle: "",
+  metaDescription: "",
+  blogContent: "",
+};
+export const AdvisorBlogFormDefaultValues: AdvisorBlogFormType = {
+  blogTitle: "",
+  blogDescription: "",
+  blogImage: "",
+  blogImagePath: "",
+  blogCategory: "discover",
   authorName: "",
   metaTitle: "",
   metaDescription: "",
   blogContent: "",
 };
 
+export type CategoryTagsType = {
+  label: string;
+  value: string;
+}[];
 // tags array
-export const categoryTags = [
+export const rideBlogCategoryTags: CategoryTagsType = [
   { label: "All", value: "all" },
   { label: "Design", value: "design" },
   { label: "Engineering", value: "engineering" },
   { label: "Automotive", value: "automotive" },
   { label: "News", value: "news" },
   { label: "Travel", value: "travel" },
+];
+
+export const advisorBlogCategoryTags: CategoryTagsType = [
+  { label: "All", value: "all" },
+  { label: "Discover", value: "discover" },
+  { label: "Experiences", value: "experiences" },
+  { label: "Insights", value: "insights" },
+  { label: "What's Buzzing", value: "whats-buzzing" },
+  { label: "News", value: "news" },
+];
+
+export const blogPromotionPlacement = [
+  { label: "Recommended Deals (Top Right)", value: "recommended-deals" },
+  { label: "Popular List (Side List)", value: "popular-list" },
+  { label: "Bottom Banner (Bottom Wide)", value: "bottom-banner" },
 ];
 
 export const VehicleSeriesFormDefaultValues: VehicleSeriesType = {

@@ -2,22 +2,21 @@ import { CircleArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import { useQuery } from "@tanstack/react-query";
+import AdvisorPromotionForm from "@/components/form/AdvisorPromotionForm";
+import { fetchAdvisorBlogPromotionById } from "@/api/advisor";
 
-import { fetchLinkById } from "@/api/links";
-import LinkForm from "@/components/form/LinkForm";
-
-export default function EditLinkPage() {
+export default function EditRideBlogPromotionPage() {
   const navigate = useNavigate();
 
-  const { linkId } = useParams<{ linkId: string }>();
+  const { promotionId } = useParams<{ promotionId: string }>();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["quick-links", linkId],
-    queryFn: () => fetchLinkById(linkId as string),
+    queryKey: ["advisor-promotions", promotionId],
+    queryFn: () => fetchAdvisorBlogPromotionById(promotionId as string),
   });
 
   // Destructure to get the 'list' array from 'data'
-  const linkData = data?.result;
+  const promotionData = data?.result;
 
   return (
     <section className="container min-h-screen pb-32 pt-5">
@@ -28,12 +27,14 @@ export default function EditLinkPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h1 className="h3-bold text-center sm:text-left">Update Link</h1>
+        <h1 className="h3-bold text-center sm:text-left">
+          Update Blog Promotion
+        </h1>
       </div>
       {isLoading ? (
         <FormSkelton />
       ) : (
-        <LinkForm type="Update" formData={linkData} />
+        <AdvisorPromotionForm type="Update" formData={promotionData} />
       )}
     </section>
   );

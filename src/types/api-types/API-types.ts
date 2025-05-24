@@ -592,3 +592,21 @@ export interface FetchPromotedCompanyListResponse {
   status: string;
   statusCode: number;
 }
+
+export interface BlogType {
+  blogTitle: string;
+  blogDescription: string;
+  blogImage: string;
+  blogCategory: string;
+  authorName: string;
+  metaTitle: string;
+  metaDescription: string;
+  blogContent: string;
+}
+
+export interface FetchAllBlogsRequest {
+  page: string;
+  limit: string;
+  sortOrder: "ASC" | "DESC";
+  blogCategory?: string[];
+}

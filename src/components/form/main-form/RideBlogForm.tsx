@@ -31,12 +31,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteMultipleFiles } from "@/helpers/form";
 import DeleteModal from "@/components/modal/DeleteModal";
 
-type StateFormProps = {
+type RideBlogFormProps = {
   type: "Add" | "Update";
   formData?: BlogFormType | null;
 };
 
-export default function BlogForm({ type, formData }: StateFormProps) {
+export default function RideBlogForm({ type, formData }: RideBlogFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
@@ -76,7 +76,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
       }
 
       if (data) {
-        // actually delete the images from the db, if any
+        // delete the images from the db, if any
         await deleteMultipleFiles(deletedImages);
       }
 
@@ -86,13 +86,9 @@ export default function BlogForm({ type, formData }: StateFormProps) {
           className: "bg-yellow text-white",
         });
         queryClient.invalidateQueries({
-          queryKey: ["blog-by-id", blogId],
-          exact: true,
+          queryKey: ["ride-blogs"],
         });
-        queryClient.invalidateQueries({
-          queryKey: ["blogs"],
-        });
-        navigate("/happenings/blogs");
+        navigate("/ride-blogs/list");
       }
     } catch (error) {
       console.error(error);
@@ -263,6 +259,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
                     value={field.value}
                     onChangeHandler={field.onChange}
                     placeholder="category"
+                    type="ride"
                   />
                 </FormControl>
                 <FormDescription className="ml-2">
@@ -458,7 +455,7 @@ export default function BlogForm({ type, formData }: StateFormProps) {
             confirmText="Delete"
             cancelText="Cancel"
             isLoading={isPending || form.formState.isSubmitting}
-            navigateTo="/happenings/blogs"
+            navigateTo="/ride-blogs"
           ></DeleteModal>
         )}
       </form>

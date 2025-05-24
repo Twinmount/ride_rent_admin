@@ -10,3 +10,9 @@ export enum GcsFilePaths {
   COMMERCIAL_LICENSES = "/vehicles/commercial-licenses",
   BLOG = "/blog",
 }
+
+export enum BlogPromotionPlacement {
+  RecommendedDeals = "recommended-deals",
+  PopularList = "popular-list",
+  BottomBanner = "bottom-banner",
+}

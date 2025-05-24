@@ -14,11 +14,16 @@ export const uploadSingleFile = async (
   fileCategory: GcsFilePaths,
   file: File,
   onUploadProgress?: (progressEvent: AxiosProgressEvent) => void,
+  isBlog: boolean = false,
 ): Promise<SingleFileUploadResponse> => {
   try {
     const formData = new FormData();
     formData.append("fileCategory", fileCategory);
     formData.append("file", file);
+
+    if (isBlog) {
+      formData.append("track", "false");
+    }
 
     const response = await API.post<SingleFileUploadResponse>({
       slug: Slug.POST_SINGLE_FILE,

@@ -5,68 +5,74 @@ import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import "@mantine/core/styles.css";
 import "@mantine/tiptap/styles.css";
 
-import Layout from "./layout/Layout";
-import ErrorPage from "./pages/ErrorPage";
+import Layout from "../layout/Layout";
+import ErrorPage from "../pages/ErrorPage";
 
 // pages import
-import Login from "./pages/login/Login";
-import Register from "./pages/Register";
-import VerifyOTP from "./pages/VerifyOTP";
-import ProtectedRoute from "./layout/ProtectedRoutes";
+import Login from "../pages/login/Login";
+import Register from "../pages/Register";
+import VerifyOTP from "../pages/VerifyOTP";
+import ProtectedRoute from "../layout/ProtectedRoutes";
+import { rideBlogRoutes } from "./route-groups/rideBlogRoutes";
+import { advisorRoutes } from "./route-groups/advisorRoutes";
 
 // lazy loaded pages
-const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"));
+const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"));
 const LiveListingPage = lazy(
-  () => import("./pages/live-listing/LiveListingPage"),
+  () => import("../pages/live-listing/LiveListingPage"),
 );
 
 const GeneralListingPage = lazy(
-  () => import("./pages/live-listing/GeneralListingPage"),
+  () => import("../pages/live-listing/GeneralListingPage"),
 );
 const VehiclesFormUpdatePage = lazy(
-  () => import("./pages/live-listing/VehiclesFormUpdatePage"),
+  () => import("../pages/live-listing/VehiclesFormUpdatePage"),
 );
 const VehiclesFormAddPage = lazy(
-  () => import("./pages/live-listing/VehiclesFormAddPage"),
+  () => import("../pages/live-listing/VehiclesFormAddPage"),
 );
 
 // company registrations page
 const CompanyListingPage = lazy(
-  () => import("./pages/company/CompanyListingPage"),
+  () => import("../pages/company/CompanyListingPage"),
 );
 const CompanyDetailsPage = lazy(
-  () => import("./pages/company/CompanyDetailsPage"),
+  () => import("../pages/company/CompanyDetailsPage"),
 );
 const CompanyPromotionPage = lazy(
-  () => import("./pages/company/CompanyPromotionPage"),
+  () => import("../pages/company/CompanyPromotionPage"),
 );
 // vehicle categories page imports
 const ManageCategoriesPage = lazy(
-  () => import("./pages/manage-categories/ManageCategoriesPage"),
+  () => import("../pages/manage-categories/ManageCategoriesPage"),
 );
 const AddCategoryPage = lazy(
-  () => import("./pages/manage-categories/AddCategoryPage"),
+  () => import("../pages/manage-categories/AddCategoryPage"),
 );
 const EditCategoryPage = lazy(
-  () => import("./pages/manage-categories/EditCategoryPage"),
+  () => import("../pages/manage-categories/EditCategoryPage"),
 );
 
 // vehicle types page import
 const ManageTypesPage = lazy(
-  () => import("./pages/manage-types/ManageTypesPage"),
+  () => import("../pages/manage-types/ManageTypesPage"),
 );
-const EditTypePage = lazy(() => import("./pages/manage-types/EditTypePage"));
-const AddTypePage = lazy(() => import("./pages/manage-types/AddTypePage"));
+const EditTypePage = lazy(() => import("../pages/manage-types/EditTypePage"));
+const AddTypePage = lazy(() => import("../pages/manage-types/AddTypePage"));
 
 // brands page import
-const BrandsPage = lazy(() => import("./pages/manage-brands/BrandsPage"));
-const AddBrandPage = lazy(() => import("./pages/manage-brands/AddBrandPage"));
-const EditBrandPage = lazy(() => import("./pages/manage-brands/EditBrandPage"));
+const BrandsPage = lazy(() => import("../pages/manage-brands/BrandsPage"));
+const AddBrandPage = lazy(() => import("../pages/manage-brands/AddBrandPage"));
+const EditBrandPage = lazy(
+  () => import("../pages/manage-brands/EditBrandPage"),
+);
 
-const SeriesPage = lazy(() => import("./pages/manage-series/SeriesPage"));
-const AddSeriesPage = lazy(() => import("./pages/manage-series/AddSeriesPage"));
+const SeriesPage = lazy(() => import("../pages/manage-series/SeriesPage"));
+const AddSeriesPage = lazy(
+  () => import("../pages/manage-series/AddSeriesPage"),
+);
 const EditSeriesPage = lazy(
-  () => import("./pages/manage-series/EditSeriesPage"),
+  () => import("../pages/manage-series/EditSeriesPage"),
 );
 
 // country page pages
@@ -82,79 +88,67 @@ const EditCountryPage = lazy(
 
 // states page pages
 const ManageStatesPage = lazy(
-  () => import("./pages/manage-states/ManageStatesPage"),
+  () => import("../pages/manage-states/ManageStatesPage"),
 );
-const AddStatePage = lazy(() => import("./pages/manage-states/AddStatePage"));
-const EditStatePage = lazy(() => import("./pages/manage-states/EditStatePage"));
+const AddStatePage = lazy(() => import("../pages/manage-states/AddStatePage"));
+const EditStatePage = lazy(
+  () => import("../pages/manage-states/EditStatePage"),
+);
 
 // city pages imports
 const ManageCitiesPage = lazy(
-  () => import("./pages/manage-cities/ManageCitiesPage"),
+  () => import("../pages/manage-cities/ManageCitiesPage"),
 );
-const AddCityPage = lazy(() => import("./pages/manage-cities/AddCityPage"));
-const EditCityPage = lazy(() => import("./pages/manage-cities/EditCityPage"));
+const AddCityPage = lazy(() => import("../pages/manage-cities/AddCityPage"));
+const EditCityPage = lazy(() => import("../pages/manage-cities/EditCityPage"));
 
 //  links page import
 const ManageLinksPage = lazy(
-  () => import("./pages/quick-links/ManageLinksPage"),
+  () => import("../pages/quick-links/ManageLinksPage"),
 );
-const AddLinkPage = lazy(() => import("./pages/quick-links/AddLinkPage"));
-const EditLinkPage = lazy(() => import("./pages/quick-links/EditLinkPage"));
+const AddLinkPage = lazy(() => import("../pages/quick-links/AddLinkPage"));
+const EditLinkPage = lazy(() => import("../pages/quick-links/EditLinkPage"));
 
 // recommended links pages
 const ManageRelatedLinksPage = lazy(
-  () => import("./pages/related-links/ManageRelatedLinksPage"),
+  () => import("../pages/related-links/ManageRelatedLinksPage"),
 );
 const AddRelatedLinkPage = lazy(
-  () => import("./pages/related-links/AddRelatedLinkPage"),
+  () => import("../pages/related-links/AddRelatedLinkPage"),
 );
 const EditRelatedLinkPage = lazy(
-  () => import("./pages/related-links/EditRelatedLinkPage"),
+  () => import("../pages/related-links/EditRelatedLinkPage"),
 );
 
 // ads page import
 const ManagePromotionsPage = lazy(
-  () => import("./pages/promotions/main-promotions/ManagePromotionsPage"),
+  () => import("../pages/promotions/main-promotions/ManagePromotionsPage"),
 );
 const AddPromotionPage = lazy(
-  () => import("./pages/promotions/main-promotions/AddPromotionPage"),
+  () => import("../pages/promotions/main-promotions/AddPromotionPage"),
 );
 const EditPromotionPage = lazy(
-  () => import("./pages/promotions/main-promotions/EditPromotionPage"),
+  () => import("../pages/promotions/main-promotions/EditPromotionPage"),
 );
-// blogs promotions page import
-const ManageBlogsPage = lazy(() => import("./pages/blogs/ManageBlogsPage"));
-const AddBlogPage = lazy(() => import("./pages/blogs/AddBlogPage"));
-const EditBlogPage = lazy(() => import("./pages/blogs/EditBlogPage"));
 
-// blogs page import
-const ManageBlogsPromotionsPage = lazy(
-  () => import("./pages/promotions/blog-promotions/ManageBlogsPromotionsPage"),
-);
-const AddBlogPromotionsPage = lazy(
-  () => import("./pages/promotions/blog-promotions/AddBlogsPromotionPage"),
-);
-const EditBlogPromotionsPage = lazy(
-  () => import("./pages/promotions/blog-promotions/EditBlogsPromotionPage"),
-);
 // meta data page routes
 const HomeMetaDataPage = lazy(
-  () => import("./pages/meta-data/home-meta/HomeMetaDataPage"),
+  () => import("../pages/meta-data/home-meta/HomeMetaDataPage"),
 );
 const AddHomeMetaPage = lazy(
-  () => import("./pages/meta-data/home-meta/AddHomeMetaPage"),
+  () => import("../pages/meta-data/home-meta/AddHomeMetaPage"),
 );
 const EditHomeMetaPage = lazy(
-  () => import("./pages/meta-data/home-meta/EditHomeMetaPage"),
+  () => import("../pages/meta-data/home-meta/EditHomeMetaPage"),
 );
 const ListingMetaDataPage = lazy(
-  () => import("./pages/meta-data/listing-meta/ListingMetaDataPage"),
+  () => import("../pages/meta-data/listing-meta/ListingMetaDataPage"),
 );
 const AddListingMetaPage = lazy(
-  () => import("./pages/meta-data/listing-meta/AddListingMetaPage"),
+  () => import("../pages/meta-data/listing-meta/AddListingMetaPage"),
 );
 const EditListingMetaPage = lazy(
-  () => import("./pages/meta-data/listing-meta/EditListingMetaPage"),
+  () => import("../pages/meta-data/listing-meta/EditListingMetaPage"),
 );
 
 export const router = createBrowserRouter([
@@ -434,38 +428,6 @@ export const router = createBrowserRouter([
                 element: <EditPromotionPage />,
               },
 
-              // blogs routes
-              {
-                path: "/happenings",
-                element: <Navigate to={"/happenings/blogs"} />,
-              },
-              {
-                path: "/happenings/blogs",
-                element: <ManageBlogsPage />,
-              },
-              {
-                path: "/happenings/blogs/add",
-                element: <AddBlogPage />,
-              },
-              {
-                path: "/happenings/blogs/edit/:blogId",
-                element: <EditBlogPage />,
-              },
-
-              // blog promotions
-              {
-                path: "/happenings/promotions",
-                element: <ManageBlogsPromotionsPage />,
-              },
-              {
-                path: "/happenings/promotions/add",
-                element: <AddBlogPromotionsPage />,
-              },
-              {
-                path: "/happenings/promotions/edit/:promotionId",
-                element: <EditBlogPromotionsPage />,
-              },
-
               // home page meta data routes
               {
                 path: "/meta-data",
@@ -491,6 +453,12 @@ export const router = createBrowserRouter([
                 path: "/meta-data/listing/edit/:metaDataId",
                 element: <EditListingMetaPage />,
               },
+
+              // ride blog routes
+              ...rideBlogRoutes,
+
+              // advisor routes
+              ...advisorRoutes,
             ],
           },
         ],
