@@ -38,6 +38,24 @@ export const BrandFormSchema = z.object({
   vehicleCategoryId: z.string().min(1, "Category is required"),
 });
 
+// Country Form Schema
+export const CountryFormSchema = z.object({
+  countryName: z
+    .string()
+    .min(3, "Country title should be at least 3 characters long")
+    .regex(
+      /^[A-Za-z\s]+$/,
+      "Country title should only contain letters and spaces",
+    ),
+  countryValue: z
+    .string()
+    .min(3, "Country value should be at least 3 characters long")
+    .regex(
+      /^[a-z-]+$/,
+      "Country value should only contain lowercase letters and hyphens",
+    ),
+});
+
 // State Form Schema
 export const StateFormSchema = z.object({
   stateName: z
@@ -55,7 +73,11 @@ export const StateFormSchema = z.object({
       "State value should only contain lowercase letters and hyphens",
     ),
   stateImage: z.string().min(1, "State image is required"),
+  stateIcon: z.string().optional(),
+  isFavorite: z.boolean().optional(),
   relatedStates: z.array(z.string()).optional(),
+  parentStateId: z.string().optional(),
+  isParentState: z.boolean().optional(),
 });
 
 // City Form Schema
@@ -170,13 +192,14 @@ export const PrimaryFormSchema = z
     vehiclePhotos: z
       .array(z.string().min(1, "vehicle photo is required"))
       .min(1, "At least one vehicle photo is required"),
+    vehicleVideos: z.array(z.string().optional()),
     commercialLicenses: z.array(z.string().optional()),
     commercialLicenseExpireDate: z.date(),
     isLease: z.boolean().default(false),
     isCryptoAccepted: z.boolean().default(false),
     isSpotDeliverySupported: z.boolean().default(false),
     specification: z
-      .enum(["USA_SPEC", "UAE_SPEC", "OTHERS"], {
+      .enum(["India_SPEC", "USA_SPEC", "UAE_SPEC", "OTHERS"], {
         required_error: "Specification is required",
       })
       .default("UAE_SPEC"),
@@ -210,6 +233,8 @@ export const PrimaryFormSchema = z
     }),
     isCreditOrDebitCardsSupported: z.boolean().default(false),
     isTabbySupported: z.boolean().default(false),
+    isCashSupported: z.boolean().default(false),
+    isVehicleModified: z.boolean().default(false),
     vehicleMetaTitle: z
       .string()
       .min(1, "Vehicle Meta title is required")
@@ -218,6 +243,23 @@ export const PrimaryFormSchema = z
       .string()
       .min(1, "Vehicle Meta description is required")
       .max(5000, "Vehicle Meta description cannot exceed 5000 characters"),
+    tempCitys: z
+      .array(
+        z.object({
+          stateId: z.string(),
+          cityId: z.string(),
+          cityName: z.string(),
+          cityValue: z.string(),
+        }),
+      )
+      .optional(),
+    location: z
+      .object({
+        lat: z.number(),
+        lng: z.number(),
+        address: z.string(),
+      })
+      .optional(),
   })
   .refine(
     (data) => {
@@ -277,6 +319,13 @@ export const CompanyFormSchema = z.object({
     .string()
     .min(1, "Meta description is required")
     .max(500, "Meta description must be 500 characters or less"),
+  location: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+      address: z.string(),
+    })
+    .optional(),
 });
 
 // Company Status Form Schema

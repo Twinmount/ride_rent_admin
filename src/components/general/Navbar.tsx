@@ -1,16 +1,25 @@
 import { Link } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
 import { Menu } from "lucide-react";
-
 import NavbarStatesDropdown from "../NavbarStatesDropdown";
-import { NavbarStateType } from "@/types/types";
+import { countryType, NavbarStateType, stateType } from "@/types/types";
+import NavbarCountryDropdown from "../NavbarCountryDropdown";
+import NavbarParentStatesDropdown from "../NavbarParentStatesDropdown";
 
 type NavbarProps = {
   options: NavbarStateType[];
+  countryOption: countryType[];
   isLoading: boolean;
+  parentSatetOptions: stateType[];
 };
-const Navbar = ({ options, isLoading }: NavbarProps) => {
-  const { isSidebarOpen, toggleSidebar, isSmallScreen } = useAdminContext();
+const Navbar = ({
+  options,
+  countryOption,
+  isLoading,
+  parentSatetOptions,
+}: NavbarProps) => {
+  const { isSidebarOpen, toggleSidebar, isSmallScreen, country } =
+    useAdminContext();
 
   return (
     <header className="flex-center fixed left-0 right-0 top-0 z-50 h-[4.84rem] border-b bg-white px-4 transition-all ease-in-out">
@@ -51,9 +60,22 @@ const Navbar = ({ options, isLoading }: NavbarProps) => {
             onClick={toggleSidebar}
           />
         )}
-
-        <div className="flex-center mr-6 gap-x-4">
-          <NavbarStatesDropdown options={options} isLoading={isLoading} />
+        <div className="flex-center mr-6 gap-x-1">
+          <NavbarCountryDropdown
+            options={countryOption}
+            isLoading={isLoading}
+          />
+          {country.countryValue === "India" && (
+            <NavbarParentStatesDropdown
+              options={parentSatetOptions}
+              isLoading={isLoading}
+            />
+          )}
+          <NavbarStatesDropdown
+            options={options}
+            isLoading={isLoading}
+            isIndia={country.countryValue === "India"}
+          />
         </div>
       </nav>
     </header>

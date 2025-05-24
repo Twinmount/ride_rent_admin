@@ -7,6 +7,7 @@ import {
   CityFormType,
   CompanyFormType,
   CompanyStatusFormType,
+  CountryFormType,
   StateFormType,
   VehicleSeriesType,
   VehicleTypeFormType,
@@ -33,7 +34,16 @@ export const StateFormDefaultValues: StateFormType = {
   stateValue: "",
   stateImage: "",
   relatedStates: [""],
+  isFavorite: false,
+  stateIcon: ""
 };
+
+export const CountryFormDefaultValues: CountryFormType = {
+  countryId: "",
+  countryName: "",
+  countryValue: "",
+};
+
 export const CityFormDefaultValues: CityFormType = {
   cityName: "",
   cityValue: "",
@@ -93,13 +103,16 @@ export const ListingMetaFormDefaultValue = {
 export const orgs = [{ id: "1", label: "UAE", value: "uae" }];
 
 // primary details form default values
-export const PrimaryFormDefaultValues: PrimaryFormType = {
+export const getPrimaryFormDefaultValues = (
+  isIndia: boolean,
+): PrimaryFormType => ({
   vehicleCategoryId: "",
   vehicleTypeId: "", //'luxury' for example
   vehicleBrandId: "",
   vehicleSeriesId: "",
   vehicleModel: "",
   vehiclePhotos: [], //upto 8 photos of the vehicle
+  vehicleVideos: [],
   vehicleRegistrationNumber: "",
   vehicleRegisteredYear: "",
   commercialLicenses: [],
@@ -107,7 +120,7 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   isLease: false,
   isCryptoAccepted: false,
   isSpotDeliverySupported: false,
-  specification: "UAE_SPEC",
+  specification: isIndia ? "India_SPEC" : "UAE_SPEC",
   rentalDetails: {
     day: { enabled: false, rentInAED: "", mileageLimit: "" },
     week: { enabled: false, rentInAED: "", mileageLimit: "" },
@@ -132,9 +145,13 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   },
   isCreditOrDebitCardsSupported: false,
   isTabbySupported: false,
+  isCashSupported: false,
   vehicleMetaTitle: "",
   vehicleMetaDescription: "",
-};
+  tempCitys: [],
+  location: undefined,
+  isVehicleModified: false,
+});
 
 // login page default value
 export const LoginPageDefaultValues = {
@@ -155,6 +172,7 @@ export const CompanyFormDefaultValues: CompanyFormType = {
   companyLanguages: [],
   companyMetaTitle: "",
   companyMetaDescription: "",
+  location: undefined,
 };
 
 // Company registration phase 2 form default values

@@ -553,22 +553,45 @@ export const getVehicleListingsCountByState = async (
 };
 
 // fetch listings count for vehicles per state
-export const getAllVehicleListingCount =
-  async (): Promise<AllVehicleListingResponse> => {
-    try {
-      const url = `${Slug.GET_ALL_VEHICLE_LISTINGS_COUNT}`;
+export const getAllVehicleListingByParentStateCount = async (
+  countryId: string,
+  parentStateId: string,
+): Promise<AllVehicleListingResponse> => {
+  try {
+    const url = `/vehicle/dashboard/count/${countryId}/${parentStateId}/state`;
 
-      const data = await API.get<AllVehicleListingResponse>({
-        slug: url,
-      });
+    const data = await API.get<AllVehicleListingResponse>({
+      slug: url,
+    });
 
-      if (!data) {
-        throw new Error("Failed to fetch all vehicle listing count data");
-      }
-
-      return data;
-    } catch (error) {
-      console.error("Error fetching all vehicle listing count data:", error);
-      throw error;
+    if (!data) {
+      throw new Error("Failed to fetch all vehicle listing count data");
     }
-  };
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching all vehicle listing count data:", error);
+    throw error;
+  }
+};
+
+export const getAllVehicleListingCount = async (
+  countryId: string,
+): Promise<AllVehicleListingResponse> => {
+  try {
+    const url = `/vehicle/dashboard/count/${countryId}/state`;
+
+    const data = await API.get<AllVehicleListingResponse>({
+      slug: url,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch all vehicle listing count data");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching all vehicle listing count data:", error);
+    throw error;
+  }
+};

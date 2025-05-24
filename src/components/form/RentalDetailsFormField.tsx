@@ -7,20 +7,22 @@ import HourlyRentalDetailFormField from "./HourlyRentalDetailsFormField";
 const RentalDetailField = ({
   period,
   description,
+  isIndia,
 }: {
   period: "day" | "week" | "month";
   description: string;
+  isIndia?: boolean;
 }) => {
   const { control, watch, clearErrors } = useFormContext();
   const isEnabled = watch(`rentalDetails.${period}.enabled`);
 
   return (
-    <div className="p-2 mb-2 rounded-lg border-b shadow">
+    <div className="mb-2 rounded-lg border-b p-2 shadow">
       <Controller
         name={`rentalDetails.${period}.enabled`}
         control={control}
         render={({ field }) => (
-          <div className="flex items-center mt-3 space-x-2">
+          <div className="mt-3 flex items-center space-x-2">
             <Checkbox
               checked={field.value}
               onCheckedChange={(value) => {
@@ -29,7 +31,7 @@ const RentalDetailField = ({
                   clearErrors([`rentalDetails`]);
                 }
               }}
-              className="w-5 h-5 bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+              className="h-5 w-5 bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
               id={`rentalDetails-${period}-enabled`}
             />
             <label
@@ -50,18 +52,18 @@ const RentalDetailField = ({
             name={`rentalDetails.${period}.rentInAED`}
             control={control}
             render={({ field }) => (
-              <div className="flex items-center mt-2">
+              <div className="mt-2 flex items-center">
                 <label
                   htmlFor={`rentalDetails-${period}-rentInAED`}
-                  className="block mr-1 mb-5 w-28 text-sm font-medium"
+                  className="mb-5 mr-1 block w-28 text-sm font-medium"
                 >
-                  Rent in AED
+                  Rent in {isIndia ? "INR" : "AED"}
                 </label>
                 <div className="w-full">
                   <Input
                     id={`rentalDetails-${period}-rentInAED`}
                     {...field}
-                    placeholder="Rent in AED"
+                    placeholder={isIndia ? "Rent in INR" : "Rent in AED"}
                     className="input-field"
                     type="text"
                     inputMode="numeric"
@@ -84,7 +86,9 @@ const RentalDetailField = ({
                     }}
                   />
                   <FormDescription>
-                    {`Rent of the Vehicle in AED per ${period} `}
+                    {`Rent of the Vehicle in ${
+                      isIndia ? "INR" : "AED"
+                    } per ${period} `}
                   </FormDescription>
                 </div>
               </div>
@@ -94,10 +98,10 @@ const RentalDetailField = ({
             name={`rentalDetails.${period}.mileageLimit`}
             control={control}
             render={({ field }) => (
-              <div className="flex items-center mt-2">
+              <div className="mt-2 flex items-center">
                 <label
                   htmlFor={`rentalDetails-${period}-mileageLimit`}
-                  className="block mb-6 w-28 text-sm font-medium"
+                  className="mb-6 block w-28 text-sm font-medium"
                 >
                   Mileage Limit
                 </label>
@@ -140,23 +144,26 @@ const RentalDetailField = ({
   );
 };
 
-const RentalDetailsFormField = () => {
+const RentalDetailsFormField = ({ isIndia = false }: { isIndia?: boolean }) => {
   return (
     <div className="flex flex-col">
       <RentalDetailField
         period="day"
         description="(Select to set daily rental rates)"
+        isIndia={isIndia}
       />
       <RentalDetailField
         period="week"
         description="(Select to set weekly rental rates)"
+        isIndia={isIndia}
       />
       <RentalDetailField
         period="month"
         description="(Select to set monthly rental rates)"
+        isIndia={isIndia}
       />
 
-      <HourlyRentalDetailFormField />
+      <HourlyRentalDetailFormField isIndia={isIndia} />
     </div>
   );
 };

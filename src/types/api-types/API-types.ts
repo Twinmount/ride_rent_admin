@@ -1,3 +1,6 @@
+import { BannerType } from "@/api/states";
+import { Location } from "../types";
+
 // register response
 export interface RegisterResponse {
   result: {
@@ -41,11 +44,43 @@ export interface StateType {
   metaTitle: string;
   metaDescription: string;
   stateImage: any;
+  isFavorite?: boolean;
+  stateIcon?: string;
+}
+
+export interface CountryType {
+  countryId: string;
+  countryName: string;
+  countryValue: string;
 }
 
 //  interface for the get-all-states  API response
 export interface FetchStatesResponse {
   result: StateType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchCountriesResponse {
+  result: CountryType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface BannerTypeResponse {
+  result: BannerType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchParentStatesResponse {
+  result: StateType;
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchCountryResponse {
+  result: CountryType[];
   status: string;
   statusCode: number;
 }
@@ -74,6 +109,12 @@ export interface GetStateFAQResponse {
 //  interface for the states (by id)  API response
 export interface FetchSpecificStateResponse {
   result: StateType;
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchSpecificCountryResponse {
+  result: CountryType;
   status: string;
   statusCode: number;
 }
@@ -257,6 +298,10 @@ export interface companyType {
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;
+  accountType: string;
+  countryName?: string;
+  countryId: string;
+  location: Location;
 }
 
 //  interface for the get-all-companies  API response
@@ -289,6 +334,12 @@ export interface promotedCompanyType {
 
 export interface FetchPromotedCompaniesSearchResponse {
   result: promotedCompanyType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchCompanyByIdResponse {
+  result: companyType;
   status: string;
   statusCode: number;
 }

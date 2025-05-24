@@ -326,6 +326,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     vehicleSeriesId: data.vehicleSeriesId,
     vehicleModel: data.vehicleModel,
     vehiclePhotos: data.vehiclePhotos,
+    vehicleVideos: data.vehicleVideos,
     vehicleRegistrationNumber: data.vehicleRegistrationNumber,
     vehicleRegisteredYear: data.vehicleRegisteredYear,
     commercialLicenses: data.commercialLicenses,
@@ -347,8 +348,12 @@ export function mapGetPrimaryFormToPrimaryFormType(
     additionalVehicleTypes: data?.additionalVehicleTypes || [],
     isCreditOrDebitCardsSupported: data.isCreditOrDebitCardsSupported,
     isTabbySupported: data.isTabbySupported,
+    isCashSupported: data.isCashSupported,
     vehicleMetaTitle: data.vehicleMetaTitle,
     vehicleMetaDescription: data.vehicleMetaDescription,
+    tempCitys: data.tempCitys || [],
+    location: data.location || undefined,
+    isVehicleModified: data.isVehicleModified,
   };
 }
 
@@ -432,7 +437,11 @@ export const downloadFileFromStream = async (
   fileName: string,
 ) => {
   try {
-    const apiBaseUrl = import.meta.env.VITE_API_URL;
+    const appCountry = localStorage.getItem("appCountry") || "uae";
+    const apiBaseUrl =
+      appCountry === "in"
+        ? import.meta.env.VITE_API_URL_INDIA
+        : import.meta.env.VITE_API_URL_UAE;
     const url = `${apiBaseUrl}/file/stream?path=${imagePath}`; // Stream endpoint for download
 
     // Fetch the image stream from the backend API

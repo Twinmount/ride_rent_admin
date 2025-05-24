@@ -9,35 +9,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useQuery } from "@tanstack/react-query";
-import { fetchAllStates } from "@/api/states";
 import { downloadCompanyData, downloadVehicleData } from "@/api/excel-data";
 import { toast } from "../ui/use-toast";
 import { CloudDownload } from "lucide-react";
-
-type StateType = {
-  stateId: string;
-  stateName: string;
-  stateValue: string;
-};
+import StatesDropdown from "../form/dropdowns/StatesDropdown";
 
 const ExcelDataDownloadModal = () => {
   const [selectedStateId, setSelectedStateId] = useState<string | null>(null);
   const [selectedStateName, setSelectedStateName] = useState<string | null>(
     null,
   );
-
-  const { data: statesData, isLoading: isStatesLoading } = useQuery({
-    queryKey: ["states"],
-    queryFn: fetchAllStates,
-  });
+  // const [isEabled, setIsEnabled] = useState<boolean>(false);
 
   const handleDownloadVehicleData = async () => {
     if (selectedStateId && selectedStateName) {
@@ -66,6 +48,7 @@ const ExcelDataDownloadModal = () => {
     <Dialog>
       <DialogTrigger
         tabIndex={-1}
+        // onClick={() => setIsEnabled(true)}
         className={`flex h-11 min-h-11 w-full max-w-full cursor-pointer items-center justify-start gap-2 truncate text-ellipsis whitespace-nowrap rounded-lg pl-2 pr-1 text-left text-black no-underline hover:bg-slate-800 hover:text-white`}
       >
         <CloudDownload />
@@ -102,27 +85,13 @@ const ExcelDataDownloadModal = () => {
                 Select a state to download vehicle data:
               </p>
               {/* States Dropdown */}
-              <Select
-                onValueChange={(value) => {
-                  const selectedState = statesData?.result.find(
-                    (state: StateType) => state.stateId === value,
-                  );
-                  setSelectedStateId(selectedState?.stateId || null);
-                  setSelectedStateName(selectedState?.stateName || null);
+              <StatesDropdown
+                onChangeHandler={(value) => {
+                  setSelectedStateId(value?.stateId || null);
+                  setSelectedStateName(value?.stateName || null);
                 }}
-                disabled={isStatesLoading}
-              >
-                <SelectTrigger className="w-full rounded-md border-gray-300 ring-0 focus:ring-0">
-                  <SelectValue placeholder="Choose state" />
-                </SelectTrigger>
-                <SelectContent className="absolute z-[110] border-gray-200 max-md:max-h-44">
-                  {statesData?.result.map((state: StateType) => (
-                    <SelectItem key={state.stateId} value={state.stateId}>
-                      {state.stateName}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                value={""}
+              />
 
               {/* Download Button for Vehicle Data */}
               <Button

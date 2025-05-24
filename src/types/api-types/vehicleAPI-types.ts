@@ -18,6 +18,12 @@ export type CompanyType = {
   companyMetaDescription: string;
 };
 
+interface Location {
+  lat: number;
+  lng: number;
+  address?: string;
+}
+
 // type of single brand
 export interface BrandType {
   id: string;
@@ -146,6 +152,7 @@ export type SingleVehicleType = {
   };
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
+  isCashSupported: boolean;
   updatedAt: string;
   createdAt: string;
   vehicleStateValue?: string;
@@ -221,11 +228,13 @@ export interface AddPrimaryFormResponse {
     city: CityType[];
     levelsFilled: number; // Assuming this is a number based on the example response
     vehiclePhotos: string[];
+    vehicleVideos: string[];
     commercialLicences: string[];
     companyId: string;
     vehicleRegistrationNumber: string;
     createdAt: string;
     updatedAt: string;
+    tempCitys?: [];
   };
   status: string;
   statusCode: number;
@@ -335,6 +344,7 @@ export type GetPrimaryForm = {
   vehicleTitle: string;
   vehicleTitleH1: string;
   vehiclePhotos: string[];
+  vehicleVideos: string[];
   commercialLicenses: string[];
   additionalVehicleTypes?: string[];
   securityDeposit: {
@@ -343,8 +353,12 @@ export type GetPrimaryForm = {
   };
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
+  isCashSupported: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
+  tempCitys: CityType[];
+  location: Location;
+  isVehicleModified: boolean;
 };
 
 // Specification form get all response

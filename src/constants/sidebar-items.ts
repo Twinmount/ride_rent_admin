@@ -111,6 +111,7 @@ export const sidebarContent: SidebarItem[] = [
     icon: MapPin,
     baseLink: "/locations",
     items: [
+      { label: "Countries", link: "/locations/manage-countries" },
       { label: "States", link: "/locations/manage-states" },
       { label: "Cities", link: "/locations/manage-cities" },
     ],

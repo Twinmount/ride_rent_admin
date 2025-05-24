@@ -90,7 +90,7 @@ export default function VehicleSeriesForm({
             >
               <StatesDropdown
                 onChangeHandler={(value) => {
-                  field.onChange(value);
+                  field.onChange(value.stateId);
                 }}
                 value={initialValues.state}
                 placeholder="location"

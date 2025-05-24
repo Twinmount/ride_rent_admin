@@ -17,6 +17,10 @@ export enum Slug {
   PUT_STATE = "/states",
   DELETE_STATE = "/states",
   GET_ALL_STATES = "/states/list",
+  GET_ALL_PARENT_STATES = "/states/parent/list",
+  GET_COUNTRY = "/country",
+  GET_ALL_COUNTRY = "/country/list",
+  ADD_HOME_PAGE_BANNER = "/homepage-banners",
 
   // Cities Endpoints
   ADD_CITY = "/city",

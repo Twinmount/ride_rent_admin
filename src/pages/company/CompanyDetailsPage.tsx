@@ -28,7 +28,9 @@ export default function CompanyDetailsPage() {
 
   return (
     <section className="py-5 pt-10">
-      <h1 className="mb-4 text-center text-3xl font-bold">Company Details</h1>
+      <h1 className="mb-4 text-center text-3xl font-bold">
+        {formData?.accountType === "individual" ? "Owner" : "Company"} Details
+      </h1>
 
       {data?.result.approvalStatus === "REJECTED" && (
         <div className="mx-auto mb-4 w-full max-w-[800px] rounded-2xl bg-red-400 p-2 text-white">

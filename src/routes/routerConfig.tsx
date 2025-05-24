@@ -75,6 +75,17 @@ const EditSeriesPage = lazy(
   () => import("../pages/manage-series/EditSeriesPage"),
 );
 
+// country page pages
+const ManageCountryPage = lazy(
+  () => import("./pages/manage-countries/ManageCountryPage"),
+);
+const AddCountryPage = lazy(
+  () => import("./pages/manage-countries/AddCountryPage"),
+);
+const EditCountryPage = lazy(
+  () => import("./pages/manage-countries/EditCountryPage"),
+);
+
 // states page pages
 const ManageStatesPage = lazy(
   () => import("../pages/manage-states/ManageStatesPage"),
@@ -146,10 +157,14 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       // login route
-      { path: "/login", element: <Login /> },
+      { path: "/in/login", element: <Login country="in" /> },
       // register and OTP route (just for the first time admin account creation only)
-      { path: "/register", element: <Register /> },
-      { path: "/verify-otp", element: <VerifyOTP /> },
+      { path: "/in/register", element: <Register country="in" /> },
+      { path: "/in/verify-otp", element: <VerifyOTP country="in" /> },
+      { path: "/uae/login", element: <Login country="uae" /> },
+      // register and OTP route (just for the first time admin account creation only)
+      { path: "/uae/register", element: <Register country="uae" /> },
+      { path: "/uae/verify-otp", element: <VerifyOTP country="uae" /> },
 
       {
         element: <ProtectedRoute />,
@@ -343,6 +358,20 @@ export const router = createBrowserRouter([
               {
                 path: "/locations/manage-states/edit/:stateId",
                 element: <EditStatePage />,
+              },
+
+              // country route
+              {
+                path: "/locations/manage-countries",
+                element: <ManageCountryPage />,
+              },
+              {
+                path: "/locations/manage-countries/add",
+                element: <AddCountryPage />,
+              },
+              {
+                path: "/locations/manage-countries/edit/:countryId",
+                element: <EditCountryPage />,
               },
 
               // cities route

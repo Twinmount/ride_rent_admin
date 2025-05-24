@@ -58,6 +58,7 @@ export default function GeneralListingPage({
         search: searchTerm.trim(),
         stateId: state.stateId as string,
       }),
+    enabled: !!state.stateId,
     staleTime: 10 * 1000,
   });
 

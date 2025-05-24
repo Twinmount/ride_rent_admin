@@ -11,6 +11,20 @@ export type CitiesType = {
   cityValue: string;
 };
 
+interface Location {
+  lat: number;
+  lng: number;
+  address?: string;
+}
+
+type CityType = {
+  _id?: string;
+  stateId: string;
+  cityId: string;
+  cityName: string;
+  cityValue: string;
+};
+
 // Rental detail type for day, week, and month
 type RentalDetailType = {
   enabled: boolean;
@@ -35,6 +49,7 @@ export type PrimaryFormType = {
   vehicleSeriesId: string;
   vehicleModel: string;
   vehiclePhotos: string[]; // Array of  URLs
+  vehicleVideos: string[];
   vehicleRegistrationNumber: string;
   vehicleRegisteredYear: string;
   commercialLicenses: string[]; // Array of  URLs
@@ -42,7 +57,7 @@ export type PrimaryFormType = {
   isLease: boolean;
   isCryptoAccepted: boolean;
   isSpotDeliverySupported: boolean;
-  specification: "UAE_SPEC" | "USA_SPEC" | "OTHERS";
+  specification: "India_SPEC" | "UAE_SPEC" | "USA_SPEC" | "OTHERS";
   rentalDetails: {
     day: RentalDetailType;
     week: RentalDetailType;
@@ -63,8 +78,12 @@ export type PrimaryFormType = {
   };
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
+  isCashSupported: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
+  tempCitys?: CityType[];
+  location?: Location;
+  isVehicleModified: boolean;
 };
 
 export type CompanyFormType = {};

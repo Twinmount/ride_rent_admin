@@ -15,7 +15,11 @@ const PreviewImageComponent: React.FC<PreviewImageComponentProps> = ({
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        const apiBaseUrl = import.meta.env.VITE_API_URL
+        const appCountry = localStorage.getItem("appCountry") || "uae";
+        const apiBaseUrl =
+          appCountry === "in"
+            ? import.meta.env.VITE_API_URL_INDIA
+            : import.meta.env.VITE_API_URL_UAE;
         // Construct the full URL for the image stream
         const url = `${apiBaseUrl}/file/stream?path=${imagePath}`
 

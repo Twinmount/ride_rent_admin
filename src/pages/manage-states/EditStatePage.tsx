@@ -1,20 +1,33 @@
 import { CircleArrowLeft } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import StateForm from "@/components/form/StateForm";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { fetchStateById, getStateFaqFn, upadteStateFaqFn } from "@/api/states";
+import {
+  fetchStateById,
+  getHomePageBanner,
+  getStateFaqFn,
+  upadteStateFaqFn,
+} from "@/api/states";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense, useState } from "react";
 import LazyLoader from "@/components/skelton/LazyLoader";
 import StateFaqForm from "@/components/form/main-form/StateFaqForm";
+import { useAdminContext } from "@/context/AdminContext";
+import HomepageBannerForm from "@/components/form/HomepageBannerForm";
 
-type TabsTypes = "primary" | "faq";
+type TabsTypes = "primary" | "faq" | "banner";
 
 export default function EditLocationPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const [searchParams] = useSearchParams();
+  const parentStateId = searchParams.get("parentStateId") || null;
+  const { country } = useAdminContext();
+  const countryName = country.countryValue;
+  const isIndia = countryName === "India";
 
   const { stateId } = useParams<{ stateId: string }>();
   const [activeTab, setActiveTab] = useState<TabsTypes>("primary");
@@ -29,6 +42,25 @@ export default function EditLocationPage() {
     queryKey: ["faq-state", stateId],
     queryFn: () => getStateFaqFn(stateId as string),
     enabled: !!stateId && activeTab === "faq",
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  let bannerFor: "state" | "country" | "parentState" = "state";
+  if (isIndia) {
+    bannerFor = parentStateId ? "state" : "parentState";
+  }
+
+  const { data: bannerData, isFetching: isBannerFetching } = useQuery({
+    queryKey: ["banner-state", stateId],
+    queryFn: () =>
+      getHomePageBanner(
+        stateId as string,
+        bannerFor as "state" | "country" | "parentState",
+      ),
+    enabled: !!stateId && activeTab === "banner",
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 
   const updateFaqMutation = useMutation({
@@ -45,6 +77,16 @@ export default function EditLocationPage() {
     setActiveTab(value as TabsTypes);
   };
 
+  const defaultStateFaq = {
+    stateId: stateId || "",
+    faqs: [
+      {
+        question: "",
+        answer: "",
+      },
+    ],
+  };
+
   return (
     <section className="container min-h-screen pb-32 pt-5">
       <div className="flex-center mb-5 ml-5 w-fit gap-x-4">
@@ -54,7 +96,9 @@ export default function EditLocationPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h1 className="h3-bold text-center sm:text-left">Update State</h1>
+        <h1 className="h3-bold text-center sm:text-left">
+          Update {!!parentStateId ? "Location" : "State"}
+        </h1>
       </div>
       <div>
         <Tabs
@@ -67,18 +111,44 @@ export default function EditLocationPage() {
               value="primary"
               className="h-9 max-sm:px-2 max-sm:text-sm"
             >
-              State Details
+              {!!parentStateId ? "Location" : "State"} Details
             </TabsTrigger>
-            <TabsTrigger value="faq" className={`max-sm:px-2`}>
-              FAQ
+            <TabsTrigger
+              value="banner"
+              className="h-9 max-sm:px-2 max-sm:text-sm"
+            >
+              Homepage Banner
             </TabsTrigger>
+            {!(!parentStateId && isIndia) && (
+              <TabsTrigger value="faq" className={`max-sm:px-2`}>
+                FAQ
+              </TabsTrigger>
+            )}
           </TabsList>
           <TabsContent value="primary" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
               {isLoading ? (
                 <FormSkelton />
               ) : (
-                <StateForm type="Update" formData={data?.result} />
+                <StateForm
+                  key={JSON.stringify(data?.result)}
+                  type="Update"
+                  formData={data?.result}
+                  parentStateId={parentStateId}
+                />
+              )}
+            </Suspense>
+          </TabsContent>
+          <TabsContent value="banner" className="flex-center">
+            <Suspense fallback={<LazyLoader />}>
+              {isBannerFetching ? (
+                <FormSkelton />
+              ) : (
+                <HomepageBannerForm
+                  id={stateId as string}
+                  bannerFor={bannerFor}
+                  data={bannerData?.result || []}
+                />
               )}
             </Suspense>
           </TabsContent>
@@ -87,13 +157,11 @@ export default function EditLocationPage() {
               {isFaqFetching ? (
                 <FormSkelton />
               ) : (
-                faqData?.result && (
-                  <StateFaqForm
-                    data={faqData?.result}
-                    updateFaqMutation={updateFaqMutation}
-                    stateValue={data?.result?.stateValue || ""}
-                  />
-                )
+                <StateFaqForm
+                  data={faqData?.result || defaultStateFaq}
+                  updateFaqMutation={updateFaqMutation}
+                  stateValue={data?.result?.stateValue || ""}
+                />
               )}
             </Suspense>
           </TabsContent>
