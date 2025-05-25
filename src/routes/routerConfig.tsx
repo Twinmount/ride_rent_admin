@@ -157,6 +157,7 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       // login route
+      { path: "/login", element: <Login country="uae" /> },
       { path: "/in/login", element: <Login country="in" /> },
       // register and OTP route (just for the first time admin account creation only)
       { path: "/in/register", element: <Register country="in" /> },
