@@ -19,7 +19,7 @@ const JoditRichTextEditor: React.FC<JoditRichTextEditorProps> = ({
 }) => {
   const editor = useRef<any | null>(null);
 
-  const appCountry = localStorage.getItem("appCountry") || "uae";
+  const appCountry = localStorage.getItem("appCountry") || "ae";
 
   const config = useMemo(
     () => ({

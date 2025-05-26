@@ -65,7 +65,7 @@ export const LiveListingColumns: (
         vehicleCategoryValue,
       } = row.original;
       const modelDetails = generateModelDetailsUrl(vehicleTitle);
-      const appCountry = localStorage.getItem("appCountry") || "uae";
+      const appCountry = localStorage.getItem("appCountry") || "ae";
       const apiBaseUrl =
         appCountry === "in"
           ? import.meta.env.VITE_API_URL_INDIA
@@ -76,7 +76,7 @@ export const LiveListingColumns: (
       const appUrl = apiBaseUrl.includes("prod")
         ? "https://ride.rent"
         : "https://dev.ride.rent";
-      const url = `${appUrl}/${isIndia ? "in" : "uae"}/${vehicleStateValue}/${vehicleCategoryValue}/${modelDetails}-for-rent/${vehicleCode.toLowerCase()}`;
+      const url = `${appUrl}/${isIndia ? "in" : "ae"}/${vehicleStateValue}/${vehicleCategoryValue}/${modelDetails}-for-rent/${vehicleCode.toLowerCase()}`;
 
       // Inline Toast + Copy Component
       const CopyButton = () => {

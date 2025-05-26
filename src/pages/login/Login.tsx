@@ -217,7 +217,7 @@ const LoginPage = ({ country }: { country: string }) => {
             <div>
               New admin?{" "}
               <Link
-                to={country === "in" ? "/in/register" : "/uae/register"}
+                to={country === "in" ? "/in/register" : "/ae/register"}
                 className="font-semibold text-yellow"
               >
                 Register

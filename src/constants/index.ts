@@ -100,7 +100,7 @@ export const ListingMetaFormDefaultValue = {
 };
 
 // navbar origin dropdown temporary value/s
-export const orgs = [{ id: "1", label: "UAE", value: "uae" }];
+export const orgs = [{ id: "1", label: "UAE", value: "ae" }];
 
 // primary details form default values
 export const getPrimaryFormDefaultValues = (

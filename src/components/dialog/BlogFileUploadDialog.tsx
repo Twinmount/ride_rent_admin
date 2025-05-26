@@ -59,7 +59,7 @@ export const BlogFileUploadDialog: React.FC = () => {
         );
         const filePath = uploadResponse.result.path;
 
-        const appCountry = localStorage.getItem("appCountry") || "uae";
+        const appCountry = localStorage.getItem("appCountry") || "ae";
 
         const imageStreamUrl =
           appCountry === "in"

@@ -6,10 +6,10 @@ import { useState } from "react";
 const countries = {
   UAE: {
     name: "UAE",
-    value: "uae",
+    value: "ae",
     imagePath: "/assets/icons/country-flags/uae-flag.png",
-    registerUrl: "/uae/register",
-    loginUrl: "/uae/login",
+    registerUrl: "/ae/register",
+    loginUrl: "/ae/login",
   },
   India: {
     name: "India",
@@ -28,7 +28,7 @@ const RegisterCountryDropdown = ({
   type?: string;
 }) => {
   const [selectedCountry, setSelectedCountry] = useState<CountryKey>(
-    country === "uae" ? "UAE" : "India",
+    country === "ae" ? "UAE" : "India",
   );
   const [open, setOpen] = useState(false);
   const { updateAppCountry } = useAdminContext();

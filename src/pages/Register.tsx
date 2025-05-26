@@ -65,7 +65,7 @@ const Register = ({ country }: { country: string }) => {
         sessionStorage.setItem("countryCode", countryCode);
         sessionStorage.setItem("password", values.password);
 
-        navigate(country === "in" ? "/in/verify-otp" : "/uae/verify-otp");
+        navigate(country === "in" ? "/in/verify-otp" : "/ae/verify-otp");
       }
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
@@ -189,7 +189,7 @@ const Register = ({ country }: { country: string }) => {
             <div>
               Existing admin?{" "}
               <Link
-                to={country === "in" ? "/in/login" : "/uae/login"}
+                to={country === "in" ? "/in/login" : "/ae/login"}
                 className="font-semibold text-yellow"
               >
                 Login
