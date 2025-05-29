@@ -109,7 +109,13 @@ export default function PrimaryDetailsForm({
   const queryClient = useQueryClient();
 
   const initialValues = formData
-    ? formData
+    ? {
+      ...formData,
+      cityIds: [
+        ...formData.cityIds,
+        ...(formData.tempCitys ?? []).map((city: CityType) => city.cityId),
+      ],
+    }
     : getPrimaryFormDefaultValues(isIndia);
 
   // Define your form.
@@ -142,6 +148,7 @@ export default function PrimaryDetailsForm({
 
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
+
     const validationError = validateRentalDetailsAndSecurityDeposit(values);
 
     if (validationError) {
