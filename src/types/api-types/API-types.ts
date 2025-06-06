@@ -46,6 +46,7 @@ export interface StateType {
   stateImage: any;
   isFavorite?: boolean;
   stateIcon?: string;
+  location: Location;
 }
 
 export interface CountryType {

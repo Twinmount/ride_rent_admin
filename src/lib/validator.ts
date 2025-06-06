@@ -78,6 +78,12 @@ export const StateFormSchema = z.object({
   relatedStates: z.array(z.string()).optional(),
   parentStateId: z.string().optional(),
   isParentState: z.boolean().optional(),
+  location: z
+  .object({
+    lat: z.number(),
+    lng: z.number(),
+    address: z.string().optional(),
+  })
 });
 
 // City Form Schema
