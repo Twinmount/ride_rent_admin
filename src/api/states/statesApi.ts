@@ -1,3 +1,4 @@
+import { Location } from "@/types/types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
@@ -20,6 +21,7 @@ export interface StateType {
   isParentState?: boolean | null;
   isFavorite?: boolean;
   stateIcon?: string;
+  location: Location;
 }
 
 export interface CountryType {
@@ -57,6 +59,7 @@ export const addState = async (
         isParentState: values.isParentState,
         isFavorite: values.isFavorite,
         stateIcon: values.stateIcon,
+        location: values.location,
       },
     });
 
@@ -85,6 +88,7 @@ export const updateState = async (
         relatedStates: selectedStates,
         isFavorite: values.isFavorite,
         stateIcon: values.stateIcon,
+        location: values.location,
       },
     });
 

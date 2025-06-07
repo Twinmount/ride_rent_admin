@@ -36,6 +36,11 @@ export const StateFormDefaultValues: StateFormType = {
   relatedStates: [""],
   isFavorite: false,
   stateIcon: "",
+  location: {
+    lat: 0,
+    lng: 0,
+    address: "",
+  },
 };
 
 export const CountryFormDefaultValues: CountryFormType = {

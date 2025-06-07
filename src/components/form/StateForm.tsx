@@ -30,6 +30,8 @@ import Select from "react-select";
 import { useAdminContext } from "@/context/AdminContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FormItemWrapper } from "./form-ui/FormItemWrapper";
+import LocationPicker from "./LocationPicker";
 
 type StateFormProps = {
   type: "Add" | "Update";
@@ -286,6 +288,28 @@ export default function StateForm({
                   <FormMessage className="ml-2" />
                 </div>
               </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItemWrapper
+                label="GPS Location"
+                description={
+                  <span>
+                    Enter the approximate GSP location of this place
+                  </span>
+                }
+              >
+                <LocationPicker
+                  onChangeHandler={field.onChange}
+                  initialLocation={field.value}
+                  buttonText="Choose Location"
+                  buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
+                />
+              </FormItemWrapper>
             )}
           />
 
