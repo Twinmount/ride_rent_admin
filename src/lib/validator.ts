@@ -78,12 +78,11 @@ export const StateFormSchema = z.object({
   relatedStates: z.array(z.string()).optional(),
   parentStateId: z.string().optional(),
   isParentState: z.boolean().optional(),
-  location: z
-  .object({
+  location: z.object({
     lat: z.number(),
     lng: z.number(),
     address: z.string().optional(),
-  })
+  }),
 });
 
 // City Form Schema
@@ -167,19 +166,17 @@ export const AdvisorPromotionFormSchema = z.object({
     .url("Link must be a valid URL"),
 });
 
-// RentalDetailType Schema for day, week, and month rentals )
+// Base schema for day/week/month rentals
 const RentalDetailTypeSchema = z.object({
   enabled: z.boolean().optional().default(false),
   rentInAED: z.string().optional().default(""),
   mileageLimit: z.string().optional().default(""),
+  unlimitedMileage: z.boolean().optional().default(false),
 });
 
-// HourlyRentalDetailType Schema with minBookingHours
-const HourlyRentalDetailTypeSchema = z.object({
-  enabled: z.boolean().optional().default(false),
-  rentInAED: z.string().optional().default(""),
-  mileageLimit: z.string().optional().default(""),
-  minBookingHours: z.string().optional().default(""), // Only for hourly rentals
+// Extended schema for hourly rentals
+const HourlyRentalDetailTypeSchema = RentalDetailTypeSchema.extend({
+  minBookingHours: z.string().optional().default(""),
 });
 
 // Primary Form Zod Schema

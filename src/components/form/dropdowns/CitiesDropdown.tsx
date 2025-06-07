@@ -38,8 +38,8 @@ type CitiesDropdownProps = {
   setSelectedCities: React.Dispatch<React.SetStateAction<string[]>>;
   cities: CityType[];
   setCities: React.Dispatch<React.SetStateAction<CityType[]>>;
-  setTemoraryCities: React.Dispatch<React.SetStateAction<CityType[]>>;
-  temoraryCities: CityType[];
+  setTemporaryCities: React.Dispatch<React.SetStateAction<CityType[]>>;
+  temporaryCities: CityType[];
 };
 
 const generateTempCityId = (name: string) =>
@@ -57,8 +57,8 @@ const CitiesDropdown = ({
   setSelectedCities = () => {},
   cities = [],
   setCities = () => {},
-  setTemoraryCities = () => {},
-  temoraryCities = [],
+  setTemporaryCities = () => {},
+  temporaryCities = [],
 }: CitiesDropdownProps) => {
   const { data, isLoading } = useQuery({
     queryKey: ["cities", stateId],
@@ -83,9 +83,9 @@ const CitiesDropdown = ({
   }, [data?.result]);
 
   useEffect(() => {
-    if (temoraryCities.length > 0) {
+    if (temporaryCities.length > 0) {
       setCities((prev) => {
-        let newCities = temoraryCities.filter(
+        let newCities = temporaryCities.filter(
           (city) =>
             city.stateId === stateId &&
             !prev.some((prevCity) => prevCity.cityId === city.cityId),
@@ -166,7 +166,7 @@ const CitiesDropdown = ({
     };
 
     setCities((prev) => [newCity, ...prev]);
-    setTemoraryCities((prev) => [newCity, ...prev]);
+    setTemporaryCities((prev) => [newCity, ...prev]);
     const updatedSelected = [cityId, ...selectedCities];
     setSelectedCities(updatedSelected);
     onChangeHandler(updatedSelected);
@@ -175,7 +175,7 @@ const CitiesDropdown = ({
 
   const handleDeleteCity = (cityId: string) => {
     setCities((prev) => prev.filter((c) => c.cityId !== cityId));
-    setTemoraryCities((prev) => prev.filter((c) => c.cityId !== cityId));
+    setTemporaryCities((prev) => prev.filter((c) => c.cityId !== cityId));
     const updatedSelected = selectedCities.filter((id) => id !== cityId);
     setSelectedCities(updatedSelected);
     onChangeHandler(updatedSelected);

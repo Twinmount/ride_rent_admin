@@ -36,10 +36,11 @@ export const StateFormDefaultValues: StateFormType = {
   relatedStates: [""],
   isFavorite: false,
   stateIcon: "",
-  location:{
+  location: {
     lat: 0,
     lng: 0,
-    address: "",}
+    address: "",
+  },
 };
 
 export const CountryFormDefaultValues: CountryFormType = {
@@ -126,14 +127,30 @@ export const getPrimaryFormDefaultValues = (
   isSpotDeliverySupported: false,
   specification: isIndia ? "India_SPEC" : "UAE_SPEC",
   rentalDetails: {
-    day: { enabled: false, rentInAED: "", mileageLimit: "" },
-    week: { enabled: false, rentInAED: "", mileageLimit: "" },
-    month: { enabled: false, rentInAED: "", mileageLimit: "" },
+    day: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    week: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    month: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
     hour: {
       enabled: false,
       minBookingHours: "",
       rentInAED: "",
       mileageLimit: "",
+      unlimitedMileage: false,
     },
   },
   phoneNumber: "",

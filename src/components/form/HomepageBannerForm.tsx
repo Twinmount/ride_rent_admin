@@ -137,7 +137,6 @@ export default function HomepageBannerForm({
       }
 
       if (response) {
-        console.log(deletedImages);
         // commented this line on puprose
         // await deleteMultipleFiles(deletedImages);
       }
