@@ -99,7 +99,7 @@ export default function PrimaryDetailsForm({
 
   const [cities, setCities] = useState<CityType[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
-  const [temoraryCities, setTemoraryCities] = useState<CityType[]>([]);
+  const [temporaryCities, setTemporaryCities] = useState<CityType[]>([]);
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string;
@@ -110,12 +110,12 @@ export default function PrimaryDetailsForm({
 
   const initialValues = formData
     ? {
-      ...formData,
-      cityIds: [
-        ...formData.cityIds,
-        ...(formData.tempCitys ?? []).map((city: CityType) => city.cityId),
-      ],
-    }
+        ...formData,
+        cityIds: [
+          ...formData.cityIds,
+          ...(formData.tempCitys ?? []).map((city: CityType) => city.cityId),
+        ],
+      }
     : getPrimaryFormDefaultValues(isIndia);
 
   // Define your form.
@@ -135,7 +135,7 @@ export default function PrimaryDetailsForm({
         return [...prevCities, ...(newCities || [])];
       });
 
-      setTemoraryCities(formData.tempCitys);
+      setTemporaryCities(formData.tempCitys);
 
       setSelectedCities((prevSelected) => {
         const newCityIds = formData?.tempCitys
@@ -148,7 +148,6 @@ export default function PrimaryDetailsForm({
 
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
-
     const validationError = validateRentalDetailsAndSecurityDeposit(values);
 
     if (validationError) {
@@ -201,7 +200,7 @@ export default function PrimaryDetailsForm({
             ...(data.result.tempCitys?.map((city: CityType) => city.cityId) ??
               []),
           ]);
-          setTemoraryCities(data.result.tempCitys || []);
+          setTemporaryCities(data.result.tempCitys || []);
         }
 
         setCities((prev) =>
@@ -651,8 +650,8 @@ export default function PrimaryDetailsForm({
                 selectedCities={selectedCities}
                 cities={cities}
                 setCities={setCities}
-                setTemoraryCities={setTemoraryCities}
-                temoraryCities={temoraryCities}
+                setTemporaryCities={setTemporaryCities}
+                temporaryCities={temporaryCities}
                 isTempCreatable={!!isIndia}
               />
             </FormItemWrapper>
