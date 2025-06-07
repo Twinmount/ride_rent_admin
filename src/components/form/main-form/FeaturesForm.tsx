@@ -16,7 +16,7 @@ import FormSkelton from "@/components/skelton/FormSkelton";
 import Spinner from "@/components/general/Spinner";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
-import { formatFeatures } from "@/helpers/form";
+import { formatFeatures, reorderFeatureValues } from "@/helpers/form";
 import { useEffect, useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useFeaturesFormQuery } from "@/hooks/useFormQuery";
@@ -161,7 +161,7 @@ export default function FeaturesForm({
     setTimeout(() => setIsCopied(false), 3000);
   };
 
-  const fields = data?.result || [];
+  const fields = reorderFeatureValues(data?.result || []);
 
   return isLoading ? (
     <FormSkelton />
