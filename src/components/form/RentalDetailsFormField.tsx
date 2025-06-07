@@ -118,6 +118,7 @@ const RentalDetailField = ({
                     className="input-field"
                     type="text"
                     inputMode="numeric"
+                    disabled={watch(`rentalDetails.${period}.unlimitedMileage`)}
                     onKeyDown={(e) => {
                       if (
                         !/^\d*$/.test(e.key) &&
