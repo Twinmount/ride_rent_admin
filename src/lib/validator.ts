@@ -78,12 +78,13 @@ export const StateFormSchema = z.object({
   relatedStates: z.array(z.string()).optional(),
   parentStateId: z.string().optional(),
   isParentState: z.boolean().optional(),
-  location: z
-  .object({
+  location: z.object({
     lat: z.number(),
     lng: z.number(),
     address: z.string().optional(),
-  })
+  }).refine((val) => val.lat && val.lng, {
+    message: "Location is required",
+  }),
 });
 
 // City Form Schema
@@ -241,6 +242,13 @@ export const PrimaryFormSchema = z
     isTabbySupported: z.boolean().default(false),
     isCashSupported: z.boolean().default(false),
     isVehicleModified: z.boolean().default(false),
+    location: z.object({
+        lat: z.number(),
+        lng: z.number(),
+        address: z.string().optional(),
+      }).refine((val) => val.lat && val.lng, {
+        message: "Location is required",
+      }),
     vehicleMetaTitle: z
       .string()
       .min(1, "Vehicle Meta title is required")
@@ -258,13 +266,6 @@ export const PrimaryFormSchema = z
           cityValue: z.string(),
         }),
       )
-      .optional(),
-    location: z
-      .object({
-        lat: z.number(),
-        lng: z.number(),
-        address: z.string(),
-      })
       .optional(),
   })
   .refine(

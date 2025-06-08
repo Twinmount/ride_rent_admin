@@ -32,7 +32,7 @@ import VehicleTypesDropdown from "../dropdowns/VehicleTypesDropdown";
 import { save, StorageKeys } from "@/utils/storage";
 import { toast } from "@/components/ui/use-toast";
 import { useParams } from "react-router-dom";
-import { ApiError } from "@/types/types";
+import { ApiError, Location } from "@/types/types";
 import { Textarea } from "@/components/ui/textarea";
 import { GcsFilePaths } from "@/constants/enum";
 import AdditionalTypesDropdown from "../dropdowns/AdditionalTypesDropdown";
@@ -68,6 +68,7 @@ type PrimaryFormProps = {
   levelsFilled?: number;
   isIndia?: boolean;
   countryId: string;
+  companyLocation: Location | null;
 };
 
 type CityType = {
@@ -86,6 +87,7 @@ export default function PrimaryDetailsForm({
   initialCountryCode,
   isIndia = false,
   countryId,
+  companyLocation,
 }: PrimaryFormProps) {
   const [countryCode, setCountryCode] = useState<string>(
     initialCountryCode || isIndia ? "+91" : "+971",
@@ -93,6 +95,7 @@ export default function PrimaryDetailsForm({
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
   const [isVideoUploading, setIsVideoUploading] = useState(false);
   const [isLicenseUploading, setIsLicenseUploading] = useState(false);
+  const [isLocationImporting, setIsLocationImporting] = useState(false);
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [isCarsCategory, setIsCarsCategory] = useState(false);
   const [hideCommercialLicenses, setHideCommercialLicenses] = useState(false);
@@ -110,12 +113,12 @@ export default function PrimaryDetailsForm({
 
   const initialValues = formData
     ? {
-      ...formData,
-      cityIds: [
-        ...formData.cityIds,
-        ...(formData.tempCitys ?? []).map((city: CityType) => city.cityId),
-      ],
-    }
+        ...formData,
+        cityIds: [
+          ...formData.cityIds,
+          ...(formData.tempCitys ?? []).map((city: CityType) => city.cityId),
+        ],
+      }
     : getPrimaryFormDefaultValues(isIndia);
 
   // Define your form.
@@ -146,9 +149,23 @@ export default function PrimaryDetailsForm({
     }
   }, [formData?.tempCitys]);
 
+  const setVehicleLocation = (location: Location | null) => {
+    if (location === null)
+      return toast({
+        variant: "destructive",
+        title: `Location importing failed`,
+        description: "Something went wrong",
+      });
+    setIsLocationImporting(true);
+    form.setValue("location", location);
+    setTimeout(() => {
+      form.clearErrors("location");
+      setIsLocationImporting(false);
+    }, 1000);
+  };
+
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
-
     const validationError = validateRentalDetailsAndSecurityDeposit(values);
 
     if (validationError) {
@@ -953,12 +970,28 @@ export default function PrimaryDetailsForm({
                 </span>
               }
             >
-              <LocationPicker
-                onChangeHandler={field.onChange}
-                initialLocation={field.value}
-                buttonText="Choose Location"
-                buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
-              />
+              <>
+                <LocationPicker
+                  onChangeHandler={field.onChange}
+                  initialLocation={field.value}
+                  buttonText="Choose Location"
+                  buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
+                />
+                <div>
+                  <div className="flex justify-end">
+                    {isLocationImporting ? (
+                      <span className="mt-2">Loading...</span>
+                    ) : (
+                      <span
+                        className="mt-2 cursor-pointer text-blue-700 underline"
+                        onClick={() => setVehicleLocation(companyLocation)}
+                      >
+                        Import location from agent
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </>
             </FormItemWrapper>
           )}
         />
