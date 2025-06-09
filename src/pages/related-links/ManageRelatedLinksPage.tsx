@@ -10,6 +10,7 @@ import { fetchAllRelatedLinks } from "@/api/related-links";
 export default function ManageRelatedLinksPage() {
   const { state } = useAdminContext();
   const [page, setPage] = useState(1);
+  const { country } = useAdminContext();
 
   const { data, isLoading } = useQuery({
     queryKey: ["recommended-links", state],
@@ -29,7 +30,7 @@ export default function ManageRelatedLinksPage() {
   return (
     <section className="container h-auto min-h-screen pb-16">
       <h1 className="mt-6 text-center text-xl font-bold sm:text-left md:text-2xl">
-        Currently Active Related Links In{" "}
+        {country.countryName} - Currently Active Related Links In{" "}
         <span className="text-yellow">{state.stateName}</span>
       </h1>
       <h3 className="mb-8 text-center italic text-gray-600 sm:text-left">

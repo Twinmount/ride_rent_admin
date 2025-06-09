@@ -9,6 +9,7 @@ import FloatingActionButton from "@/components/general/FloatingActionButton";
 import BlogPromotionCard from "@/components/card/BlogPromotionCard";
 import PageHeading from "@/components/general/PageHeading";
 import RideBlogPlacementTags from "@/components/RideBlogPlacementTags";
+import { useAdminContext } from "@/context/AdminContext";
 
 export default function ManageRideBlogPromotionsPage() {
   const [page, setPage] = useState(1);
@@ -16,6 +17,8 @@ export default function ManageRideBlogPromotionsPage() {
     useState<string>("all");
   const [selectedPromotion, setSelectedPromotion] =
     useState<PromotionType | null>(null);
+
+  const { country } = useAdminContext();
 
   // Prepare the request body
   const requestBody: any = {
@@ -42,7 +45,9 @@ export default function ManageRideBlogPromotionsPage() {
 
   return (
     <section className="container h-auto min-h-screen pb-10">
-      <PageHeading heading={`Manage Ride Blog Promotions`} />
+      <PageHeading
+        heading={`Manage Ride Blog Promotions - ${country.countryName}`}
+      />
 
       <RideBlogPlacementTags
         selectedPlacementFilter={selectedPlacementFilter}

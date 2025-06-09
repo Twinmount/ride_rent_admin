@@ -1,10 +1,12 @@
 import RideBlogForm from "@/components/form/main-form/RideBlogForm";
+import { useAdminContext } from "@/context/AdminContext";
 
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function AddRideBlogPage() {
   const navigate = useNavigate();
+  const { country } = useAdminContext();
 
   return (
     <section className="container pb-32 pt-5">
@@ -15,7 +17,9 @@ export default function AddRideBlogPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h3 className="h3-bold text-center sm:text-left">Add New Ride Blog</h3>
+        <h3 className="h3-bold text-center sm:text-left">
+          Add New Ride Blog under {country.countryName}
+        </h3>
       </div>
       <RideBlogForm type="Add" />
     </section>
