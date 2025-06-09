@@ -1,10 +1,12 @@
 import AdvisorPromotionForm from "@/components/form/AdvisorPromotionForm";
+import { useAdminContext } from "@/context/AdminContext";
 
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function AddRideBlogPromotionPage() {
   const navigate = useNavigate();
+  const { country } = useAdminContext();
 
   return (
     <section className="container pb-32 pt-5">
@@ -16,7 +18,7 @@ export default function AddRideBlogPromotionPage() {
           <CircleArrowLeft />
         </button>
         <h3 className="h3-bold text-center sm:text-left">
-          Add New Blog Promotion
+          Add New Blog Promotion under {country.countryName}
         </h3>
       </div>
       <AdvisorPromotionForm type="Add" />

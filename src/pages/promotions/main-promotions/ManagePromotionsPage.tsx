@@ -15,6 +15,7 @@ export default function ManagePromotionsPage() {
   const [selectedPromotion, setSelectedPromotion] =
     useState<PromotionType | null>(null);
   const [page, setPage] = useState(1);
+  const { country } = useAdminContext();
 
   const { data, isLoading } = useQuery({
     queryKey: ["promotions", state],
@@ -41,7 +42,7 @@ export default function ManagePromotionsPage() {
   return (
     <section className="container h-auto min-h-screen pb-16">
       <h1 className="mt-6 text-center text-2xl font-bold sm:text-left">
-        Currently Published Ads In{" "}
+        {country.countryName} - Currently Published Ads In{" "}
         <span className="text-yellow">{state.stateName}</span>
       </h1>
       <h3 className="mb-8 text-center italic text-gray-600 sm:text-left">

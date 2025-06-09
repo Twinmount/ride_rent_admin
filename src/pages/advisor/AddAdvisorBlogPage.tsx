@@ -1,10 +1,12 @@
 import AdvisorBlogForm from "@/components/form/main-form/AdvisorBlogForm";
+import { useAdminContext } from "@/context/AdminContext";
 
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function AddAdvisorBlogPage() {
   const navigate = useNavigate();
+  const { country } = useAdminContext();
 
   return (
     <section className="container pb-32 pt-5">
@@ -16,7 +18,7 @@ export default function AddAdvisorBlogPage() {
           <CircleArrowLeft />
         </button>
         <h3 className="h3-bold text-center sm:text-left">
-          Add New Advisor Blog
+          Add New Advisor Blog under {country.countryName}
         </h3>
       </div>
       <AdvisorBlogForm type="Add" />
