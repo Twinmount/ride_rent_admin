@@ -41,6 +41,12 @@ export const StateFormDefaultValues: StateFormType = {
     lng: 0,
     address: "",
   },
+  iconConfig: {
+    iconName: "",
+    bgColor: "#ffffff",
+    strokeColor: "#000000",
+    strokeWidth: "1",
+  },
 };
 
 export const CountryFormDefaultValues: CountryFormType = {

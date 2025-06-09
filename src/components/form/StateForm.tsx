@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
+import { IconRenderer } from "../IconRenderer/IconRenderer";
 
 import {
   Form,
@@ -32,6 +33,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FormItemWrapper } from "./form-ui/FormItemWrapper";
 import LocationPicker from "./LocationPicker";
+import { IconName } from "../IconRenderer/icons";
 
 type StateFormProps = {
   type: "Add" | "Update";
@@ -48,6 +50,25 @@ export default function StateForm({
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
   const queryClient = useQueryClient();
+
+  const iconList = [
+    "pub",
+    "residentialArea",
+    "residentialBuildings",
+    "waterfall",
+    "wildlife",
+    "windmill",
+    "zoo",
+    "airport",
+    "amusementPark",
+    "aquarium",
+    "artGallery",
+    "bar",
+    "beachUmberlla",
+    "beach",
+  ];
+
+  const strokeWidthList = ["0.5", "0.75", "1", "1.25", "1.5", "1.75", "2"];
 
   const { country } = useAdminContext();
   const countryName = country.countryValue;
@@ -278,7 +299,8 @@ export default function StateForm({
                         htmlFor="isFavorite"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
-                        Show this {!!parentStateId ? "location" : "state"} as a favorite
+                        Show this {!!parentStateId ? "location" : "state"} as a
+                        favorite
                       </label>
                     </div>
                   </FormControl>
@@ -298,9 +320,7 @@ export default function StateForm({
               <FormItemWrapper
                 label="GPS Location"
                 description={
-                  <span>
-                    Enter the approximate GSP location of this place
-                  </span>
+                  <span>Enter the approximate GSP location of this place</span>
                 }
               >
                 <LocationPicker
@@ -353,6 +373,162 @@ export default function StateForm({
               )}
             />
           )}
+
+          <FormField
+            control={form.control}
+            name="iconConfig"
+            render={() => {
+              const iconName = useWatch({
+                control: form.control,
+                name: "iconConfig.iconName",
+              });
+              const bgColor = useWatch({
+                control: form.control,
+                name: "iconConfig.bgColor",
+              });
+              const strokeColor = useWatch({
+                control: form.control,
+                name: "iconConfig.strokeColor",
+              });
+              const strokeWidth = useWatch({
+                control: form.control,
+                name: "iconConfig.strokeWidth",
+              });
+
+              return (
+                <FormItem className="mb-6 flex flex-col gap-4 rounded-lg border border-gray-300 p-4 shadow-sm">
+                  <FormLabel className="text-lg font-semibold">
+                    Icon Configuration
+                  </FormLabel>
+
+                  {/* Icon Name */}
+                  <FormField
+                    control={form.control}
+                    name="iconConfig.iconName"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Icon Name</FormLabel>
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="rounded-md border px-3 py-2 shadow-sm"
+                          >
+                            <option value="">Select icon</option>
+                            {iconList.map((icon) => (
+                              <option key={icon} value={icon}>
+                                {icon}
+                              </option>
+                            ))}
+                          </select>
+                        </FormControl>
+                        <FormDescription>
+                          Choose an icon for this state.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="iconConfig.strokeWidth"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Stroke Width</FormLabel>
+                        <FormControl>
+                          <select
+                            {...field}
+                            className="rounded-md border px-3 py-2 shadow-sm"
+                          >
+                            <option value="">Select</option>
+                            {strokeWidthList.map((icon) => (
+                              <option key={icon} value={icon}>
+                                {icon}
+                              </option>
+                            ))}
+                          </select>
+                        </FormControl>
+                        <FormDescription>
+                          Choose an icon for this state.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex justify-between">
+                    {/* Background Color */}
+                    <FormField
+                      control={form.control}
+                      name="iconConfig.bgColor"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel>Background Color</FormLabel>
+                          <FormControl>
+                            <input
+                              type="color"
+                              {...field}
+                              className="h-10 w-24 cursor-pointer rounded border"
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Select background color for the icon.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Stroke Color */}
+                    <FormField
+                      control={form.control}
+                      name="iconConfig.strokeColor"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col">
+                          <FormLabel>Stroke Color</FormLabel>
+                          <FormControl>
+                            <input
+                              type="color"
+                              {...field}
+                              className="h-10 w-24 cursor-pointer rounded border"
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Choose the stroke color around the icon.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Preview */}
+                  {(iconName || bgColor || strokeColor || strokeWidth) && (
+                    <div className="mt-4 flex flex-col items-center justify-center">
+                      <div
+                        className="inline-flex items-center justify-center rounded-sm p-2 shadow-md"
+                        style={{
+                          backgroundColor: bgColor || "#fff",
+                          width: "60px",
+                          height: "60px",
+                        }}
+                      >
+                        {iconName ? (
+                          <IconRenderer
+                            name={iconName as IconName}
+                            color={strokeColor}
+                            strokeWidth={strokeWidth}
+                          />
+                        ) : (
+                          <span className="text-sm text-gray-400">No icon</span>
+                        )}
+                      </div>
+                      <div>Icon Preview</div>
+                    </div>
+                  )}
+                </FormItem>
+              );
+            }}
+          />
         </div>
 
         {/* submit  */}

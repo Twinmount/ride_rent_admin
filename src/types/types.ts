@@ -1,3 +1,6 @@
+import { iconConfigSchema } from "@/lib/validator";
+import { z } from "zod";
+
 // admin context org  type
 export type orgType = {
   id?: string;
@@ -11,7 +14,6 @@ export type AppSuportedCountries = {
   value: string;
   icon: string;
 };
-
 
 export interface Location {
   lat: number;
@@ -96,6 +98,8 @@ export type BrandFormType = {
   brandLogo: string;
 };
 
+export type IconConfig = z.infer<typeof iconConfigSchema>;
+
 export type StateFormType = {
   stateId?: string;
   stateName: string;
@@ -105,6 +109,7 @@ export type StateFormType = {
   isFavorite?: boolean;
   stateIcon?: string;
   location: Location;
+  iconConfig: IconConfig;
 };
 
 export type CountryFormType = {

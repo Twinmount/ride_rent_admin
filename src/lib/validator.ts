@@ -56,6 +56,23 @@ export const CountryFormSchema = z.object({
     ),
 });
 
+export const iconConfigSchema = z.object({
+  iconName: z.string().optional(),
+  bgColor: z
+    .string()
+    .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, {
+      message: "Invalid HEX color",
+    })
+    .optional(),
+  strokeColor: z
+    .string()
+    .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, {
+      message: "Invalid HEX color",
+    })
+    .optional(),
+  strokeWidth: z.string().optional(),
+});
+
 // State Form Schema
 export const StateFormSchema = z.object({
   stateName: z
@@ -87,6 +104,7 @@ export const StateFormSchema = z.object({
     .refine((val) => val.lat && val.lng, {
       message: "Location is required",
     }),
+  iconConfig: iconConfigSchema.optional(),
 });
 
 // City Form Schema
