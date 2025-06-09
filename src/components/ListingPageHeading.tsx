@@ -10,7 +10,7 @@ type PathStatusMap = {
 
 export default function ListingPageHeading() {
   const location = useLocation();
-  const { country, state } = useAdminContext();
+  const { state } = useAdminContext();
 
   // Map paths to their corresponding statuses and titles
   const pathToStatus: PathStatusMap = {
