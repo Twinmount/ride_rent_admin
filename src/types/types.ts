@@ -109,7 +109,7 @@ export type StateFormType = {
   isFavorite?: boolean;
   stateIcon?: string;
   location: Location;
-  iconConfig: IconConfig;
+  iconConfig?: IconConfig;
 };
 
 export type CountryFormType = {
