@@ -5,9 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import LazyLoader from "@/components/skelton/LazyLoader";
 import AdvisorBlogForm from "@/components/form/main-form/AdvisorBlogForm";
 import { fetchAdvisorBlogById } from "@/api/advisor";
+import { useAdminContext } from "@/context/AdminContext";
 
 export default function EditAdvisorBlogPage() {
   const navigate = useNavigate();
+  const { country } = useAdminContext();
 
   const { blogId } = useParams<{ blogId: string }>();
 
@@ -26,7 +28,7 @@ export default function EditAdvisorBlogPage() {
           <CircleArrowLeft />
         </button>
         <h1 className="h3-bold text-center sm:text-left">
-          Update Advisor Blog
+          Update Advisor Blog under {country.countryName}
         </h1>
       </div>
       {isLoading ? (

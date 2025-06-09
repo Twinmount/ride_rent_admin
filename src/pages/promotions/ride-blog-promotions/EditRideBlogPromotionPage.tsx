@@ -4,10 +4,11 @@ import FormSkelton from "@/components/skelton/FormSkelton";
 import { useQuery } from "@tanstack/react-query";
 import BlogPromotionForm from "@/components/form/BlogPromotionForm";
 import { fetchBlogPromotionById } from "@/api/blogs";
+import { useAdminContext } from "@/context/AdminContext";
 
 export default function EditRideBlogPromotionPage() {
   const navigate = useNavigate();
-
+  const { country } = useAdminContext();
   const { promotionId } = useParams<{ promotionId: string }>();
 
   const { data, isLoading } = useQuery({
@@ -28,7 +29,7 @@ export default function EditRideBlogPromotionPage() {
           <CircleArrowLeft />
         </button>
         <h1 className="h3-bold text-center sm:text-left">
-          Update Blog Promotion
+          Update Blog Promotion under {country.countryName}
         </h1>
       </div>
       {isLoading ? (

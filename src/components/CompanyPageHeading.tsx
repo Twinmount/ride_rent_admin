@@ -1,17 +1,32 @@
+import { useAdminContext } from "@/context/AdminContext";
+
 export default function CompanyPageHeading({
   status,
 }: {
   status: "APPROVED" | "PENDING" | "REJECTED" | "UNDER_REVIEW";
 }) {
-  const classes = "max-sm:text-2xl text-3xl font-semibold max-sm:mb-4";
+  const { country } = useAdminContext();
 
-  if (status === "APPROVED") {
-    return <h2 className={classes}>Approved Companies</h2>;
-  } else if (status === "PENDING") {
-    return <h2 className={classes}>Pending Registrations</h2>;
-  } else if (status === "REJECTED") {
-    return <h2 className={classes}>Rejected Registrations</h2>;
-  } else if (status === "UNDER_REVIEW") {
-    return <h2 className={classes}>Under Review Registrations</h2>;
-  }
+  const getTitle = (status: string) => {
+    switch (status) {
+      case "APPROVED":
+        return "Approved Companies";
+      case "PENDING":
+        return "Pending Registrations";
+      case "REJECTED":
+        return "Rejected Registrations";
+      case "UNDER_REVIEW":
+        return "Under Review Registrations";
+      default:
+        return "";
+    }
+  };
+
+  const title = getTitle(status);
+
+  return (
+    <h2 className={`text-3xl font-semibold max-sm:mb-4 max-sm:text-2xl`}>
+      {title} in {country.countryName}
+    </h2>
+  );
 }

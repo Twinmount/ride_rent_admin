@@ -8,11 +8,13 @@ import { fetchAllAdvisorBlogPromotions } from "@/api/advisor";
 import PageHeading from "@/components/general/PageHeading";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import BlogPromotionCard from "@/components/card/BlogPromotionCard";
+import { useAdminContext } from "@/context/AdminContext";
 
 export default function ManageRideBlogPromotionsPage() {
   const [page, setPage] = useState(1);
   const [selectedPromotion, setSelectedPromotion] =
     useState<PromotionType | null>(null);
+  const { country } = useAdminContext();
 
   const { data, isLoading } = useQuery({
     queryKey: ["advisor-promotions", page],
@@ -29,7 +31,9 @@ export default function ManageRideBlogPromotionsPage() {
 
   return (
     <section className="container h-auto min-h-screen pb-10">
-      <PageHeading heading={`Manage Advisor Blog Promotions`} />
+      <PageHeading
+        heading={`Manage Advisor Blog Promotions - ${country.countryName}`}
+      />
 
       {isLoading ? (
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

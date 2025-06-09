@@ -5,9 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchBlogById } from "@/api/blogs";
 import LazyLoader from "@/components/skelton/LazyLoader";
 import RideBlogForm from "@/components/form/main-form/RideBlogForm";
+import { useAdminContext } from "@/context/AdminContext";
 
 export default function EditRideBlogPage() {
   const navigate = useNavigate();
+  const { country } = useAdminContext();
 
   const { blogId } = useParams<{ blogId: string }>();
 
@@ -25,7 +27,9 @@ export default function EditRideBlogPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h1 className="h3-bold text-center sm:text-left">Update Ride Blog</h1>
+        <h1 className="h3-bold text-center sm:text-left">
+          Update Ride Blog under {country.countryName}
+        </h1>
       </div>
       {isLoading ? (
         <LazyLoader />

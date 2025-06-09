@@ -8,8 +8,10 @@ import BlogCategoryTags from "@/components/BlogCategoryTags";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import PageHeading from "@/components/general/PageHeading";
 import { fetchAllAdvisorBlogs } from "@/api/advisor";
+import { useAdminContext } from "@/context/AdminContext";
 
 export default function ManageAdvisorBlogsPage() {
+  const { country } = useAdminContext();
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
@@ -34,7 +36,7 @@ export default function ManageAdvisorBlogsPage() {
 
   return (
     <section className="container h-auto min-h-screen pb-10">
-      <PageHeading heading={`Manage Advisor Blogs`} />
+      <PageHeading heading={`Manage Advisor Blogs - ${country.countryName}`} />
 
       {/* Category filter component */}
       <BlogCategoryTags
