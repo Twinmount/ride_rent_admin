@@ -1,5 +1,5 @@
 import { BannerType } from "@/api/states";
-import { Location } from "../types";
+import { IconConfig, Location } from "../types";
 
 // register response
 export interface RegisterResponse {
@@ -47,6 +47,7 @@ export interface StateType {
   isFavorite?: boolean;
   stateIcon?: string;
   location: Location;
+  IconConfig?: IconConfig;
 }
 
 export interface CountryType {
