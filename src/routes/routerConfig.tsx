@@ -15,6 +15,7 @@ import VerifyOTP from "../pages/VerifyOTP";
 import ProtectedRoute from "../layout/ProtectedRoutes";
 import { rideBlogRoutes } from "./route-groups/rideBlogRoutes";
 import { advisorRoutes } from "./route-groups/advisorRoutes";
+import { careersRoutes } from "./route-groups/careersRoutes";
 
 // lazy loaded pages
 const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"));
@@ -454,6 +455,10 @@ export const router = createBrowserRouter([
                 path: "/meta-data/listing/edit/:metaDataId",
                 element: <EditListingMetaPage />,
               },
+
+              // Career Routes
+
+              ...careersRoutes,
 
               // ride blog routes
               ...rideBlogRoutes,

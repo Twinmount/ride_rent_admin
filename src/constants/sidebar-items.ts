@@ -9,6 +9,7 @@ import {
   FileText,
   FileSearch,
   Group,
+  GraduationCap,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -162,6 +163,17 @@ export const sidebarContent: SidebarItem[] = [
     items: [
       { label: "Home Page", link: "/meta-data/home" },
       { label: "Listings Page", link: "/meta-data/listing" },
+    ],
+  },
+  // Careers
+  {
+    type: "accordion",
+    label: "Careers",
+    baseLink: "/careers",
+    icon: GraduationCap,
+    items: [
+      { label: "Jobs", link: "/careers/jobs" },
+      { label: "Applications", link: "/careers/applications" },
     ],
   },
 ];

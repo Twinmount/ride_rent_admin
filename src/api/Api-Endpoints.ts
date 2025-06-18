@@ -177,4 +177,15 @@ export enum Slug {
   PUT_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
   DELETE_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
   GET_ALL_ADVISOR_BLOG_PROMOTIONS = "/advisor-blogs-promotions/list",
+
+  // Job Endpoints
+  ADD_JOB = "/jobs",
+  GET_JOB = "/jobs",
+  PUT_JOB = "/jobs",
+  DELETE_JOB = "/jobs",
+  GET_ALL_JOBS = "/jobs/list",
+
+  // Application Endpoints
+  GET_APPLICATIONS = "/applications",
+  UPDATE_APPLICATION_STATUS = "/applications",
 }
