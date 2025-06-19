@@ -188,4 +188,5 @@ export enum Slug {
   // Application Endpoints
   GET_APPLICATIONS = "/applications",
   UPDATE_APPLICATION_STATUS = "/applications",
+  DELETE_APPLICATION = "/applications",
 }

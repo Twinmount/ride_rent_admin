@@ -1,11 +1,15 @@
-import StateSkelton from "@/components/skelton/StateSkelton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchApplications, updateApplicationStatus } from "@/api/careers";
+import {
+  fetchApplications,
+  removeApplicationById,
+  updateApplicationStatus,
+} from "@/api/careers";
 import { useState } from "react";
 import PageHeading from "@/components/general/PageHeading";
 import { useAdminContext } from "@/context/AdminContext";
 import CareerApplicationTags from "@/components/CareerApplicationTags";
 import { toast } from "@/components/ui/use-toast";
+import TableSkelton from "@/components/skelton/TableSkeleton";
 
 const CAREER_APPLICATIONS = "CAREER_APPLICATIONS";
 
@@ -39,13 +43,32 @@ export default function ApplicationListPage() {
     },
   });
 
+  const removeApplication = useMutation({
+    mutationFn: removeApplicationById,
+    onSuccess: () => {
+      toast({
+        title: "Application deleted successfully",
+        className: "bg-yellow text-white",
+      });
+      queryClient.invalidateQueries({
+        queryKey: [CAREER_APPLICATIONS, selectedCategory],
+      });
+    },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Application delete failed",
+      });
+    },
+  });
+
   const ActionButtons = ({ id, status }: { id: string; status: string }) => {
     const isNewList = status === "new";
     const isAcceptedList = status === "accepted";
     const isRejectedList = status === "rejected";
 
     return (
-      <>
+      <div className="flex gap-2">
         {(isRejectedList || isNewList) && (
           <button
             onClick={() =>
@@ -55,7 +78,7 @@ export default function ApplicationListPage() {
               })
             }
             disabled={statusUpdate?.isPending}
-            className="mr-2 rounded bg-green-600 p-1 text-white"
+            className="rounded bg-green-600 p-1 text-white"
           >
             Accept
           </button>
@@ -69,12 +92,21 @@ export default function ApplicationListPage() {
               })
             }
             disabled={statusUpdate?.isPending}
-            className="rounded bg-red-600 p-1 text-white"
+            className="rounded bg-blue-800 p-1 text-white"
           >
             Reject
           </button>
         )}
-      </>
+        {(isAcceptedList || isRejectedList) && (
+          <button
+            onClick={() => removeApplication.mutate(id)}
+            disabled={removeApplication?.isPending}
+            className="rounded bg-red-600 p-1 text-white"
+          >
+            Remove
+          </button>
+        )}
+      </div>
     );
   };
 
@@ -91,8 +123,8 @@ export default function ApplicationListPage() {
       />
 
       {isLoading ? (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <StateSkelton />
+        <div className="flex flex-col gap-2">
+          <TableSkelton />
         </div>
       ) : applicationList?.length > 0 ? (
         <div className="">
@@ -111,7 +143,7 @@ export default function ApplicationListPage() {
               {applicationList?.map((data: any, i: number) => {
                 const { _id, firstname, lastname, phone, email, type } = data;
                 return (
-                  <tr>
+                  <tr key={_id}>
                     <td className="border px-4 py-2">{++i}</td>
                     <td className="border px-4 py-2">{`${firstname} ${lastname ?? ""}`}</td>
                     <td className="border px-4 py-2">{type}</td>

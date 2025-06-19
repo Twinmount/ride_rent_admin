@@ -56,6 +56,23 @@ export const updateApplicationStatus = async (payload: {
   }
 };
 
+export const removeApplicationById = async (id: string) => {
+  try {
+    const data = await API.delete({
+      slug: `${Slug.DELETE_APPLICATION}/${id}`,
+    });
+
+    if (!data) {
+      throw new Error("Failed to delete Applications");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error delete Application:", error);
+    throw error;
+  }
+};
+
 export const fetchJobs = async (): Promise<FetchApplicationResponse> => {
   try {
     const data = await API.get<FetchApplicationResponse>({
