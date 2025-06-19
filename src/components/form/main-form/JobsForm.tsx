@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import * as z from "zod";
 
 import {
@@ -14,7 +14,6 @@ import {
 import "@mantine/tiptap/styles.css";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { JobFormType } from "@/types/types";
 import { JobFormSchema } from "@/lib/validator";
 import { JobFormDefaultValues } from "@/constants";
 import { useNavigate, useParams } from "react-router-dom";
@@ -27,9 +26,11 @@ import DeleteModal from "@/components/modal/DeleteModal";
 import JobFormDropdown from "../dropdowns/JobFormDropdown";
 import { addJob, deleteJobById, updateJob } from "@/api/careers";
 
+export type JobFormSchemaType = z.infer<typeof JobFormSchema>;
+
 type JobFormProps = {
   type: "Add" | "Update";
-  formData?: JobFormType | null;
+  formData?: JobFormSchemaType | null;
 };
 
 const CAREER_JOB = "CAREER_JOB";
@@ -44,13 +45,13 @@ export default function JobsForm({ type, formData }: JobFormProps) {
   const { jobId } = useParams<{ jobId: string }>();
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof JobFormSchema>>({
+  const form = useForm<JobFormSchemaType>({
     resolver: zodResolver(JobFormSchema),
     defaultValues: initialValues,
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof JobFormSchema>) {
+  async function onSubmit(values: JobFormSchemaType) {
     try {
       let data;
       if (type === "Add") {
@@ -87,6 +88,15 @@ export default function JobsForm({ type, formData }: JobFormProps) {
         queryKey: [CAREER_JOB],
       });
     },
+  });
+
+  const {
+    fields: sectionFields,
+    append: appendSection,
+    remove: removeSection,
+  } = useFieldArray<z.infer<typeof JobFormSchema>>({
+    control: form.control,
+    name: "sections",
   });
 
   return (
@@ -231,7 +241,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                   <JobFormDropdown
                     value={field.value}
                     onChangeHandler={field.onChange}
-                    // placeholder="Location"
+                    placeholder="Location"
                     type="location"
                   />
                 </FormControl>
@@ -258,7 +268,8 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                   <Input
                     type="date"
                     placeholder="e.g., 'Choose date'"
-                    {...field}
+                    value={field.value}
+                    onChange={field.onChange}
                     className="input-field"
                   />
                 </FormControl>
@@ -323,6 +334,65 @@ export default function JobsForm({ type, formData }: JobFormProps) {
           )}
         />
 
+        {/* Sections */}
+
+        <div>
+          <div>
+            {sectionFields?.map((section, sectionIndex) => {
+              return (
+                <div
+                  key={section.id}
+                  className="mb-3 space-y-4 rounded-lg border p-4"
+                >
+                  {/* Section Title */}
+                  <FormField
+                    control={form.control}
+                    name={`sections.${sectionIndex}.title`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Section Title</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter section title" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Points */}
+
+                  <PointsField
+                    sectionIndex={sectionIndex}
+                    control={form.control}
+                  />
+
+                  {/* Remove section */}
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={() => removeSection(sectionIndex)}
+                    className="text-sm"
+                  >
+                    Remove Section
+                  </Button>
+                </div>
+              );
+            })}
+            <Button
+              type="button"
+              onClick={() =>
+                appendSection({
+                  title: "",
+                  points: [""],
+                })
+              }
+              className="bg-yellow text-white"
+            >
+              + Add Section
+            </Button>
+          </div>
+        </div>
+
         {/* submit  */}
         <Button
           type="submit"
@@ -349,5 +419,63 @@ export default function JobsForm({ type, formData }: JobFormProps) {
         )}
       </form>
     </Form>
+  );
+}
+
+// Separate component for Points
+function PointsField({
+  sectionIndex,
+  control,
+}: {
+  sectionIndex: number;
+  control: any;
+}) {
+  const {
+    fields: pointFields,
+    append: appendPoint,
+    remove: removePoint,
+  } = useFieldArray({
+    control,
+    name: `sections.${sectionIndex}.points` as const,
+  });
+
+  return (
+    <div className="space-y-3">
+      <FormLabel className="text-sm text-gray-700">Points</FormLabel>
+      {pointFields.map((point, pointIndex) => (
+        <div key={point.id} className="flex items-start gap-2">
+          <FormField
+            control={control}
+            name={`sections.${sectionIndex}.points.${pointIndex}` as const}
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Textarea placeholder="Enter point" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => removePoint(pointIndex)}
+            className="mt-1 text-red-500"
+          >
+            ✕
+          </Button>
+        </div>
+      ))}
+      <div>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => appendPoint("")}
+          className="text-sm"
+        >
+          + Add Point
+        </Button>
+      </div>
+    </div>
   );
 }

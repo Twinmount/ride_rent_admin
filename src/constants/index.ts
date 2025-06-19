@@ -286,8 +286,8 @@ export const JobFormDefaultValues: JobFormType = {
   experience: "",
   sections: [
     {
-      title: "",
-      points: [""],
+      title: "Section 1",
+      points: ["Section point 1"],
     },
   ],
 };
