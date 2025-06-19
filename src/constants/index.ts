@@ -8,6 +8,7 @@ import {
   CompanyFormType,
   CompanyStatusFormType,
   CountryFormType,
+  JobFormType,
   StateFormType,
   VehicleSeriesType,
   VehicleTypeFormType,
@@ -273,4 +274,20 @@ export const VehicleSeriesFormDefaultValues: VehicleSeriesType = {
   vehicleSeriesInfoDescription: "",
   vehicleSeriesMetaTitle: "",
   vehicleSeriesMetaDescription: "",
+};
+
+// Blog form default values
+export const JobFormDefaultValues: JobFormType = {
+  jobtitle: "",
+  jobdescription: "",
+  location: "",
+  date: "",
+  level: "",
+  experience: "",
+  sections: [
+    {
+      title: "",
+      points: [""],
+    },
+  ],
 };

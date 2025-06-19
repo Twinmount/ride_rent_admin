@@ -1,10 +1,17 @@
+import { JobFormType } from "@/types/types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
-
-export interface FetchApplicationResponse {
-  result: [];
+interface FetchResponse {
   status: string;
   statusCode: number;
+}
+
+export interface FetchApplicationResponse extends FetchResponse {
+  result: JobFormType[];
+}
+
+export interface FetchSingleResponse extends FetchResponse {
+  result: JobFormType;
 }
 
 export const fetchApplications = async (
@@ -29,11 +36,11 @@ export const fetchApplications = async (
 export const updateApplicationStatus = async (payload: {
   id: string;
   status: string;
-}): Promise<FetchApplicationResponse> => {
+}): Promise<FetchSingleResponse> => {
   try {
     const { id, status } = payload;
 
-    const data = await API.patch<FetchApplicationResponse>({
+    const data = await API.patch<FetchSingleResponse>({
       slug: `${Slug.UPDATE_APPLICATION_STATUS}/${id}/status`,
       body: { status },
     });
@@ -68,9 +75,9 @@ export const fetchJobs = async (): Promise<FetchApplicationResponse> => {
 
 export const fetchJobById = async (
   jobId: string,
-): Promise<FetchApplicationResponse> => {
+): Promise<FetchSingleResponse> => {
   try {
-    const data = await API.get<FetchApplicationResponse>({
+    const data = await API.get<FetchSingleResponse>({
       slug: `${Slug.GET_JOB}/${jobId}`,
     });
 
@@ -81,6 +88,49 @@ export const fetchJobById = async (
     return data;
   } catch (error) {
     console.error("Error fetching Job:", error);
+    throw error;
+  }
+};
+
+// add job
+export const addJob = async (values: JobFormType) => {
+  try {
+    const data = await API.post({
+      slug: Slug.ADD_JOB,
+      body: values,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error adding job:", error);
+    throw error;
+  }
+};
+
+// update job
+export const updateJob = async (values: JobFormType, jobId: string) => {
+  try {
+    const data = await API.patch({
+      slug: `${Slug.PUT_JOB}/${jobId}`,
+      body: values,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error updating job:", error);
+    throw error;
+  }
+};
+
+export const deleteJobById = async (jobId: string) => {
+  try {
+    const data = await API.delete({
+      slug: `${Slug.DELETE_JOB}/${jobId}`,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error deleting Job:", error);
     throw error;
   }
 };

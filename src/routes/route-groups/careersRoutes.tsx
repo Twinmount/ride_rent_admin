@@ -28,7 +28,7 @@ export const careersRoutes = [
     element: <CreateNewJobPage />,
   },
   {
-    path: "/careers/jobs/edit",
+    path: "/careers/jobs/edit/:jobId",
     element: <EditJobPage />,
   },
 ];

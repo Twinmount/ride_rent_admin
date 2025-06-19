@@ -5,6 +5,7 @@ import { useState } from "react";
 import PageHeading from "@/components/general/PageHeading";
 import { useAdminContext } from "@/context/AdminContext";
 import CareerApplicationTags from "@/components/CareerApplicationTags";
+import { toast } from "@/components/ui/use-toast";
 
 const CAREER_APPLICATIONS = "CAREER_APPLICATIONS";
 
@@ -22,12 +23,20 @@ export default function ApplicationListPage() {
   const statusUpdate = useMutation({
     mutationFn: updateApplicationStatus,
     onSuccess: () => {
-      alert("Application status updated successfully");
+      toast({
+        title: "Application status updated successfully",
+        className: "bg-yellow text-white",
+      });
       queryClient.invalidateQueries({
         queryKey: [CAREER_APPLICATIONS, selectedCategory],
       });
     },
-    onError: () => alert("Failed to update application status"),
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: "Application status updation failed",
+      });
+    },
   });
 
   const ActionButtons = ({ id, status }: { id: string; status: string }) => {

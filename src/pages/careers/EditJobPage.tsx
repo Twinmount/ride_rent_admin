@@ -1,11 +1,10 @@
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-
-import { fetchBlogById } from "@/api/blogs";
 import LazyLoader from "@/components/skelton/LazyLoader";
-import RideBlogForm from "@/components/form/main-form/RideBlogForm";
 import { useAdminContext } from "@/context/AdminContext";
+import JobsForm from "@/components/form/main-form/JobsForm";
+import { fetchJobById } from "@/api/careers";
 
 const CAREER_JOB_BY_ID = "CAREER_JOB_BY_ID";
 
@@ -17,7 +16,7 @@ export default function EditJobPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: [CAREER_JOB_BY_ID, jobId],
-    queryFn: () => fetchBlogById(jobId as string),
+    queryFn: () => fetchJobById(jobId as string),
   });
 
   return (
@@ -36,7 +35,7 @@ export default function EditJobPage() {
       {isLoading ? (
         <LazyLoader />
       ) : (
-        <RideBlogForm type="Update" formData={data?.result} />
+        <JobsForm type="Update" formData={data?.result} />
       )}
     </section>
   );

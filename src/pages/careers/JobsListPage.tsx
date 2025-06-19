@@ -4,6 +4,7 @@ import PageHeading from "@/components/general/PageHeading";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import { useAdminContext } from "@/context/AdminContext";
 import { fetchJobs } from "@/api/careers";
+import JobCard from "@/components/card/JobCard";
 
 const CAREER_JOBS = "CAREER_JOBS";
 
@@ -27,7 +28,9 @@ export default function JobsListPage() {
         </div>
       ) : jobsResult?.length > 0 ? (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-          {jobsResult?.map((data: any) => <h1>hi</h1>)}
+          {jobsResult?.map((data: any) => (
+            <JobCard job={data} key={data?._id} />
+          ))}
         </div>
       ) : (
         <div className="mt-36 text-center text-2xl">No Jobs Found!</div>

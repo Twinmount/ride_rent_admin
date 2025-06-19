@@ -1,4 +1,4 @@
-import RideBlogForm from "@/components/form/main-form/RideBlogForm";
+import JobsForm from "@/components/form/main-form/JobsForm";
 import { useAdminContext } from "@/context/AdminContext";
 
 import { CircleArrowLeft } from "lucide-react";
@@ -21,7 +21,7 @@ export default function CreateNewJobPage() {
           Add New Job {country.countryName}
         </h3>
       </div>
-      <RideBlogForm type="Add" />
+      <JobsForm type="Add" />
     </section>
   );
 }
