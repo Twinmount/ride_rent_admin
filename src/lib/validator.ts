@@ -552,6 +552,11 @@ export const JobFormSchema = z.object({
     .string()
     .min(10, "Job description should be at least 10 characters long")
     .max(500, "Job description should not exceed 500 characters"),
+  aboutCompany: z
+    .string()
+    .min(10, "About company should be at least 10 characters long")
+    .max(500, "About company should not exceed 500 characters")
+    .optional(),
   date: z.string(),
   location: z.enum([
     "Remote",

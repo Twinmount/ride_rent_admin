@@ -346,4 +346,5 @@ export type JobFormType = {
   level: ExperienceLevel;
   experience: YearExperience;
   sections?: JobSectionDto[];
+  aboutCompany?: string;
 };

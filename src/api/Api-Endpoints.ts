@@ -183,7 +183,7 @@ export enum Slug {
   GET_JOB = "/jobs",
   PUT_JOB = "/jobs",
   DELETE_JOB = "/jobs",
-  GET_ALL_JOBS = "/jobs/list",
+  GET_ALL_JOBS = "/jobs/minimal-list",
 
   // Application Endpoints
   GET_APPLICATIONS = "/applications",

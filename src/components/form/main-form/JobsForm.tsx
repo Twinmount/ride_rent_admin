@@ -160,6 +160,73 @@ export default function JobsForm({ type, formData }: JobFormProps) {
             }}
           />
 
+          {/* About Company */}
+          <FormField
+            control={form.control}
+            name="aboutCompany"
+            render={({ field }) => {
+              const [isFocused, setIsFocused] = useState(false); // To manage focus state
+              const [charCount, setCharCount] = useState(
+                field.value?.length || 0,
+              );
+
+              const handleFocus = () => setIsFocused(true);
+              const handleBlur = () => setIsFocused(false);
+
+              const handleInputChange = (
+                e: React.ChangeEvent<HTMLTextAreaElement>,
+              ) => {
+                const newValue = e.target.value;
+
+                // Prevent typing if the character count exceeds 500
+                if (newValue.length <= 500) {
+                  setCharCount(newValue.length);
+                  field.onChange(e);
+                }
+              };
+
+              return (
+                <FormItem className="mb-2 flex w-full max-sm:flex-col">
+                  <FormLabel className="ml-2 mt-4 flex h-fit w-64 justify-between text-base lg:text-lg">
+                    About Company
+                    <span className="mr-5 max-sm:hidden">:</span>
+                  </FormLabel>
+                  <div
+                    className="w-full flex-col items-start"
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                  >
+                    <FormControl>
+                      <Textarea
+                        placeholder="e.g., 'Discover the top attractions in Abu Dhabi, from the Sheikh Zayed Mosque to the Corniche.'"
+                        {...field}
+                        className={`textarea rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0 ${
+                          isFocused ? "h-96" : "h-20"
+                        }`}
+                        onChange={handleInputChange}
+                      />
+                    </FormControl>
+                    <FormDescription className="flex-between ml-2 w-full">
+                      <span className="w-full max-w-[90%]">
+                        This value will be used to show the "about company" in
+                        job details page. Up to 500 characters are allowed.
+                      </span>{" "}
+                      <span
+                        className={`ml-auto mr-5 ${
+                          charCount >= 500 ? "text-red-500" : ""
+                        }`}
+                      >
+                        {" "}
+                        {`${charCount}/500`}
+                      </span>
+                    </FormDescription>
+                    <FormMessage className="ml-2" />
+                  </div>
+                </FormItem>
+              );
+            }}
+          />
+
           {/* description */}
           <FormField
             control={form.control}
