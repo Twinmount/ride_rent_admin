@@ -2,8 +2,8 @@ import { lazy } from "react";
 
 const JobsListPage = lazy(() => import("../../pages/careers/JobsListPage"));
 
-const ApplicationListPage = lazy(
-  () => import("../../pages/careers/ApplicationListPage"),
+const CareerApplicationListPage = lazy(
+  () => import("../../pages/careers/CareerApplicationListPage"),
 );
 
 const CreateNewJobPage = lazy(
@@ -17,7 +17,7 @@ export const careersRoutes = [
 
   {
     path: "/careers/applications",
-    element: <ApplicationListPage />,
+    element: <CareerApplicationListPage />,
   },
   {
     path: "/careers/jobs",

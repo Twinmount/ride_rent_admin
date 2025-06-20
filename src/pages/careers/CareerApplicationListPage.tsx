@@ -1,66 +1,19 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  fetchApplications,
-  removeApplicationById,
-  updateApplicationStatus,
-} from "@/api/careers";
 import { useState } from "react";
 import PageHeading from "@/components/general/PageHeading";
 import { useAdminContext } from "@/context/AdminContext";
 import CareerApplicationTags from "@/components/CareerApplicationTags";
-import { toast } from "@/components/ui/use-toast";
 import TableSkelton from "@/components/skelton/TableSkeleton";
+import { useCareerApplication } from "@/hooks/useCareerApplication";
 
-const CAREER_APPLICATIONS = "CAREER_APPLICATIONS";
-
-export default function ApplicationListPage() {
-  const queryClient = useQueryClient();
-
+export default function CareerApplicationListPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("new");
   const { country } = useAdminContext();
 
-  const { data, isLoading } = useQuery({
-    queryKey: [CAREER_APPLICATIONS, selectedCategory],
-    queryFn: () => fetchApplications(selectedCategory),
-  });
-
-  const statusUpdate = useMutation({
-    mutationFn: updateApplicationStatus,
-    onSuccess: () => {
-      toast({
-        title: "Application status updated successfully",
-        className: "bg-yellow text-white",
-      });
-      queryClient.invalidateQueries({
-        queryKey: [CAREER_APPLICATIONS, selectedCategory],
-      });
-    },
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "Application status updation failed",
-      });
-    },
-  });
-
-  const removeApplication = useMutation({
-    mutationFn: removeApplicationById,
-    onSuccess: () => {
-      toast({
-        title: "Application deleted successfully",
-        className: "bg-yellow text-white",
-      });
-      queryClient.invalidateQueries({
-        queryKey: [CAREER_APPLICATIONS, selectedCategory],
-      });
-    },
-    onError: () => {
-      toast({
-        variant: "destructive",
-        title: "Application delete failed",
-      });
-    },
-  });
+  const { isLoading, applicationList, statusUpdate, removeApplication } =
+    useCareerApplication({
+      enabled: true,
+      selectedCategory,
+    });
 
   const ActionButtons = ({ id, status }: { id: string; status: string }) => {
     const isNewList = status === "new";
@@ -78,7 +31,7 @@ export default function ApplicationListPage() {
               })
             }
             disabled={statusUpdate?.isPending}
-            className="rounded bg-green-600 p-1 text-white"
+            className="rounded bg-green-600 px-2 py-1 text-white"
           >
             Accept
           </button>
@@ -92,7 +45,7 @@ export default function ApplicationListPage() {
               })
             }
             disabled={statusUpdate?.isPending}
-            className="rounded bg-blue-800 p-1 text-white"
+            className="rounded bg-blue-800 px-2 py-1 text-white"
           >
             Reject
           </button>
@@ -101,7 +54,7 @@ export default function ApplicationListPage() {
           <button
             onClick={() => removeApplication.mutate(id)}
             disabled={removeApplication?.isPending}
-            className="rounded bg-red-600 p-1 text-white"
+            className="rounded bg-red-600 px-2 py-1 text-white"
           >
             Remove
           </button>
@@ -110,7 +63,24 @@ export default function ApplicationListPage() {
     );
   };
 
-  const applicationList = data?.result || [];
+  type ApplicationType = "intern" | "career";
+
+  const applicationTypeBadge = (type: ApplicationType): JSX.Element | null => {
+    const badgeMap: Record<ApplicationType, JSX.Element> = {
+      intern: (
+        <span className="select-none rounded bg-rose-100 px-2 py-1 text-rose-700">
+          Intern
+        </span>
+      ),
+      career: (
+        <span className="select-none rounded bg-green-100 px-2 py-1 text-green-700">
+          Career
+        </span>
+      ),
+    };
+
+    return badgeMap[type] ?? null;
+  };
 
   return (
     <section className="container h-auto min-h-screen pb-10">
@@ -131,12 +101,14 @@ export default function ApplicationListPage() {
           <table className="w-full text-left">
             <thead>
               <tr>
-                <th className="border bg-gray-200 px-4 py-2">Sl.</th>
-                <th className="border bg-gray-200 px-4 py-2">Name</th>
-                <th className="border bg-gray-200 px-4 py-2">Type</th>
-                <th className="border bg-gray-200 px-4 py-2">Phone</th>
-                <th className="border bg-gray-200 px-4 py-2">Email</th>
-                <th className="border bg-gray-200 px-4 py-2">Action</th>
+                <th className="border bg-slate-300 px-4 py-2">Sl.</th>
+                <th className="border bg-slate-300 px-4 py-2">Name</th>
+                <th className="border bg-slate-300 px-4 py-2">
+                  Application Type
+                </th>
+                <th className="border bg-slate-300 px-4 py-2">Phone</th>
+                <th className="border bg-slate-300 px-4 py-2">Email</th>
+                <th className="border bg-slate-300 px-4 py-2">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -144,12 +116,14 @@ export default function ApplicationListPage() {
                 const { _id, firstname, lastname, phone, email, type } = data;
                 return (
                   <tr key={_id}>
-                    <td className="border px-4 py-2">{++i}</td>
-                    <td className="border px-4 py-2">{`${firstname} ${lastname ?? ""}`}</td>
-                    <td className="border px-4 py-2">{type}</td>
-                    <td className="border px-4 py-2">{phone}</td>
-                    <td className="border px-4 py-2">{email}</td>
-                    <td className="border px-4 py-2">
+                    <td className="border bg-white px-4 py-2">{++i}</td>
+                    <td className="border bg-white px-4 py-2">{`${firstname} ${lastname ?? ""}`}</td>
+                    <td className="border bg-white px-4 py-2">
+                      {applicationTypeBadge(type)}
+                    </td>
+                    <td className="border bg-white px-4 py-2">{phone}</td>
+                    <td className="border bg-white px-4 py-2">{email}</td>
+                    <td className="border bg-white px-4 py-2">
                       <ActionButtons id={_id} status={selectedCategory} />
                     </td>
                   </tr>
