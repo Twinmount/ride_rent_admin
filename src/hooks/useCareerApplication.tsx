@@ -15,11 +15,14 @@ export const useCareerApplication = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const { isLoading, data } = useCareerApplicationQuery({
+  const { query, page, setPage } = useCareerApplicationQuery({
     enabled,
     selectedCategory,
+    limit: 10,
   });
-  const applicationList = data?.result || [];
+  const { isLoading, data } = query;
+  const applicationList = data?.result?.list || [];
+  const totalNumberOfPages = data?.result?.totalNumberOfPages;
 
   const statusUpdate = useMutation({
     mutationFn: updateApplicationStatus,
@@ -64,5 +67,8 @@ export const useCareerApplication = ({
     applicationList,
     statusUpdate,
     removeApplication,
+    totalNumberOfPages,
+    page,
+    setPage,
   };
 };

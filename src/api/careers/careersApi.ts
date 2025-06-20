@@ -6,20 +6,34 @@ interface FetchResponse {
   statusCode: number;
 }
 
+interface Response {
+  list: JobFormType[];
+  page: number;
+  limit: number;
+  total: number;
+  totalNumberOfPages: number;
+}
+
 export interface FetchApplicationResponse extends FetchResponse {
-  result: JobFormType[];
+  result: Response;
 }
 
 export interface FetchSingleResponse extends FetchResponse {
   result: JobFormType;
 }
 
-export const fetchApplications = async (
-  type: string,
-): Promise<FetchApplicationResponse> => {
+export const fetchApplications = async ({
+  status,
+  page,
+  limit,
+}: {
+  status: string;
+  page: number;
+  limit: number;
+}): Promise<FetchApplicationResponse> => {
   try {
     const data = await API.get<FetchApplicationResponse>({
-      slug: `${Slug.GET_APPLICATIONS}?status=${type}`,
+      slug: `${Slug.GET_APPLICATIONS}?status=${status}&page=${page}&limit=${limit}`,
     });
 
     if (!data) {

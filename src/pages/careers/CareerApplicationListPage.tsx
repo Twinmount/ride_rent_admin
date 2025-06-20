@@ -4,16 +4,24 @@ import { useAdminContext } from "@/context/AdminContext";
 import CareerApplicationTags from "@/components/CareerApplicationTags";
 import TableSkelton from "@/components/skelton/TableSkeleton";
 import { useCareerApplication } from "@/hooks/useCareerApplication";
+import Pagination from "@/components/Pagination";
 
 export default function CareerApplicationListPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("new");
   const { country } = useAdminContext();
 
-  const { isLoading, applicationList, statusUpdate, removeApplication } =
-    useCareerApplication({
-      enabled: true,
-      selectedCategory,
-    });
+  const {
+    isLoading,
+    applicationList,
+    statusUpdate,
+    removeApplication,
+    totalNumberOfPages,
+    page,
+    setPage,
+  } = useCareerApplication({
+    enabled: true,
+    selectedCategory,
+  });
 
   const ActionButtons = ({ id, status }: { id: string; status: string }) => {
     const isNewList = status === "new";
@@ -135,6 +143,12 @@ export default function CareerApplicationListPage() {
       ) : (
         <div className="mt-36 text-center text-2xl">No Applications Found!</div>
       )}
+
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalNumberOfPages || 1}
+      />
     </section>
   );
 }
