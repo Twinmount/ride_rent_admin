@@ -5,6 +5,7 @@ import CareerApplicationTags from "@/components/CareerApplicationTags";
 import TableSkelton from "@/components/skelton/TableSkeleton";
 import { useCareerApplication } from "@/hooks/useCareerApplication";
 import Pagination from "@/components/Pagination";
+import ApplicationDeleteModal from "@/components/modal/ApplicationDeleteModal";
 
 export default function CareerApplicationListPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("new");
@@ -58,15 +59,16 @@ export default function CareerApplicationListPage() {
             Reject
           </button>
         )}
-        {(isAcceptedList || isRejectedList) && (
-          <button
-            onClick={() => removeApplication.mutate(id)}
-            disabled={removeApplication?.isPending}
-            className="rounded bg-red-600 px-2 py-1 text-white"
-          >
-            Remove
-          </button>
-        )}
+
+        <ApplicationDeleteModal
+          onDelete={() => removeApplication.mutate(id)}
+          title="Delete application?"
+          description="Are you sure you want to delete this application? This cannot be undone"
+          confirmText="Delete"
+          cancelText="Cancel"
+          isLoading={removeApplication?.isPending}
+          navigateTo="/careers/applications"
+        />
       </div>
     );
   };
