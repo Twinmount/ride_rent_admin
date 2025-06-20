@@ -116,12 +116,21 @@ export default function CareerApplicationListPage() {
                 </th>
                 <th className="border bg-slate-300 px-4 py-2">Phone</th>
                 <th className="border bg-slate-300 px-4 py-2">Email</th>
+                <th className="border bg-slate-300 px-4 py-2">Resume</th>
                 <th className="border bg-slate-300 px-4 py-2">Action</th>
               </tr>
             </thead>
             <tbody>
               {applicationList?.map((data: any, i: number) => {
-                const { _id, firstname, lastname, phone, email, type } = data;
+                const {
+                  _id,
+                  firstname,
+                  lastname,
+                  phone,
+                  email,
+                  type,
+                  fileUrl,
+                } = data;
                 return (
                   <tr key={_id}>
                     <td className="border bg-white px-4 py-2">{++i}</td>
@@ -131,6 +140,20 @@ export default function CareerApplicationListPage() {
                     </td>
                     <td className="border bg-white px-4 py-2">{phone}</td>
                     <td className="border bg-white px-4 py-2">{email}</td>
+                    <td className="border bg-white px-4 py-2">
+                      <a
+                        className="un flex items-center gap-1 underline"
+                        href={fileUrl}
+                        download
+                        target="_blank"
+                      >
+                        <img
+                          className="h-[20px] w-[20px]"
+                          src="/assets/icons/file-download.svg"
+                        />
+                        <span>Resume</span>
+                      </a>
+                    </td>
                     <td className="border bg-white px-4 py-2">
                       <ActionButtons id={_id} status={selectedCategory} />
                     </td>

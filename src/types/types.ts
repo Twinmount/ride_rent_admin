@@ -347,4 +347,5 @@ export type JobFormType = {
   experience: YearExperience;
   sections?: JobSectionDto[];
   aboutCompany?: string;
+  fileUrl?: string | null;
 };
