@@ -118,7 +118,8 @@ export default function CareerApplicationListPage() {
                 </th>
                 <th className="border bg-slate-300 px-4 py-2">Phone</th>
                 <th className="border bg-slate-300 px-4 py-2">Email</th>
-                <th className="border bg-slate-300 px-4 py-2">Resume</th>
+                <th className="border bg-slate-300 px-4 py-2">Links</th>
+                <th className="border bg-slate-300 px-4 py-2">Job Details</th>
                 <th className="border bg-slate-300 px-4 py-2">Action</th>
               </tr>
             </thead>
@@ -132,29 +133,63 @@ export default function CareerApplicationListPage() {
                   email,
                   type,
                   fileUrl,
+                  jobTitle,
+                  jobId,
+                  linkedinprofile,
                 } = data;
                 return (
                   <tr key={_id}>
                     <td className="border bg-white px-4 py-2">{++i}</td>
-                    <td className="border bg-white px-4 py-2">{`${firstname} ${lastname ?? ""}`}</td>
+                    <td className="border bg-white px-4 py-2">
+                      {`${firstname} ${lastname ?? ""}`}
+                    </td>
                     <td className="border bg-white px-4 py-2">
                       {applicationTypeBadge(type)}
                     </td>
                     <td className="border bg-white px-4 py-2">{phone}</td>
                     <td className="border bg-white px-4 py-2">{email}</td>
                     <td className="border bg-white px-4 py-2">
-                      <a
-                        className="un flex items-center gap-1 underline"
-                        href={fileUrl}
-                        download
-                        target="_blank"
-                      >
-                        <img
-                          className="h-[20px] w-[20px]"
-                          src="/assets/icons/file-download.svg"
-                        />
-                        <span>Resume</span>
-                      </a>
+                      <div className="flex items-center gap-6">
+                        <a
+                          className="flex items-center gap-1 underline"
+                          href={fileUrl}
+                          download
+                          target="_blank"
+                        >
+                          <img
+                            className="h-[20px] w-[20px]"
+                            src="/assets/icons/file-download.svg"
+                          />
+                          <span>Resume</span>
+                        </a>
+                        {linkedinprofile && (
+                          <a
+                            className="flex items-center gap-1 underline"
+                            href={linkedinprofile}
+                            target="_blank"
+                          >
+                            <img
+                              className="h-[20px] w-[20px]"
+                              src="/assets/icons/linkedin.svg"
+                            />
+                            <span>Linkedin</span>
+                          </a>
+                        )}
+                      </div>
+                    </td>
+                    <td className="border bg-white px-4 py-2">
+                      {jobTitle && jobId ? (
+                        <div>
+                          <p className="w-full max-w-[160px] overflow-hidden overflow-ellipsis whitespace-nowrap">
+                            {jobTitle}
+                          </p>
+                          <p className="text-xs font-medium text-gray-500">
+                            {jobId}
+                          </p>
+                        </div>
+                      ) : (
+                        "N/A"
+                      )}
                     </td>
                     <td className="border bg-white px-4 py-2">
                       <ActionButtons id={_id} status={selectedCategory} />
