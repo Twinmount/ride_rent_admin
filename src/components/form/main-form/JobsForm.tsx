@@ -401,6 +401,32 @@ export default function JobsForm({ type, formData }: JobFormProps) {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="country"
+          render={({ field }) => (
+            <FormItem className="mb-2 flex w-full max-sm:flex-col">
+              <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base lg:text-lg">
+                Country <span className="mr-5 max-sm:hidden">:</span>
+              </FormLabel>
+              <div className="w-full flex-col items-start">
+                <FormControl>
+                  <JobFormDropdown
+                    value={field.value}
+                    onChangeHandler={field.onChange}
+                    placeholder="Country"
+                    type="country"
+                  />
+                </FormControl>
+                <FormDescription className="ml-2">
+                  Select the Job located country.
+                </FormDescription>
+                <FormMessage className="ml-2" />
+              </div>
+            </FormItem>
+          )}
+        />
+
         {/* Sections */}
 
         <div>

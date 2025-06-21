@@ -118,6 +118,9 @@ export default function CareerApplicationListPage() {
                 </th>
                 <th className="border bg-slate-300 px-4 py-2">Phone</th>
                 <th className="border bg-slate-300 px-4 py-2">Email</th>
+                <th className="border bg-slate-300 px-4 py-2">
+                  Preferred Country
+                </th>
                 <th className="border bg-slate-300 px-4 py-2">Links</th>
                 <th className="border bg-slate-300 px-4 py-2">Job Details</th>
                 <th className="border bg-slate-300 px-4 py-2">Action</th>
@@ -136,6 +139,7 @@ export default function CareerApplicationListPage() {
                   jobTitle,
                   jobId,
                   linkedinprofile,
+                  country,
                 } = data;
                 return (
                   <tr key={_id}>
@@ -148,6 +152,7 @@ export default function CareerApplicationListPage() {
                     </td>
                     <td className="border bg-white px-4 py-2">{phone}</td>
                     <td className="border bg-white px-4 py-2">{email}</td>
+                    <td className="border bg-white px-4 py-2">{country}</td>
                     <td className="border bg-white px-4 py-2">
                       <div className="flex items-center gap-6">
                         <a

@@ -601,6 +601,7 @@ export const JobFormSchema = z.object({
     "15-16 yrs",
     "",
   ]),
+  country: z.enum(["UAE", "INDIA"]),
   sections: z
     .array(
       z.object({

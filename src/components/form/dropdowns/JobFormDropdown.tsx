@@ -16,7 +16,7 @@ type JobFormDropdownProps = {
   onChangeHandler: (value: string) => void;
   placeholder?: string;
   isDisabled?: boolean;
-  type: "location" | "level" | "experience";
+  type: "location" | "level" | "experience" | "country";
 };
 
 export const workTypeOptions: JobDropdownType = [
@@ -65,6 +65,11 @@ export const yearExperienceOptions: JobDropdownType = [
   { value: "15-16 yrs", label: "15-16 yrs" },
 ];
 
+export const countryList: JobDropdownType = [
+  { value: "UAE", label: "UAE" },
+  { value: "INDIA", label: "INDIA" },
+];
+
 const JobFormDropdown = ({
   value,
   onChangeHandler,
@@ -79,6 +84,8 @@ const JobFormDropdown = ({
     jobOptionList = experienceLevelOptions;
   } else if (type === "experience") {
     jobOptionList = yearExperienceOptions;
+  } else if (type === "country") {
+    jobOptionList = countryList;
   }
 
   return (
