@@ -87,10 +87,16 @@ export const removeApplicationById = async (id: string) => {
   }
 };
 
-export const fetchJobs = async (): Promise<FetchApplicationResponse> => {
+export const fetchJobs = async ({
+  page,
+  limit,
+}: {
+  page: number;
+  limit: number;
+}): Promise<FetchApplicationResponse> => {
   try {
     const data = await API.get<FetchApplicationResponse>({
-      slug: Slug.GET_ALL_JOBS,
+      slug: `${Slug.GET_ALL_JOBS}?page=${page}&limit=${limit}`,
     });
 
     if (!data) {

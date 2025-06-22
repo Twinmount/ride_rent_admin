@@ -348,4 +348,5 @@ export type JobFormType = {
   sections?: JobSectionDto[];
   aboutCompany?: string;
   fileUrl?: string | null;
+  country: string;
 };

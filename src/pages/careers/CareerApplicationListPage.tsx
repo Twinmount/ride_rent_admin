@@ -149,7 +149,7 @@ export default function CareerApplicationListPage() {
       accessorKey: "",
       header: "Candidate Name",
       cell: ({ row }: { row: any }) => (
-        <span className="whitespace-nowrap">
+        <span>
           {`${row.original.firstname} ${row.original.lastname ?? ""}`}
         </span>
       ),

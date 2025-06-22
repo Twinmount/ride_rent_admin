@@ -1,22 +1,18 @@
 import StateSkelton from "@/components/skelton/StateSkelton";
-import { useQuery } from "@tanstack/react-query";
 import PageHeading from "@/components/general/PageHeading";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import { useAdminContext } from "@/context/AdminContext";
-import { fetchJobs } from "@/api/careers";
 import JobCard from "@/components/card/JobCard";
-
-const CAREER_JOBS = "CAREER_JOBS";
+import { useJobList } from "@/hooks/useJobList";
+import Pagination from "@/components/Pagination";
 
 export default function JobsListPage() {
   const { country } = useAdminContext();
 
-  const { data, isLoading } = useQuery({
-    queryKey: [CAREER_JOBS],
-    queryFn: () => fetchJobs(),
-  });
-
-  const jobsResult = data?.result || [];
+  const { isLoading, jobsResult, totalNumberOfPages, page, setPage } =
+    useJobList({
+      enabled: true,
+    });
 
   return (
     <section className="container h-auto min-h-screen pb-10">
@@ -35,6 +31,12 @@ export default function JobsListPage() {
       ) : (
         <div className="mt-36 text-center text-2xl">No Jobs Found!</div>
       )}
+
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalNumberOfPages || 1}
+      />
 
       {/* New Job Link Button */}
       <FloatingActionButton href={`/careers/jobs/add`} label="New Job" />
