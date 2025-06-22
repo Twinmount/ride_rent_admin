@@ -332,6 +332,8 @@ export type YearExperience =
   | "15-16 yrs"
   | "";
 
+export type CountryList = "UAE" | "INDIA" | "";
+
 export type JobSectionDto = {
   title: string;
   points: string[];
@@ -348,5 +350,5 @@ export type JobFormType = {
   sections?: JobSectionDto[];
   aboutCompany?: string;
   fileUrl?: string | null;
-  country: string;
+  country: CountryList;
 };

@@ -388,7 +388,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                   <JobFormDropdown
                     value={field.value}
                     onChangeHandler={field.onChange}
-                    // placeholder="Location"
+                    placeholder="Location"
                     type="experience"
                   />
                 </FormControl>

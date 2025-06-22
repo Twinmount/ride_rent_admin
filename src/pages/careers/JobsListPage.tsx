@@ -1,10 +1,10 @@
-import StateSkelton from "@/components/skelton/StateSkelton";
 import PageHeading from "@/components/general/PageHeading";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import { useAdminContext } from "@/context/AdminContext";
-import JobCard from "@/components/card/JobCard";
 import { useJobList } from "@/hooks/useJobList";
 import Pagination from "@/components/Pagination";
+import { CommonListingTable } from "@/components/table/CommonListingTable";
+import { Link } from "react-router-dom";
 
 export default function JobsListPage() {
   const { country } = useAdminContext();
@@ -14,23 +14,50 @@ export default function JobsListPage() {
       enabled: true,
     });
 
+  const columns = [
+    {
+      accessorKey: "_id",
+      header: "Job Id",
+      cell: (e: any) => (
+        <Link
+          className="font-semibold text-blue-600 hover:underline"
+          to={`/careers/jobs/edit/${e.getValue()}`}
+        >
+          {e.getValue()}
+        </Link>
+      ),
+    },
+    {
+      accessorKey: "jobtitle",
+      header: "Job Title",
+    },
+    {
+      accessorKey: "location",
+      header: "Location",
+    },
+    {
+      accessorKey: "level",
+      header: "Level",
+    },
+    {
+      accessorKey: "experience",
+      header: "Experience",
+    },
+    {
+      accessorKey: "country",
+      header: "Country",
+    },
+  ];
+
   return (
     <section className="container h-auto min-h-screen pb-10">
       <PageHeading heading={`Jobs List - ${country.countryName}`} />
 
-      {isLoading ? (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <StateSkelton />
-        </div>
-      ) : jobsResult?.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-          {jobsResult?.map((data: any) => (
-            <JobCard job={data} key={data?._id} />
-          ))}
-        </div>
-      ) : (
-        <div className="mt-36 text-center text-2xl">No Jobs Found!</div>
-      )}
+      <CommonListingTable
+        columns={columns}
+        data={jobsResult || []}
+        loading={isLoading}
+      />
 
       <Pagination
         page={page}

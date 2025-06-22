@@ -284,6 +284,7 @@ export const JobFormDefaultValues: JobFormType = {
   date: "",
   level: "",
   experience: "",
+  country: "",
   sections: [
     {
       title: "Section 1",

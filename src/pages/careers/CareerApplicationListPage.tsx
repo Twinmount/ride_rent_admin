@@ -5,7 +5,7 @@ import CareerApplicationTags from "@/components/CareerApplicationTags";
 import { useCareerApplication } from "@/hooks/useCareerApplication";
 import Pagination from "@/components/Pagination";
 import ApplicationDeleteModal from "@/components/modal/ApplicationDeleteModal";
-import { ApplicationListingTable } from "@/components/table/ApplicationListingTable";
+import { CommonListingTable } from "@/components/table/CommonListingTable";
 
 export default function CareerApplicationListPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("new");
@@ -54,7 +54,7 @@ export default function CareerApplicationListPage() {
               })
             }
             disabled={statusUpdate?.isPending}
-            className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md !bg-blue-800 bg-primary px-4 py-2 text-sm font-medium text-white ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+            className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md !bg-gray-800 bg-primary px-4 py-2 text-sm font-medium text-white ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
           >
             Reject
           </button>
@@ -76,7 +76,6 @@ export default function CareerApplicationListPage() {
   type ApplicationType = "intern" | "career";
 
   const ApplicationTypeBadge = (value: ApplicationType): JSX.Element | null => {
-    console.log("value :>> ", value);
     const badgeMap: Record<ApplicationType, JSX.Element> = {
       intern: (
         <span className="select-none rounded bg-rose-100 px-2 py-1 text-rose-700">
@@ -198,7 +197,7 @@ export default function CareerApplicationListPage() {
         setSelectedCategory={setSelectedCategory}
       />
 
-      <ApplicationListingTable
+      <CommonListingTable
         columns={columns}
         data={applicationList || []}
         loading={isLoading}
