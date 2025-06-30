@@ -26,14 +26,16 @@ export const fetchApplications = async ({
   status,
   page,
   limit,
+  type,
 }: {
   status: string;
   page: number;
   limit: number;
+  type: string;
 }): Promise<FetchApplicationResponse> => {
   try {
     const data = await API.get<FetchApplicationResponse>({
-      slug: `${Slug.GET_APPLICATIONS}?status=${status}&page=${page}&limit=${limit}`,
+      slug: `${Slug.GET_APPLICATIONS}?status=${status}&page=${page}&limit=${limit}&type=${type}`,
     });
 
     if (!data) {

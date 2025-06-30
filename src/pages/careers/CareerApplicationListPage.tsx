@@ -6,6 +6,9 @@ import { useCareerApplication } from "@/hooks/useCareerApplication";
 import Pagination from "@/components/Pagination";
 import ApplicationDeleteModal from "@/components/modal/ApplicationDeleteModal";
 import { CommonListingTable } from "@/components/table/CommonListingTable";
+import { ApplicationTypeDropdown } from "@/components/ApplicationTypeDropdown";
+import { ApplicationTypes } from "@/types/types";
+import { Link } from "react-router-dom";
 
 export default function CareerApplicationListPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("new");
@@ -19,6 +22,8 @@ export default function CareerApplicationListPage() {
     totalNumberOfPages,
     page,
     setPage,
+    type,
+    setType,
   } = useCareerApplication({
     enabled: true,
     selectedCategory,
@@ -132,8 +137,14 @@ export default function CareerApplicationListPage() {
             <p className="w-full max-w-[160px] overflow-hidden overflow-ellipsis whitespace-nowrap">
               {row.original.jobTitle}
             </p>
-            <p className="text-xs font-medium text-gray-500">
-              {row.original.jobId}
+            <p className="text-sm font-normal text-gray-500">
+              JobId:{" "}
+              <Link
+                className="text-blue-600 hover:underline"
+                to={`/careers/jobs/edit/${row.original.jobId}`}
+              >
+                {row.original.jobId}
+              </Link>
             </p>
           </div>
         ) : (
@@ -145,7 +156,7 @@ export default function CareerApplicationListPage() {
 
   const columns = [
     {
-      accessorKey: "",
+      id: "candidatename",
       header: "Candidate Name",
       cell: ({ row }: { row: any }) => (
         <span>
@@ -159,6 +170,11 @@ export default function CareerApplicationListPage() {
       cell: (e: any) => ApplicationTypeBadge(e.getValue()),
     },
     {
+      accessorKey: "gender",
+      header: "Gender",
+      cell: (e: any) => <span>{e.getValue() ? e.getValue() : "N/A"}</span>,
+    },
+    {
       accessorKey: "phone",
       header: "Phone",
     },
@@ -167,21 +183,41 @@ export default function CareerApplicationListPage() {
       header: "Email",
     },
     {
+      accessorKey: "expectedCTC",
+      header: "Asked CTC",
+      cell: (e: any) => <span>{e.getValue() ? e.getValue() : "N/A"}</span>,
+    },
+    {
+      accessorKey: "experience",
+      header: "Experience CTC",
+      cell: (e: any) => <span>{e.getValue() ? e.getValue() : "N/A"}</span>,
+    },
+    {
       accessorKey: "country",
       header: "Preferred Country",
     },
     {
-      accessorKey: "",
+      id: "links",
       header: "Links",
       cell: Links,
     },
     {
-      accessorKey: "",
+      id: "jobdetails",
       header: "Job Details",
       cell: jobDetails,
     },
     {
-      accessorKey: "company.companyName",
+      accessorKey: "collegename",
+      header: "College Name",
+      cell: (e: any) => <span>{e.getValue() ? e.getValue() : "N/A"}</span>,
+    },
+    {
+      accessorKey: "placementofficer",
+      header: "Placement Officer Contact",
+      cell: (e: any) => <span>{e.getValue() ? e.getValue() : "N/A"}</span>,
+    },
+    {
+      id: "actions",
       header: "Actions",
       cell: ActionButtons,
     },
@@ -191,16 +227,25 @@ export default function CareerApplicationListPage() {
     <section className="container h-auto min-h-screen pb-10">
       <PageHeading heading={`Application List - ${country.countryName}`} />
 
-      {/* Category filter component */}
-      <CareerApplicationTags
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
+      <div className="flex w-full items-center justify-between">
+        {/* Category filter component */}
+        <CareerApplicationTags
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+
+        <ApplicationTypeDropdown
+          type={type as ApplicationTypes}
+          setType={setType}
+          isLoading={isLoading}
+        />
+      </div>
 
       <CommonListingTable
         columns={columns}
         data={applicationList || []}
         loading={isLoading}
+        cellMaxWidth="max-w-auto"
       />
 
       <Pagination

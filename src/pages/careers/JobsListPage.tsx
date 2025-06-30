@@ -16,7 +16,7 @@ export default function JobsListPage() {
 
   const columns = [
     {
-      accessorKey: "_id",
+      accessorKey: "jobId",
       header: "Job Id",
       cell: (e: any) => (
         <Link

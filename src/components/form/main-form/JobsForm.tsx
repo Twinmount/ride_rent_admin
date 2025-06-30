@@ -33,7 +33,7 @@ type JobFormProps = {
   formData?: JobFormSchemaType | null;
 };
 
-const CAREER_JOB = "CAREER_JOB";
+const CAREER_JOBS = "CAREER_JOBS";
 
 export default function JobsForm({ type, formData }: JobFormProps) {
   const initialValues =
@@ -66,7 +66,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
           className: "bg-yellow text-white",
         });
         queryClient.invalidateQueries({
-          queryKey: [CAREER_JOB],
+          queryKey: [CAREER_JOBS],
         });
         navigate("/careers/jobs");
       }
@@ -85,7 +85,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
     mutationFn: () => deleteJobById(jobId as string),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [CAREER_JOB],
+        queryKey: [CAREER_JOBS],
       });
     },
   });

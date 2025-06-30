@@ -352,3 +352,5 @@ export type JobFormType = {
   fileUrl?: string | null;
   country: CountryList;
 };
+
+export type ApplicationTypes = "all" | "intern" | "career";

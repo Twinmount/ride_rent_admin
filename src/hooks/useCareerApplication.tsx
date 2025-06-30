@@ -15,7 +15,7 @@ export const useCareerApplication = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const { query, page, setPage } = useCareerApplicationQuery({
+  const { query, page, setPage, type, setType } = useCareerApplicationQuery({
     enabled,
     selectedCategory,
     limit: 10,
@@ -70,5 +70,7 @@ export const useCareerApplication = ({
     totalNumberOfPages,
     page,
     setPage,
+    type,
+    setType,
   };
 };

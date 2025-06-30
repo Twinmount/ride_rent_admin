@@ -24,6 +24,7 @@ interface GenericTableProps<TData> {
   loading: boolean;
   loadingText?: string;
   noDataText?: string;
+  cellMaxWidth?: string;
 }
 
 export function GenericTable<TData>({
@@ -32,6 +33,7 @@ export function GenericTable<TData>({
   loading,
   loadingText = "Loading ...",
   noDataText = "No data found.",
+  cellMaxWidth = "max-w-44",
 }: GenericTableProps<TData>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -84,7 +86,10 @@ export function GenericTable<TData>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="min-w-40 max-w-44">
+                    <TableCell
+                      key={cell.id}
+                      className={`min-w-40 ${cellMaxWidth}`}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

@@ -6,6 +6,7 @@ interface CommonListingTableProps {
   columns: ColumnDef<JobFormType>[];
   data: JobFormType[];
   loading: boolean;
+  cellMaxWidth?: string;
 }
 
 export function CommonListingTable(props: CommonListingTableProps) {
