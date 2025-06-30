@@ -57,6 +57,7 @@ export default function JobsListPage() {
         columns={columns}
         data={jobsResult || []}
         loading={isLoading}
+        cellMaxWidth="max-w-auto"
       />
 
       <Pagination
