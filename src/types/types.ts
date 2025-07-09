@@ -289,51 +289,6 @@ export type VehicleSeriesType = {
 
 // Job
 
-export type JobLocation =
-  | "Remote"
-  | "Onsite"
-  | "Hybrid"
-  | "Freelance"
-  | "Contract"
-  | "Internship"
-  | "Part-time"
-  | "Full-time"
-  | "Temporary"
-  | "Project-based"
-  | "";
-
-export type ExperienceLevel =
-  | "Intern / Trainee"
-  | "Entry-Level / Junior"
-  | "Associate / Mid-Level"
-  | "Senior-Level"
-  | "Lead / Principal"
-  | "Manager / Team Lead"
-  | "Director"
-  | "VP / Vice President"
-  | "C-Level (e.g., CTO, CFO, CEO)"
-  | "";
-
-export type YearExperience =
-  | "1-2 yrs"
-  | "2-3 yrs"
-  | "3-4 yrs"
-  | "4-5 yrs"
-  | "5-6 yrs"
-  | "6-7 yrs"
-  | "7-8 yrs"
-  | "8-9 yrs"
-  | "9-10 yrs"
-  | "10-11 yrs"
-  | "11-12 yrs"
-  | "12-13 yrs"
-  | "13-14 yrs"
-  | "14-15 yrs"
-  | "15-16 yrs"
-  | "";
-
-export type CountryList = "UAE" | "INDIA" | "";
-
 export type JobSectionDto = {
   title: string;
   points: string[];
@@ -343,14 +298,14 @@ export type JobFormType = {
   _id?: string;
   jobtitle: string;
   jobdescription: string;
-  location: JobLocation;
+  location: string;
   date: string;
-  level: ExperienceLevel;
-  experience: YearExperience;
+  level: string;
+  experience: string;
+  country: string;
   sections?: JobSectionDto[];
   aboutCompany?: string;
   fileUrl?: string | null;
-  country: CountryList;
 };
 
 export type ApplicationTypes = "all" | "intern" | "career";

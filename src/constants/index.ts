@@ -276,7 +276,8 @@ export const VehicleSeriesFormDefaultValues: VehicleSeriesType = {
   vehicleSeriesMetaDescription: "",
 };
 
-// Blog form default values
+// Job form default values
+
 export const JobFormDefaultValues: JobFormType = {
   jobtitle: "",
   jobdescription: "",

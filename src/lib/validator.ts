@@ -543,65 +543,89 @@ export const VehicleSeriesSchema = z.object({
 });
 
 // Job form schema
+
+export const locationOptions = [
+  "Remote",
+  "Onsite",
+  "Hybrid",
+  "Freelance",
+  "Contract",
+  "Internship",
+  "Part-time",
+  "Full-time",
+  "Temporary",
+  "Project-based",
+] as const;
+
+export const levelOptions = [
+  "Intern / Trainee",
+  "Entry-Level / Junior",
+  "Associate / Mid-Level",
+  "Senior-Level",
+  "Lead / Principal",
+  "Manager / Team Lead",
+  "Director",
+  "VP / Vice President",
+  "C-Level (e.g., CTO, CFO, CEO)",
+] as const;
+
+export const experienceOptions = [
+  "1-2 yrs",
+  "2-3 yrs",
+  "3-4 yrs",
+  "4-5 yrs",
+  "5-6 yrs",
+  "6-7 yrs",
+  "7-8 yrs",
+  "8-9 yrs",
+  "9-10 yrs",
+  "10-11 yrs",
+  "11-12 yrs",
+  "12-13 yrs",
+  "13-14 yrs",
+  "14-15 yrs",
+  "15-16 yrs",
+] as const;
+
+export const countryOptions = ["UAE", "INDIA"] as const;
+
 export const JobFormSchema = z.object({
   jobtitle: z
     .string()
     .min(3, "Job title should be at least 3 characters long")
     .max(120, "Job title should not exceed 120 characters"),
+
   jobdescription: z
     .string()
     .min(10, "Job description should be at least 10 characters long")
     .max(500, "Job description should not exceed 500 characters"),
+
   aboutCompany: z
     .string()
     .min(10, "About company should be at least 10 characters long")
     .max(500, "About company should not exceed 500 characters")
     .optional(),
-  date: z.string(),
-  location: z.enum([
-    "Remote",
-    "Onsite",
-    "Hybrid",
-    "Freelance",
-    "Contract",
-    "Internship",
-    "Part-time",
-    "Full-time",
-    "Temporary",
-    "Project-based",
-    "",
-  ]),
-  level: z.enum([
-    "Intern / Trainee",
-    "Entry-Level / Junior",
-    "Associate / Mid-Level",
-    "Senior-Level",
-    "Lead / Principal",
-    "Manager / Team Lead",
-    "Director",
-    "VP / Vice President",
-    "C-Level (e.g., CTO, CFO, CEO)",
-    "",
-  ]),
-  experience: z.enum([
-    "1-2 yrs",
-    "2-3 yrs",
-    "3-4 yrs",
-    "4-5 yrs",
-    "5-6 yrs",
-    "6-7 yrs",
-    "7-8 yrs",
-    "8-9 yrs",
-    "9-10 yrs",
-    "10-11 yrs",
-    "11-12 yrs",
-    "12-13 yrs",
-    "13-14 yrs",
-    "14-15 yrs",
-    "15-16 yrs",
-    "",
-  ]),
-  country: z.enum(["UAE", "INDIA", ""]),
+
+  date: z.string().min(1, "Date is required"),
+
+  location: z.string().refine((val) => locationOptions.includes(val as any), {
+    message: "Please select a valid job location.",
+  }),
+
+  level: z.string().refine((val) => levelOptions.includes(val as any), {
+    message: "Please select a valid job level.",
+  }),
+
+  experience: z
+    .string()
+    .refine((val) => experienceOptions.includes(val as any), {
+      message: "Please select a valid experience range.",
+    }),
+
+  country: z.string().refine((val) => countryOptions.includes(val as any), {
+    message: "Please select a valid country.",
+  }),
+
   sections: z
     .array(
       z.object({

@@ -46,7 +46,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
   const { jobId } = useParams<{ jobId: string }>();
 
   // 1. Define your form.
-  const form = useForm<JobFormSchemaType>({
+  const form = useForm<z.infer<typeof JobFormSchema>>({
     resolver: zodResolver(JobFormSchema),
     defaultValues: initialValues,
   });
