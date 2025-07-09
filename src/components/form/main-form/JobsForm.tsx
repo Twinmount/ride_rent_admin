@@ -25,6 +25,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import DeleteModal from "@/components/modal/DeleteModal";
 import JobFormDropdown from "../dropdowns/JobFormDropdown";
 import { addJob, deleteJobById, updateJob } from "@/api/careers";
+import { Plus, Trash2 } from "lucide-react";
 
 export type JobFormSchemaType = z.infer<typeof JobFormSchema>;
 
@@ -51,7 +52,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: JobFormSchemaType) {
+  async function onSubmit(values: z.infer<typeof JobFormSchema>) {
     try {
       let data;
       if (type === "Add") {
@@ -308,7 +309,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                   <JobFormDropdown
                     value={field.value}
                     onChangeHandler={field.onChange}
-                    placeholder="Location"
+                    placeholder="Choose Job Location"
                     type="location"
                   />
                 </FormControl>
@@ -362,7 +363,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                   <JobFormDropdown
                     value={field.value}
                     onChangeHandler={field.onChange}
-                    // placeholder="Location"
+                    placeholder="Choose Job Level"
                     type="level"
                   />
                 </FormControl>
@@ -388,7 +389,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                   <JobFormDropdown
                     value={field.value}
                     onChangeHandler={field.onChange}
-                    placeholder="Location"
+                    placeholder="Choose Job Experience"
                     type="experience"
                   />
                 </FormControl>
@@ -414,7 +415,7 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                   <JobFormDropdown
                     value={field.value}
                     onChangeHandler={field.onChange}
-                    placeholder="Country"
+                    placeholder="Choose Job Country"
                     type="country"
                   />
                 </FormControl>
@@ -430,6 +431,9 @@ export default function JobsForm({ type, formData }: JobFormProps) {
         {/* Sections */}
 
         <div>
+          <div className="mb-4 border-t-[1px] pb-3 pt-4">
+            <h3 className="text-xl font-semibold">Page Sections</h3>
+          </div>
           <div>
             {sectionFields?.map((section, sectionIndex) => {
               return (
@@ -443,10 +447,31 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                     name={`sections.${sectionIndex}.title`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Section Title</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter section title" {...field} />
-                        </FormControl>
+                        <div className="mb-4 flex items-center justify-between">
+                          <FormLabel className="ml-2 text-base lg:text-lg">
+                            Section Title
+                          </FormLabel>
+
+                          {/* Remove section */}
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={() => removeSection(sectionIndex)}
+                            className="flex h-auto items-center justify-between gap-1 text-sm font-medium"
+                          >
+                            <Trash2 size={18} /> Remove Section
+                          </Button>
+                        </div>
+
+                        <div className="w-full flex-col items-start">
+                          <FormControl>
+                            <Input
+                              placeholder="e.g., 'Job features'"
+                              {...field}
+                              className="input-field"
+                            />
+                          </FormControl>
+                        </div>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -458,16 +483,6 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                     sectionIndex={sectionIndex}
                     control={form.control}
                   />
-
-                  {/* Remove section */}
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    onClick={() => removeSection(sectionIndex)}
-                    className="text-sm"
-                  >
-                    Remove Section
-                  </Button>
                 </div>
               );
             })}
@@ -479,9 +494,9 @@ export default function JobsForm({ type, formData }: JobFormProps) {
                   points: [""],
                 })
               }
-              className="bg-yellow text-white"
+              className="flex items-center justify-between gap-1 bg-yellow text-white hover:bg-amber-400"
             >
-              + Add Section
+              <Plus size={18} /> Add Section
             </Button>
           </div>
         </div>
@@ -534,28 +549,48 @@ function PointsField({
 
   return (
     <div className="space-y-3">
-      <FormLabel className="text-sm text-gray-700">Points</FormLabel>
+      <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base lg:text-lg">
+        Section Points
+      </FormLabel>
       {pointFields.map((point, pointIndex) => (
         <div key={point.id} className="flex items-start gap-2">
           <FormField
             control={control}
             name={`sections.${sectionIndex}.points.${pointIndex}` as const}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Textarea placeholder="Enter point" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => {
+              const [isFocused, setIsFocused] = useState(false);
+              const handleFocus = () => setIsFocused(true);
+              const handleBlur = () => setIsFocused(false);
+
+              return (
+                <FormItem className="w-full">
+                  <div
+                    className="w-full flex-col items-start"
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                  >
+                    <FormControl>
+                      <Textarea
+                        placeholder="Add points"
+                        {...field}
+                        className={`textarea rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0 ${
+                          isFocused ? "h-96" : "h-20"
+                        }`}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
           />
           <Button
             type="button"
             variant="ghost"
             onClick={() => removePoint(pointIndex)}
-            className="mt-1 text-red-500"
+            className="mt-1 h-auto !bg-transparent p-2 text-red-500 hover:text-red-600"
           >
-            ✕
+            <Trash2 size={18} />
           </Button>
         </div>
       ))}
@@ -564,9 +599,9 @@ function PointsField({
           type="button"
           variant="outline"
           onClick={() => appendPoint("")}
-          className="text-sm"
+          className="flex items-center justify-between gap-1 text-sm font-medium"
         >
-          + Add Point
+          <Plus size={18} /> Add Point
         </Button>
       </div>
     </div>

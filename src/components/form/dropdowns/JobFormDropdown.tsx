@@ -71,6 +71,7 @@ export const countryList: JobDropdownType = [
 ];
 
 const JobFormDropdown = ({
+  placeholder = "Choose",
   value,
   onChangeHandler,
   isDisabled = false,
@@ -97,7 +98,7 @@ const JobFormDropdown = ({
       <SelectTrigger className="select-field input-fields ring-0 focus:ring-0">
         <SelectValue
           className="!font-bold !text-black"
-          placeholder="Choose Blog Category"
+          placeholder={placeholder}
         />
       </SelectTrigger>
       <SelectContent>
