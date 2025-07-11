@@ -1,5 +1,4 @@
 import { useState } from "react";
-import PageHeading from "@/components/general/PageHeading";
 import { useAdminContext } from "@/context/AdminContext";
 import CareerApplicationTags from "@/components/CareerApplicationTags";
 import { useCareerApplication } from "@/hooks/useCareerApplication";
@@ -9,6 +8,7 @@ import { ApplicationTypeDropdown } from "@/components/ApplicationTypeDropdown";
 import { ApplicationTypes, JobFormType } from "@/types/types";
 import { Link } from "react-router-dom";
 import { GenericTable } from "@/components/table/GenericTable";
+import PageWrapper from "@/components/common/PageWrapper";
 
 export default function CareerApplicationListPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("new");
@@ -224,9 +224,10 @@ export default function CareerApplicationListPage() {
   ];
 
   return (
-    <section className="container h-auto min-h-screen pb-10">
-      <PageHeading heading={`Application List - ${country.countryName}`} />
-
+    <PageWrapper
+      heading={`Application List - ${country.countryName}`}
+      shouldRenderNavigation={false}
+    >
       <div className="flex w-full items-center justify-between">
         {/* Category filter component */}
         <CareerApplicationTags
@@ -253,6 +254,6 @@ export default function CareerApplicationListPage() {
         setPage={setPage}
         totalPages={totalNumberOfPages || 1}
       />
-    </section>
+    </PageWrapper>
   );
 }

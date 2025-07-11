@@ -1,3 +1,5 @@
+import PageWrapper from "@/components/common/PageWrapper";
+
 export default function SRMActiveTripsPage() {
-  return <div>SRMActiveTripsPage</div>;
+  return <PageWrapper heading="Active Trips">hmm</PageWrapper>;
 }

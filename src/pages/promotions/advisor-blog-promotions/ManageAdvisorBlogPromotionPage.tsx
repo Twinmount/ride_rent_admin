@@ -9,6 +9,7 @@ import PageHeading from "@/components/general/PageHeading";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import BlogPromotionCard from "@/components/card/BlogPromotionCard";
 import { useAdminContext } from "@/context/AdminContext";
+import PageWrapper from "@/components/common/PageWrapper";
 
 export default function ManageRideBlogPromotionsPage() {
   const [page, setPage] = useState(1);
@@ -30,11 +31,10 @@ export default function ManageRideBlogPromotionsPage() {
   const promotions = data?.result?.list || [];
 
   return (
-    <section className="container h-auto min-h-screen pb-10">
-      <PageHeading
-        heading={`Manage Advisor Blog Promotions - ${country.countryName}`}
-      />
-
+    <PageWrapper
+      heading={`Manage Advisor Blog Promotions - ${country.countryName}`}
+      shouldRenderNavigation={false}
+    >
       {isLoading ? (
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <AdsSkelton />
@@ -75,6 +75,6 @@ export default function ManageRideBlogPromotionsPage() {
           setSelectedPromotion={setSelectedPromotion}
         />
       )}
-    </section>
+    </PageWrapper>
   );
 }

@@ -6,7 +6,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { BrandGrid } from "@/components/BrandGrid";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import useFetchBrands from "./BrandsPage.hooks";
-import PageHeading from "@/components/general/PageHeading";
+import PageWrapper from "@/components/common/PageWrapper";
 
 export default function BrandsPage() {
   const { vehicleCategoryId } = useParams<{ vehicleCategoryId: string }>();
@@ -34,9 +34,7 @@ export default function BrandsPage() {
   const brandList = brandData?.result?.list || [];
 
   return (
-    <section className="container h-auto min-h-screen py-6">
-      <PageHeading heading={`Manage Brands`} />
-
+    <PageWrapper heading="Manage Brands" shouldRenderNavigation={false}>
       <div className="flex items-center gap-3 pl-2 pr-10">
         {/* search component */}
         <SearchComponent placeholder="search brand" />
@@ -69,6 +67,6 @@ export default function BrandsPage() {
         href={`/manage-brands/${selectedCategory?.categoryId}/add-brand`}
         label="New Brand"
       />
-    </section>
+    </PageWrapper>
   );
 }

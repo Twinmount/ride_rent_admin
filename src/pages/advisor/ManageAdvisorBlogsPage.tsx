@@ -6,9 +6,9 @@ import { useState } from "react";
 
 import BlogCategoryTags from "@/components/BlogCategoryTags";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
-import PageHeading from "@/components/general/PageHeading";
 import { fetchAllAdvisorBlogs } from "@/api/advisor";
 import { useAdminContext } from "@/context/AdminContext";
+import PageWrapper from "@/components/common/PageWrapper";
 
 export default function ManageAdvisorBlogsPage() {
   const { country } = useAdminContext();
@@ -35,9 +35,10 @@ export default function ManageAdvisorBlogsPage() {
   const blogsResult = data?.result.list || [];
 
   return (
-    <section className="container h-auto min-h-screen pb-10">
-      <PageHeading heading={`Manage Advisor Blogs - ${country.countryName}`} />
-
+    <PageWrapper
+      heading={`Manage Advisor Blogs - ${country.countryName}`}
+      shouldRenderNavigation={false}
+    >
       {/* Category filter component */}
       <BlogCategoryTags
         selectedCategory={selectedCategory}
@@ -70,6 +71,6 @@ export default function ManageAdvisorBlogsPage() {
         href={`/advisor/blogs/add`}
         label="New Advisor Blog"
       />
-    </section>
+    </PageWrapper>
   );
 }

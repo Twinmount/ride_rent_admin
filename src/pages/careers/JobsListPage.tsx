@@ -7,6 +7,7 @@ import Pagination from "@/components/Pagination";
 import { Link } from "react-router-dom";
 import { GenericTable } from "@/components/table/GenericTable";
 import { JobFormType } from "@/types/types";
+import PageWrapper from "@/components/common/PageWrapper";
 
 export default function JobsListPage() {
   const { country } = useAdminContext();
@@ -52,9 +53,10 @@ export default function JobsListPage() {
   ];
 
   return (
-    <section className="container h-auto min-h-screen pb-10">
-      <PageHeading heading={`Jobs List - ${country.countryName}`} />
-
+    <PageWrapper
+      heading={`Jobs List - ${country.countryName}`}
+      shouldRenderNavigation={false}
+    >
       <GenericTable<JobFormType>
         columns={columns}
         data={jobsResult || []}
@@ -69,6 +71,6 @@ export default function JobsListPage() {
 
       {/* New Job Link Button */}
       <FloatingActionButton href={`/careers/jobs/add`} label="New Job" />
-    </section>
+    </PageWrapper>
   );
 }
