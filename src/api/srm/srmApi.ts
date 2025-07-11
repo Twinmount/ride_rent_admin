@@ -4,11 +4,15 @@ import {
   FetchAllSRMAgentsResponse,
   FetchAllSRMCompletedTripsResponse,
   FetchAllSRMCustomersResponse,
+  FetchAllSRMVehiclesResponse,
   GetSRMCustomerDetailsResponse,
 } from "@/types/api-types/srm-api.types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
-import { SRMCustomerDetailsFormType } from "@/types/formTypes";
+import {
+  SRMCustomerDetailsFormType,
+  SRMVehicleFormType,
+} from "@/types/formTypes";
 
 export const fetchAllSRMActiveTrips = async (urlParams: {
   page: number;
@@ -247,6 +251,69 @@ export const getSRMCustomerFormDetails = async (
     return data;
   } catch (error) {
     console.error("Error on GET customer details", error);
+    throw error;
+  }
+};
+
+export const getAllSRMVehicles = async (urlParams: {
+  page: number;
+  limit: number;
+  sortOrder: string;
+  search?: string;
+}): Promise<FetchAllSRMVehiclesResponse> => {
+  try {
+    // generating query params
+    const queryParams = new URLSearchParams({
+      page: urlParams.page.toString(),
+      limit: urlParams.limit.toString(),
+      sortOrder: urlParams.sortOrder,
+    });
+
+    if (urlParams.search) {
+      queryParams.append("search", urlParams.search);
+    }
+
+    const slugWithParams = `${Slug.GET_SRM_VEHICLES}?${queryParams}`;
+
+    const data = await API.get<FetchAllSRMVehiclesResponse>({
+      slug: slugWithParams,
+    });
+
+    if (!data) {
+      throw new Error("Failed to fetch srm vehicles data");
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching srm vehicles:", error);
+    throw error;
+  }
+};
+
+export const updateSRMVehicle = async (
+  vehicleId: string,
+  values: SRMVehicleFormType,
+): Promise<undefined> => {
+  try {
+    // Prepare the request body as a regular object (no FormData)
+    // Build the common request body using the helper
+    const requestBody = {
+      vehicleId,
+      ...values,
+    };
+
+    // Send the request as a JSON object
+    const data = await API.put<undefined>({
+      slug: Slug.PUT_SRM_VEHICLE,
+      body: requestBody,
+    });
+
+    if (!data) {
+      throw new Error("Failed to update srm vehicle rental details");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error updating srm vehicle rental details", error);
     throw error;
   }
 };

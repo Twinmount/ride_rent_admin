@@ -1,4 +1,4 @@
-import { fetchAllSRMCustomers } from "@/api/srm";
+// import { fetchAllSRMCustomers } from "@/api/srm";
 import ListingPageLayout from "@/components/common/ListingPageLayout";
 import LinkButton from "@/components/general/LinkButton";
 import { LimitDropdown } from "@/components/LimitDropdown";
@@ -10,7 +10,7 @@ import { SRMCustomersColumn } from "@/components/table/columns/SRMCustomersColum
 import { GenericTable } from "@/components/table/GenericTable";
 import { useListingPageState } from "@/hooks/useListingPageState";
 import { SRMCustomerType } from "@/types/api-types/srm-api.types";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 
 export default function SRMCustomerPage() {
   const {
@@ -20,7 +20,7 @@ export default function SRMCustomerPage() {
     setLimit,
     sortOrder,
     setSortOrder,
-    searchTerm,
+    // searchTerm,
   } = useListingPageState();
 
   // const { data, isLoading } = useQuery({

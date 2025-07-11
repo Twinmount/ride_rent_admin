@@ -1,3 +1,5 @@
+import { RentalDetailsFormFieldType } from "../formTypes";
+
 export interface SRMActiveTripType {
   tripId: string;
   agentName: string;
@@ -114,6 +116,28 @@ export interface AddSRMCustomerFormResponse {
 
 export interface GetSRMCustomerDetailsResponse {
   result: CustomerApiType;
+  status: string;
+  statusCode: number;
+}
+
+export interface SRMVehicleType {
+  vehicleId: string;
+  agentName: string;
+  brandName: string;
+  vehicleCategory: string;
+  vehiclePhoto: string;
+  vehicleRegistrationNumber: string;
+  rentalDetails: RentalDetailsFormFieldType;
+}
+
+export interface FetchAllSRMVehiclesResponse {
+  result: {
+    list: SRMVehicleType[];
+    page: number;
+    limit: number;
+    total: number;
+    totalNumberOfPages: number;
+  };
   status: string;
   statusCode: number;
 }

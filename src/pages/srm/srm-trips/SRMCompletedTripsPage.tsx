@@ -7,8 +7,8 @@ import { SRMCompletedTripsColumn } from "@/components/table/columns/SRMCompleted
 import { GenericTable } from "@/components/table/GenericTable";
 import { useListingPageState } from "@/hooks/useListingPageState";
 import { SRMCompletedTripType } from "@/types/api-types/srm-api.types";
-import { fetchAllSRMActiveTrips, fetchAllSRMCompletedTrips } from "@/api/srm";
-import { useQuery } from "@tanstack/react-query";
+// import {  fetchAllSRMCompletedTrips } from "@/api/srm";
+// import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import CompletedTripReceiptDownloadDialog from "@/components/dialog/CompletedTripReceiptDownloadDialog";
 
@@ -24,7 +24,7 @@ export default function SRMCompletedTripsPage() {
     setLimit,
     sortOrder,
     setSortOrder,
-    searchTerm,
+    // searchTerm,
   } = useListingPageState();
 
   // const { data, isLoading } = useQuery({

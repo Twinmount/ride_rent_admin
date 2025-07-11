@@ -12,6 +12,9 @@ const SRMAgentsPage = lazy(
 const SRMVehiclesPage = lazy(
   () => import("../../pages/srm/srm-vehicles/SRMVehiclesPage"),
 );
+const SRMVehicleEditPage = lazy(
+  () => import("../../pages/srm/srm-vehicles/SRMVehicleEditPage"),
+);
 const SRMCustomerPage = lazy(
   () => import("../../pages/srm/srm-customer/SRMCustomerPage"),
 );
@@ -38,6 +41,10 @@ export const srmRoutes = [
   {
     path: "/srm/vehicles",
     element: <SRMVehiclesPage />,
+  },
+  {
+    path: "/srm/vehicles/edit/:vehicleId",
+    element: <SRMVehicleEditPage />,
   },
   {
     path: "/srm/customers",

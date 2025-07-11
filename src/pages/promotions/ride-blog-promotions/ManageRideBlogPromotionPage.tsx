@@ -7,7 +7,6 @@ import { fetchAllBlogPromotions } from "@/api/blogs";
 import Pagination from "@/components/Pagination";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import BlogPromotionCard from "@/components/card/BlogPromotionCard";
-import PageHeading from "@/components/general/PageHeading";
 import RideBlogPlacementTags from "@/components/RideBlogPlacementTags";
 import { useAdminContext } from "@/context/AdminContext";
 import PageLayout from "@/components/common/PageLayout";

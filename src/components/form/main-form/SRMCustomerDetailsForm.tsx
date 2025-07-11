@@ -21,7 +21,7 @@ import { FormSubmitButton } from "../form-ui/FormSubmitButton";
 import { FormContainer } from "../form-ui/FormContainer";
 import MultipleFileUpload from "../file-uploads/MultipleFileUpload";
 import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import SRMNationalityDropdown from "../dropdowns/SRMNationalityDropdown";
 import { FormItemWrapper } from "../form-ui/FormItemWrapper";
 import { SRMCustomerDetailsFormType } from "@/types/formTypes";
@@ -42,7 +42,7 @@ export default function SRMCustomerDetailsForm({
 
   const queryClient = useQueryClient();
 
-  const { customerId } = useParams<{ customerId: string }>();
+  // const { customerId } = useParams<{ customerId: string }>();
 
   //  initial default values for the form
   const initialValues = formData

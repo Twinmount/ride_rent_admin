@@ -1,4 +1,4 @@
-import { fetchAllSRMAgents } from "@/api/srm";
+// import { fetchAllSRMAgents } from "@/api/srm";
 import ListingPageLayout from "@/components/common/ListingPageLayout";
 import { LimitDropdown } from "@/components/LimitDropdown";
 import Pagination from "@/components/Pagination";
@@ -8,7 +8,7 @@ import { SRMAgentsColumn } from "@/components/table/columns/SRMAgentsColumn";
 import { GenericTable } from "@/components/table/GenericTable";
 import { useListingPageState } from "@/hooks/useListingPageState";
 import { SRMAgentType } from "@/types/api-types/srm-api.types";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 
 export default function SRMAgentsPage() {
   const {
@@ -18,7 +18,7 @@ export default function SRMAgentsPage() {
     setLimit,
     sortOrder,
     setSortOrder,
-    searchTerm,
+    // searchTerm,
   } = useListingPageState();
 
   // const { data, isLoading } = useQuery({

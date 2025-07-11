@@ -1,4 +1,8 @@
-import { PrimaryFormType, SRMCustomerDetailsFormType } from "@/types/formTypes";
+import {
+  PrimaryFormType,
+  SRMCustomerDetailsFormType,
+  SRMVehicleFormType,
+} from "@/types/formTypes";
 import {
   AdvisorBlogFormType,
   BlogFormType,
@@ -181,6 +185,35 @@ export const getPrimaryFormDefaultValues = (
   isVehicleModified: false,
 });
 
+export const getSRMVehicleFormDefaultValue = (): SRMVehicleFormType => ({
+  rentalDetails: {
+    day: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    week: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    month: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    hour: {
+      enabled: false,
+      minBookingHours: "",
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+  },
+});
 // login page default value
 export const LoginPageDefaultValues = {
   phoneNumber: "",

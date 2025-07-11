@@ -199,5 +199,7 @@ export enum Slug {
   GET_SRM_CUSTOMER = "/srm/customer",
   POST_SRM_CUSTOMER = "/srm/customer",
   PUT_SRM_CUSTOMER = "/srm/customer",
+
+  GET_SRM_VEHICLES = "/srm/vehicles",
   PUT_SRM_VEHICLE = "/srm/vehicle",
 }

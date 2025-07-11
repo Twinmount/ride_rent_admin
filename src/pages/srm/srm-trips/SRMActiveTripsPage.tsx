@@ -1,4 +1,4 @@
-import { fetchAllSRMActiveTrips } from "@/api/srm";
+// import { fetchAllSRMActiveTrips } from "@/api/srm";
 import ListingPageLayout from "@/components/common/ListingPageLayout";
 import { LimitDropdown } from "@/components/LimitDropdown";
 import Pagination from "@/components/Pagination";
@@ -8,7 +8,7 @@ import { SRMActiveTripsColumn } from "@/components/table/columns/SRMActiveTripsC
 import { GenericTable } from "@/components/table/GenericTable";
 import { useListingPageState } from "@/hooks/useListingPageState";
 import { SRMActiveTripType } from "@/types/api-types/srm-api.types";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 
 export default function SRMActiveTripsPage() {
   const {
@@ -18,7 +18,7 @@ export default function SRMActiveTripsPage() {
     setLimit,
     sortOrder,
     setSortOrder,
-    searchTerm,
+    // searchTerm,
   } = useListingPageState();
 
   // const { data, isLoading } = useQuery({

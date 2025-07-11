@@ -17,7 +17,7 @@ export const SRMAgentsColumn: ColumnDef<SRMAgentType>[] = [
   {
     accessorKey: "expiryDate",
     header: "Expiry Date",
-    cell: ({ row }) => {
+    cell: ({}) => {
       // const expiryDate = new Date(row.original.expiryDate).toLocaleDateString();
       const expiryDate = "N/A";
       return <span className="whitespace-nowrap">{expiryDate}</span>;
@@ -26,7 +26,7 @@ export const SRMAgentsColumn: ColumnDef<SRMAgentType>[] = [
   {
     accessorKey: "planDetails",
     header: "Plan Details",
-    cell: ({ row }) => {
+    cell: ({}) => {
       const planDetails = "N/A";
       return <span className="whitespace-nowrap">{planDetails}</span>;
     },
