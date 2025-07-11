@@ -5,10 +5,10 @@ import CareerApplicationTags from "@/components/CareerApplicationTags";
 import { useCareerApplication } from "@/hooks/useCareerApplication";
 import Pagination from "@/components/Pagination";
 import ApplicationDeleteModal from "@/components/modal/ApplicationDeleteModal";
-import { CommonListingTable } from "@/components/table/CommonListingTable";
 import { ApplicationTypeDropdown } from "@/components/ApplicationTypeDropdown";
-import { ApplicationTypes } from "@/types/types";
+import { ApplicationTypes, JobFormType } from "@/types/types";
 import { Link } from "react-router-dom";
+import { GenericTable } from "@/components/table/GenericTable";
 
 export default function CareerApplicationListPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("new");
@@ -241,11 +241,11 @@ export default function CareerApplicationListPage() {
         />
       </div>
 
-      <CommonListingTable
+      <GenericTable<JobFormType>
         columns={columns}
         data={applicationList || []}
         loading={isLoading}
-        cellMaxWidth="max-w-auto"
+        loadingText="Fetching Applications..."
       />
 
       <Pagination

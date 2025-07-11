@@ -3,8 +3,10 @@ import FloatingActionButton from "@/components/general/FloatingActionButton";
 import { useAdminContext } from "@/context/AdminContext";
 import { useJobList } from "@/hooks/useJobList";
 import Pagination from "@/components/Pagination";
-import { CommonListingTable } from "@/components/table/CommonListingTable";
+
 import { Link } from "react-router-dom";
+import { GenericTable } from "@/components/table/GenericTable";
+import { JobFormType } from "@/types/types";
 
 export default function JobsListPage() {
   const { country } = useAdminContext();
@@ -53,13 +55,12 @@ export default function JobsListPage() {
     <section className="container h-auto min-h-screen pb-10">
       <PageHeading heading={`Jobs List - ${country.countryName}`} />
 
-      <CommonListingTable
+      <GenericTable<JobFormType>
         columns={columns}
         data={jobsResult || []}
         loading={isLoading}
-        cellMaxWidth="max-w-auto"
+        loadingText="Fetching Jobs..."
       />
-
       <Pagination
         page={page}
         setPage={setPage}

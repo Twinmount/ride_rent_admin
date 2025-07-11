@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { companyColumns } from "../../components/table/columns/GeneralCompanyColumn";
-import { CompanyTable } from "@/components/table/CompanyTable";
 import { getAllCompany, updateCompanyStatus } from "@/api/company";
 import { SortDropdown } from "@/components/SortDropdown";
 import { LimitDropdown } from "@/components/LimitDropdown";
@@ -13,6 +12,7 @@ import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
 import CompanyPageHeading from "../../components/CompanyPageHeading";
 import { useAdminContext } from "@/context/AdminContext";
+import { GenericTable } from "@/components/table/GenericTable";
 
 interface CompanyListingPageProps {
   queryKey: string[];
@@ -140,10 +140,11 @@ export default function CompanyListingPage({
         </p>
       </div>
 
-      <CompanyTable
+      <GenericTable<CompanyType>
         columns={companyColumns(handleOpenModal)}
         data={data?.result?.list || []}
         loading={isLoading}
+        loadingText="Fetching Companies..."
       />
 
       <Pagination

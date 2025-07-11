@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiveListingColumns } from "@/components/table/columns/LiveListingColumn";
 import { fetchAllVehicles, enableOrDisableVehicle } from "@/api/listings";
-import { AllListingTable } from "@/components/table/LiveListingTable";
 import { toast } from "@/components/ui/use-toast";
 import Pagination from "@/components/Pagination";
 import { LimitDropdown } from "@/components/LimitDropdown";
@@ -11,6 +10,8 @@ import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
 import ListingPageHeading from "../../components/ListingPageHeading";
+import { GenericTable } from "@/components/table/GenericTable";
+import { LiveListingVehicleType } from "@/types/api-types/vehicleAPI-types";
 
 export default function AllListingPage() {
   const [page, setPage] = useState(1);
@@ -119,10 +120,11 @@ export default function AllListingPage() {
         </p>
       </div>
 
-      <AllListingTable
+      <GenericTable<LiveListingVehicleType>
         columns={LiveListingColumns(handleToggle, isPending)}
         data={data?.result?.list || []}
         loading={isLoading}
+        loadingText="Fetching Listings..."
       />
 
       {data?.result && data?.result.totalNumberOfPages > 0 && (

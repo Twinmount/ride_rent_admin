@@ -7,7 +7,6 @@ import {
   fetchNewOrModifiedVehicles,
   updateVehicleStatus,
 } from "@/api/listings";
-import { GeneralListingTable } from "@/components/table/GeneralListingTable";
 import { VehicleStatusType } from "@/types/formTypes";
 import { GeneralListingColumns } from "@/components/table/columns/GeneralListingsColumn";
 import { GeneralListingVehicleType } from "@/types/api-types/vehicleAPI-types";
@@ -17,6 +16,7 @@ import SearchComponent from "@/components/Search";
 import { useSearchParams } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
 import ListingPageHeading from "../../components/ListingPageHeading";
+import { GenericTable } from "@/components/table/GenericTable";
 
 interface GeneralListingPageProps {
   queryKey: any[];
@@ -160,7 +160,7 @@ export default function GeneralListingPage({
         </p>
       </div>
 
-      <GeneralListingTable
+      <GenericTable<GeneralListingVehicleType>
         columns={GeneralListingColumns(handleOpenModal)}
         data={data?.result?.list || []}
         loading={isLoading}
