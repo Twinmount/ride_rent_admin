@@ -10,6 +10,7 @@ import {
   FileSearch,
   Group,
   GraduationCap,
+  Box,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -78,6 +79,35 @@ export const sidebarContent: SidebarItem[] = [
         link: "/company/registrations/rejected",
       },
       { label: "Promotions", link: "/company/promotions" },
+    ],
+  },
+  // srm
+  {
+    type: "accordion",
+    label: "SRM",
+    baseLink: "/srm",
+    icon: Box,
+    items: [
+      {
+        label: "Active Trips",
+        link: "/srm/active-trips",
+      },
+      {
+        label: "Completed Trips",
+        link: "/srm/completed-trips",
+      },
+      {
+        label: "Agents",
+        link: "/srm/agents",
+      },
+      {
+        label: "Vehicles",
+        link: "/srm/vehicles",
+      },
+      {
+        label: "Customers",
+        link: "/srm/customers",
+      },
     ],
   },
   // Categories and types routes

@@ -78,9 +78,10 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
     if (name === "vehiclePhotos") return 8;
     if (name === "commercialLicenses") return 2;
     if (name === "vehicleVideos") return 1;
+    if (name === "passport") return 2;
+    if (name === "drivingLicense") return 2;
     return 0;
   };
-
   const maxCount = getMaxCount();
 
   useEffect(() => {
@@ -197,7 +198,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   return (
     <>
       <FormItem className="mb-2 flex w-full max-sm:flex-col">
-        <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
+        <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base font-semibold lg:text-lg">
           {label} <span className="mr-5 max-sm:hidden">:</span>
         </FormLabel>
         <div className="w-full flex-col items-start">

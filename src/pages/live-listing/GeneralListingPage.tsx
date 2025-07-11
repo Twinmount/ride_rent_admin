@@ -7,16 +7,17 @@ import {
   fetchNewOrModifiedVehicles,
   updateVehicleStatus,
 } from "@/api/listings";
-import { GeneralListingTable } from "@/components/table/GeneralListingTable";
 import { VehicleStatusType } from "@/types/formTypes";
 import { GeneralListingColumns } from "@/components/table/columns/GeneralListingsColumn";
 import { GeneralListingVehicleType } from "@/types/api-types/vehicleAPI-types";
 import VehicleStatusModal from "@/components/VehicleStatusModal";
 import { toast } from "@/components/ui/use-toast";
-import SearchComponent from "@/components/Search";
+import SearchBox from "@/components/SearchBox";
 import { useSearchParams } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
 import ListingPageHeading from "../../components/ListingPageHeading";
+import { GenericTable } from "@/components/table/GenericTable";
+import ListingPageLayout from "@/components/common/ListingPageLayout";
 
 interface GeneralListingPageProps {
   queryKey: any[];
@@ -129,50 +130,44 @@ export default function GeneralListingPage({
     }
   };
 
+  const totalNumberOfPages = data?.result?.totalNumberOfPages || 0;
+
   return (
-    <section className="container mx-auto min-h-screen py-5 md:py-7">
-      <div className="flex-between my-2 mb-6 max-sm:flex-col">
-        {/* Heading */}
-        <ListingPageHeading />
-        <div className="flex-between w-fit gap-x-2 max-sm:mt-3">
-          <SortDropdown
-            sortOrder={sortOrder}
-            setSortOrder={setSortOrder}
-            isLoading={isLoading}
-          />
-          <LimitDropdown
-            limit={limit}
-            setLimit={setLimit}
-            isLoading={isLoading}
-          />
-        </div>
-      </div>
-
-      {/* search component */}
-      <div className="mb-8">
-        <SearchComponent placeholder="Search vehicle" />
-        <p className="ml-2 text-left text-sm italic text-gray-500">
-          <span className="font-semibold text-gray-600">
-            vehicle model,vehicle registration number, vehicle code, registered
-            year or phone number
-          </span>{" "}
-          can be used to search the vehicle
-        </p>
-      </div>
-
-      <GeneralListingTable
+    <ListingPageLayout
+      heading={<ListingPageHeading />}
+      sortDropdown={
+        <SortDropdown
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+          isLoading={isLoading}
+        />
+      }
+      limitDropdown={
+        <LimitDropdown
+          limit={limit}
+          setLimit={setLimit}
+          isLoading={isLoading}
+        />
+      }
+      search={
+        <SearchBox
+          placeholder="Search vehicle"
+          searchDescription="vehicle model, registration number, vehicle code, year, or phone number can be used to search"
+        />
+      }
+    >
+      <GenericTable<GeneralListingVehicleType>
         columns={GeneralListingColumns(handleOpenModal)}
         data={data?.result?.list || []}
         loading={isLoading}
+        loadingText="Fetching General Listings..."
       />
 
-      {data?.result && data?.result.totalNumberOfPages > 0 && (
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={data?.result.totalNumberOfPages as number}
-        />
-      )}
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalNumberOfPages}
+      />
 
       {selectedVehicle && (
         <VehicleStatusModal
@@ -184,6 +179,6 @@ export default function GeneralListingPage({
           onSubmit={handleSubmitModal}
         />
       )}
-    </section>
+    </ListingPageLayout>
   );
 }

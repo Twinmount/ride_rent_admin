@@ -70,9 +70,9 @@ export type RentalDetailsType = {
     enabled: boolean;
     rentInAED: string;
     mileageLimit: string;
-    minBookingHours: string;
   };
   hour: {
+    minBookingHours: string;
     enabled: boolean;
     rentInAED: string;
     mileageLimit: string;

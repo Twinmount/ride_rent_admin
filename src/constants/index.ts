@@ -1,4 +1,8 @@
-import { PrimaryFormType } from "@/types/formTypes";
+import {
+  PrimaryFormType,
+  SRMCustomerDetailsFormType,
+  SRMVehicleFormType,
+} from "@/types/formTypes";
 import {
   AdvisorBlogFormType,
   BlogFormType,
@@ -181,6 +185,35 @@ export const getPrimaryFormDefaultValues = (
   isVehicleModified: false,
 });
 
+export const getSRMVehicleFormDefaultValue = (): SRMVehicleFormType => ({
+  rentalDetails: {
+    day: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    week: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    month: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    hour: {
+      enabled: false,
+      minBookingHours: "",
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+  },
+});
 // login page default value
 export const LoginPageDefaultValues = {
   phoneNumber: "",
@@ -292,4 +325,16 @@ export const JobFormDefaultValues: JobFormType = {
       points: ["Section point 1"],
     },
   ],
+};
+
+export const SRMCustomerDetailsFormDefaultValues: SRMCustomerDetailsFormType = {
+  customerProfilePic: "",
+  customerName: "", // Name of the Customer
+  email: "",
+  nationality: "", // Nationality of the user
+  passportNumber: "", // Passport number
+  passport: [], // Passport image
+  drivingLicenseNumber: "", // Driving license number
+  drivingLicense: [], // Driving license image
+  phoneNumber: "", // Phone number with validation on minimum characters
 };

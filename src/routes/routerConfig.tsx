@@ -16,6 +16,7 @@ import ProtectedRoute from "../layout/ProtectedRoutes";
 import { rideBlogRoutes } from "./route-groups/rideBlogRoutes";
 import { advisorRoutes } from "./route-groups/advisorRoutes";
 import { careersRoutes } from "./route-groups/careersRoutes";
+import { srmRoutes } from "./route-groups/srmRoutes";
 
 // lazy loaded pages
 const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"));
@@ -457,7 +458,6 @@ export const router = createBrowserRouter([
               },
 
               // Career Routes
-
               ...careersRoutes,
 
               // ride blog routes
@@ -465,6 +465,9 @@ export const router = createBrowserRouter([
 
               // advisor routes
               ...advisorRoutes,
+
+              // srm routes
+              ...srmRoutes,
             ],
           },
         ],

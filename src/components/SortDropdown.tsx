@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuRadioGroup,
@@ -7,15 +7,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { ChevronDown } from 'lucide-react'
+} from "@/components/ui/dropdown-menu";
+import { ArrowDownWideNarrow, ChevronDown } from "lucide-react";
 
-type SortOrder = 'ASC' | 'DESC'
+type SortOrder = "ASC" | "DESC";
 
 interface SortDropdownProps {
-  sortOrder: SortOrder
-  setSortOrder: (value: SortOrder) => void
-  isLoading: boolean
+  sortOrder: SortOrder;
+  setSortOrder: (value: SortOrder) => void;
+  isLoading: boolean;
 }
 
 export function SortDropdown({
@@ -26,8 +26,9 @@ export function SortDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild disabled={isLoading}>
-        <Button variant="outline" className="shadow-lg">
-          Sort by: {sortOrder === 'ASC' ? 'Ascending' : 'Descending'}{' '}
+        <Button variant="outline" className="flex-center gap-x-2 shadow-lg">
+          <ArrowDownWideNarrow size={18} />{" "}
+          {sortOrder === "ASC" ? "Asc" : "Desc"}{" "}
           <ChevronDown size={17} className="my-auto ml-2" />
         </Button>
       </DropdownMenuTrigger>
@@ -43,5 +44,5 @@ export function SortDropdown({
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

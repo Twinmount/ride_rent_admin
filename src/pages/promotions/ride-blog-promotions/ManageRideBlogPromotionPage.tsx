@@ -7,9 +7,9 @@ import { fetchAllBlogPromotions } from "@/api/blogs";
 import Pagination from "@/components/Pagination";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import BlogPromotionCard from "@/components/card/BlogPromotionCard";
-import PageHeading from "@/components/general/PageHeading";
 import RideBlogPlacementTags from "@/components/RideBlogPlacementTags";
 import { useAdminContext } from "@/context/AdminContext";
+import PageLayout from "@/components/common/PageLayout";
 
 export default function ManageRideBlogPromotionsPage() {
   const [page, setPage] = useState(1);
@@ -44,11 +44,9 @@ export default function ManageRideBlogPromotionsPage() {
   const promotions = data?.result?.list || [];
 
   return (
-    <section className="container h-auto min-h-screen pb-10">
-      <PageHeading
-        heading={`Manage Ride Blog Promotions - ${country.countryName}`}
-      />
-
+    <PageLayout
+      heading={`Manage Ride Blog Promotions - ${country.countryName}`}
+    >
       <RideBlogPlacementTags
         selectedPlacementFilter={selectedPlacementFilter}
         setSelectedPlacementFilter={setSelectedPlacementFilter}
@@ -94,6 +92,6 @@ export default function ManageRideBlogPromotionsPage() {
         href="/ride-blogs/promotions/add"
         label="New Blog Promotion"
       />
-    </section>
+    </PageLayout>
   );
 }

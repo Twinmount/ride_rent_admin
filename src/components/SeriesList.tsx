@@ -1,10 +1,10 @@
-import { BrandType } from "@/types/api-types/API-types";
+import { BrandType, SeriesListType } from "@/types/api-types/API-types";
 import { useFetchSeries } from "@/pages/manage-series/SeriesPage.hooks";
-import { SeriesListingTable } from "./table/SeriesListingTable";
 import { SeriesListingColumns } from "./table/columns/SeriesListingsColumn";
 import Pagination from "./Pagination";
 import { useState } from "react";
 import { useGetSearchParams } from "@/hooks/useGetSearchParams";
+import { GenericTable } from "./table/GenericTable";
 
 type SeriesListProps = {
   stateId: string;
@@ -25,10 +25,11 @@ export const SeriesList: React.FC<SeriesListProps> = ({ stateId, brand }) => {
 
   return (
     <section className="mt-6">
-      <SeriesListingTable
+      <GenericTable<SeriesListType>
         data={seriesList || []}
         columns={SeriesListingColumns}
         loading={isLoading}
+        loadingText="Fetching Series..."
       />
 
       {/* pagination */}
