@@ -89,12 +89,16 @@ export const sidebarContent: SidebarItem[] = [
     icon: Box,
     items: [
       {
-        label: "Trips",
+        label: "Active Trips",
         link: "/srm/active-trips",
       },
       {
-        label: "Sellers",
-        link: "/srm/sellers",
+        label: "Completed Trips",
+        link: "/srm/completed-trips",
+      },
+      {
+        label: "Agents",
+        link: "/srm/agents",
       },
       {
         label: "Vehicles",

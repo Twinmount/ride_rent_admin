@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiveListingColumns } from "@/components/table/columns/LiveListingColumn";
 import { fetchAllVehicles, enableOrDisableVehicle } from "@/api/listings";
@@ -6,20 +5,26 @@ import { toast } from "@/components/ui/use-toast";
 import Pagination from "@/components/Pagination";
 import { LimitDropdown } from "@/components/LimitDropdown";
 import { SortDropdown } from "@/components/SortDropdown";
-import SearchComponent from "@/components/Search";
-import { useSearchParams } from "react-router-dom";
+import SearchBox from "@/components/SearchBox";
 import { useAdminContext } from "@/context/AdminContext";
 import ListingPageHeading from "../../components/ListingPageHeading";
 import { GenericTable } from "@/components/table/GenericTable";
 import { LiveListingVehicleType } from "@/types/api-types/vehicleAPI-types";
+import ListingPageLayout from "@/components/common/ListingPageLayout";
+import { useListingPageState } from "@/hooks/useListingPageState";
 
 export default function AllListingPage() {
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10);
-  const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
+  const {
+    page,
+    setPage,
+    limit,
+    setLimit,
+    sortOrder,
+    setSortOrder,
+    searchTerm,
+  } = useListingPageState();
+
   const queryClient = useQueryClient();
-  const [searchParams] = useSearchParams();
-  const searchTerm = searchParams.get("search") || "";
 
   const { state } = useAdminContext();
 
@@ -89,37 +94,33 @@ export default function AllListingPage() {
     await toggleVehicleStatus({ vehicleId, isDisabled });
   };
 
+  const totalPages = data?.result?.totalNumberOfPages || 0;
+
   return (
-    <section className="container mx-auto min-h-screen py-5 md:py-7">
-      <div className="flex-between my-2 mb-6 max-md:flex-col">
-        {/* heading */}
-        <ListingPageHeading />
-        <div className="flex-between w-fit gap-x-2 max-sm:mt-3">
-          <SortDropdown
-            sortOrder={sortOrder}
-            setSortOrder={setSortOrder}
-            isLoading={isLoading}
-          />
-          <LimitDropdown
-            limit={limit}
-            setLimit={setLimit}
-            isLoading={isLoading}
-          />
-        </div>
-      </div>
-
-      {/* search component */}
-      <div className="mb-8">
-        <SearchComponent placeholder="Search vehicle" />
-        <p className="ml-2 text-left text-sm italic text-gray-500">
-          <span className="font-semibold text-gray-600">
-            vehicle model,vehicle registration number, vehicle code, registered
-            year or phone number
-          </span>{" "}
-          can be used to search the vehicle
-        </p>
-      </div>
-
+    <ListingPageLayout
+      heading={<ListingPageHeading />}
+      sortDropdown={
+        <SortDropdown
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+          isLoading={isLoading}
+        />
+      }
+      limitDropdown={
+        <LimitDropdown
+          limit={limit}
+          setLimit={setLimit}
+          isLoading={isLoading}
+        />
+      }
+      search={
+        <SearchBox
+          placeholder="Search vehicle"
+          searchDescription="vehicle model,vehicle registration number, vehicle code, registered year
+          or phone number can be used to search the vehicle"
+        />
+      }
+    >
       <GenericTable<LiveListingVehicleType>
         columns={LiveListingColumns(handleToggle, isPending)}
         data={data?.result?.list || []}
@@ -127,13 +128,7 @@ export default function AllListingPage() {
         loadingText="Fetching Listings..."
       />
 
-      {data?.result && data?.result.totalNumberOfPages > 0 && (
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPages={data?.result.totalNumberOfPages as number}
-        />
-      )}
-    </section>
+      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+    </ListingPageLayout>
   );
 }

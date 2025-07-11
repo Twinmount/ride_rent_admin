@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Input } from "./ui/input";
 
-function SearchComponent({
-  placeholder = "search..",
-}: {
+type SearchBoxProps = {
   placeholder?: string;
-}) {
+  searchDescription?: string;
+};
+
+function SearchBox({
+  placeholder = "search..",
+  searchDescription,
+}: SearchBoxProps) {
   const [searchValue, setSearchValue] = useState(""); // Update input value immediately
   const [searchParams, setSearchParams] = useSearchParams();
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
@@ -43,10 +47,10 @@ function SearchComponent({
   };
 
   return (
-    <div
-      className={`ml-3 flex w-full max-w-[500px] flex-col justify-start gap-y-2`}
-    >
-      <div className="flex items-center justify-start gap-x-1">
+    <div className="mb-6">
+      <div
+        className={`flex w-full min-w-96 max-w-[500px] flex-col justify-start gap-y-2`}
+      >
         <Input
           type="search"
           value={searchValue}
@@ -55,8 +59,13 @@ function SearchComponent({
           className="p-regular-16 h-[40px] w-full rounded-2xl border bg-white px-4 py-3 placeholder:text-gray-500 focus-visible:ring-transparent focus-visible:ring-offset-0"
         />
       </div>
+      {!!searchDescription && (
+        <p className="ml-2 text-left text-sm italic text-gray-500">
+          {searchDescription}
+        </p>
+      )}
     </div>
   );
 }
 
-export default SearchComponent;
+export default SearchBox;

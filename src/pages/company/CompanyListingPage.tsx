@@ -8,7 +8,7 @@ import Pagination from "@/components/Pagination";
 import CompanyStatusModal from "@/components/CompanyStatusModal"; // Modal for updating company status
 import { toast } from "@/components/ui/use-toast";
 import { CompanyType } from "@/types/api-types/vehicleAPI-types";
-import SearchComponent from "@/components/Search";
+import SearchBox from "@/components/SearchBox";
 import { useSearchParams } from "react-router-dom";
 import CompanyPageHeading from "../../components/CompanyPageHeading";
 import { useAdminContext } from "@/context/AdminContext";
@@ -130,15 +130,13 @@ export default function CompanyListingPage({
       </div>
 
       {/* search component */}
-      <div className="mb-6">
-        <SearchComponent placeholder="Search company" />
-        <p className="ml-2 text-left text-sm italic text-gray-500">
-          <span className="font-semibold text-gray-600">
-            company name or agent id
-          </span>{" "}
-          can be used to search the company
-        </p>
-      </div>
+
+      <SearchBox
+        placeholder="Search company"
+        searchDescription={
+          "company name or agent id can be used to search the company"
+        }
+      />
 
       <GenericTable<CompanyType>
         columns={companyColumns(handleOpenModal)}

@@ -7,7 +7,7 @@ import { useState } from "react";
 import BlogCategoryTags from "@/components/BlogCategoryTags";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import { useAdminContext } from "@/context/AdminContext";
-import PageWrapper from "@/components/common/PageWrapper";
+import PageLayout from "@/components/common/PageLayout";
 
 export default function ManageRideBlogsPage() {
   const [page, setPage] = useState(1);
@@ -34,10 +34,7 @@ export default function ManageRideBlogsPage() {
   const blogsResult = data?.result.list || [];
 
   return (
-    <PageWrapper
-      heading={`Manage Ride Blogs - ${country.countryName}`}
-      shouldRenderNavigation={false}
-    >
+    <PageLayout heading={`Manage Ride Blogs - ${country.countryName}`}>
       {/* Category filter component */}
       <BlogCategoryTags
         selectedCategory={selectedCategory}
@@ -67,6 +64,6 @@ export default function ManageRideBlogsPage() {
 
       {/* New Blog Link Button */}
       <FloatingActionButton href={`/ride-blogs/add`} label="New Blog" />
-    </PageWrapper>
+    </PageLayout>
   );
 }

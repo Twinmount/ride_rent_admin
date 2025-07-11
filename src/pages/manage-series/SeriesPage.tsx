@@ -1,12 +1,12 @@
 import { useState } from "react";
-import SearchComponent from "@/components/Search";
+import SearchBox from "@/components/SearchBox";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import SeriesCategoryDropdown from "@/components/SeriesCategoryDropdown";
 import { BrandType, CategoryType } from "@/types/api-types/API-types";
 import SeriesBrandDropdown from "@/components/SeriesBrandDropdown";
 import { SeriesList } from "@/components/SeriesList";
 import { useAdminContext } from "@/context/AdminContext";
-import PageWrapper from "@/components/common/PageWrapper";
+import PageLayout from "@/components/common/PageLayout";
 
 export default function BrandsPage() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(
@@ -23,10 +23,10 @@ export default function BrandsPage() {
   }
 
   return (
-    <PageWrapper heading={heading} shouldRenderNavigation={false}>
+    <PageLayout heading={heading}>
       <div className="flex flex-col items-center gap-3 pl-2 pr-10 md:flex-row">
         {/* search component */}
-        <SearchComponent placeholder="search series name or brand" />
+        <SearchBox placeholder="search series name or brand" />
 
         <div className="flex items-center gap-x-2">
           {/* category dropdown */}
@@ -57,6 +57,6 @@ export default function BrandsPage() {
       <SeriesList stateId={state.stateId} brand={selectedBrand} />
 
       <FloatingActionButton href={`/manage-series/add`} label="New Series" />
-    </PageWrapper>
+    </PageLayout>
   );
 }

@@ -189,4 +189,15 @@ export enum Slug {
   GET_APPLICATIONS = "/applications",
   UPDATE_APPLICATION_STATUS = "/applications",
   DELETE_APPLICATION = "/applications",
+
+  // SRM Endpoints
+  GET_ALL_SRM_ACTIVE_TRIPS = "/srm/active-trips",
+  GET_ALL_SRM_COMPLETED_TRIPS = "/srm/completed-trips",
+  GET_ALL_SRM_AGENTS = "/srm/agents",
+  GET_ALL_SRM_CUSTOMERS = "/srm/customers",
+
+  GET_SRM_CUSTOMER = "/srm/customer",
+  POST_SRM_CUSTOMER = "/srm/customer",
+  PUT_SRM_CUSTOMER = "/srm/customer",
+  PUT_SRM_VEHICLE = "/srm/vehicle",
 }

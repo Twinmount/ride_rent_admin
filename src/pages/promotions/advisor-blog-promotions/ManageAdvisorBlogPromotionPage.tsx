@@ -5,11 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import { PromotionType } from "@/types/api-types/API-types";
 import Pagination from "@/components/Pagination";
 import { fetchAllAdvisorBlogPromotions } from "@/api/advisor";
-import PageHeading from "@/components/general/PageHeading";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import BlogPromotionCard from "@/components/card/BlogPromotionCard";
 import { useAdminContext } from "@/context/AdminContext";
-import PageWrapper from "@/components/common/PageWrapper";
+import PageLayout from "@/components/common/PageLayout";
 
 export default function ManageRideBlogPromotionsPage() {
   const [page, setPage] = useState(1);
@@ -31,9 +30,8 @@ export default function ManageRideBlogPromotionsPage() {
   const promotions = data?.result?.list || [];
 
   return (
-    <PageWrapper
+    <PageLayout
       heading={`Manage Advisor Blog Promotions - ${country.countryName}`}
-      shouldRenderNavigation={false}
     >
       {isLoading ? (
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -75,6 +73,6 @@ export default function ManageRideBlogPromotionsPage() {
           setSelectedPromotion={setSelectedPromotion}
         />
       )}
-    </PageWrapper>
+    </PageLayout>
   );
 }

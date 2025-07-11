@@ -1,16 +1,16 @@
-import { fetchAllSRMActiveTrips } from "@/api/srm";
+import { fetchAllSRMAgents } from "@/api/srm";
 import ListingPageLayout from "@/components/common/ListingPageLayout";
 import { LimitDropdown } from "@/components/LimitDropdown";
 import Pagination from "@/components/Pagination";
 import SearchBox from "@/components/SearchBox";
 import { SortDropdown } from "@/components/SortDropdown";
-import { SRMActiveTripsColumn } from "@/components/table/columns/SRMActiveTripsColumn";
+import { SRMAgentsColumn } from "@/components/table/columns/SRMAgentsColumn";
 import { GenericTable } from "@/components/table/GenericTable";
 import { useListingPageState } from "@/hooks/useListingPageState";
-import { SRMActiveTripType } from "@/types/api-types/srm-api.types";
+import { SRMAgentType } from "@/types/api-types/srm-api.types";
 import { useQuery } from "@tanstack/react-query";
 
-export default function SRMActiveTripsPage() {
+export default function SRMAgentsPage() {
   const {
     page,
     setPage,
@@ -24,7 +24,7 @@ export default function SRMActiveTripsPage() {
   // const { data, isLoading } = useQuery({
   //   queryKey: ["srm", "srm-active-trips", page, limit, sortOrder, searchTerm],
   //   queryFn: () =>
-  //     fetchAllSRMActiveTrips({
+  //     fetchAllSRMAgents({
   //       page,
   //       limit,
   //       sortOrder,
@@ -40,7 +40,7 @@ export default function SRMActiveTripsPage() {
 
   return (
     <ListingPageLayout
-      heading={"SRM - Active Trips"}
+      heading={"SRM - Sellers"}
       sortDropdown={
         <SortDropdown
           sortOrder={sortOrder}
@@ -57,13 +57,13 @@ export default function SRMActiveTripsPage() {
       }
       search={
         <SearchBox
-          placeholder="trip id"
-          searchDescription="search with trip id"
+          placeholder="Search seller"
+          searchDescription="search seller"
         />
       }
     >
-      <GenericTable<SRMActiveTripType>
-        columns={SRMActiveTripsColumn}
+      <GenericTable<SRMAgentType>
+        columns={SRMAgentsColumn}
         data={list}
         loading={isLoading}
         loadingText="Fetching Listings..."

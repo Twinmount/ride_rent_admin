@@ -6,8 +6,8 @@ const SRMActiveTripsPage = lazy(
 const SRMCompletedTripsPage = lazy(
   () => import("../../pages/srm/srm-trips/SRMCompletedTripsPage"),
 );
-const SRMSellersPage = lazy(
-  () => import("../../pages/srm/srm-sellers/SRMSellersPage"),
+const SRMAgentsPage = lazy(
+  () => import("../../pages/srm/srm-agents/SRMAgentsPage"),
 );
 const SRMVehiclesPage = lazy(
   () => import("../../pages/srm/srm-vehicles/SRMVehiclesPage"),
@@ -32,8 +32,8 @@ export const srmRoutes = [
     element: <SRMCompletedTripsPage />,
   },
   {
-    path: "/srm/sellers",
-    element: <SRMSellersPage />,
+    path: "/srm/agents",
+    element: <SRMAgentsPage />,
   },
   {
     path: "/srm/vehicles",

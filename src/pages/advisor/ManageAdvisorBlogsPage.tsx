@@ -8,7 +8,7 @@ import BlogCategoryTags from "@/components/BlogCategoryTags";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 import { fetchAllAdvisorBlogs } from "@/api/advisor";
 import { useAdminContext } from "@/context/AdminContext";
-import PageWrapper from "@/components/common/PageWrapper";
+import PageLayout from "@/components/common/PageLayout";
 
 export default function ManageAdvisorBlogsPage() {
   const { country } = useAdminContext();
@@ -35,10 +35,7 @@ export default function ManageAdvisorBlogsPage() {
   const blogsResult = data?.result.list || [];
 
   return (
-    <PageWrapper
-      heading={`Manage Advisor Blogs - ${country.countryName}`}
-      shouldRenderNavigation={false}
-    >
+    <PageLayout heading={`Manage Advisor Blogs - ${country.countryName}`}>
       {/* Category filter component */}
       <BlogCategoryTags
         selectedCategory={selectedCategory}
@@ -71,6 +68,6 @@ export default function ManageAdvisorBlogsPage() {
         href={`/advisor/blogs/add`}
         label="New Advisor Blog"
       />
-    </PageWrapper>
+    </PageLayout>
   );
 }

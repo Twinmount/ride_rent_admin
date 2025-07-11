@@ -2,24 +2,26 @@ import { CircleArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import PageHeading from "../general/PageHeading";
 
-type PageWrapperProps = {
+type PageLayoutProps = {
   heading: string;
   subheading?: string;
   children: React.ReactNode;
   shouldRenderNavigation?: boolean;
+  headingClassName?: string;
 };
 
-export default function PageWrapper({
+export default function PageLayout({
   heading,
   subheading,
   children,
-  shouldRenderNavigation = true,
-}: PageWrapperProps) {
+  shouldRenderNavigation = false,
+  headingClassName,
+}: PageLayoutProps) {
   const navigate = useNavigate();
 
   return (
     <div className="container h-auto min-h-screen bg-slate-50 py-6 pb-16">
-      <div className="mb-5 ml-2 w-fit flex-col gap-x-4">
+      <div className={`mb-5 ml-2 w-fit flex-col gap-x-4 ${headingClassName}`}>
         <div className="flex w-fit items-center gap-x-4">
           {/* navigation button */}
           {shouldRenderNavigation && (

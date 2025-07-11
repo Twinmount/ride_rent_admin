@@ -1,4 +1,4 @@
-import { PrimaryFormType } from "@/types/formTypes";
+import { PrimaryFormType, SRMCustomerDetailsFormType } from "@/types/formTypes";
 import {
   AdvisorBlogFormType,
   BlogFormType,
@@ -292,4 +292,16 @@ export const JobFormDefaultValues: JobFormType = {
       points: ["Section point 1"],
     },
   ],
+};
+
+export const SRMCustomerDetailsFormDefaultValues: SRMCustomerDetailsFormType = {
+  customerProfilePic: "",
+  customerName: "", // Name of the Customer
+  email: "",
+  nationality: "", // Nationality of the user
+  passportNumber: "", // Passport number
+  passport: [], // Passport image
+  drivingLicenseNumber: "", // Driving license number
+  drivingLicense: [], // Driving license image
+  phoneNumber: "", // Phone number with validation on minimum characters
 };

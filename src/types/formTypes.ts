@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { SRMCustomerDetailsFormSchema } from "@/lib/validator";
+
 export type VehicleStatusType =
   | "APPROVED"
   | "REJECTED"
@@ -83,3 +86,7 @@ export type PrimaryFormType = {
 };
 
 export type CompanyFormType = {};
+
+export type SRMCustomerDetailsFormType = z.infer<
+  typeof SRMCustomerDetailsFormSchema
+>;
