@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { sidebarContent } from "../../constants/sidebar-items";
+import { sidebarContent } from "./sidebar-config";
 import { SidebarItem } from "./SidebarItem";
 import {
   Accordion,
@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/accordion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ScrollArea } from "@mantine/core";
-import ExcelDataDownloadModal from "../modal/ExcelDataDownloadModal";
 import LogoutModal from "../modal/LogoutModal";
 import SidebarAccordion from "./SidebarAccordion";
 
@@ -48,6 +47,7 @@ export default function SidebarItemsContainer({
       defaultValue={defaultOpenAccordion}
     >
       {sidebarContent.map((item) =>
+        // if the item is a link, render a sidebar item, which will act like a link with direct navigation, otherwise, if the type is "accordion", render an accordion
         item.type === "link" ? (
           <AccordionItem
             key={item.link}
@@ -73,8 +73,7 @@ export default function SidebarItemsContainer({
         ),
       )}
 
-      {/* Data download and logout modals */}
-      <ExcelDataDownloadModal />
+      {/* logout Dialog */}
       <LogoutModal />
     </SidebarItemContainerWrapper>
   );

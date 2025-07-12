@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import { createBrowserRouter, Outlet } from "react-router-dom";
 
 // core styles are required for all packages
@@ -23,7 +24,10 @@ import { locationsRoutes } from "./route-groups/locationsRoutes";
 import { categoryAndVehicleTypeRoutes } from "./route-groups/categoryAndVehicleTypeRoutes";
 import { linkAndPromotionRoutes } from "./route-groups/linkAndPromotionRoutes";
 import { brandsAndSeriesRoutes } from "./route-groups/brandsAndSeriesRoutes";
-import { dashboardRoutes } from "./route-groups/dashboardRoutes";
+
+// lazy imports
+const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"));
+const DownloadPage = lazy(() => import("../pages/download/DownloadPage"));
 
 export const router = createBrowserRouter([
   {
@@ -49,7 +53,10 @@ export const router = createBrowserRouter([
             element: <Layout />,
             children: [
               // dashboard routes
-              ...dashboardRoutes,
+              { path: "/", element: <Dashboard /> },
+
+              // download routes
+              { path: "/download", element: <DownloadPage /> },
 
               // vehicle listing routes
               ...vehicleListingRoutes,

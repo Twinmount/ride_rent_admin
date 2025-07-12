@@ -11,6 +11,7 @@ import {
   Group,
   GraduationCap,
   Box,
+  CloudDownload,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -205,5 +206,11 @@ export const sidebarContent: SidebarItem[] = [
       { label: "Jobs", link: "/careers/jobs" },
       { label: "Applications", link: "/careers/applications" },
     ],
+  },
+  {
+    type: "link",
+    label: "Downloads",
+    icon: CloudDownload,
+    link: "/download",
   },
 ];

@@ -16,30 +16,30 @@ type DownloadSectionConfig = {
 
 export const downloadSections: DownloadSectionConfig[] = [
   {
-    title: "Vehicles",
+    title: "Vehicle Listing Data",
     triggers: [
       {
-        triggerLabel: "Download Vehicle Data",
+        triggerLabel: "Vehicle Data",
         dialogTitle: "Download Vehicle Data",
         Component: VehicleDownloadPanel,
       },
     ],
   },
   {
-    title: "Companies",
+    title: "Company Data",
     triggers: [
       {
-        triggerLabel: "Download Company Data",
+        triggerLabel: "Company Data",
         dialogTitle: "Download Company Data",
         Component: CompanyDownloadPanel,
       },
     ],
   },
   {
-    title: "SRM",
+    title: "SRM data",
     triggers: [
       {
-        triggerLabel: "Download SRM Data",
+        triggerLabel: "SRM Data",
         dialogTitle: "Download SRM Data",
         Component: SRMDownloadPanel,
       },
