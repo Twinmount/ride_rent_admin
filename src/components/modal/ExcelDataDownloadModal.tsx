@@ -19,7 +19,6 @@ const ExcelDataDownloadModal = () => {
   const [selectedStateName, setSelectedStateName] = useState<string | null>(
     null,
   );
-  // const [isEabled, setIsEnabled] = useState<boolean>(false);
 
   const handleDownloadVehicleData = async () => {
     if (selectedStateId && selectedStateName) {
