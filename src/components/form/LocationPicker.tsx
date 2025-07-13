@@ -13,6 +13,7 @@ interface LocationPickerProps {
   initialLocation?: Location | null;
   buttonText?: string;
   buttonClassName?: string;
+  showDetails?: boolean;
 }
 
 const LocationPicker: React.FC<LocationPickerProps> = ({
@@ -20,6 +21,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   initialLocation = null,
   buttonText = "Select Location",
   buttonClassName = "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md",
+  showDetails = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,6 +38,14 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
       <button type="button" onClick={openModal} className={buttonClassName}>
         {buttonText}
       </button>
+      {showDetails && (
+        <p>
+          Initial Location:{" "}
+          {initialLocation?.lat && initialLocation?.lng
+            ? `${initialLocation.lat}, ${initialLocation.lng}`
+            : "No location selected"}
+        </p>
+      )}
 
       {/* Only render the map component when modal is open */}
       {isOpen && (

@@ -164,7 +164,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
               name={field.name}
               label={
                 isIndia && !isIndividual
-                  ? "Registration Detail"
+                  ? "Registration Details"
                   : isIndia && isIndividual
                     ? "Commercial Registration"
                     : "Commercial License"
@@ -272,6 +272,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
               }`}
             >
               <CompanyLanguagesDropdown
+                isIndia={isIndia}
                 value={field.value}
                 onChangeHandler={field.onChange}
                 placeholder="Languages"
@@ -285,7 +286,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           name="location"
           render={({ field }) => (
             <FormItemWrapper
-              label="GPS Location"
+              label="Office Location"
               description={
                 <span>
                   Enter the GSP location where the company is registered or

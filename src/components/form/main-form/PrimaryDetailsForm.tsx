@@ -431,7 +431,7 @@ export default function PrimaryDetailsForm({
           render={({ field }) => (
             <FormItemWrapper
               label="Modified?"
-              description="Select if this vehicle is modified."
+              description="Select this if the vehicle is modified for show/display purposes and can't be used on the road."
             >
               <FormCheckbox
                 id="isVehicleModified"
@@ -962,11 +962,10 @@ export default function PrimaryDetailsForm({
           name="location"
           render={({ field }) => (
             <FormItemWrapper
-              label="GPS Location"
+              label="Vehicle Location"
               description={
                 <span>
-                  Enter the GSP location where the company is registered or
-                  operates.
+                  Enter the GSP location where the vehicle is situated.
                 </span>
               }
             >
@@ -975,6 +974,7 @@ export default function PrimaryDetailsForm({
                   onChangeHandler={field.onChange}
                   initialLocation={field.value}
                   buttonText="Choose Location"
+                  showDetails={true}
                   buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
                 />
                 <div>
@@ -983,10 +983,21 @@ export default function PrimaryDetailsForm({
                       <span className="mt-2">Loading...</span>
                     ) : (
                       <span
-                        className="mt-2 cursor-pointer text-blue-700 underline"
-                        onClick={() => setVehicleLocation(companyLocation)}
+                        className={`mt-2 select-none underline ${
+                          companyLocation
+                            ? "cursor-pointer text-blue-700"
+                            : "cursor-not-allowed text-gray-400"
+                        }`}
+                        onClick={() => {
+                          if (!companyLocation) return;
+                          toast({
+                            title: `Imported location successfully`,
+                            className: "bg-yellow text-white",
+                          });
+                          setVehicleLocation(companyLocation);
+                        }}
                       >
-                        Import location from agent
+                        Import office location of agent as vehicle location.
                       </span>
                     )}
                   </div>
@@ -1130,25 +1141,27 @@ export default function PrimaryDetailsForm({
           >
             <div className="w-full rounded-lg border-b p-2 shadow">
               {/* Crypto */}
-              <FormField
-                control={form.control}
-                name="isCryptoAccepted"
-                render={({ field }) => (
-                  <div className="mb-2">
-                    <FormCheckbox
-                      id="isCryptoAccepted"
-                      label="Crypto"
-                      checked={field.value}
-                      onChange={field.onChange}
-                    />
-                    <FormDescription className="ml-7 mt-1">
-                      Select if your company accepts payments via
-                      cryptocurrency.
-                    </FormDescription>
-                    <FormMessage className="ml-2" />
-                  </div>
-                )}
-              />
+              {!isIndia && (
+                <FormField
+                  control={form.control}
+                  name="isCryptoAccepted"
+                  render={({ field }) => (
+                    <div className="mb-2">
+                      <FormCheckbox
+                        id="isCryptoAccepted"
+                        label="Crypto"
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormDescription className="ml-7 mt-1">
+                        Select if your company accepts payments via
+                        cryptocurrency.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
+                    </div>
+                  )}
+                />
+              )}
 
               {/* Credit/Debit Cards */}
               <FormField
@@ -1172,24 +1185,26 @@ export default function PrimaryDetailsForm({
               />
 
               {/* Tabby */}
-              <FormField
-                control={form.control}
-                name="isTabbySupported"
-                render={({ field }) => (
-                  <div className="mb-2">
-                    <FormCheckbox
-                      id="isTabby"
-                      label="Tabby"
-                      checked={field.value}
-                      onChange={field.onChange}
-                    />
-                    <FormDescription className="ml-7 mt-1">
-                      Select if your company accepts payments via Tabby.
-                    </FormDescription>
-                    <FormMessage className="ml-2" />
-                  </div>
-                )}
-              />
+              {!isIndia && (
+                <FormField
+                  control={form.control}
+                  name="isTabbySupported"
+                  render={({ field }) => (
+                    <div className="mb-2">
+                      <FormCheckbox
+                        id="isTabby"
+                        label="Tabby"
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormDescription className="ml-7 mt-1">
+                        Select if your company accepts payments via Tabby.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
+                    </div>
+                  )}
+                />
+              )}
 
               {/* Cash */}
               {isIndia && (
