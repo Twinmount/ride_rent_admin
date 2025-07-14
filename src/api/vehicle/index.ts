@@ -17,6 +17,7 @@ export const buildCommonPrimaryDetails = (
     vehicleSeriesId: values.vehicleSeriesId,
     vehicleModel: values.vehicleModel,
     vehicleRegistrationNumber: values.vehicleRegistrationNumber,
+    isFancyNumber: values.isFancyNumber,
     vehicleRegisteredYear: values.vehicleRegisteredYear,
     commercialLicenseExpireDate:
       values.commercialLicenseExpireDate?.toISOString(),
