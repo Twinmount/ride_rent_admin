@@ -740,6 +740,25 @@ export default function PrimaryDetailsForm({
           )}
         />
 
+        {/* Lease */}
+        <FormField
+          control={form.control}
+          name="isFancyNumber"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Fancy Number?"
+              description="Select if your vehicle has a fancy/special number plate. Highlight will be shown in your public vehicle details page."
+            >
+              <FormCheckbox
+                id="isFancyNumber"
+                label="Fancy Number Highlight"
+                checked={field.value}
+                onChange={field.onChange}
+              />
+            </FormItemWrapper>
+          )}
+        />
+
         {/* Vehicle Photos */}
         <FormField
           control={form.control}

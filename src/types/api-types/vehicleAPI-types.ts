@@ -313,6 +313,7 @@ type hourlyRentalDetailType = rentalDetailType & {
 export type GetPrimaryForm = {
   vehicleId: string;
   vehicleRegistrationNumber: string;
+  isFancyNumber: boolean;
   vehicleCategoryId: string;
   vehicleTypeId: string;
   vehicleBrandId: string;
