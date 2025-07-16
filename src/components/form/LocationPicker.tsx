@@ -40,10 +40,19 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
       </button>
       {showDetails && (
         <p>
-          Initial Location:{" "}
-          {initialLocation?.lat && initialLocation?.lng
-            ? `${initialLocation.lat}, ${initialLocation.lng}`
-            : "No location selected"}
+          Current Location:{" "}
+          {initialLocation?.lat && initialLocation?.lng ? (
+            <a
+              href={`https://www.google.com/maps?q=${initialLocation.lat},${initialLocation.lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline"
+            >
+              View on Google Maps
+            </a>
+          ) : (
+            "No location selected"
+          )}
         </p>
       )}
 
