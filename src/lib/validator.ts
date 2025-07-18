@@ -665,3 +665,25 @@ export const SRMCustomerDetailsFormSchema = z.object({
     .min(2, "Upload both front and back of the driving license"),
   phoneNumber: z.string().min(6, "Provide a valid mobile number"),
 });
+
+/**
+ * Schema for a single ride promotion card (vehicle)
+ */
+export const RidePromotionCardSchema = z.object({
+  image: z.string().min(1, "Image is required"),
+  cardTitle: z.string().min(1, "Title is required"),
+  cardSubtitle: z.string().min(1, "Subtitle is required"),
+  link: z.string().url("Must be a valid URL"),
+});
+
+/**
+ * Schema for the entire promotion section
+ */
+export const RidePromotionFormSchema = z.object({
+  sectionTitle: z.string().min(1, "Section title is required"),
+  sectionSubtitle: z.string().min(1, "Section subtitle is required"),
+  cards: z
+    .array(RidePromotionCardSchema)
+    .max(4, "You can only add up to 4 promotion cards")
+    .min(1, "At least 1 promotion card is required"),
+});

@@ -16,8 +16,11 @@ import LazyLoader from "@/components/skelton/LazyLoader";
 import StateFaqForm from "@/components/form/main-form/StateFaqForm";
 import { useAdminContext } from "@/context/AdminContext";
 import HomepageBannerForm from "@/components/form/HomepageBannerForm";
+import RidePromotionForm from "@/components/form/RidePromotionForm";
+import { fetchAllRidePromotions } from "@/api/ride-promotions";
+import { ContentFor } from "@/types/types";
 
-type TabsTypes = "primary" | "faq" | "banner";
+type TabsTypes = "primary" | "faq" | "banner" | "ride-promotion";
 
 export default function EditLocationPage() {
   const navigate = useNavigate();
@@ -46,19 +49,27 @@ export default function EditLocationPage() {
     refetchOnWindowFocus: false,
   });
 
-  let bannerFor: "state" | "country" | "parentState" = "state";
+  let contentFor: ContentFor = "state";
   if (isIndia) {
-    bannerFor = parentStateId ? "state" : "parentState";
+    contentFor = parentStateId ? "state" : "parentState";
   }
 
   const { data: bannerData, isFetching: isBannerFetching } = useQuery({
     queryKey: ["banner-state", stateId],
-    queryFn: () =>
-      getHomePageBanner(
-        stateId as string,
-        bannerFor as "state" | "country" | "parentState",
-      ),
+    queryFn: () => getHomePageBanner(stateId as string, contentFor),
     enabled: !!stateId && activeTab === "banner",
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: promotionData, isFetching: isPromotionFetching } = useQuery({
+    queryKey: ["ride-promotions", stateId],
+    queryFn: () =>
+      fetchAllRidePromotions({
+        promotionForId: stateId as string,
+        promotionFor: contentFor,
+      }),
+    enabled: !!stateId && activeTab === "ride-promotion",
     retry: false,
     refetchOnWindowFocus: false,
   });
@@ -124,6 +135,12 @@ export default function EditLocationPage() {
                 FAQ
               </TabsTrigger>
             )}
+            <TabsTrigger
+              value="ride-promotion"
+              className="h-9 max-sm:px-2 max-sm:text-sm"
+            >
+              Ride Promotion
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="primary" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
@@ -146,7 +163,7 @@ export default function EditLocationPage() {
               ) : (
                 <HomepageBannerForm
                   id={stateId as string}
-                  bannerFor={bannerFor}
+                  bannerFor={contentFor}
                   data={bannerData?.result || []}
                 />
               )}
@@ -161,6 +178,20 @@ export default function EditLocationPage() {
                   data={faqData?.result || defaultStateFaq}
                   updateFaqMutation={updateFaqMutation}
                   stateValue={data?.result?.stateValue || ""}
+                />
+              )}
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="ride-promotion" className="flex-center">
+            <Suspense fallback={<LazyLoader />}>
+              {isPromotionFetching ? (
+                <FormSkelton />
+              ) : (
+                <RidePromotionForm
+                  id={stateId as string}
+                  promotionFor={contentFor}
+                  formData={promotionData?.result || null}
                 />
               )}
             </Suspense>

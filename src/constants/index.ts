@@ -1,5 +1,6 @@
 import {
   PrimaryFormType,
+  RidePromotionFormType,
   SRMCustomerDetailsFormType,
   SRMVehicleFormType,
 } from "@/types/formTypes";
@@ -338,4 +339,17 @@ export const SRMCustomerDetailsFormDefaultValues: SRMCustomerDetailsFormType = {
   drivingLicenseNumber: "", // Driving license number
   drivingLicense: [], // Driving license image
   phoneNumber: "", // Phone number with validation on minimum characters
+};
+
+export const RidePromotionFormDefaultValues: RidePromotionFormType = {
+  sectionTitle: "",
+  sectionSubtitle: "",
+  cards: [
+    {
+      image: "",
+      cardTitle: "",
+      cardSubtitle: "",
+      link: "",
+    },
+  ],
 };

@@ -63,12 +63,17 @@ export enum Slug {
   DELETE_RELATED_LINK = "/recomented-links",
   GET_ALL_RELATED_LINKS = "/recomented-links/list",
 
-  // Links Endpoints
+  // Promotion old Endpoints
   ADD_PROMOTION = "/promotions",
   GET_PROMOTION = "/promotions",
   PUT_PROMOTION = "/promotions",
   DELETE_PROMOTION = "/promotions",
   GET_ALL_PROMOTIONS = "/promotions/list",
+
+  // Ride Promotions (redesign)
+  ADD_RIDE_PROMOTION = "/ride-promotions",
+  GET_RIDE_PROMOTION = "/ride-promotions",
+  PUT_RIDE_PROMOTION = "/ride-promotions",
 
   // company end points
   POST_COMPANY = "/company",

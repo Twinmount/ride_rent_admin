@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { SRMCustomerDetailsFormSchema } from "@/lib/validator";
+import {
+  RidePromotionCardSchema,
+  RidePromotionFormSchema,
+  SRMCustomerDetailsFormSchema,
+} from "@/lib/validator";
 
 export type VehicleStatusType =
   | "APPROVED"
@@ -102,3 +106,13 @@ export type RentalDetailsFormFieldType = {
 export type SRMVehicleFormType = {
   rentalDetails: RentalDetailsFormFieldType;
 };
+
+/**
+ * Type for a single promotion vehicle card
+ */
+export type RidePromotionCardType = z.infer<typeof RidePromotionCardSchema>;
+
+/**
+ * Type for the entire promotion form
+ */
+export type RidePromotionFormType = z.infer<typeof RidePromotionFormSchema>;
