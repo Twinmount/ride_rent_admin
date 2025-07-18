@@ -3,7 +3,7 @@ import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
   FetchSpecificPromotionResponse,
-  FetchPromotionsResponse,
+  FetchRidePromotionsResponse,
 } from "@/types/api-types/API-types";
 
 export interface PromotionType {
@@ -12,19 +12,46 @@ export interface PromotionType {
 }
 
 // add promotion
-export async function saveRidePromotions(
+export async function addRidePromotions(
   data: RidePromotionFormType & {
     promotionForId: string;
     promotionFor: string;
   },
 ) {
   try {
-    const response = await fetch(`/api/ride-promotions`, {
-      method: "POST", // or PUT for updates
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+    const response = await API.post({
+      slug: Slug.ADD_RIDE_PROMOTION,
+      body: data,
     });
-    return await response.json();
+
+    if (!response) {
+      throw new Error("Failed to save promotion");
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error saving ride promotions:", error);
+    throw error;
+  }
+}
+
+export async function updateRidePromotions(
+  data: RidePromotionFormType & {
+    promotionForId: string;
+    promotionFor: string;
+  },
+) {
+  try {
+    const response = await API.put({
+      slug: Slug.PUT_RIDE_PROMOTION,
+      body: data,
+    });
+
+    if (!response) {
+      throw new Error("Failed to save promotion");
+    }
+
+    return response;
   } catch (error) {
     console.error("Error saving ride promotions:", error);
     throw error;
@@ -53,38 +80,23 @@ export const fetchRidePromotionById = async (
 
 // /api/promotions.ts
 export const fetchAllRidePromotions = async (urlParams: {
-  stateId: string;
+  promotionForId: string;
   promotionFor: "state" | "parentState" | "country";
-}): Promise<{ result: any }> => {
+}): Promise<FetchRidePromotionsResponse> => {
+  const queryParams = new URLSearchParams({
+    promotionForId: urlParams.promotionForId,
+    promotionFor: urlParams.promotionFor,
+  });
   try {
-    // Later you’ll call your real API here
-    console.log("Fetching promotions for:", urlParams);
+    const data = await API.get<FetchRidePromotionsResponse>({
+      slug: `${Slug.GET_RIDE_PROMOTION}?${queryParams.toString()}`,
+    });
 
-    // Mimic API response with sample data
-    const samplePromotions = {
-      sectionTitle: "Top Vehicle Promotions",
-      sectionSubtitle: "Exclusive deals and discounts in your area.",
-      cards: [
-        {
-          _id: "promo1",
-          image: "https://via.placeholder.com/400x300.png?text=Car+1",
-          cardTitle: "Offer Upto 25%",
-          cardSubtitle: "Discount on SUV rentals for this month.",
-          link: "/ae/dubai/cars/123",
-        },
-        {
-          _id: "promo2",
-          image: "https://via.placeholder.com/400x300.png?text=Car+2",
-          cardTitle: "Save 15% on Sedans",
-          cardSubtitle: "Enjoy sedan rentals at 15% off in Bengaluru.",
-          link: "/in/bengaluru/cars/456",
-        },
-      ],
-    };
+    if (!data) {
+      throw new Error("Failed to fetch promotion data");
+    }
 
-    return {
-      result: null,
-    };
+    return data;
   } catch (error) {
     console.error("Error fetching ride promotions:", error);
     throw error;

@@ -1,4 +1,4 @@
-import { IconConfig, Location } from "@/types/types";
+import { ContentFor, IconConfig, Location } from "@/types/types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
@@ -188,7 +188,7 @@ export const deleteHomePageBanner = async (id: string) => {
 
 export const getHomePageBanner = async (
   bannerForId: string,
-  bannerFor: "state" | "country" | "parentState",
+  bannerFor: ContentFor,
 ) => {
   try {
     let params = new URLSearchParams();

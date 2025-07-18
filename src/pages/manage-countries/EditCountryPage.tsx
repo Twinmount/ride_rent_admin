@@ -9,8 +9,11 @@ import { Suspense, useState } from "react";
 import LazyLoader from "@/components/skelton/LazyLoader";
 import HomepageBannerForm from "@/components/form/HomepageBannerForm";
 import CountryForm from "@/components/form/CountryForm";
+import RidePromotionForm from "@/components/form/RidePromotionForm";
+import { fetchAllRidePromotions } from "@/api/ride-promotions";
+import { ContentFor } from "@/types/types";
 
-type TabsTypes = "primary" | "faq" | "banner";
+type TabsTypes = "primary" | "faq" | "banner" | "ride-promotion";
 
 export default function EditCountryPage() {
   const navigate = useNavigate();
@@ -24,15 +27,24 @@ export default function EditCountryPage() {
     staleTime: 0,
   });
 
-  const bannerFor: "state" | "country" | "parentState" = "country";
+  let contentFor: ContentFor = "country";
+
   const { data: bannerData, isFetching: isBannerFetching } = useQuery({
     queryKey: ["banner-country", countryId],
-    queryFn: () =>
-      getHomePageBanner(
-        countryId as string,
-        bannerFor as "state" | "country" | "parentState",
-      ),
+    queryFn: () => getHomePageBanner(countryId as string, contentFor),
     enabled: !!countryId && activeTab === "banner",
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: promotionData, isFetching: isPromotionFetching } = useQuery({
+    queryKey: ["ride-promotions", countryId],
+    queryFn: () =>
+      fetchAllRidePromotions({
+        promotionForId: countryId as string,
+        promotionFor: contentFor,
+      }),
+    enabled: !!countryId && activeTab === "ride-promotion",
     retry: false,
     refetchOnWindowFocus: false,
   });
@@ -71,6 +83,13 @@ export default function EditCountryPage() {
             >
               Homepage Banner
             </TabsTrigger>
+
+            <TabsTrigger
+              value="ride-promotion"
+              className="h-9 max-sm:px-2 max-sm:text-sm"
+            >
+              Ride Promotion
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="primary" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
@@ -92,8 +111,22 @@ export default function EditCountryPage() {
               ) : (
                 <HomepageBannerForm
                   id={countryId as string}
-                  bannerFor={bannerFor}
+                  bannerFor={contentFor}
                   data={bannerData?.result || []}
+                />
+              )}
+            </Suspense>
+          </TabsContent>
+
+          <TabsContent value="ride-promotion" className="flex-center">
+            <Suspense fallback={<LazyLoader />}>
+              {isPromotionFetching ? (
+                <FormSkelton />
+              ) : (
+                <RidePromotionForm
+                  id={countryId as string}
+                  promotionFor={contentFor}
+                  formData={promotionData?.result || null}
                 />
               )}
             </Suspense>

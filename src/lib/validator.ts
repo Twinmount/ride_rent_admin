@@ -670,7 +670,6 @@ export const SRMCustomerDetailsFormSchema = z.object({
  * Schema for a single ride promotion card (vehicle)
  */
 export const RidePromotionCardSchema = z.object({
-  _id: z.string().optional(),
   image: z.string().min(1, "Image is required"),
   cardTitle: z.string().min(1, "Title is required"),
   cardSubtitle: z.string().min(1, "Subtitle is required"),

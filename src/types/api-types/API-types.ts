@@ -1,5 +1,6 @@
 import { BannerType } from "@/api/states";
 import { IconConfig, Location } from "../types";
+import { RidePromotionCardType } from "../formTypes";
 
 // register response
 export interface RegisterResponse {
@@ -279,6 +280,18 @@ export interface FetchSpecificPromotionResponse {
   result: PromotionType;
   status: string;
   statusCode: number;
+}
+
+export interface RidePromotionType {
+  _id: string;
+  sectionTitle: string;
+  sectionSubtitle: string;
+  cards: RidePromotionCardType[];
+}
+export interface FetchRidePromotionsResponse {
+  status: string;
+  statusCode: string;
+  result: RidePromotionType;
 }
 
 // company type

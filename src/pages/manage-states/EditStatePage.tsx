@@ -18,9 +18,9 @@ import { useAdminContext } from "@/context/AdminContext";
 import HomepageBannerForm from "@/components/form/HomepageBannerForm";
 import RidePromotionForm from "@/components/form/RidePromotionForm";
 import { fetchAllRidePromotions } from "@/api/ride-promotions";
+import { ContentFor } from "@/types/types";
 
 type TabsTypes = "primary" | "faq" | "banner" | "ride-promotion";
-type ContentFor = "state" | "country" | "parentState";
 
 export default function EditLocationPage() {
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ export default function EditLocationPage() {
     queryKey: ["ride-promotions", stateId],
     queryFn: () =>
       fetchAllRidePromotions({
-        stateId: stateId as string,
+        promotionForId: stateId as string,
         promotionFor: contentFor,
       }),
     enabled: !!stateId && activeTab === "ride-promotion",
@@ -191,7 +191,7 @@ export default function EditLocationPage() {
                 <RidePromotionForm
                   id={stateId as string}
                   promotionFor={contentFor}
-                  data={promotionData?.result}
+                  formData={promotionData?.result || null}
                 />
               )}
             </Suspense>

@@ -309,3 +309,4 @@ export type JobFormType = {
 };
 
 export type ApplicationTypes = "all" | "intern" | "career";
+export type ContentFor = "state" | "country" | "parentState";

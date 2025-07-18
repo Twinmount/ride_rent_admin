@@ -7,41 +7,37 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import SingleFileUpload from "./file-uploads/SingleFileUpload";
 import { toast } from "../ui/use-toast";
-import { saveRidePromotions } from "@/api/ride-promotions";
+import { addRidePromotions, updateRidePromotions } from "@/api/ride-promotions";
 import { RidePromotionFormSchema } from "@/lib/validator";
 import { RidePromotionFormType } from "@/types/formTypes";
 import { GcsFilePaths } from "@/constants/enum";
 import { deleteMultipleFiles } from "@/helpers/form";
 import { FormContainer, FormItemWrapper, FormSubmitButton } from "./form-ui";
 import { Plus } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { RidePromotionFormDefaultValues } from "@/constants";
+
+type RidePromotionFormProps = {
+  id: string;
+  promotionFor: "state" | "parentState" | "country";
+  formData: RidePromotionFormType | null; // entire section data
+};
 
 export default function RidePromotionForm({
   id,
   promotionFor,
-  data,
-}: {
-  id: string;
-  promotionFor: "state" | "parentState" | "country";
-  data?: RidePromotionFormType | null; // entire section data
-}) {
+  formData,
+}: RidePromotionFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
+  const queryClient = useQueryClient();
+
+  const type: "Add" | "Update" = !!formData ? "Update" : "Add";
+
   const form = useForm<RidePromotionFormType>({
     resolver: zodResolver(RidePromotionFormSchema),
-    defaultValues: data ?? {
-      sectionTitle: "",
-      sectionSubtitle: "",
-      cards: [
-        {
-          _id: "",
-          image: "",
-          cardTitle: "",
-          cardSubtitle: "",
-          link: "",
-        },
-      ],
-    },
+    defaultValues: formData ?? RidePromotionFormDefaultValues,
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -66,27 +62,30 @@ export default function RidePromotionForm({
         promotionFor,
       };
 
-      console.log("Submitting payload:", payload);
-
-      const response = await saveRidePromotions(payload);
+      // const response = await saveRidePromotions(payload);
+      let response;
+      if (type === "Update") {
+        response = await updateRidePromotions(payload);
+      } else {
+        response = await addRidePromotions(payload);
+      }
 
       if (response) {
         await deleteMultipleFiles(deletedImages);
+        queryClient.invalidateQueries({ queryKey: ["ride-promotions"] });
       }
 
       toast({
-        title: "Promotions Saved",
-        description: "The promotion section was successfully saved.",
+        title: type === "Add" ? "Promotion Saved" : "Promotion Updated",
+        description:
+          "Changes will be reflected in public home page of corresponding location",
         className: "bg-green-600 text-white",
       });
-
-      // Optionally reset form state with updated data
-      form.reset(response.result);
     } catch (error) {
       console.error("Save failed:", error);
       toast({
         variant: "destructive",
-        title: "Save Failed",
+        title: "Promotion save Failed",
         description: "There was an error saving the promotions.",
       });
     }
@@ -233,7 +232,6 @@ export default function RidePromotionForm({
             variant="outline"
             onClick={() =>
               append({
-                _id: "",
                 image: "",
                 cardTitle: "",
                 cardSubtitle: "",
@@ -248,7 +246,13 @@ export default function RidePromotionForm({
         {/* Submit Button */}
         <div className="flex-center mt-6 flex-col gap-4">
           <FormSubmitButton
-            text="Save Promotions"
+            text={
+              form.formState.isSubmitting
+                ? "Submitting..."
+                : type === "Add"
+                  ? "Save"
+                  : "Update"
+            }
             isLoading={form.formState.isSubmitting}
           />
           <Button
