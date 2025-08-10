@@ -1,22 +1,23 @@
 import { CircleArrowLeft } from "lucide-react";
+
 import { useNavigate, useParams } from "react-router-dom";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSeriesById } from "@/api/vehicle-series";
 import VehicleSeriesForm from "@/components/form/VehicleSeriesForm";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import SeriesPriceTable from "@/components/form/SeriesPriceTable";
+import { useState } from "react";
 
 export default function EditBrandPage() {
-  const { vehicleSeriesId } = useParams<{
-    vehicleSeriesId: string;
-  }>();
-
+  const { vehicleSeriesId } = useParams<{ vehicleSeriesId: string }>();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("primary");
 
   const { data, isLoading } = useQuery({
     queryKey: ["vehicle-series-by-id", vehicleSeriesId],
     queryFn: () => fetchSeriesById(vehicleSeriesId as string),
   });
-
   const formData = data?.result;
 
   return (
@@ -30,11 +31,22 @@ export default function EditBrandPage() {
         </button>
         <h1 className="h3-bold text-center sm:text-left">Update Series</h1>
       </div>
-      {isLoading ? (
-        <FormSkelton />
-      ) : (
-        <VehicleSeriesForm type="Update" formData={formData} />
-      )}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="flex-center mb-6 gap-x-2">
+          <TabsTrigger value="primary" className="h-9 max-sm:px-2 max-sm:text-sm">
+            Primary Details
+          </TabsTrigger>
+          <TabsTrigger value="price" className="h-9 max-sm:px-2 max-sm:text-sm">
+            Price Table
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="primary">
+          {isLoading ? <FormSkelton /> : <VehicleSeriesForm type="Update" formData={formData} />}
+        </TabsContent>
+        <TabsContent value="price">
+          <SeriesPriceTable />
+        </TabsContent>
+      </Tabs>
     </section>
   );
 }

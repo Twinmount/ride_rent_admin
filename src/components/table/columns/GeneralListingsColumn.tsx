@@ -51,7 +51,7 @@ export const GeneralListingColumns = (
               : approvalStatus === "PENDING"
                 ? "!bg-blue-500 text-white"
                 : approvalStatus === "UNDER_REVIEW"
-                  ? "!bg-yellow-500 text-white"
+                  ? "!bg-yellow text-white"
                   : "!bg-red-500 text-white"
           }`}
         >

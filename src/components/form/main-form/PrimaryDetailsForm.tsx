@@ -401,6 +401,24 @@ export default function PrimaryDetailsForm({
           )}
         />
 
+        {/* Year of Manufacture */}
+        <FormField
+          control={form.control}
+          name="vehicleRegisteredYear"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Year of Manufacture"
+              description="Enter the year in which the vehicle was manufactured."
+            >
+              <YearPicker
+                onChangeHandler={field.onChange}
+                value={initialValues.vehicleRegisteredYear}
+                placeholder="year"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
         {/* Model Name */}
         <FormField
           control={form.control}
@@ -875,24 +893,6 @@ export default function PrimaryDetailsForm({
                 dateFormat="dd/MM/yyyy"
                 wrapperClassName="datePicker text-base -ml-4"
                 placeholderText="DD/MM/YYYY"
-              />
-            </FormItemWrapper>
-          )}
-        />
-
-        {/* Registered Year */}
-        <FormField
-          control={form.control}
-          name="vehicleRegisteredYear"
-          render={({ field }) => (
-            <FormItemWrapper
-              label="Registered Year"
-              description="Enter the year in which the vehicle was registered."
-            >
-              <YearPicker
-                onChangeHandler={field.onChange}
-                value={initialValues.vehicleRegisteredYear}
-                placeholder="year"
               />
             </FormItemWrapper>
           )}

@@ -116,7 +116,7 @@ export default function AllListingPage() {
       search={
         <SearchBox
           placeholder="Search vehicle"
-          searchDescription="vehicle model,vehicle registration number, vehicle code, registered year
+          searchDescription="vehicle model,vehicle registration number, vehicle code, year of manufacture
           or phone number can be used to search the vehicle"
         />
       }
