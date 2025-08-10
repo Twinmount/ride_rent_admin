@@ -5,7 +5,7 @@ import PriceEditModal from "./PriceEditModal";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRentalAverages } from "@/api/vehicle-series";
 import { API } from "@/api/ApiService";
-async function saveRentalPricesApi(vehicleSeriesId: string, year: string, prices: { hourly: number; daily: number; week: number; monthly: number }) {
+export async function saveRentalPricesApi(vehicleSeriesId: string, year: string, prices: { hourly: number; daily: number; week: number; monthly: number }) {
   await API.post({
     slug: `/vehicle/series/${vehicleSeriesId}/rental-averages`,
     body: { year, ...prices },
@@ -55,6 +55,7 @@ export default function SeriesPriceTable() {
         week: { ...row.week, assigned: prices.week },
         monthly: { ...row.monthly, assigned: prices.monthly },
       } : row));
+        setModalOpen(false);
     }
   };
 

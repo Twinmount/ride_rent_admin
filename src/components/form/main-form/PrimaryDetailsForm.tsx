@@ -44,6 +44,8 @@ import {
   showSuccessToast,
 } from "@/utils/toastUtils";
 import { handleLevelOneFormSubmission } from "@/utils/form-utils";
+import PriceEditModal from "../PriceEditModal";
+import { validatePriceEdit } from "@/utils/validatePriceEdit";
 import VehicleDescriptionTextEditor from "../VehicleDescriptionTextEditor";
 import { FormContainer } from "../form-ui/FormContainer";
 import { FormItemWrapper } from "../form-ui/FormItemWrapper";
@@ -59,6 +61,7 @@ import {
 } from "@/components/ui/dialog";
 import StatesDropdownForVehicleForm from "../dropdowns/StatesDropdownForVehicleForm";
 import LocationPicker from "../LocationPicker";
+import { saveRentalPricesApi } from "../SeriesPriceTable";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -99,6 +102,8 @@ export default function PrimaryDetailsForm({
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [isCarsCategory, setIsCarsCategory] = useState(false);
   const [hideCommercialLicenses, setHideCommercialLicenses] = useState(false);
+  const [isPriceEditModalOpen, setIsPriceEditModalOpen] = useState(false);
+  const [priceEditModalProps, setPriceEditModalProps] = useState<any>(null);
 
   const [cities, setCities] = useState<CityType[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
@@ -164,6 +169,16 @@ export default function PrimaryDetailsForm({
     }, 1000);
   };
 
+const handleSavePrices = async (prices: { hourly: number; daily: number; week: number; monthly: number }
+) => {
+  console.log(prices);
+  
+  const vehicleSeriesId = form.getValues("vehicleSeriesId") || "";
+  const year = form.getValues("vehicleRegisteredYear")
+  await saveRentalPricesApi(vehicleSeriesId, year, prices);
+  setIsPriceEditModalOpen(false);
+};
+
   // Define a submit handler.
   async function onSubmit(values: z.infer<typeof PrimaryFormSchema>) {
     const validationError = validateRentalDetailsAndSecurityDeposit(values);
@@ -180,6 +195,24 @@ export default function PrimaryDetailsForm({
     if (isPhotosUploading || isLicenseUploading || isVideoUploading) {
       showFileUploadInProgressToast();
       return;
+    }
+
+    // Only for Update, call price edit validation API before submit
+    if (type === "Update" && vehicleId) {
+      const vehicleSeriesId = form.getValues("vehicleSeriesId") || "";
+      const year = form.getValues("vehicleRegisteredYear")
+      const priceEditResult = await validatePriceEdit(vehicleSeriesId, year);
+      if (!priceEditResult.ok) {
+        setIsPriceEditModalOpen(true);
+        setPriceEditModalProps({
+          open: true,
+          onClose: () => setIsPriceEditModalOpen(false),
+          year: values.vehicleRegisteredYear?.toString() || new Date().getFullYear().toString(),
+          prices: { hourly: 0, daily: 0, week: 0, monthly: 0 },
+          onSave: (prices: { hourly: number; daily: number; week: number; monthly: number }) => handleSavePrices(prices)
+        });
+        return;
+      }
     }
 
     const cityIds = selectedCities.filter((city) => !city.includes("temp-"));
@@ -292,8 +325,9 @@ export default function PrimaryDetailsForm({
   const isCategoryDisabled = levelsFilled === 3;
 
   return (
-    <Form {...form}>
-      <FormContainer onSubmit={form.handleSubmit(onSubmit)}>
+    <>
+      <Form {...form}>
+        <FormContainer onSubmit={form.handleSubmit(onSubmit)}>
         {/* Vehicle Category */}
         <FormField
           control={form.control}
@@ -1282,11 +1316,16 @@ export default function PrimaryDetailsForm({
         />
 
         {/* Submit */}
-        <FormSubmitButton
-          text={type === "Add" ? "Add Vehicle" : "Update Vehicle"}
-          isLoading={form.formState.isSubmitting}
-        />
-      </FormContainer>
-    </Form>
+          <FormSubmitButton
+            text={type === "Add" ? "Add Vehicle" : "Update Vehicle"}
+            isLoading={form.formState.isSubmitting}
+          />
+        </FormContainer>
+      </Form>
+      {/* Price Edit Modal for price validation failure */}
+      {isPriceEditModalOpen && (
+        <PriceEditModal {...priceEditModalProps} />
+      )}
+    </>
   );
 }
