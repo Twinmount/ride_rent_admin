@@ -355,6 +355,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     tempCitys: data.tempCitys || [],
     location: data.location || undefined,
     isVehicleModified: data.isVehicleModified,
+    disablePriceMatching: data.disablePriceMatching || false,
   };
 }
 

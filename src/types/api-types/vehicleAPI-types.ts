@@ -158,6 +158,7 @@ export type SingleVehicleType = {
   vehicleStateValue?: string;
   vehicleCategoryValue?: string;
   vehicleTitle?: string;
+  disablePriceMatching?: boolean;
 };
 
 export type GeneralListingVehicleType = {
@@ -235,6 +236,7 @@ export interface AddPrimaryFormResponse {
     createdAt: string;
     updatedAt: string;
     tempCitys?: [];
+    disablePriceMatching?: boolean;
   };
   status: string;
   statusCode: number;
@@ -354,6 +356,7 @@ export type GetPrimaryForm = {
   tempCitys: CityType[];
   location: Location;
   isVehicleModified: boolean;
+  disablePriceMatching?: boolean;
 };
 
 // Specification form get all response

@@ -88,6 +88,7 @@ export type PrimaryFormType = {
   tempCitys?: CityType[];
   location?: Location;
   isVehicleModified: boolean;
+  disablePriceMatching?: boolean;
 };
 
 export type CompanyFormType = {};

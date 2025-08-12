@@ -213,4 +213,11 @@ export const sidebarContent: SidebarItem[] = [
     icon: CloudDownload,
     link: "/download",
   },
+  // Price Matching page
+  {
+    type: "link",
+    label: "Price Matching",
+    icon: FileSearch,
+    link: "/price-matching",
+  },
 ];

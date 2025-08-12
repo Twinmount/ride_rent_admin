@@ -9,6 +9,8 @@ export const buildCommonPrimaryDetails = (
   phoneNumber: string,
   isCarsCategory: boolean,
 ): Record<string, any> => {
+  console.log(values);
+  
   return {
     countryCode,
     vehicleCategoryId: values.vehicleCategoryId,
@@ -48,5 +50,6 @@ export const buildCommonPrimaryDetails = (
     }),
     tempCitys: values.tempCitys,
     isVehicleModified: values.isVehicleModified.toString(),
+    disablePriceMatching: values?.disablePriceMatching || false,
   };
 };

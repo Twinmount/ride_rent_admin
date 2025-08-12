@@ -288,6 +288,7 @@ export const PrimaryFormSchema = z
         }),
       )
       .optional(),
+    disablePriceMatching: z.boolean().optional().default(false),
   })
   .refine(
     (data) => {

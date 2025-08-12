@@ -15,9 +15,17 @@ export default function PriceEditModal({ open, onClose, year, prices, onSave }: 
   const [week, setWeek] = useState(prices.week);
   const [monthly, setMonthly] = useState(prices.monthly);
 
+
+  const [error, setError] = useState("");
+
   const handleSave = () => {
-    onSave({ hourly, daily, week, monthly });
-    onClose();
+    if (hourly > 0 || daily > 0 || week > 0 || monthly > 0) {
+      setError("");
+      onSave({ hourly, daily, week, monthly });
+      onClose();
+    } else {
+      setError("At least one price must be greater than zero.");
+    }
   };
 
   return (
@@ -30,6 +38,9 @@ export default function PriceEditModal({ open, onClose, year, prices, onSave }: 
           className="flex flex-col gap-5 mt-2"
           onSubmit={e => { e.preventDefault(); handleSave(); }}
         >
+          {error && (
+            <div className="text-red-600 text-sm mb-2">{error}</div>
+          )}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-gray-700 mb-1">Hourly Price</label>
             <input
