@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
               { path: "/download", element: <DownloadPage /> },
 
               // price matching route
-              { path: "/price-matching", element: <PriceMatchingPage /> },
+              { path: "/price-alert", element: <PriceMatchingPage /> },
 
               // vehicle listing routes
               ...vehicleListingRoutes,

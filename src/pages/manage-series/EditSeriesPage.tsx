@@ -37,7 +37,7 @@ export default function EditBrandPage() {
             Primary Details
           </TabsTrigger>
           <TabsTrigger value="price" className="h-9 max-sm:px-2 max-sm:text-sm">
-            Price Table
+            Price Update
           </TabsTrigger>
         </TabsList>
         <TabsContent value="primary">

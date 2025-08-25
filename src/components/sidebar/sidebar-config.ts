@@ -64,6 +64,7 @@ export const sidebarContent: SidebarItem[] = [
       { label: "Updated Listings", link: "/listings/updated" },
       { label: "Pending Listings", link: "/listings/pending" },
       { label: "Rejected Listings", link: "/listings/rejected" },
+      { label: "Price Alert", link: "/price-alert" },
     ],
   },
   // Agents/Company routes
@@ -214,10 +215,4 @@ export const sidebarContent: SidebarItem[] = [
     link: "/download",
   },
   // Price Matching page
-  {
-    type: "link",
-    label: "Price Matching",
-    icon: FileSearch,
-    link: "/price-matching",
-  },
 ];

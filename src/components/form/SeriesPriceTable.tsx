@@ -55,7 +55,7 @@ export default function SeriesPriceTable() {
         week: { ...row.week, assigned: prices.week },
         monthly: { ...row.monthly, assigned: prices.monthly },
       } : row));
-        setModalOpen(false);
+      setModalOpen(false);
     }
   };
 
