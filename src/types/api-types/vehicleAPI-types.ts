@@ -18,6 +18,12 @@ export type CompanyType = {
   companyMetaDescription: string;
 };
 
+interface Location {
+  lat: number;
+  lng: number;
+  address?: string;
+}
+
 // type of single brand
 export interface BrandType {
   id: string;
@@ -64,9 +70,9 @@ export type RentalDetailsType = {
     enabled: boolean;
     rentInAED: string;
     mileageLimit: string;
-    minBookingHours: string;
   };
   hour: {
+    minBookingHours: string;
     enabled: boolean;
     rentInAED: string;
     mileageLimit: string;
@@ -146,11 +152,13 @@ export type SingleVehicleType = {
   };
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
+  isCashSupported: boolean;
   updatedAt: string;
   createdAt: string;
   vehicleStateValue?: string;
   vehicleCategoryValue?: string;
   vehicleTitle?: string;
+  disablePriceMatching?: boolean;
 };
 
 export type GeneralListingVehicleType = {
@@ -221,11 +229,14 @@ export interface AddPrimaryFormResponse {
     city: CityType[];
     levelsFilled: number; // Assuming this is a number based on the example response
     vehiclePhotos: string[];
+    vehicleVideos: string[];
     commercialLicences: string[];
     companyId: string;
     vehicleRegistrationNumber: string;
     createdAt: string;
     updatedAt: string;
+    tempCitys?: [];
+    disablePriceMatching?: boolean;
   };
   status: string;
   statusCode: number;
@@ -289,10 +300,22 @@ export type GetFeaturesFormDataResponse = {
   statusCode: number;
 };
 
+type rentalDetailType = {
+  enabled: boolean;
+  rentInAED: string;
+  mileageLimit: string;
+  unlimitedMileage: boolean;
+};
+
+type hourlyRentalDetailType = rentalDetailType & {
+  minBookingHours: string;
+};
+
 // Specification form data
 export type GetPrimaryForm = {
   vehicleId: string;
   vehicleRegistrationNumber: string;
+  isFancyNumber: boolean;
   vehicleCategoryId: string;
   vehicleTypeId: string;
   vehicleBrandId: string;
@@ -302,27 +325,10 @@ export type GetPrimaryForm = {
   phoneNumber: string;
   specification: "UAE_SPEC" | "USA_SPEC" | "OTHERS";
   rentalDetails: {
-    day: {
-      enabled: boolean;
-      rentInAED: string;
-      mileageLimit: string;
-    };
-    week: {
-      enabled: boolean;
-      rentInAED: string;
-      mileageLimit: string;
-    };
-    month: {
-      enabled: boolean;
-      rentInAED: string;
-      mileageLimit: string;
-    };
-    hour: {
-      enabled: boolean;
-      rentInAED: string;
-      mileageLimit: string;
-      minBookingHours: string;
-    };
+    day: rentalDetailType;
+    week: rentalDetailType;
+    month: rentalDetailType;
+    hour: hourlyRentalDetailType;
   };
   stateId: string;
   cityIds: string[];
@@ -335,6 +341,7 @@ export type GetPrimaryForm = {
   vehicleTitle: string;
   vehicleTitleH1: string;
   vehiclePhotos: string[];
+  vehicleVideos: string[];
   commercialLicenses: string[];
   additionalVehicleTypes?: string[];
   securityDeposit: {
@@ -343,8 +350,13 @@ export type GetPrimaryForm = {
   };
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
+  isCashSupported: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
+  tempCitys: CityType[];
+  location: Location;
+  isVehicleModified: boolean;
+  disablePriceMatching?: boolean;
 };
 
 // Specification form get all response

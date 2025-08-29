@@ -19,6 +19,8 @@ const JoditRichTextEditor: React.FC<JoditRichTextEditorProps> = ({
 }) => {
   const editor = useRef<any | null>(null);
 
+  const appCountry = localStorage.getItem("appCountry") || "ae";
+
   const config = useMemo(
     () => ({
       readonly: false,
@@ -26,7 +28,7 @@ const JoditRichTextEditor: React.FC<JoditRichTextEditorProps> = ({
       removeButtons: ["about", "print", "file"],
       disablePlugins: ["speech-recognize"],
       uploader: {
-        url: `${import.meta.env.VITE_API_URL}${Slug.POST_SINGLE_FILE}`,
+        url: `${appCountry === "in" ? import.meta.env.VITE_API_URL_INDIA : import.meta.env.VITE_API_URL_UAE}${Slug.POST_SINGLE_FILE}`,
         headers: {
           Authorization: `Bearer ${load<string>(StorageKeys.ACCESS_TOKEN)}`,
         },

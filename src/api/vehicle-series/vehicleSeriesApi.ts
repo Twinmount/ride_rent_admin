@@ -1,3 +1,18 @@
+// Fetch rental averages for a vehicle series
+export const fetchRentalAverages = async (vehicleSeriesId: string) => {
+  try {
+    const data = await API.get<any>({
+      slug: `/vehicle/series/${vehicleSeriesId}/rental-averages`,
+    });
+    if (!data) {
+      throw new Error("Failed to fetch rental averages");
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching rental averages:", error);
+    throw error;
+  }
+};
 import {
   FetchAllSeriesResponse,
   FetchSpecificSeriesResponse,

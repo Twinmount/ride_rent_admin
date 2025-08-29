@@ -163,7 +163,7 @@ const StateFaqForm = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="min-w-[650px] space-y-4">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

@@ -1,3 +1,7 @@
+import { BannerType } from "@/api/states";
+import { IconConfig, Location } from "../types";
+import { RidePromotionCardType } from "../formTypes";
+
 // register response
 export interface RegisterResponse {
   result: {
@@ -41,11 +45,45 @@ export interface StateType {
   metaTitle: string;
   metaDescription: string;
   stateImage: any;
+  isFavorite?: boolean;
+  stateIcon?: string;
+  location: Location;
+  IconConfig?: IconConfig;
+}
+
+export interface CountryType {
+  countryId: string;
+  countryName: string;
+  countryValue: string;
 }
 
 //  interface for the get-all-states  API response
 export interface FetchStatesResponse {
   result: StateType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchCountriesResponse {
+  result: CountryType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface BannerTypeResponse {
+  result: BannerType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchParentStatesResponse {
+  result: StateType;
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchCountryResponse {
+  result: CountryType[];
   status: string;
   statusCode: number;
 }
@@ -74,6 +112,12 @@ export interface GetStateFAQResponse {
 //  interface for the states (by id)  API response
 export interface FetchSpecificStateResponse {
   result: StateType;
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchSpecificCountryResponse {
+  result: CountryType;
   status: string;
   statusCode: number;
 }
@@ -238,6 +282,18 @@ export interface FetchSpecificPromotionResponse {
   statusCode: number;
 }
 
+export interface RidePromotionType {
+  _id: string;
+  sectionTitle: string;
+  sectionSubtitle: string;
+  cards: RidePromotionCardType[];
+}
+export interface FetchRidePromotionsResponse {
+  status: string;
+  statusCode: string;
+  result: RidePromotionType;
+}
+
 // company type
 export interface companyType {
   companyId: string;
@@ -257,6 +313,10 @@ export interface companyType {
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;
+  accountType: string;
+  countryName?: string;
+  countryId: string;
+  location: Location;
 }
 
 //  interface for the get-all-companies  API response
@@ -289,6 +349,12 @@ export interface promotedCompanyType {
 
 export interface FetchPromotedCompaniesSearchResponse {
   result: promotedCompanyType[];
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchCompanyByIdResponse {
+  result: companyType;
   status: string;
   statusCode: number;
 }

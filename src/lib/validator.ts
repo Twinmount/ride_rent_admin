@@ -38,6 +38,41 @@ export const BrandFormSchema = z.object({
   vehicleCategoryId: z.string().min(1, "Category is required"),
 });
 
+// Country Form Schema
+export const CountryFormSchema = z.object({
+  countryName: z
+    .string()
+    .min(3, "Country title should be at least 3 characters long")
+    .regex(
+      /^[A-Za-z\s]+$/,
+      "Country title should only contain letters and spaces",
+    ),
+  countryValue: z
+    .string()
+    .min(3, "Country value should be at least 3 characters long")
+    .regex(
+      /^[a-z-]+$/,
+      "Country value should only contain lowercase letters and hyphens",
+    ),
+});
+
+export const iconConfigSchema = z.object({
+  iconName: z.string().optional(),
+  bgColor: z
+    .string()
+    .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, {
+      message: "Invalid HEX color",
+    })
+    .optional(),
+  strokeColor: z
+    .string()
+    .regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, {
+      message: "Invalid HEX color",
+    })
+    .optional(),
+  strokeWidth: z.string().optional(),
+});
+
 // State Form Schema
 export const StateFormSchema = z.object({
   stateName: z
@@ -55,7 +90,21 @@ export const StateFormSchema = z.object({
       "State value should only contain lowercase letters and hyphens",
     ),
   stateImage: z.string().min(1, "State image is required"),
+  stateIcon: z.string().optional(),
+  isFavorite: z.boolean().optional(),
   relatedStates: z.array(z.string()).optional(),
+  parentStateId: z.string().optional(),
+  isParentState: z.boolean().optional(),
+  location: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+      address: z.string().optional(),
+    })
+    .refine((val) => val.lat && val.lng, {
+      message: "Location is required",
+    }),
+  iconConfig: iconConfigSchema.optional(),
 });
 
 // City Form Schema
@@ -139,19 +188,17 @@ export const AdvisorPromotionFormSchema = z.object({
     .url("Link must be a valid URL"),
 });
 
-// RentalDetailType Schema for day, week, and month rentals )
+// Base schema for day/week/month rentals
 const RentalDetailTypeSchema = z.object({
   enabled: z.boolean().optional().default(false),
   rentInAED: z.string().optional().default(""),
   mileageLimit: z.string().optional().default(""),
+  unlimitedMileage: z.boolean().optional().default(false),
 });
 
-// HourlyRentalDetailType Schema with minBookingHours
-const HourlyRentalDetailTypeSchema = z.object({
-  enabled: z.boolean().optional().default(false),
-  rentInAED: z.string().optional().default(""),
-  mileageLimit: z.string().optional().default(""),
-  minBookingHours: z.string().optional().default(""), // Only for hourly rentals
+// Extended schema for hourly rentals
+const HourlyRentalDetailTypeSchema = RentalDetailTypeSchema.extend({
+  minBookingHours: z.string().optional().default(""),
 });
 
 // Primary Form Zod Schema
@@ -166,17 +213,19 @@ export const PrimaryFormSchema = z
       .string()
       .min(1, "Vehicle registration number is required")
       .max(15, "Vehicle registration number cannot exceed 15 characters"),
-    vehicleRegisteredYear: z.string().min(1, "Registered Year is required"),
+    isFancyNumber: z.boolean().default(false),
+    vehicleRegisteredYear: z.string().min(1, "Year of Manufacture is required"),
     vehiclePhotos: z
       .array(z.string().min(1, "vehicle photo is required"))
       .min(1, "At least one vehicle photo is required"),
+    vehicleVideos: z.array(z.string().optional()),
     commercialLicenses: z.array(z.string().optional()),
     commercialLicenseExpireDate: z.date(),
     isLease: z.boolean().default(false),
     isCryptoAccepted: z.boolean().default(false),
     isSpotDeliverySupported: z.boolean().default(false),
     specification: z
-      .enum(["USA_SPEC", "UAE_SPEC", "OTHERS"], {
+      .enum(["India_SPEC", "USA_SPEC", "UAE_SPEC", "OTHERS"], {
         required_error: "Specification is required",
       })
       .default("UAE_SPEC"),
@@ -210,6 +259,17 @@ export const PrimaryFormSchema = z
     }),
     isCreditOrDebitCardsSupported: z.boolean().default(false),
     isTabbySupported: z.boolean().default(false),
+    isCashSupported: z.boolean().default(false),
+    isVehicleModified: z.boolean().default(false),
+    location: z
+      .object({
+        lat: z.number(),
+        lng: z.number(),
+        address: z.string().optional(),
+      })
+      .refine((val) => val.lat && val.lng, {
+        message: "Location is required",
+      }),
     vehicleMetaTitle: z
       .string()
       .min(1, "Vehicle Meta title is required")
@@ -218,6 +278,17 @@ export const PrimaryFormSchema = z
       .string()
       .min(1, "Vehicle Meta description is required")
       .max(5000, "Vehicle Meta description cannot exceed 5000 characters"),
+    tempCitys: z
+      .array(
+        z.object({
+          stateId: z.string(),
+          cityId: z.string(),
+          cityName: z.string(),
+          cityValue: z.string(),
+        }),
+      )
+      .optional(),
+    disablePriceMatching: z.boolean().optional().default(false),
   })
   .refine(
     (data) => {
@@ -277,6 +348,13 @@ export const CompanyFormSchema = z.object({
     .string()
     .min(1, "Meta description is required")
     .max(500, "Meta description must be 500 characters or less"),
+  location: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+      address: z.string(),
+    })
+    .optional(),
 });
 
 // Company Status Form Schema
@@ -464,4 +542,149 @@ export const VehicleSeriesSchema = z.object({
     .string()
     .min(1, "Series Meta description is required")
     .max(5000, "Series Meta description cannot exceed 5000 characters"),
+});
+
+// Job form schema
+
+export const locationOptions = [
+  "Remote",
+  "Onsite",
+  "Hybrid",
+  "Freelance",
+  "Contract",
+  "Internship",
+  "Part-time",
+  "Full-time",
+  "Temporary",
+  "Project-based",
+] as const;
+
+export const levelOptions = [
+  "Intern / Trainee",
+  "Entry-Level / Junior",
+  "Associate / Mid-Level",
+  "Senior-Level",
+  "Lead / Principal",
+  "Manager / Team Lead",
+  "Director",
+  "VP / Vice President",
+  "C-Level (e.g., CTO, CFO, CEO)",
+] as const;
+
+export const experienceOptions = [
+  "1-2 yrs",
+  "2-3 yrs",
+  "3-4 yrs",
+  "4-5 yrs",
+  "5-6 yrs",
+  "6-7 yrs",
+  "7-8 yrs",
+  "8-9 yrs",
+  "9-10 yrs",
+  "10-11 yrs",
+  "11-12 yrs",
+  "12-13 yrs",
+  "13-14 yrs",
+  "14-15 yrs",
+  "15-16 yrs",
+] as const;
+
+export const countryOptions = ["UAE", "INDIA"] as const;
+
+export const JobFormSchema = z.object({
+  jobtitle: z
+    .string()
+    .min(3, "Job title should be at least 3 characters long")
+    .max(120, "Job title should not exceed 120 characters"),
+
+  jobdescription: z
+    .string()
+    .min(10, "Job description should be at least 10 characters long")
+    .max(500, "Job description should not exceed 500 characters"),
+
+  aboutCompany: z
+    .string()
+    .min(10, "About company should be at least 10 characters long")
+    .max(500, "About company should not exceed 500 characters")
+    .optional(),
+
+  date: z.string().min(1, "Date is required"),
+
+  location: z.string().refine((val) => locationOptions.includes(val as any), {
+    message: "Please select a valid job location.",
+  }),
+
+  level: z.string().refine((val) => levelOptions.includes(val as any), {
+    message: "Please select a valid job level.",
+  }),
+
+  experience: z
+    .string()
+    .refine((val) => experienceOptions.includes(val as any), {
+      message: "Please select a valid experience range.",
+    }),
+
+  country: z.string().refine((val) => countryOptions.includes(val as any), {
+    message: "Please select a valid country.",
+  }),
+
+  sections: z
+    .array(
+      z.object({
+        title: z.string(),
+        points: z.array(z.string()),
+      }),
+    )
+    .optional(),
+});
+
+// SRM : Customer Details Form Schema
+export const SRMCustomerDetailsFormSchema = z.object({
+  customerProfilePic: z.string().optional(),
+  customerName: z
+    .string()
+    .min(1, "Customer name is required")
+    .max(50, "Maximum 50 characters allowed"),
+  email: z.string().email("Provide a valid email address"),
+  nationality: z
+    .string()
+    .min(1, "Nationality is required")
+    .max(30, "Maximum 30 characters allowed"),
+  passportNumber: z
+    .string()
+    .min(1, "Passport number is required")
+    .max(30, "Maximum 30 characters allowed"),
+  passport: z
+    .array(z.string().min(1, "Passport image is required"))
+    .min(2, "Upload both front and back of the passport"),
+  drivingLicenseNumber: z
+    .string()
+    .min(1, "Driving license number is required")
+    .max(30, "Maximum 30 characters allowed"),
+  drivingLicense: z
+    .array(z.string().min(1, "Driving license image is required"))
+    .min(2, "Upload both front and back of the driving license"),
+  phoneNumber: z.string().min(6, "Provide a valid mobile number"),
+});
+
+/**
+ * Schema for a single ride promotion card (vehicle)
+ */
+export const RidePromotionCardSchema = z.object({
+  image: z.string().min(1, "Image is required"),
+  cardTitle: z.string().min(1, "Title is required"),
+  cardSubtitle: z.string().min(1, "Subtitle is required"),
+  link: z.string().url("Must be a valid URL"),
+});
+
+/**
+ * Schema for the entire promotion section
+ */
+export const RidePromotionFormSchema = z.object({
+  sectionTitle: z.string().min(1, "Section title is required"),
+  sectionSubtitle: z.string().min(1, "Section subtitle is required"),
+  cards: z
+    .array(RidePromotionCardSchema)
+    .max(4, "You can only add up to 4 promotion cards")
+    .min(1, "At least 1 promotion card is required"),
 });

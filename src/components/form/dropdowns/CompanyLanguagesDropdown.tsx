@@ -20,9 +20,10 @@ type LanguagesDropdownProps = {
   value: string[];
   onChangeHandler: (value: string[]) => void;
   placeholder?: string;
+  isIndia?: boolean;
 };
 
-const languages = [
+const globalLanguages = [
   "English",
   "French",
   "Russian",
@@ -45,13 +46,42 @@ const languages = [
   "Polish",
 ];
 
+const indianLanguages = [
+  "English",
+  "Assamese",
+  "Bengali",
+  "Bodo",
+  "Dogri",
+  "Gujarati",
+  "Hindi",
+  "Kannada",
+  "Kashmiri",
+  "Konkani",
+  "Maithili",
+  "Malayalam",
+  "Manipuri",
+  "Marathi",
+  "Nepali",
+  "Odia",
+  "Punjabi",
+  "Sanskrit",
+  "Santali",
+  "Sindhi",
+  "Tamil",
+  "Telugu",
+  "Urdu",
+];
+
 const CompanyLanguagesDropdown = ({
+  isIndia = false,
   value = [],
   onChangeHandler,
   placeholder = "Languages",
 }: LanguagesDropdownProps) => {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(value);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const languages = isIndia ? [...indianLanguages] : [...globalLanguages];
 
   useEffect(() => {
     setSelectedLanguages(value);
@@ -61,7 +91,7 @@ const CompanyLanguagesDropdown = ({
     let updatedSelectedLanguages: string[];
     if (selectedLanguages.includes(language)) {
       updatedSelectedLanguages = selectedLanguages.filter(
-        (lang) => lang !== language
+        (lang) => lang !== language,
       );
     } else {
       updatedSelectedLanguages = [...selectedLanguages, language];
@@ -71,7 +101,7 @@ const CompanyLanguagesDropdown = ({
   };
 
   const filteredLanguages = languages.filter((language) =>
-    language.toLowerCase().includes(searchTerm.toLowerCase())
+    language.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
@@ -84,10 +114,10 @@ const CompanyLanguagesDropdown = ({
           {selectedLanguages.length > 0
             ? `${selectedLanguages.length} ${placeholder} selected`
             : `Choose ${placeholder}`}
-          <ChevronDown className="w-6 h-6 opacity-50" />
+          <ChevronDown className="h-6 w-6 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="md:w-96 p-0">
+      <PopoverContent className="p-0 md:w-96">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder={`Search ${placeholder}...`}
@@ -102,12 +132,12 @@ const CompanyLanguagesDropdown = ({
                   <CommandItem
                     key={language}
                     onSelect={() => handleSelectLanguage(language)}
-                    className="flex items-center mt-1 gap-x-2"
+                    className="mt-1 flex items-center gap-x-2"
                   >
                     <Checkbox
                       checked={selectedLanguages.includes(language)}
                       onCheckedChange={() => handleSelectLanguage(language)}
-                      className="bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
+                      className="bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
                     />
                     {language}
                   </CommandItem>

@@ -9,13 +9,14 @@ import Pagination from "@/components/Pagination";
 import { useCategories } from "@/hooks/useCategories";
 import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
 import { useFetchStates } from "@/hooks/useFetchStates";
+import { StateType } from "@/types/api-types/vehicleAPI-types";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
 
 export default function ListingMetaDataPage() {
   const [page, setPage] = useState(1);
+  const [selectedState, setSelectedState] = useState<StateType | null>(null);
 
-  const { isStateLoading, selectedState, statesList, setSelectedState } =
-    useFetchStates();
+  const { isStateLoading, statesList, setFilter } = useFetchStates();
 
   const {
     selectedCategory,
@@ -40,7 +41,7 @@ export default function ListingMetaDataPage() {
         categoryId: selectedCategory?.categoryId || "",
         stateId: selectedState?.stateId as string,
       }),
-    enabled: !!selectedCategory, // Fetch only when category is selected
+    enabled: !!selectedCategory && !!selectedState?.stateId, // Fetch only when category is selected
   });
 
   const seoData = data?.result?.list || [];
@@ -60,6 +61,7 @@ export default function ListingMetaDataPage() {
             options={statesList}
             selectedState={selectedState}
             setSelectedState={setSelectedState}
+            setFilter={setFilter}
           />
 
           {/* category dropdown */}

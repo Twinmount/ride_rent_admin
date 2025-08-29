@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, ExternalLink } from "lucide-react";
 import * as Toast from "@radix-ui/react-toast";
 import { useState } from "react";
+import { useAdminContext } from "@/context/AdminContext";
 
 export const LiveListingColumns: (
   onToggle: (vehicleId: string, isDisabled: boolean) => void,
@@ -57,45 +58,65 @@ export const LiveListingColumns: (
     accessorKey: "vehicleId",
     header: "Published URL",
     cell: ({ row }) => {
-      const { vehicleTitle, vehicleCode, vehicleStateValue, vehicleCategoryValue } = row.original;
+      const {
+        vehicleTitle,
+        vehicleCode,
+        vehicleStateValue,
+        vehicleCategoryValue,
+      } = row.original;
       const modelDetails = generateModelDetailsUrl(vehicleTitle);
-      const apiBaseUrl = import.meta.env.VITE_API_URL;
-      const appUrl = apiBaseUrl.includes("prod") ? "https://ride.rent" : "https://dev.ride.rent";
-      const url = `${appUrl}/${vehicleStateValue}/${vehicleCategoryValue}/${modelDetails}-for-rent/${vehicleCode.toLowerCase()}`;
-  
+      const appCountry = localStorage.getItem("appCountry") || "ae";
+      const apiBaseUrl =
+        appCountry === "in"
+          ? import.meta.env.VITE_API_URL_INDIA
+          : import.meta.env.VITE_API_URL_UAE;
+      const { country } = useAdminContext();
+      const countryName = country.countryValue;
+      const isIndia = countryName === "India";
+      const appUrl = apiBaseUrl.includes("prod")
+        ? "https://ride.rent"
+        : "https://dev.ride.rent";
+      const url = `${appUrl}/${isIndia ? "in" : "ae"}/${vehicleStateValue}/${vehicleCategoryValue}/${modelDetails}-for-rent/${vehicleCode.toLowerCase()}`;
+
       // Inline Toast + Copy Component
       const CopyButton = () => {
         const [open, setOpen] = useState(false);
-  
+
         const handleCopy = async () => {
           await navigator.clipboard.writeText(url);
           setOpen(true);
         };
-  
+
         return (
           <>
             <Button variant="ghost" size="icon" onClick={handleCopy}>
               <Copy size={16} />
             </Button>
-  
+
             <Toast.Provider swipeDirection="right">
-              <Toast.Root open={open} onOpenChange={setOpen} className="bg-black text-white rounded px-4 py-2 shadow">
-                <Toast.Title className="text-sm">Copied to clipboard!</Toast.Title>
+              <Toast.Root
+                open={open}
+                onOpenChange={setOpen}
+                className="rounded bg-black px-4 py-2 text-white shadow"
+              >
+                <Toast.Title className="text-sm">
+                  Copied to clipboard!
+                </Toast.Title>
               </Toast.Root>
               <Toast.Viewport className="fixed bottom-4 right-4 z-50" />
             </Toast.Provider>
           </>
         );
       };
-  
+
       return (
         <div className="flex items-center gap-2">
-          <a href={url} target="_blank" rel="noopener noreferrer" >
+          <a href={url} target="_blank" rel="noopener noreferrer">
             <ExternalLink />
           </a>
           <CopyButton />
         </div>
       );
     },
-  }
+  },
 ];

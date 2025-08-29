@@ -1,0 +1,45 @@
+name: Deploy to HostHatch
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via SSH
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd /root/docker/ride-rent/ride_rent_admin
+            git fetch origin
+            git checkout development || git checkout -b development origin/development
+            git reset --hard origin/development
+
+            # Move back to central compose folder
+            cd ..
+
+            # stop old container 
+            
+            docker compose down ride-rent-admin || true
+
+            # Build fresh image without cache
+            docker compose build --no-cache ride-rent-admin
+
+            # start container in detached mode
+            docker compose up -d ride-rent-admin
+          EOF
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

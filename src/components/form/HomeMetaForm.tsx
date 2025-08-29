@@ -67,12 +67,12 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
         });
         navigate("/meta-data/home");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: `${type} meta data failed`,
-        description: "Something went wrong",
+        description:
+          error?.response?.data?.error?.message || "Something went wrong",
       });
     }
   }
@@ -96,7 +96,7 @@ export default function HomeMetaForm({ type, formData }: HomeMetaFormProps) {
                   <FormControl>
                     <StatesDropdown
                       onChangeHandler={(value) => {
-                        field.onChange(value);
+                        field.onChange(value.stateId);
                       }}
                       value={initialValues.stateId}
                       placeholder="state"

@@ -17,8 +17,9 @@ export default function LogoutModal() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    const appCountry = localStorage.getItem("appCountry") || "ae";
     clear();
-    navigate("/login");
+    navigate(appCountry === "in" ? "/in/login" : "/ae/login");
   };
 
   const handleClose = () => {

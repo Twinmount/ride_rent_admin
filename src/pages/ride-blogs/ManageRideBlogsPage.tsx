@@ -4,14 +4,15 @@ import { fetchAllBlogs } from "@/api/blogs";
 import BlogCard from "@/components/card/BlogCard";
 import Pagination from "@/components/Pagination";
 import { useState } from "react";
-
 import BlogCategoryTags from "@/components/BlogCategoryTags";
-import PageHeading from "@/components/general/PageHeading";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
+import { useAdminContext } from "@/context/AdminContext";
+import PageLayout from "@/components/common/PageLayout";
 
 export default function ManageRideBlogsPage() {
   const [page, setPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const { country } = useAdminContext();
 
   // Prepare the request body
   const requestBody: any = {
@@ -33,9 +34,7 @@ export default function ManageRideBlogsPage() {
   const blogsResult = data?.result.list || [];
 
   return (
-    <section className="container h-auto min-h-screen pb-10">
-      <PageHeading heading={`Manage Ride Blogs`} />
-
+    <PageLayout heading={`Manage Ride Blogs - ${country.countryName}`}>
       {/* Category filter component */}
       <BlogCategoryTags
         selectedCategory={selectedCategory}
@@ -65,6 +64,6 @@ export default function ManageRideBlogsPage() {
 
       {/* New Blog Link Button */}
       <FloatingActionButton href={`/ride-blogs/add`} label="New Blog" />
-    </section>
+    </PageLayout>
   );
 }

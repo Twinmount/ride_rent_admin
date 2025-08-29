@@ -59,8 +59,12 @@ export const BlogFileUploadDialog: React.FC = () => {
         );
         const filePath = uploadResponse.result.path;
 
+        const appCountry = localStorage.getItem("appCountry") || "ae";
+
         const imageStreamUrl =
-          import.meta.env.VITE_API_URL + "/file/stream?path=" + filePath;
+          appCountry === "in"
+            ? import.meta.env.VITE_API_URL_INDIA
+            : import.meta.env.VITE_API_URL_UAE + "/file/stream?path=" + filePath;
 
         // set the image URL
         setImageUrl(imageStreamUrl);

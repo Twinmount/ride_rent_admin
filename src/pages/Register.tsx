@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,9 +19,17 @@ import "react-international-phone/style.css";
 import Spinner from "@/components/general/Spinner";
 import { toast } from "@/components/ui/use-toast";
 import { register } from "@/api/auth";
+import { useAdminContext } from "@/context/AdminContext";
+import RegisterCountryDropdown from "@/components/RegisterCountryDropdown";
 
-const Register = () => {
+const Register = ({ country }: { country: string }) => {
   const navigate = useNavigate();
+
+  const { updateAppCountry } = useAdminContext();
+
+  useEffect(() => {
+    updateAppCountry(country);
+  }, []);
 
   // Retrieve stored values from sessionStorage
   const storedPhoneNumber = sessionStorage.getItem("phoneNumber") || "";
@@ -57,7 +65,7 @@ const Register = () => {
         sessionStorage.setItem("countryCode", countryCode);
         sessionStorage.setItem("password", values.password);
 
-        navigate("/verify-otp");
+        navigate(country === "in" ? "/in/verify-otp" : "/ae/verify-otp");
       }
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
@@ -85,29 +93,40 @@ const Register = () => {
   }
 
   return (
-    <section className="h-screen bg-gray-100 flex-center">
+    <section
+      className="flex-center relative h-screen bg-gray-100"
+      style={{
+        backgroundImage: `url('/assets/img/bg/register-banner.webp')`,
+        backgroundSize: "cover", // This ensures the image covers the div
+        backgroundPosition: "center", // This centers the background image
+        backgroundRepeat: "no-repeat", // Prevent the image from repeating
+      }}
+    >
+      <div className="absolute right-4 top-6 z-20">
+        <RegisterCountryDropdown country={country} type="register" />
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex-1 bg-white shadow-lg p-4 pb-6 rounded-[1rem] w-full max-w-[500px] max-sm:max-w-[95%] mx-auto"
+          className="mx-auto w-full max-w-[500px] flex-1 rounded-[1rem] bg-white p-4 pb-6 shadow-lg max-sm:max-w-[95%]"
         >
-          <h3 className="mb-4 text-3xl font-bold text-center text-yellow">
+          <h3 className="mb-4 text-center text-3xl font-bold text-yellow">
             Admin Register
           </h3>
-          <div className="flex flex-col gap-5 w-full max-w-full md:max-w-[800px] mx-auto ">
+          <div className="mx-auto flex w-full max-w-full flex-col gap-5 md:max-w-[800px]">
             {/* mobile / whatsapp*/}
             <FormField
               control={form.control}
               name="phoneNumber"
               render={({ field }) => (
-                <FormItem className="flex flex-col mb-2 w-full">
-                  <FormLabel className="flex justify-between mt-4 ml-2 w-72 text-base lg:text-lg">
+                <FormItem className="mb-2 flex w-full flex-col">
+                  <FormLabel className="ml-2 mt-4 flex w-72 justify-between text-base lg:text-lg">
                     Mobile
                   </FormLabel>
-                  <div className="flex-col items-start w-full">
+                  <div className="w-full flex-col items-start">
                     <FormControl>
                       <PhoneInput
-                        defaultCountry="ae"
+                        defaultCountry={country === "in" ? "in" : "ae"}
                         value={field.value}
                         onChange={(value, country) => {
                           field.onChange(value);
@@ -138,11 +157,11 @@ const Register = () => {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem className="flex flex-col mb-2 w-full">
-                  <FormLabel className="flex justify-between ml-2 w-72 text-base lg:text-lg">
+                <FormItem className="mb-2 flex w-full flex-col">
+                  <FormLabel className="ml-2 flex w-72 justify-between text-base lg:text-lg">
                     Password
                   </FormLabel>
-                  <div className="flex-col items-start w-full">
+                  <div className="w-full flex-col items-start">
                     <FormControl>
                       <Input
                         placeholder="Password"
@@ -161,15 +180,18 @@ const Register = () => {
               type="submit"
               size="lg"
               disabled={form.formState.isSubmitting}
-              className="w-full  mx-auto flex-center col-span-2 mt-2 !text-lg !font-semibold button bg-yellow hover:bg-darkYellow"
+              className="flex-center button hover:bg-darkYellow col-span-2 mx-auto mt-2 w-full bg-yellow !text-lg !font-semibold"
             >
               Send OTP {form.formState.isSubmitting && <Spinner />}
             </Button>
           </div>
-          <div className="flex justify-end px-2 mt-3">
+          <div className="mt-3 flex justify-end px-2">
             <div>
               Existing admin?{" "}
-              <Link to={"/login"} className="font-semibold text-yellow">
+              <Link
+                to={country === "in" ? "/in/login" : "/ae/login"}
+                className="font-semibold text-yellow"
+              >
                 Login
               </Link>
             </div>

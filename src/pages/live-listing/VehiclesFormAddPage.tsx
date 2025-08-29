@@ -12,6 +12,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { getPrimaryDetailsFormDefaultData } from "@/api/vehicle";
 import FormSkelton from "@/components/skelton/FormSkelton";
+import { getCompanyById } from "@/api/company";
 
 // Lazy-loaded components
 const PrimaryDetailsForm = lazy(
@@ -39,6 +40,16 @@ export default function VehiclesFormAddPage() {
     staleTime: 30000,
     enabled: !!companyId,
   });
+
+  const { data: companyData, isLoading: isCompanyLoading } = useQuery({
+    queryKey: ["company", companyId],
+    queryFn: () => getCompanyById(companyId as string),
+    enabled: !!companyId,
+  });
+
+  const isIndia = companyData?.result?.countryName === "India";
+  const countryId = companyData?.result?.countryId || "";
+  const companyLocation = companyData?.result?.location || null;
 
   // Handle tab change based on levelsFilled state
   const handleTabChange = (value: string) => {
@@ -111,7 +122,7 @@ export default function VehiclesFormAddPage() {
 
           <TabsContent value="primary" className="flex-center">
             <Suspense fallback={<LazyLoader />}>
-              {isLoading ? (
+              {isLoading || isCompanyLoading ? (
                 <FormSkelton />
               ) : (
                 <PrimaryDetailsForm
@@ -119,6 +130,9 @@ export default function VehiclesFormAddPage() {
                   formData={formData}
                   onNextTab={() => handleNextTab("specifications")}
                   initialCountryCode="971"
+                  isIndia={isIndia}
+                  countryId={countryId}
+                  companyLocation={companyLocation}
                 />
               )}
             </Suspense>

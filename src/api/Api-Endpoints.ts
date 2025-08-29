@@ -17,6 +17,10 @@ export enum Slug {
   PUT_STATE = "/states",
   DELETE_STATE = "/states",
   GET_ALL_STATES = "/states/list",
+  GET_ALL_PARENT_STATES = "/states/parent/list",
+  GET_COUNTRY = "/country",
+  GET_ALL_COUNTRY = "/country/list",
+  ADD_HOME_PAGE_BANNER = "/homepage-banners",
 
   // Cities Endpoints
   ADD_CITY = "/city",
@@ -59,12 +63,17 @@ export enum Slug {
   DELETE_RELATED_LINK = "/recomented-links",
   GET_ALL_RELATED_LINKS = "/recomented-links/list",
 
-  // Links Endpoints
+  // Promotion old Endpoints
   ADD_PROMOTION = "/promotions",
   GET_PROMOTION = "/promotions",
   PUT_PROMOTION = "/promotions",
   DELETE_PROMOTION = "/promotions",
   GET_ALL_PROMOTIONS = "/promotions/list",
+
+  // Ride Promotions (redesign)
+  ADD_RIDE_PROMOTION = "/ride-promotions",
+  GET_RIDE_PROMOTION = "/ride-promotions",
+  PUT_RIDE_PROMOTION = "/ride-promotions",
 
   // company end points
   POST_COMPANY = "/company",
@@ -173,4 +182,29 @@ export enum Slug {
   PUT_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
   DELETE_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
   GET_ALL_ADVISOR_BLOG_PROMOTIONS = "/advisor-blogs-promotions/list",
+
+  // Job Endpoints
+  ADD_JOB = "/jobs",
+  GET_JOB = "/jobs",
+  PUT_JOB = "/jobs",
+  DELETE_JOB = "/jobs",
+  GET_ALL_JOBS = "/jobs/minimal-list",
+
+  // Application Endpoints
+  GET_APPLICATIONS = "/applications",
+  UPDATE_APPLICATION_STATUS = "/applications",
+  DELETE_APPLICATION = "/applications",
+
+  // SRM Endpoints
+  GET_ALL_SRM_ACTIVE_TRIPS = "/srm/active-trips",
+  GET_ALL_SRM_COMPLETED_TRIPS = "/srm/completed-trips",
+  GET_ALL_SRM_AGENTS = "/srm/agents",
+  GET_ALL_SRM_CUSTOMERS = "/srm/customers",
+
+  GET_SRM_CUSTOMER = "/srm/customer",
+  POST_SRM_CUSTOMER = "/srm/customer",
+  PUT_SRM_CUSTOMER = "/srm/customer",
+
+  GET_SRM_VEHICLES = "/srm/vehicles",
+  PUT_SRM_VEHICLE = "/srm/vehicle",
 }

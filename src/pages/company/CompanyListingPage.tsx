@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { companyColumns } from "../../components/table/columns/GeneralCompanyColumn";
-import { CompanyTable } from "@/components/table/CompanyTable";
 import { getAllCompany, updateCompanyStatus } from "@/api/company";
 import { SortDropdown } from "@/components/SortDropdown";
 import { LimitDropdown } from "@/components/LimitDropdown";
@@ -9,9 +8,11 @@ import Pagination from "@/components/Pagination";
 import CompanyStatusModal from "@/components/CompanyStatusModal"; // Modal for updating company status
 import { toast } from "@/components/ui/use-toast";
 import { CompanyType } from "@/types/api-types/vehicleAPI-types";
-import SearchComponent from "@/components/Search";
+import SearchBox from "@/components/SearchBox";
 import { useSearchParams } from "react-router-dom";
 import CompanyPageHeading from "../../components/CompanyPageHeading";
+import { useAdminContext } from "@/context/AdminContext";
+import { GenericTable } from "@/components/table/GenericTable";
 
 interface CompanyListingPageProps {
   queryKey: string[];
@@ -33,11 +34,12 @@ export default function CompanyListingPage({
   );
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
+  const { country } = useAdminContext();
 
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
-    queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
+    queryKey: [...queryKey, page, limit, sortOrder, searchTerm, country],
     queryFn: () =>
       getAllCompany({
         page,
@@ -46,7 +48,9 @@ export default function CompanyListingPage({
         approvalStatus,
         edited: isModified,
         search: searchTerm.trim(),
+        countryId: country.countryId,
       }),
+    enabled: !!country.countryId,
   });
 
   const handleOpenModal = (company: CompanyType) => {
@@ -126,20 +130,19 @@ export default function CompanyListingPage({
       </div>
 
       {/* search component */}
-      <div className="mb-6">
-        <SearchComponent placeholder="Search company" />
-        <p className="ml-2 text-left text-sm italic text-gray-500">
-          <span className="font-semibold text-gray-600">
-            company name or agent id
-          </span>{" "}
-          can be used to search the company
-        </p>
-      </div>
 
-      <CompanyTable
+      <SearchBox
+        placeholder="Search company"
+        searchDescription={
+          "company name or agent id can be used to search the company"
+        }
+      />
+
+      <GenericTable<CompanyType>
         columns={companyColumns(handleOpenModal)}
         data={data?.result?.list || []}
         loading={isLoading}
+        loadingText="Fetching Companies..."
       />
 
       <Pagination

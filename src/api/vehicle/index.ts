@@ -9,6 +9,8 @@ export const buildCommonPrimaryDetails = (
   phoneNumber: string,
   isCarsCategory: boolean,
 ): Record<string, any> => {
+  console.log(values);
+  
   return {
     countryCode,
     vehicleCategoryId: values.vehicleCategoryId,
@@ -17,6 +19,7 @@ export const buildCommonPrimaryDetails = (
     vehicleSeriesId: values.vehicleSeriesId,
     vehicleModel: values.vehicleModel,
     vehicleRegistrationNumber: values.vehicleRegistrationNumber,
+    isFancyNumber: values.isFancyNumber,
     vehicleRegisteredYear: values.vehicleRegisteredYear,
     commercialLicenseExpireDate:
       values.commercialLicenseExpireDate?.toISOString(),
@@ -32,15 +35,21 @@ export const buildCommonPrimaryDetails = (
     cityIds: values.cityIds,
     rentalDetails: JSON.stringify(values.rentalDetails),
     vehiclePhotos: values.vehiclePhotos,
+    vehicleVideos: values.vehicleVideos,
     commercialLicenses: values.commercialLicenses,
     securityDeposit: values.securityDeposit,
     isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
     isTabbySupported: values.isTabbySupported,
+    isCashSupported: values.isCashSupported,
     vehicleMetaTitle: values.vehicleMetaTitle,
     vehicleMetaDescription: values.vehicleMetaDescription,
+    location: values.location,
     // Include additionalVehicleTypes only if isCarsCategory is true
     ...(isCarsCategory && {
       additionalVehicleTypes: values.additionalVehicleTypes || [],
     }),
+    tempCitys: values.tempCitys,
+    isVehicleModified: values.isVehicleModified.toString(),
+    disablePriceMatching: values?.disablePriceMatching || false,
   };
 };

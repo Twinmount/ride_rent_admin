@@ -4,10 +4,15 @@ import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
 import { useFetchStates } from "@/hooks/useFetchStates";
 import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
+import { Link } from "react-router-dom";
+import { Plus } from "lucide-react";
+import { StateType } from "@/types/api-types/vehicleAPI-types";
+import { useState } from "react";
 
 export default function HomeMetaData() {
-  const { isStateLoading, selectedState, statesList, setSelectedState } =
-    useFetchStates();
+  const [selectedState, setSelectedState] = useState<StateType | null>(null);
+
+  const { isStateLoading, statesList, setFilter } = useFetchStates();
 
   // Fetch meta data using useQuery
   const { data, isLoading } = useQuery({
@@ -28,8 +33,7 @@ export default function HomeMetaData() {
     <section className="h-auto min-h-screen w-full bg-gray-100 py-10">
       <div className="mb-6 flex flex-col">
         <h1 className="mb-5 text-center text-2xl font-semibold lg:ml-6 lg:text-left">
-          HomePage MetaData under {selectedState?.stateName} for all 11
-          categories
+          Homepage MetaData under {selectedState?.stateName} for categories
         </h1>
 
         <div className="ml-auto mr-6 w-fit md:mr-10 lg:mr-16">
@@ -38,6 +42,7 @@ export default function HomeMetaData() {
             options={statesList}
             selectedState={selectedState}
             setSelectedState={setSelectedState}
+            setFilter={setFilter}
           />
         </div>
       </div>
@@ -57,6 +62,14 @@ export default function HomeMetaData() {
             />
           ))
         )}
+        <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
+          <Link
+            className="flex-center gap-x-1 bg-yellow px-3 py-2 text-white"
+            to="add"
+          >
+            Add New <Plus />
+          </Link>
+        </button>
       </div>
     </section>
   );

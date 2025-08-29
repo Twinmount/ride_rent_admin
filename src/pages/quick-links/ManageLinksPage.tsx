@@ -10,6 +10,7 @@ import Pagination from "@/components/Pagination";
 export default function ManageLinksPage() {
   const { state } = useAdminContext();
   const [page, setPage] = useState(1);
+  const { country } = useAdminContext();
 
   const { data, isLoading } = useQuery({
     queryKey: ["quick-links", state],
@@ -28,7 +29,7 @@ export default function ManageLinksPage() {
   return (
     <section className="container h-auto min-h-screen pb-16">
       <h1 className="mt-6 text-center text-2xl font-bold sm:text-left">
-        Currently Active Links In{" "}
+        {country.countryName} - Currently Active Links In{" "}
         <span className="text-yellow">{state.stateName}</span>
       </h1>
       <h3 className="mb-8 text-center italic text-gray-600 sm:text-left">

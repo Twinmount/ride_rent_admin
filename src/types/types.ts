@@ -1,3 +1,6 @@
+import { iconConfigSchema } from "@/lib/validator";
+import { z } from "zod";
+
 // admin context org  type
 export type orgType = {
   id?: string;
@@ -5,11 +8,36 @@ export type orgType = {
   value: string;
 };
 
+export type AppSuportedCountries = {
+  id: string;
+  name: string;
+  value: string;
+  icon: string;
+};
+
+export interface Location {
+  lat: number;
+  lng: number;
+  address?: string;
+}
+
 // admin context  state type
 export type stateType = {
   stateId: string;
   stateName: string;
   stateValue: string;
+};
+
+export type countryType = {
+  countryId: string;
+  countryName: string;
+  countryValue: string;
+};
+
+export type ParentState = {
+  stateName: string;
+  stateValue: string;
+  stateId: string;
 };
 
 export type NavbarStateType = {
@@ -26,10 +54,15 @@ export type AdminContextType = {
   setSidebarOpen?: (value: boolean) => void;
   toggleSidebar: () => void;
   isSmallScreen: boolean;
-  org: orgType;
-  setOrg: (origin: orgType) => void;
   state: stateType;
   setState: (state: stateType) => void;
+  country: countryType;
+  setCountry: (state: countryType) => void;
+  parentState: stateType;
+  setParentState: (state: stateType) => void;
+  appCountry: string;
+  updateAppCountry: (country: string) => void;
+  appSuportedCountries: AppSuportedCountries[];
 };
 
 export type VehicleCategoryType =
@@ -65,12 +98,24 @@ export type BrandFormType = {
   brandLogo: string;
 };
 
+export type IconConfig = z.infer<typeof iconConfigSchema>;
+
 export type StateFormType = {
   stateId?: string;
   stateName: string;
   stateValue: string;
   stateImage: string;
   relatedStates?: string[];
+  isFavorite?: boolean;
+  stateIcon?: string;
+  location: Location;
+  iconConfig?: IconConfig;
+};
+
+export type CountryFormType = {
+  countryId?: string;
+  countryName: string;
+  countryValue: string;
 };
 
 export type CategoryFormType = {
@@ -152,6 +197,9 @@ export type CompanyFormType = {
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;
+  accountType?: string;
+  countryName?: string;
+  location?: Location;
 };
 
 export type CompanyStatusFormType = {
@@ -238,3 +286,27 @@ export type VehicleSeriesType = {
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
 };
+
+// Job
+
+export type JobSectionDto = {
+  title: string;
+  points: string[];
+};
+
+export type JobFormType = {
+  _id?: string;
+  jobtitle: string;
+  jobdescription: string;
+  location: string;
+  date: string;
+  level: string;
+  experience: string;
+  country: string;
+  sections?: JobSectionDto[];
+  aboutCompany?: string;
+  fileUrl?: string | null;
+};
+
+export type ApplicationTypes = "all" | "intern" | "career";
+export type ContentFor = "state" | "country" | "parentState";

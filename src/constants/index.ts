@@ -1,4 +1,9 @@
-import { PrimaryFormType } from "@/types/formTypes";
+import {
+  PrimaryFormType,
+  RidePromotionFormType,
+  SRMCustomerDetailsFormType,
+  SRMVehicleFormType,
+} from "@/types/formTypes";
 import {
   AdvisorBlogFormType,
   BlogFormType,
@@ -7,6 +12,8 @@ import {
   CityFormType,
   CompanyFormType,
   CompanyStatusFormType,
+  CountryFormType,
+  JobFormType,
   StateFormType,
   VehicleSeriesType,
   VehicleTypeFormType,
@@ -33,7 +40,27 @@ export const StateFormDefaultValues: StateFormType = {
   stateValue: "",
   stateImage: "",
   relatedStates: [""],
+  isFavorite: false,
+  stateIcon: "",
+  location: {
+    lat: 0,
+    lng: 0,
+    address: "",
+  },
+  iconConfig: {
+    iconName: "",
+    bgColor: "#ffffff",
+    strokeColor: "#000000",
+    strokeWidth: "1",
+  },
 };
+
+export const CountryFormDefaultValues: CountryFormType = {
+  countryId: "",
+  countryName: "",
+  countryValue: "",
+};
+
 export const CityFormDefaultValues: CityFormType = {
   cityName: "",
   cityValue: "",
@@ -90,33 +117,53 @@ export const ListingMetaFormDefaultValue = {
 };
 
 // navbar origin dropdown temporary value/s
-export const orgs = [{ id: "1", label: "UAE", value: "uae" }];
+export const orgs = [{ id: "1", label: "UAE", value: "ae" }];
 
 // primary details form default values
-export const PrimaryFormDefaultValues: PrimaryFormType = {
+export const getPrimaryFormDefaultValues = (
+  isIndia: boolean,
+): PrimaryFormType => ({
   vehicleCategoryId: "",
   vehicleTypeId: "", //'luxury' for example
   vehicleBrandId: "",
   vehicleSeriesId: "",
   vehicleModel: "",
   vehiclePhotos: [], //upto 8 photos of the vehicle
+  vehicleVideos: [],
   vehicleRegistrationNumber: "",
+  isFancyNumber: false,
   vehicleRegisteredYear: "",
   commercialLicenses: [],
   commercialLicenseExpireDate: undefined,
   isLease: false,
   isCryptoAccepted: false,
   isSpotDeliverySupported: false,
-  specification: "UAE_SPEC",
+  specification: isIndia ? "India_SPEC" : "UAE_SPEC",
   rentalDetails: {
-    day: { enabled: false, rentInAED: "", mileageLimit: "" },
-    week: { enabled: false, rentInAED: "", mileageLimit: "" },
-    month: { enabled: false, rentInAED: "", mileageLimit: "" },
+    day: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    week: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    month: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
     hour: {
       enabled: false,
       minBookingHours: "",
       rentInAED: "",
       mileageLimit: "",
+      unlimitedMileage: false,
     },
   },
   phoneNumber: "",
@@ -132,10 +179,43 @@ export const PrimaryFormDefaultValues: PrimaryFormType = {
   },
   isCreditOrDebitCardsSupported: false,
   isTabbySupported: false,
+  isCashSupported: false,
   vehicleMetaTitle: "",
   vehicleMetaDescription: "",
-};
+  tempCitys: [],
+  location: undefined,
+  isVehicleModified: false,
+});
 
+export const getSRMVehicleFormDefaultValue = (): SRMVehicleFormType => ({
+  rentalDetails: {
+    day: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    week: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    month: {
+      enabled: false,
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+    hour: {
+      enabled: false,
+      minBookingHours: "",
+      rentInAED: "",
+      mileageLimit: "",
+      unlimitedMileage: false,
+    },
+  },
+});
 // login page default value
 export const LoginPageDefaultValues = {
   phoneNumber: "",
@@ -155,6 +235,7 @@ export const CompanyFormDefaultValues: CompanyFormType = {
   companyLanguages: [],
   companyMetaTitle: "",
   companyMetaDescription: "",
+  location: undefined,
 };
 
 // Company registration phase 2 form default values
@@ -228,4 +309,47 @@ export const VehicleSeriesFormDefaultValues: VehicleSeriesType = {
   vehicleSeriesInfoDescription: "",
   vehicleSeriesMetaTitle: "",
   vehicleSeriesMetaDescription: "",
+};
+
+// Job form default values
+
+export const JobFormDefaultValues: JobFormType = {
+  jobtitle: "",
+  jobdescription: "",
+  location: "",
+  date: "",
+  level: "",
+  experience: "",
+  country: "",
+  sections: [
+    {
+      title: "Section 1",
+      points: ["Section point 1"],
+    },
+  ],
+};
+
+export const SRMCustomerDetailsFormDefaultValues: SRMCustomerDetailsFormType = {
+  customerProfilePic: "",
+  customerName: "", // Name of the Customer
+  email: "",
+  nationality: "", // Nationality of the user
+  passportNumber: "", // Passport number
+  passport: [], // Passport image
+  drivingLicenseNumber: "", // Driving license number
+  drivingLicense: [], // Driving license image
+  phoneNumber: "", // Phone number with validation on minimum characters
+};
+
+export const RidePromotionFormDefaultValues: RidePromotionFormType = {
+  sectionTitle: "",
+  sectionSubtitle: "",
+  cards: [
+    {
+      image: "",
+      cardTitle: "",
+      cardSubtitle: "",
+      link: "",
+    },
+  ],
 };

@@ -107,7 +107,7 @@ const ExpandCollapseButton = ({
       </Link>
 
       <button
-        className="bg-yellow-500 hover:bg-yellow-600 flex items-center rounded-md px-4 py-2 font-semibold text-black transition"
+        className="bg-yellow hover:bg-yellow-600 flex items-center rounded-md px-4 py-2 font-semibold text-black transition"
         onClick={toggleExpand}
         aria-label={isExpanded ? "Collapse content" : "Expand content"}
       >

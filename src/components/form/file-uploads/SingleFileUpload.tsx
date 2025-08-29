@@ -176,7 +176,7 @@ const SingleFileUpload = ({
   return (
     <>
       <FormItem className="mb-2 flex w-full max-sm:flex-col">
-        <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base max-sm:w-fit lg:text-lg">
+        <FormLabel className="ml-2 mt-4 flex w-64 justify-between text-base font-semibold max-sm:w-fit lg:text-lg">
           {label} <span className="mr-5 max-sm:hidden">:</span>
         </FormLabel>
         <div className="w-full flex-col items-start">
