@@ -78,10 +78,10 @@ export default function StateForm({
     formData && type === "Update"
       ? formData
       : {
-          ...StateFormDefaultValues,
-          ...(parentStateId ? { parentStateId } : {}),
-          ...(!parentStateId && isIndia ? { isParentState: true } : {}),
-        };
+        ...StateFormDefaultValues,
+        ...(parentStateId ? { parentStateId } : {}),
+        ...(!parentStateId && isIndia ? { isParentState: true } : {}),
+      };
 
   const navigate = useNavigate();
   const { stateId } = useParams<{ stateId: string }>();
@@ -327,6 +327,7 @@ export default function StateForm({
                   onChangeHandler={field.onChange}
                   initialLocation={field.value}
                   buttonText="Choose Location"
+                  showDetails={true}
                   buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
                 />
               </FormItemWrapper>

@@ -48,11 +48,11 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
   const initialValues =
     formData && type === "Update"
       ? {
-          ...formData,
-          expireDate: formData.expireDate
-            ? new Date(formData.expireDate)
-            : undefined,
-        }
+        ...formData,
+        expireDate: formData.expireDate
+          ? new Date(formData.expireDate)
+          : undefined,
+      }
       : CompanyFormDefaultValues;
 
   // creating form
@@ -205,12 +205,11 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             <FormItemWrapper
               label="Expiry Date"
               description={`Enter the expiry of your
-                ${
-                  isIndia && !isIndividual
-                    ? " Commercial License / GST Registration / Trade License"
-                    : isIndia && isIndividual
-                      ? " Commercial Registration / Tourist Permit"
-                      : " Commercial License / Trade License"
+                ${isIndia && !isIndividual
+                  ? " Commercial License / GST Registration / Trade License"
+                  : isIndia && isIndividual
+                    ? " Commercial Registration / Tourist Permit"
+                    : " Commercial License / Trade License"
                 }{" "}
                 &#40;DD/MM/YYYY&#41;.`}
             >
@@ -230,20 +229,18 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           name="regNumber"
           render={({ field }) => (
             <FormItemWrapper
-              label={`${
-                isIndia && !isIndividual
+              label={`${isIndia && !isIndividual
                   ? "GST Number"
                   : isIndia && isIndividual
                     ? "PAN Number"
                     : "Registration Number / Trade License Number"
-              }`}
-              description={`${
-                isIndia && !isIndividual
+                }`}
+              description={`${isIndia && !isIndividual
                   ? `Enter your company GST number. The number should be a combination of letters and numbers, without any spaces or special characters.`
                   : isIndia && isIndividual
                     ? "Enter your company PAN. The number should be a combination of letters and numbers, without any spaces or special characters."
                     : `Enter your company registration number. The number should be a combination of letters and numbers, without any spaces or special characters, up to 15 characters.`
-              }`}
+                }`}
             >
               <Input
                 placeholder={
@@ -265,11 +262,10 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           render={({ field }) => (
             <FormItemWrapper
               label="Supported Languages"
-              description={`${
-                isIndividual
+              description={`${isIndividual
                   ? "Select all the languages you can speak or understand. These will be shown on your public profile to help customers communicate comfortably with you."
                   : "Select all the languages your staff can speak or understand. These will be displayed on your company's public profile page, helping customers feel comfortable with communication."
-              }`}
+                }`}
             >
               <CompanyLanguagesDropdown
                 isIndia={isIndia}
@@ -298,6 +294,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
                 onChangeHandler={field.onChange}
                 initialLocation={field.value}
                 buttonText="Choose Location"
+                showDetails={true}
                 buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
               />
             </FormItemWrapper>
