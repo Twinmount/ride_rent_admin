@@ -314,9 +314,19 @@ export function formatSpecifications(
  */
 export function mapGetPrimaryFormToPrimaryFormType(
   data: GetPrimaryForm,
+  isIndia: boolean,
 ): PrimaryFormType {
-  // Combine countryCode and phoneNumber into a single phoneNumber string
-  const formattedPhoneNumber = `+${data.countryCode}${data.phoneNumber}`;
+  const isPhoneNumberExist = data.countryCode && data.phoneNumber;
+  const countryCode =
+    data?.countryCode && data?.countryCode.startsWith("+")
+      ? data.countryCode
+      : `+${data.countryCode}`;
+
+  const formattedPhoneNumber = isPhoneNumberExist
+    ? `${countryCode}${data.phoneNumber}`
+    : isIndia
+      ? "+91"
+      : "+971";
 
   return {
     vehicleId: data.vehicleId,
@@ -363,6 +373,19 @@ interface TabValidationProps {
   tab: TabsTypes;
   levelsFilled: number;
 }
+
+/**
+ * Extract a phone number from a full phone number string by removing the country code and trimming any remaining whitespace.
+ */
+export const extractPhoneNumber = (
+  fullPhoneNumber: string,
+  countryCode: string,
+): string => {
+  const cleanCountryCode = countryCode.startsWith("+")
+    ? countryCode
+    : `+${countryCode}`;
+  return fullPhoneNumber.replace(cleanCountryCode, "").trim();
+};
 
 /**
  * Function to validate access to different tabs in the vehicle form process.
