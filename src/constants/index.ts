@@ -122,6 +122,7 @@ export const orgs = [{ id: "1", label: "UAE", value: "ae" }];
 // primary details form default values
 export const getPrimaryFormDefaultValues = (
   isIndia: boolean,
+  countryCode: string,
 ): PrimaryFormType => ({
   vehicleCategoryId: "",
   vehicleTypeId: "", //'luxury' for example
@@ -166,7 +167,7 @@ export const getPrimaryFormDefaultValues = (
       unlimitedMileage: false,
     },
   },
-  phoneNumber: "",
+  phoneNumber: countryCode.startsWith("+") ? countryCode : `+${countryCode}`,
   stateId: "",
   cityIds: [],
   description: "",
