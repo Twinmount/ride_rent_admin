@@ -93,9 +93,6 @@ export default function PrimaryDetailsForm({
   countryId,
   companyLocation,
 }: PrimaryFormProps) {
-  const [countryCode, setCountryCode] = useState<string>(
-    initialCountryCode || isIndia ? "+91" : "+971",
-  );
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
   const [isVideoUploading, setIsVideoUploading] = useState(false);
   const [isLicenseUploading, setIsLicenseUploading] = useState(false);
@@ -109,6 +106,10 @@ export default function PrimaryDetailsForm({
   const [cities, setCities] = useState<CityType[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [temporaryCities, setTemporaryCities] = useState<CityType[]>([]);
+  const [countryCode, setCountryCode] = useState<string>(() => {
+    const code = initialCountryCode || (isIndia ? "+91" : "+971");
+    return code.startsWith("+") ? code : `+${code}`;
+  });
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string;
@@ -119,13 +120,13 @@ export default function PrimaryDetailsForm({
 
   const initialValues = formData
     ? {
-      ...formData,
-      cityIds: [
-        ...formData.cityIds,
-        ...(formData.tempCitys ?? []).map((city: CityType) => city.cityId),
-      ],
-    }
-    : getPrimaryFormDefaultValues(isIndia);
+        ...formData,
+        cityIds: [
+          ...formData.cityIds,
+          ...(formData.tempCitys ?? []).map((city: CityType) => city.cityId),
+        ],
+      }
+    : getPrimaryFormDefaultValues(isIndia, countryCode);
 
   // Define your form.
   const form = useForm<z.infer<typeof PrimaryFormSchema>>({
@@ -133,6 +134,15 @@ export default function PrimaryDetailsForm({
     defaultValues: initialValues as PrimaryFormType,
     shouldFocusError: true,
   });
+
+  useEffect(() => {
+    if (initialCountryCode) {
+      const normalizedCode = initialCountryCode.startsWith("+")
+        ? initialCountryCode
+        : `+${initialCountryCode}`;
+      setCountryCode(normalizedCode);
+    }
+  }, [initialCountryCode]);
 
   useEffect(() => {
     if (formData?.tempCitys && Array.isArray(formData.tempCitys)) {
@@ -170,10 +180,14 @@ export default function PrimaryDetailsForm({
     }, 1000);
   };
 
-  const handleSavePrices = async (prices: { hourly: number; daily: number; week: number; monthly: number }
-  ) => {
+  const handleSavePrices = async (prices: {
+    hourly: number;
+    daily: number;
+    week: number;
+    monthly: number;
+  }) => {
     const vehicleSeriesId = form.getValues("vehicleSeriesId") || "";
-    const year = form.getValues("vehicleRegisteredYear")
+    const year = form.getValues("vehicleRegisteredYear");
     await saveRentalPricesApi(vehicleSeriesId, year, prices);
     setIsPriceEditModalOpen(false);
   };
@@ -199,16 +213,23 @@ export default function PrimaryDetailsForm({
     // Only for Update, call price edit validation API before submit
     if (type === "Update" && vehicleId) {
       const vehicleSeriesId = form.getValues("vehicleSeriesId") || "";
-      const year = form.getValues("vehicleRegisteredYear")
+      const year = form.getValues("vehicleRegisteredYear");
       const priceEditResult = await validatePriceEdit(vehicleSeriesId, year);
       if (!priceEditResult.ok) {
         setIsPriceEditModalOpen(true);
         setPriceEditModalProps({
           open: true,
           onClose: () => setIsPriceEditModalOpen(false),
-          year: values.vehicleRegisteredYear?.toString() || new Date().getFullYear().toString(),
+          year:
+            values.vehicleRegisteredYear?.toString() ||
+            new Date().getFullYear().toString(),
           prices: { hourly: 0, daily: 0, week: 0, monthly: 0 },
-          onSave: (prices: { hourly: number; daily: number; week: number; monthly: number }) => handleSavePrices(prices)
+          onSave: (prices: {
+            hourly: number;
+            daily: number;
+            week: number;
+            monthly: number;
+          }) => handleSavePrices(prices),
         });
         return;
       }
@@ -332,7 +353,9 @@ export default function PrimaryDetailsForm({
             name="disablePriceMatching"
             render={({ field }) => (
               <FormItem className="mt-4 flex items-center justify-end">
-                <FormLabel className="mt-2 mb-0 mr-2">Disable Price Matchin : </FormLabel>
+                <FormLabel className="mb-0 mr-2 mt-2">
+                  Disable Price Matchin :{" "}
+                </FormLabel>
                 <FormControl>
                   <Switch
                     id="disablePriceMatching"
@@ -606,7 +629,9 @@ export default function PrimaryDetailsForm({
                           type="button"
                           onClick={() => {
                             setIsDialogOpen(false);
-                            field.onChange({ target: { value: originalValue } });
+                            field.onChange({
+                              target: { value: originalValue },
+                            });
                             focusInputAtEnd();
                           }}
                           className="rounded-md border border-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-100"
@@ -650,9 +675,10 @@ export default function PrimaryDetailsForm({
                     <>
                       <span className="w-full max-w-[90%]">
                         Provide vehicle title. This will be used for showing the
-                        vehicle <strong>title of the vehicle details page</strong>
-                        , and also for the <strong>SEO meta data</strong>{" "}
-                        purposes. 100 characters max.
+                        vehicle{" "}
+                        <strong>title of the vehicle details page</strong>, and
+                        also for the <strong>SEO meta data</strong> purposes.
+                        100 characters max.
                       </span>{" "}
                       <span className="ml-auto"> {`${charCount}/100`}</span>
                     </>
@@ -894,8 +920,9 @@ export default function PrimaryDetailsForm({
                   existingFiles={initialValues.commercialLicenses || []}
                   description={
                     <>
-                      Upload <span className="font-bold text-yellow">front</span>{" "}
-                      & <span className="font-bold text-yellow">back</span> images
+                      Upload{" "}
+                      <span className="font-bold text-yellow">front</span> &{" "}
+                      <span className="font-bold text-yellow">back</span> images
                       of the Registration Card{" "}
                       {!isIndia
                         ? isCustomCommercialLicenseLabel
@@ -932,8 +959,9 @@ export default function PrimaryDetailsForm({
                     <span className="text-sm text-gray-500">(DD/MM/YYYY)</span>
                   </span>
                 }
-                description={`Enter the expiry date for the Registration Card ${isIndia ? "" : "/ Mulkia"
-                  } in the format DD/MM/YYYY.`}
+                description={`Enter the expiry date for the Registration Card ${
+                  isIndia ? "" : "/ Mulkia"
+                } in the format DD/MM/YYYY.`}
               >
                 <DatePicker
                   selected={field.value}
@@ -995,7 +1023,9 @@ export default function PrimaryDetailsForm({
                 description={
                   <span>
                     Enter the{" "}
-                    <span className="font-semibold text-green-400">WhatsApp</span>{" "}
+                    <span className="font-semibold text-green-400">
+                      WhatsApp
+                    </span>{" "}
                     mobile number. This number will receive direct booking
                     details.
                   </span>
@@ -1006,7 +1036,8 @@ export default function PrimaryDetailsForm({
                   value={field.value}
                   onChange={(value, country) => {
                     field.onChange(value);
-                    setCountryCode(country.country.dialCode);
+                    const newCountryCode = `+${country.country.dialCode}`;
+                    setCountryCode(newCountryCode);
                   }}
                   className="flex items-center"
                   inputClassName="input-field !w-full !text-base"
@@ -1050,10 +1081,11 @@ export default function PrimaryDetailsForm({
                         <span className="mt-2">Loading...</span>
                       ) : (
                         <span
-                          className={`mt-2 select-none underline ${companyLocation
-                            ? "cursor-pointer text-blue-700"
-                            : "cursor-not-allowed text-gray-400"
-                            }`}
+                          className={`mt-2 select-none underline ${
+                            companyLocation
+                              ? "cursor-pointer text-blue-700"
+                              : "cursor-not-allowed text-gray-400"
+                          }`}
                           onClick={() => {
                             if (!companyLocation) return;
                             toast({
@@ -1145,9 +1177,9 @@ export default function PrimaryDetailsForm({
                   description={
                     <span className="flex flex-col">
                       <span>
-                        Provide a meta description for this vehicle. This will be
-                        used as the Meta Description in the vehicle-details-page
-                        in Nextjs.
+                        Provide a meta description for this vehicle. This will
+                        be used as the Meta Description in the
+                        vehicle-details-page in Nextjs.
                       </span>
                       <span className="ml-auto mt-1 text-sm text-gray-500">
                         {charCount}/{limit}
@@ -1336,9 +1368,7 @@ export default function PrimaryDetailsForm({
         </FormContainer>
       </Form>
       {/* Price Edit Modal for price validation failure */}
-      {isPriceEditModalOpen && (
-        <PriceEditModal {...priceEditModalProps} />
-      )}
+      {isPriceEditModalOpen && <PriceEditModal {...priceEditModalProps} />}
     </>
   );
 }

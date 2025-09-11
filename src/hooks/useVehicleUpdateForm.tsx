@@ -12,7 +12,10 @@ import { save, StorageKeys } from "@/utils/storage";
 
 export type TabsTypes = "primary" | "specifications" | "features" | "faq";
 
-export const useVehicleUpdateForm = (vehicleId: string | undefined) => {
+export const useVehicleUpdateForm = (
+  vehicleId: string | undefined,
+  isIndia: boolean,
+) => {
   const [activeTab, setActiveTab] = useState<TabsTypes>("primary");
   const queryClient = useQueryClient();
 
@@ -52,13 +55,14 @@ export const useVehicleUpdateForm = (vehicleId: string | undefined) => {
 
   // Format form data
   const formData = data
-    ? mapGetPrimaryFormToPrimaryFormType(data.result)
+    ? mapGetPrimaryFormToPrimaryFormType(data.result, isIndia)
     : null;
 
   // Extract necessary fields
   const vehicleCategoryId = data?.result?.vehicleCategoryId;
   const vehicleTypeId = data?.result?.vehicleTypeId;
-  const initialCountryCode = data?.result?.countryCode;
+  const initialCountryCode =
+    data?.result?.countryCode || (isIndia ? "+91" : "+971");
 
   // Store vehicleCategoryId in localStorage if levelsFilled < 3
   useEffect(() => {

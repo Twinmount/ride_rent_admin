@@ -15,6 +15,7 @@ import {
 } from "@/types/api-types/vehicleAPI-types";
 import { PrimaryFormType } from "@/types/formTypes";
 import { buildCommonPrimaryDetails } from ".";
+import { extractPhoneNumber } from "@/helpers/form";
 
 export const addPrimaryDetailsForm = async (
   values: PrimaryFormType,
@@ -24,9 +25,7 @@ export const addPrimaryDetailsForm = async (
 ): Promise<AddPrimaryFormResponse> => {
   try {
     // Extracting phone number and country code
-    const phoneNumber = values.phoneNumber
-      .replace(`+${countryCode}`, "")
-      .trim();
+    const phoneNumber = extractPhoneNumber(values.phoneNumber, countryCode);
 
     // Prepare the request body as a regular object (no FormData)
     // Build the common request body using the helper
@@ -71,9 +70,7 @@ export const updatePrimaryDetailsForm = async (
 ): Promise<AddPrimaryFormResponse> => {
   try {
     // Extracting phone number and country code
-    const phoneNumber = values.phoneNumber
-      .replace(`+${countryCode}`, "")
-      .trim();
+    const phoneNumber = extractPhoneNumber(values.phoneNumber, countryCode);
 
     // Prepare the request body as a regular object (no FormData)
     // Build the common request body using the helper
