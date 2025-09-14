@@ -1,6 +1,6 @@
 import { CircleArrowLeft } from "lucide-react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSeriesById } from "@/api/vehicle-series";
@@ -11,8 +11,10 @@ import { useState } from "react";
 
 export default function EditBrandPage() {
   const { vehicleSeriesId } = useParams<{ vehicleSeriesId: string }>();
+  const [searchParams] = useSearchParams();
+  const tab = searchParams?.get("tab") || "primary";
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("primary");
+  const [activeTab, setActiveTab] = useState(tab);
 
   const { data, isLoading } = useQuery({
     queryKey: ["vehicle-series-by-id", vehicleSeriesId],
