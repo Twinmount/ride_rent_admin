@@ -62,7 +62,7 @@ export default function VehiclesFormUpdatePage() {
     faqData,
     updateFaqMutation,
     resetFaqMutation,
-  } = useVehicleUpdateForm(vehicleId);
+  } = useVehicleUpdateForm(vehicleId, isIndia);
 
   return (
     <section className="container h-auto min-h-screen py-8 pb-10">

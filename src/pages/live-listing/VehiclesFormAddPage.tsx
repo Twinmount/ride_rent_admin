@@ -80,7 +80,7 @@ export default function VehiclesFormAddPage() {
   };
 
   const formData = data
-    ? mapGetPrimaryFormToPrimaryFormType(data.result)
+    ? mapGetPrimaryFormToPrimaryFormType(data.result, isIndia)
     : null;
 
   return (
@@ -129,7 +129,7 @@ export default function VehiclesFormAddPage() {
                   type="Add"
                   formData={formData}
                   onNextTab={() => handleNextTab("specifications")}
-                  initialCountryCode="971"
+                  initialCountryCode={isIndia ? "+91" : "+971"}
                   isIndia={isIndia}
                   countryId={countryId}
                   companyLocation={companyLocation}
