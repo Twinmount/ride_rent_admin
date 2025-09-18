@@ -9,7 +9,10 @@ type filterType = {
   stateId: string | null;
 };
 
-export const useFetchStates = (parentStateId: string | null = null) => {
+export const useFetchStates = (
+  parentStateId: string | null = null,
+  enabled = true,
+) => {
   const [filter, setFilter] = useImmer<filterType>({
     count: 20,
     searchTerm: null,
@@ -29,6 +32,7 @@ export const useFetchStates = (parentStateId: string | null = null) => {
         filter.searchTerm,
         filter.stateId,
       ),
+    enabled: enabled,
   });
 
   const statesResult = data?.result || [];

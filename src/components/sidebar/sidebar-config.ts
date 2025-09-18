@@ -202,7 +202,7 @@ export const sidebarContent: SidebarItem[] = [
     icon: FileSearch,
     items: [
       { label: "Home Page", link: "/meta-data/home" },
-      { label: "Listings Page", link: "/meta-data/listing" },
+      { label: "Listings Page", link: "/meta-data/listing?tab=category" },
     ],
   },
   // Careers

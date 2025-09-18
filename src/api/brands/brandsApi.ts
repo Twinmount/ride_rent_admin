@@ -1,21 +1,15 @@
 import {
   FetchSpecificBrandResponse,
   FetchBrandsResponse,
-} from '@/types/api-types/API-types'
-import { Slug } from '../Api-Endpoints'
-import { API } from '../ApiService'
-
-type BrandType = {
-  brandName: string
-  brandValue: string
-  vehicleCategoryId: string
-  brandLogo: string
-}
+  BrandType,
+} from "@/types/api-types/API-types";
+import { Slug } from "../Api-Endpoints";
+import { API } from "../ApiService";
 
 // add brand
 export const addBrand = async (
-  values: BrandType,
-  vehicleCategoryId: string
+  values: Omit<BrandType, "id">,
+  vehicleCategoryId: string,
 ) => {
   try {
     const data = await API.post({
@@ -24,18 +18,21 @@ export const addBrand = async (
         vehicleCategoryId: vehicleCategoryId,
         brandName: values.brandName,
         brandValue: values.brandValue,
-        brandLogo: values.brandLogo, // Assuming this is the URL of the uploaded logo
+        brandLogo: values.brandLogo,
       },
-    })
-    return data
+    });
+    return data;
   } catch (error) {
-    console.error('Error adding brand:', error)
-    throw error
+    console.error("Error adding brand:", error);
+    throw error;
   }
-}
+};
 
 // update brand
-export const updateBrand = async (values: BrandType, brandId: string) => {
+export const updateBrand = async (
+  values: Omit<BrandType, "id">,
+  brandId: string,
+) => {
   try {
     const data = await API.put({
       slug: `${Slug.PUT_BRAND}`,
@@ -44,42 +41,42 @@ export const updateBrand = async (values: BrandType, brandId: string) => {
         brandName: values.brandName,
         brandValue: values.brandValue,
         vehicleCategoryId: values.vehicleCategoryId,
-        brandLogo: values.brandLogo, // Assuming this is the URL of the uploaded logo
+        brandLogo: values.brandLogo,
       },
-    })
-    return data
+    });
+    return data;
   } catch (error) {
-    console.error('Error updating brand:', error)
-    throw error
+    console.error("Error updating brand:", error);
+    throw error;
   }
-}
+};
 
 // fetch specific brand by ID
 export const fetchBrandById = async (
-  brandId: string
+  brandId: string,
 ): Promise<FetchSpecificBrandResponse> => {
   try {
     const data = await API.get<FetchSpecificBrandResponse>({
       slug: `${Slug.GET_BRAND}?id=${brandId}`,
-    })
+    });
     if (!data) {
-      throw new Error('Failed to fetch brand data ')
+      throw new Error("Failed to fetch brand data ");
     }
 
-    return data
+    return data;
   } catch (error) {
-    console.error('Error fetching brand:', error)
-    throw error
+    console.error("Error fetching brand:", error);
+    throw error;
   }
-}
+};
 
 // fetch all brands
 export const fetchAllBrands = async (urlParams: {
-  page: number
-  limit: number
-  sortOrder: string
-  vehicleCategoryId: string
-  search: string
+  page: number;
+  limit: number;
+  sortOrder: string;
+  vehicleCategoryId: string;
+  search: string;
 }): Promise<FetchBrandsResponse> => {
   try {
     // generating query params
@@ -89,33 +86,33 @@ export const fetchAllBrands = async (urlParams: {
       sortOrder: urlParams.sortOrder,
       vehicleCategoryId: urlParams.vehicleCategoryId,
       search: urlParams.search,
-    }).toString()
+    }).toString();
 
-    const slugWithParams = `${Slug.GET_ALL_BRANDS}?${queryParams}`
+    const slugWithParams = `${Slug.GET_ALL_BRANDS}?${queryParams}`;
 
     const data = await API.get<FetchBrandsResponse>({
       slug: slugWithParams,
-    })
+    });
 
     if (!data) {
-      throw new Error('Failed to fetch brands data')
+      throw new Error("Failed to fetch brands data");
     }
-    return data
+    return data;
   } catch (error) {
-    console.error('Error fetching brands:', error)
-    throw error
+    console.error("Error fetching brands:", error);
+    throw error;
   }
-}
+};
 
 // delete specific state by ID
 export const deleteBrand = async (brandId: string) => {
   try {
     const data = await API.delete({
       slug: `${Slug.DELETE_BRAND}?id=${brandId}`,
-    })
-    return data
+    });
+    return data;
   } catch (error) {
-    console.error('Error deleting brands:', error)
-    throw error
+    console.error("Error deleting brands:", error);
+    throw error;
   }
-}
+};

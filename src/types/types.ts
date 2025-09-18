@@ -168,19 +168,22 @@ export type HomeMetaFormType = {
 };
 
 export type ListingMetaFormType = {
-  stateId: string;
+  stateId?: string;
   categoryId: string;
-  typeId: string;
+  typeId?: string | undefined;
+  brandId?: string | undefined;
   metaTitle: string;
   metaDescription: string;
+  h1: string;
+  h2: string;
 };
 
-export type BrandType = {
-  id: number | string;
-  label: string;
-  value: string;
-  link: string;
-};
+// export type BrandType = {
+//   id: number | string;
+//   label: string;
+//   value: string;
+//   link: string;
+// };
 
 export type CompanyFormType = {
   companyName: string;
