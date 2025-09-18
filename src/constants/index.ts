@@ -14,6 +14,7 @@ import {
   CompanyStatusFormType,
   CountryFormType,
   JobFormType,
+  ListingMetaFormType,
   StateFormType,
   VehicleSeriesType,
   VehicleTypeFormType,
@@ -31,10 +32,6 @@ export const BrandFormDefaultValues: BrandFormType = {
   brandValue: "",
   vehicleCategoryId: "",
   brandLogo: "",
-  brandMetaTitle: "",
-  brandMetaDescription: "",
-  brandH1: "",
-  brandH2: "",
 };
 
 // State form default values
@@ -112,10 +109,13 @@ export const HomeMetaFormDefaultValue = {
   metaDescription: "",
 };
 
-export const ListingMetaFormDefaultValue = {
+export const ListingMetaFormDefaultValue: ListingMetaFormType = {
   stateId: "",
   categoryId: "",
   typeId: "",
+  brandId: "",
+  h1: "",
+  h2: "",
   metaTitle: "",
   metaDescription: "",
 };

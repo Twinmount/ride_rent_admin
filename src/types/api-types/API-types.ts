@@ -205,10 +205,6 @@ export interface BrandType {
   brandValue: string;
   brandLogo: any;
   vehicleCategoryId: string;
-  brandH1: string;
-  brandH2: string;
-  brandMetaTitle: string;
-  brandMetaDescription: string;
 }
 
 //  interface for the Brand GET ALL) API response
@@ -395,16 +391,18 @@ export interface FetchHomeMetaListResponse {
 // single listing data type
 export interface ListingMetaListData {
   metaDataId: string;
-  stateId: string;
   state: string;
+  stateId: string;
   category: string;
-  type: string;
   categoryId: string;
+  type: string;
   typeId: string;
+  brand: string;
+  brandId: string;
   metaTitle: string;
   metaDescription: string;
-  h1?: string;
-  h2?: string;
+  h1: string;
+  h2: string;
 }
 
 //  fetch listing all meta data
