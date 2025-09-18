@@ -201,13 +201,14 @@ export interface FetchSpecificTypeResponse {
 // type of single brand
 export interface BrandType {
   id: string;
-  vehicleCategoryId: string;
   brandName: string;
   brandValue: string;
-  subHeading: string;
   brandLogo: any;
-  metaTitle: string;
-  metaDescription: string;
+  vehicleCategoryId: string;
+  brandH1: string;
+  brandH2: string;
+  brandMetaTitle: string;
+  brandMetaDescription: string;
 }
 
 //  interface for the Brand GET ALL) API response

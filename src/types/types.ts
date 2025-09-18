@@ -96,6 +96,10 @@ export type BrandFormType = {
   brandValue: string;
   vehicleCategoryId: string;
   brandLogo: string;
+  brandMetaTitle: string;
+  brandMetaDescription: string;
+  brandH1: string;
+  brandH2: string;
 };
 
 export type IconConfig = z.infer<typeof iconConfigSchema>;
@@ -175,12 +179,12 @@ export type ListingMetaFormType = {
   metaDescription: string;
 };
 
-export type BrandType = {
-  id: number | string;
-  label: string;
-  value: string;
-  link: string;
-};
+// export type BrandType = {
+//   id: number | string;
+//   label: string;
+//   value: string;
+//   link: string;
+// };
 
 export type CompanyFormType = {
   companyName: string;

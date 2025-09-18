@@ -36,6 +36,22 @@ export const BrandFormSchema = z.object({
     ),
   brandLogo: z.string().min(1, "Brand logo is required"),
   vehicleCategoryId: z.string().min(1, "Category is required"),
+  brandH1: z
+    .string()
+    .min(1, "H1 is required")
+    .max(60, "H1 can be maximum 60 characters long"),
+  brandH2: z
+    .string()
+    .min(1, "H2 is required")
+    .max(160, "H2 can be maximum 160 characters long"),
+  brandMetaTitle: z
+    .string()
+    .min(1, "Meta title is required")
+    .max(80, "Meta title must be 80 characters or less"),
+  brandMetaDescription: z
+    .string()
+    .min(1, "Meta description is required")
+    .max(2000, "Meta description must be 2000 characters or less"),
 });
 
 // Country Form Schema
