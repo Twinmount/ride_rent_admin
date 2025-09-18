@@ -151,6 +151,9 @@ export enum Slug {
 
   GET_ADMIN_DASHBOARD = "/vehicle/admin/analytics",
 
+  // admin enquiries endpoints
+  GET_ADMIN_ENQUIRIES = "/enquiries/admin/all",
+
   // excel data download endpoints
   GET_DOWNLOAD_VEHICLE_DATA = "/vehicle/download/excel",
   GET_DOWNLOAD_COMPANY_DATA = "/company/download/excel",

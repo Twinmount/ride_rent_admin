@@ -25,11 +25,13 @@ import { categoryAndVehicleTypeRoutes } from "./route-groups/categoryAndVehicleT
 import { linkAndPromotionRoutes } from "./route-groups/linkAndPromotionRoutes";
 import { brandsAndSeriesRoutes } from "./route-groups/brandsAndSeriesRoutes";
 
-
 // lazy imports
 const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"));
 const DownloadPage = lazy(() => import("../pages/download/DownloadPage"));
 const PriceMatchingPage = lazy(() => import("../pages/PriceMatchingPage"));
+const AdminEnquiriesPage = lazy(
+  () => import("../pages/enquiries/AdminEnquiriesPageNew"),
+);
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +59,8 @@ export const router = createBrowserRouter([
               // dashboard routes
               { path: "/", element: <Dashboard /> },
 
+              // enquiries routes
+              { path: "/enquiries", element: <AdminEnquiriesPage /> },
 
               // download routes
               { path: "/download", element: <DownloadPage /> },

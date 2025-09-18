@@ -625,3 +625,41 @@ export interface FetchAllBlogsRequest {
   sortOrder: "ASC" | "DESC";
   blogCategory?: string[];
 }
+
+// Admin Enquiries Types
+export interface AdminEnquiry {
+  _id: string;
+  message: string;
+  status: string;
+  rentalStartDate: string;
+  rentalEndDate: string;
+  isMasked: boolean;
+  createdAt: string;
+  agent: {
+    _id: string;
+    name: string;
+  };
+  vehicle: {
+    _id: string;
+    name: string;
+    location: string;
+  };
+  user: {
+    _id: string;
+    name: string;
+    phone: string;
+    email: string;
+  };
+}
+
+export interface AdminEnquiriesResponse {
+  status: string;
+  result: {
+    list: AdminEnquiry[];
+    page: number;
+    limit: number;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  statusCode: number;
+}
