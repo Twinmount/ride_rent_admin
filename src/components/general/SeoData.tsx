@@ -12,14 +12,16 @@ import {
   HomeMetaListData,
   ListingMetaListData,
 } from "@/types/api-types/API-types";
+import { ListingMetaTabType } from "../ListingMetaTab";
 
 // Define props for the SeoData component
 interface SeoDataProps {
   item: HomeMetaListData | ListingMetaListData;
   link: string;
+  activeTab?: ListingMetaTabType;
 }
 
-export default function SeoData({ item, link }: SeoDataProps) {
+export default function SeoData({ item, link, activeTab }: SeoDataProps) {
   // Local state for expanding/collapsing
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -28,6 +30,10 @@ export default function SeoData({ item, link }: SeoDataProps) {
     setIsExpanded(!isExpanded);
   };
 
+  const formattedLink = activeTab
+    ? `${link}/${item.metaDataId}?tab=${activeTab}`
+    : `/${link}/${item.metaDataId}`;
+
   return (
     <div
       key={item.metaDataId}
@@ -35,15 +41,23 @@ export default function SeoData({ item, link }: SeoDataProps) {
     >
       {/* state and category tags */}
       <div className="mb-3 flex items-center gap-x-3">
-        <span className="rounded-[0.5rem] bg-gray-800 px-3 py-0 text-sm text-white">
-          {item.state}
-        </span>
+        {item.state && (
+          <span className="rounded-[0.5rem] bg-gray-800 px-3 py-0 text-sm text-white">
+            {item.state}
+          </span>
+        )}
         <span className="rounded-[0.5rem] bg-gray-800 px-3 py-0 text-sm text-white">
           {item.category}
         </span>
         {(item as ListingMetaListData).type && (
           <span className="rounded-[0.5rem] bg-gray-800 px-3 py-0 text-sm text-white">
             {(item as ListingMetaListData).type}
+          </span>
+        )}
+
+        {(item as ListingMetaListData).brand && (
+          <span className="rounded-[0.5rem] bg-gray-800 px-3 py-0 text-sm text-white">
+            {(item as ListingMetaListData).brand}
           </span>
         )}
       </div>
@@ -77,12 +91,18 @@ export default function SeoData({ item, link }: SeoDataProps) {
         </div>
 
         {/* Expand/Collapse Button */}
-        <ExpandCollapseButton
-          isExpanded={isExpanded}
-          toggleExpand={toggleExpand}
-          item={item}
-          link={link}
-        />
+        <div className="flex h-20 w-7 flex-col items-center justify-between rounded-full p-0 max-md:ml-auto max-md:mt-2 max-md:h-7 max-md:w-fit max-md:flex-row md:ml-4 md:mt-0">
+          <Link to={`${formattedLink}`}>
+            <FilePenLine className="hover:text-yellow" />
+          </Link>
+
+          <ExpandCollapseButton
+            isExpanded={isExpanded}
+            toggleExpand={toggleExpand}
+            item={item}
+            link={link}
+          />
+        </div>
       </div>
     </div>
   );
@@ -92,8 +112,6 @@ export default function SeoData({ item, link }: SeoDataProps) {
 const ExpandCollapseButton = ({
   isExpanded,
   toggleExpand,
-  item,
-  link,
 }: {
   isExpanded: boolean;
   toggleExpand: () => void;
@@ -101,22 +119,16 @@ const ExpandCollapseButton = ({
   link: string;
 }) => {
   return (
-    <div className="flex h-20 w-7 flex-col items-center justify-between rounded-full p-0 max-md:ml-auto max-md:mt-2 max-md:h-7 max-md:w-fit max-md:flex-row md:ml-4 md:mt-0">
-      <Link to={`${link}/${item.metaDataId}`}>
-        <FilePenLine className="hover:text-yellow" />
-      </Link>
-
-      <button
-        className="bg-yellow hover:bg-yellow-600 flex items-center rounded-md px-4 py-2 font-semibold text-black transition"
-        onClick={toggleExpand}
-        aria-label={isExpanded ? "Collapse content" : "Expand content"}
-      >
-        {isExpanded ? (
-          <ChevronUp className="h-7 w-7 rounded-full bg-slate-800 text-white hover:bg-slate-900" />
-        ) : (
-          <ChevronDown className="h-7 w-7 rounded-full bg-slate-800 text-white hover:bg-slate-900" />
-        )}
-      </button>
-    </div>
+    <button
+      className="hover:bg-yellow-600 flex items-center rounded-md px-4 py-2 font-semibold text-black transition"
+      onClick={toggleExpand}
+      aria-label={isExpanded ? "Collapse content" : "Expand content"}
+    >
+      {isExpanded ? (
+        <ChevronUp className="h-7 w-7 rounded-full bg-slate-800 text-white hover:bg-slate-900" />
+      ) : (
+        <ChevronDown className="h-7 w-7 rounded-full bg-slate-800 text-white hover:bg-slate-900" />
+      )}
+    </button>
   );
 };
