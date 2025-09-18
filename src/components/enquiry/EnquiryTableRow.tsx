@@ -92,12 +92,7 @@ export function EnquiryTableRow({
           title="Click to reveal phone number"
         >
           <Phone className="h-3 w-3" />
-          <span className="select-none">
-            {isPhoneRevealed ? userInfo.phone : maskPhoneNumber(userInfo.phone)}
-          </span>
-          {!isPhoneRevealed && (
-            <span className="ml-1 text-xs text-primary">(click to view)</span>
-          )}
+          <span className="select-none">{userInfo.phone}</span>
         </div>
       </TableCell>
       <TableCell>
