@@ -108,12 +108,14 @@ export default function ListingMetaDataPage() {
           )}
 
           {/* category dropdown */}
-          <MetaCategoryDropdown
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            categories={categoryList || []}
-            isLoading={isCategoryLoading}
-          />
+          {activeTab !== "category" && (
+            <MetaCategoryDropdown
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              categories={categoryList || []}
+              isLoading={isCategoryLoading}
+            />
+          )}
         </div>
       </div>
 
