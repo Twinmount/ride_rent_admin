@@ -16,7 +16,7 @@ interface EnquiryTableRowProps {
 
 export function EnquiryTableRow({
   enquiry,
-  isPhoneRevealed,
+  // isPhoneRevealed,
   onTogglePhoneVisibility,
   onVehicleClick,
   onStatusChange,
@@ -33,11 +33,11 @@ export function EnquiryTableRow({
       .slice(0, 2);
   };
 
-  const maskPhoneNumber = (phone: string) => {
-    const cleaned = phone.replace(/\D/g, "");
-    const lastFour = cleaned.slice(-4);
-    return `***-***-${lastFour}`;
-  };
+  // const maskPhoneNumber = (phone: string) => {
+  //   const cleaned = phone.replace(/\D/g, "");
+  //   const lastFour = cleaned.slice(-4);
+  //   return `***-***-${lastFour}`;
+  // };
 
   const getStatusBadge = (status: string) => {
     const statusInfo = adminEnquiryUtils.formatStatus(status);
@@ -66,7 +66,7 @@ export function EnquiryTableRow({
     >
       <TableCell>
         <div className="flex items-center gap-2">
-          <span className="font-medium">{enquiry.agent.name}</span>
+          <span className="font-medium">{enquiry.agent.companyName}</span>
         </div>
       </TableCell>
       <TableCell>
@@ -93,11 +93,12 @@ export function EnquiryTableRow({
         >
           <Phone className="h-3 w-3" />
           <span className="select-none">
-            {isPhoneRevealed ? userInfo.phone : maskPhoneNumber(userInfo.phone)}
+            {userInfo.phone}
+            {/* {isPhoneRevealed ? userInfo.phone : maskPhoneNumber(userInfo.phone)} */}
           </span>
-          {!isPhoneRevealed && (
+          {/* {!isPhoneRevealed && (
             <span className="ml-1 text-xs text-primary">(click to view)</span>
-          )}
+          )} */}
         </div>
       </TableCell>
       <TableCell>

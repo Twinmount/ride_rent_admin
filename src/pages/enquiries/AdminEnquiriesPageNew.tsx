@@ -37,6 +37,9 @@ export default function AdminEnquiriesPageNew() {
     },
   });
 
+    console.log("filteredEnquiries: ", filteredEnquiries);
+
+
   const [locationFilter, setLocationFilter] = useState("all");
   const [revealedPhones, setRevealedPhones] = useState<{
     [key: string]: boolean;

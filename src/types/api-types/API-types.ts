@@ -637,6 +637,7 @@ export interface AdminEnquiry {
   agent: {
     _id: string;
     name: string;
+    companyName: string;
   };
   vehicle: {
     _id: string;
