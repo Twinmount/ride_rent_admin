@@ -344,6 +344,11 @@ export default function PrimaryDetailsForm({
   // category dropdown is disabled if levels filled is 3
   const isCategoryDisabled = levelsFilled === 3;
 
+  const videoDownloadFileName =
+    formData?.vehicleTitleH1 || formData?.vehicleTitle || "vehicle-video";
+  const photoDownloadFileName =
+    formData?.vehicleTitleH1 || formData?.vehicleTitle || "vehicle-photo";
+
   return (
     <>
       <Form {...form}>
@@ -866,11 +871,7 @@ export default function PrimaryDetailsForm({
                 setIsFileUploading={setIsPhotosUploading}
                 bucketFilePath={GcsFilePaths.IMAGE_VEHICLES}
                 isFileUploading={isPhotosUploading}
-                downloadFileName={
-                  formData?.vehicleModel
-                    ? ` ${formData.vehicleModel}`
-                    : "vehicle-image"
-                }
+                downloadFileName={photoDownloadFileName}
                 setDeletedFiles={setDeletedFiles}
                 isVideoAccepted={false}
                 isImageAccepted={true}
@@ -892,11 +893,7 @@ export default function PrimaryDetailsForm({
                 setIsFileUploading={setIsVideoUploading}
                 bucketFilePath={GcsFilePaths.VIDEO_VEHICLES}
                 isFileUploading={isVideoUploading}
-                downloadFileName={
-                  formData?.vehicleModel
-                    ? ` ${formData.vehicleModel}`
-                    : "vehicle-video"
-                }
+                downloadFileName={videoDownloadFileName}
                 setDeletedFiles={setDeletedFiles}
                 isVideoAccepted={true}
                 isImageAccepted={false}
