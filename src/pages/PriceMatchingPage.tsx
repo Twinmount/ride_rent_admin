@@ -1,16 +1,19 @@
 import { useState } from "react";
+import { toast } from "@/components/ui/use-toast";
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
 import Pagination from "@/components/Pagination";
 import { API } from "@/api/ApiService";
 import { useAdminContext } from "@/context/AdminContext";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 
 export default function PriceMatchingPage() {
+    const queryClient = useQueryClient();
     const PAGE_LIMIT = 50;
     const { state } = useAdminContext()
     const stateId = state.stateId;
     const [page, setPage] = useState(1);
+    const [loadingIdx, setLoadingIdx] = useState<number | null>(null);
 
     const fetchVehiclePriceMatching = async ({ queryKey }: any) => {
         const [_key, { stateId, page }] = queryKey;
@@ -31,14 +34,34 @@ export default function PriceMatchingPage() {
     } = useQuery({
         queryKey: ["vehicle-price-matching", { stateId, page }],
         queryFn: fetchVehiclePriceMatching,
-        keepPreviousData: true, // keeps old page data while fetching new one
+        placeholderData: (prev) => prev,
         enabled: !!stateId, // only run if stateId exists
     });
 
-    const handleSendEmail = (idx: number) => {
-        // Simulate sending email
-        // TODO: Replace with actual API call
-        alert(`Reminder sent for ${data.list[idx].vehicleName}`);
+    const handleSendEmail = async (idx: number) => {
+        if (!data?.list?.[idx]) return;
+        const vehicleId = data.list[idx].vehicleId;
+        setLoadingIdx(idx);
+        try {
+            await API.post({
+                slug: `/vehicle/price-matching/send-mail/${vehicleId}`,
+            });
+            toast({
+                title: `Reminder sent for ${data.list[idx].vehicleName}`,
+                className: "bg-yellow text-white",
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["vehicle-price-matching", { stateId, page }],
+            });
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Failed to send reminder.",
+                description: "Something went wrong",
+            });
+        } finally {
+            setLoadingIdx(null);
+        }
     };
 
     return (
@@ -111,13 +134,25 @@ export default function PriceMatchingPage() {
                                             )}
                                         </div>
                                     </TableCell>
-                                    <TableCell className="py-3 px-4">{row.lastReminder}</TableCell>
+                                    <TableCell className="py-3 px-4">
+                                        {row.priceMatchEmailSendOn
+                                            ? new Date(row.priceMatchEmailSendOn).toLocaleString()
+                                            : "-"}
+                                    </TableCell>
                                     <TableCell className="py-3 px-4">
                                         <button
-                                            className="px-3 py-1 rounded bg-yellow text-white"
+                                            className="px-3 py-1 rounded bg-yellow text-white flex items-center justify-center min-w-[100px]"
                                             onClick={() => handleSendEmail(idx)}
+                                            disabled={loadingIdx === idx}
                                         >
-                                            Send&nbsp;Email
+                                            {loadingIdx === idx ? (
+                                                <span className="flex items-center gap-2">
+                                                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path></svg>
+                                                    Sending...
+                                                </span>
+                                            ) : (
+                                                'Send Email'
+                                            )}
                                         </button>
                                     </TableCell>
                                 </TableRow>
