@@ -408,21 +408,35 @@ export const HomeMetaFormSchema = z.object({
     .max(5000, "Meta description must be 5000 characters or less"),
 });
 
-export const ListingMetaFormSchema = z.object({
-  stateId: z.string().min(1, "State is required"),
-  categoryId: z.string().min(1, "Vehicle Category is required"),
-  typeId: z.string().min(1, "Vehicle type is required"),
-  metaTitle: z
-    .string()
-    .min(1, "Meta title is required")
-    .max(160, "Meta title must be 160 characters or less"),
-  metaDescription: z
-    .string()
-    .min(1, "Meta description is required")
-    .max(5000, "Meta description must be 5000 characters or less"),
-  h1: z.string().max(60, "H1 can be maximum 60 characters long"),
-  h2: z.string().max(160, "H2 can be maximum 160 characters long"),
-});
+export const ListingMetaFormSchema = z
+  .object({
+    stateId: z.string().optional(),
+    categoryId: z.string().min(1, "Vehicle Category is required"),
+    typeId: z.string().optional(),
+    brandId: z.string().optional(),
+    metaTitle: z
+      .string()
+      .min(1, "Meta title is required")
+      .max(160, "Meta title must be 160 characters or less"),
+    metaDescription: z
+      .string()
+      .min(1, "Meta description is required")
+      .max(5000, "Meta description must be 5000 characters or less"),
+    h1: z.string().max(60, "H1 can be maximum 60 characters long"),
+    h2: z.string().max(160, "H2 can be maximum 160 characters long"),
+  })
+  .refine(
+    (data) => {
+      if (!data.brandId && !data.stateId) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "State is required for non-brand metadata",
+      path: ["stateId"],
+    },
+  );
 
 // blog form schema
 export const BlogFormSchema = z.object({

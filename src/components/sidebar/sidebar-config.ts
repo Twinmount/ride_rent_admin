@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Box,
   CloudDownload,
+  MessageSquare,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -51,6 +52,13 @@ export const sidebarContent: SidebarItem[] = [
     label: "Dashboard",
     icon: LayoutDashboard,
     link: "/",
+  },
+  // Enquiries route
+  {
+    type: "link",
+    label: "Enquiries",
+    icon: MessageSquare,
+    link: "/enquiries",
   },
   // Vehicle Listings routes
   {
@@ -194,7 +202,7 @@ export const sidebarContent: SidebarItem[] = [
     icon: FileSearch,
     items: [
       { label: "Home Page", link: "/meta-data/home" },
-      { label: "Listings Page", link: "/meta-data/listing" },
+      { label: "Listings Page", link: "/meta-data/listing?tab=category" },
     ],
   },
   // Careers

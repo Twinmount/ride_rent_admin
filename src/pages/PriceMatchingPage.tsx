@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
-import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
+import {
+    Table,
+    TableHeader,
+    TableBody,
+    TableRow,
+    TableCell,
+    TableHead,
+} from "@/components/ui/table";
 import Pagination from "@/components/Pagination";
 import { API } from "@/api/ApiService";
 import { useAdminContext } from "@/context/AdminContext";
@@ -21,7 +28,15 @@ export default function PriceMatchingPage() {
             slug: "/vehicle/price-matching/paginated",
             queryParameters: { stateId, page, limit: PAGE_LIMIT },
         });
-        return res?.result || { list: [], page: 1, limit: PAGE_LIMIT, total: 0, totalNumberOfPages: 1 };
+        return (
+            res?.result || {
+                list: [],
+                page: 1,
+                limit: PAGE_LIMIT,
+                total: 0,
+                totalNumberOfPages: 1,
+            }
+        );
     };
 
     const {

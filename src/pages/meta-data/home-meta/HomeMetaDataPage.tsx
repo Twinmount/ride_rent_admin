@@ -4,10 +4,9 @@ import LazyLoader from "@/components/skelton/LazyLoader";
 import SeoData from "@/components/general/SeoData";
 import { useFetchStates } from "@/hooks/useFetchStates";
 import GeneralStatesDropdown from "@/components/GeneralStatesDropdown";
-import { Link } from "react-router-dom";
-import { Plus } from "lucide-react";
 import { StateType } from "@/types/api-types/vehicleAPI-types";
 import { useState } from "react";
+import FloatingActionButton from "@/components/general/FloatingActionButton";
 
 export default function HomeMetaData() {
   const [selectedState, setSelectedState] = useState<StateType | null>(null);
@@ -62,14 +61,8 @@ export default function HomeMetaData() {
             />
           ))
         )}
-        <button className="fixed bottom-10 right-10 z-30 h-fit w-fit cursor-pointer overflow-hidden rounded-xl shadow-xl transition-all hover:scale-[1.02]">
-          <Link
-            className="flex-center gap-x-1 bg-yellow px-3 py-2 text-white"
-            to="add"
-          >
-            Add New <Plus />
-          </Link>
-        </button>
+
+        <FloatingActionButton label="Add New" href="/meta-data/home/add" />
       </div>
     </section>
   );

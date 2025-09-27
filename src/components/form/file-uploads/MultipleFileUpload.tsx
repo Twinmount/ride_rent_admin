@@ -181,7 +181,7 @@ const MultipleFileUpload: React.FC<MultipleFileUploadProps> = ({
   const handleDownloadImage = async (filePath: string, index: number) => {
     try {
       const fileName = downloadFileName || label;
-      const formattedFileName = `[${index + 1}] - ${fileName}`;
+      const formattedFileName = ` ${fileName} (${index + 1})`;
       await downloadFileFromStream(filePath, formattedFileName);
     } catch (error) {
       toast({

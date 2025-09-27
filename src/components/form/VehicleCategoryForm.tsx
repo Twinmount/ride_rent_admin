@@ -72,9 +72,9 @@ export default function CategoryForm({ type, formData }: CategoryFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
+        className="mx-auto flex w-full max-w-[700px] flex-col gap-5 rounded-3xl bg-white p-2 py-8 !pb-8 shadow-md md:p-4"
       >
-        <div className="flex flex-col gap-5 r">
+        <div className="r flex flex-col gap-5">
           {/* category label */}
           <FormField
             control={form.control}
@@ -126,7 +126,7 @@ export default function CategoryForm({ type, formData }: CategoryFormProps) {
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
+          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
         >
           {form.formState.isSubmitting ? "Processing..." : `${type} Category`}
           {form.formState.isSubmitting && <Spinner />}

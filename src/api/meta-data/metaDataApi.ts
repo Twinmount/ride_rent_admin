@@ -7,18 +7,11 @@ import {
 } from "@/types/api-types/API-types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
+import { ListingMetaFormType } from "@/types/types";
 
 type HomeMetaType = {
   stateId: string;
   categoryId: string;
-  metaTitle: string;
-  metaDescription: string;
-};
-
-type ListingMetaType = {
-  stateId: string;
-  categoryId: string;
-  typeId: string;
   metaTitle: string;
   metaDescription: string;
 };
@@ -62,6 +55,7 @@ export const fetchListingMetaList = async (urlParams: {
   sortOrder: string;
   stateId: string;
   categoryId: string;
+  filterType: "category" | "brand" | "vehicleType";
 }): Promise<FetchListingMetaListResponse> => {
   try {
     const queryParams = new URLSearchParams({
@@ -70,6 +64,7 @@ export const fetchListingMetaList = async (urlParams: {
       sortOrder: urlParams.sortOrder,
       stateId: urlParams.stateId,
       categoryId: urlParams.categoryId,
+      filterType: urlParams.filterType,
     }).toString();
 
     const slugWithParams = `${Slug.GET_ADMIN_LISTING_META_ALL}?${queryParams}`;
@@ -150,7 +145,7 @@ export const updateHomeMetaData = async (
 };
 
 // add home meta data
-export const addListingMetaData = async (values: ListingMetaType) => {
+export const addListingMetaData = async (values: ListingMetaFormType) => {
   try {
     // Send the FormData object using the API post method
     const data = await API.post({
@@ -161,6 +156,29 @@ export const addListingMetaData = async (values: ListingMetaType) => {
     return data;
   } catch (error) {
     console.error("Error adding listing meta data:", error);
+    throw error;
+  }
+};
+
+export const updateListingMetaData = async (
+  values: ListingMetaFormType,
+  metaDataId: string,
+) => {
+  try {
+    const requestBody = {
+      ...values,
+      metaDataId,
+    };
+
+    // Send the FormData object using the API put method
+    const data = await API.put({
+      slug: Slug.PUT_ADMIN_LISTING_META,
+      body: requestBody,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error updating listing meta data:", error);
     throw error;
   }
 };
@@ -181,30 +199,6 @@ export const fetchListingMetaDataById = async (
     return data;
   } catch (error) {
     console.error("Error fetching meta data by id:", error);
-    throw error;
-  }
-};
-
-// update link
-export const updateListingMetaData = async (
-  values: ListingMetaType,
-  metaDataId: string,
-) => {
-  try {
-    const requestBody = {
-      ...values,
-      metaDataId,
-    };
-
-    // Send the FormData object using the API put method
-    const data = await API.put({
-      slug: Slug.PUT_ADMIN_LISTING_META,
-      body: requestBody,
-    });
-
-    return data;
-  } catch (error) {
-    console.error("Error updating listing meta data:", error);
     throw error;
   }
 };

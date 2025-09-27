@@ -201,13 +201,10 @@ export interface FetchSpecificTypeResponse {
 // type of single brand
 export interface BrandType {
   id: string;
-  vehicleCategoryId: string;
   brandName: string;
   brandValue: string;
-  subHeading: string;
   brandLogo: any;
-  metaTitle: string;
-  metaDescription: string;
+  vehicleCategoryId: string;
 }
 
 //  interface for the Brand GET ALL) API response
@@ -394,16 +391,18 @@ export interface FetchHomeMetaListResponse {
 // single listing data type
 export interface ListingMetaListData {
   metaDataId: string;
-  stateId: string;
   state: string;
+  stateId: string;
   category: string;
-  type: string;
   categoryId: string;
+  type: string;
   typeId: string;
+  brand: string;
+  brandId: string;
   metaTitle: string;
   metaDescription: string;
-  h1?: string;
-  h2?: string;
+  h1: string;
+  h2: string;
 }
 
 //  fetch listing all meta data
@@ -624,4 +623,42 @@ export interface FetchAllBlogsRequest {
   limit: string;
   sortOrder: "ASC" | "DESC";
   blogCategory?: string[];
+}
+
+// Admin Enquiries Types
+export interface AdminEnquiry {
+  _id: string;
+  message: string;
+  status: string;
+  rentalStartDate: string;
+  rentalEndDate: string;
+  isMasked: boolean;
+  createdAt: string;
+  agent: {
+    _id: string;
+    name: string;
+  };
+  vehicle: {
+    _id: string;
+    name: string;
+    location: string;
+  };
+  user: {
+    _id: string;
+    name: string;
+    phone: string;
+    email: string;
+  };
+}
+
+export interface AdminEnquiriesResponse {
+  status: string;
+  result: {
+    list: AdminEnquiry[];
+    page: number;
+    limit: number;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  statusCode: number;
 }
