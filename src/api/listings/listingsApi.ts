@@ -1,7 +1,10 @@
 import { VehicleStatusType } from "@/types/formTypes";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
-import { FetchAllVehiclesResponse } from "@/types/api-types/vehicleAPI-types";
+import {
+  FetchAllVehiclesResponse,
+  FetchVehicleTableListingResponse,
+} from "@/types/api-types/vehicleAPI-types";
 
 // fetch all vehicles
 export const fetchAllVehicles = async (urlParams: {
@@ -11,7 +14,7 @@ export const fetchAllVehicles = async (urlParams: {
   approvalStatus?: VehicleStatusType;
   search?: string;
   stateId: string;
-}): Promise<FetchAllVehiclesResponse> => {
+}): Promise<FetchVehicleTableListingResponse> => {
   try {
     // generating query params
     const queryParams = new URLSearchParams({
@@ -31,7 +34,7 @@ export const fetchAllVehicles = async (urlParams: {
 
     const slugWithParams = `${Slug.GET_ALL_VEHICLES}?${queryParams}`;
 
-    const data = await API.get<FetchAllVehiclesResponse>({
+    const data = await API.get<FetchVehicleTableListingResponse>({
       slug: slugWithParams,
     });
 
@@ -81,7 +84,7 @@ export const fetchNewOrModifiedVehicles = async (urlParams: {
     if (urlParams.newRegistration) {
       queryParams.append(
         "newRegistration",
-        urlParams.newRegistration.toString()
+        urlParams.newRegistration.toString(),
       );
     }
 
