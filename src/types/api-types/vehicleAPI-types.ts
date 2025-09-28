@@ -190,6 +190,18 @@ export type LiveListingVehicleType = {
   };
 };
 
+export interface FetchVehicleTableListingResponse {
+  result: {
+    list: LiveListingVehicleType[];
+    page: number;
+    limit: number;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  status: string;
+  statusCode: number;
+}
+
 // get all vehicles api response
 export interface FetchAllVehiclesResponse {
   result: {
