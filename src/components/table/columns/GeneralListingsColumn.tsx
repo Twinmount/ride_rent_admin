@@ -31,11 +31,16 @@ export const GeneralListingColumns = (
   {
     accessorKey: "company.companyName",
     header: "Company Name",
-    cell: ({ row }) => (
-      <span className="whitespace-nowrap">
-        {row.original.company?.companyName}
-      </span>
-    ),
+    cell: ({ row }) => {
+      return (
+        <Link
+          to={`/company/registrations/view/${row.original.company.companyId}`}
+          className="line-clamp-1 font-semibold text-blue-600 hover:underline"
+        >
+          {row.original.company.companyName}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "approvalStatus",
