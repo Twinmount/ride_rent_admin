@@ -5,11 +5,15 @@ import {
   EnquiryStatsCards,
   EnquiryFilters,
   EnquiryTable,
+  ExportConfirmationModal,
 } from "@/components/enquiry";
 import { DataTablePagination } from "@/components/common";
 import { useAdminEnquiryManagement } from "@/hooks/useAdminEnquiryManagement";
-import { ENQUIRY_STATUSES } from "@/utils/adminEnquiryUtils";
+import { adminEnquiryUtils } from "@/utils/adminEnquiryUtils";
+import { exportEnquiriesToExcel, exportEnquiryStatsToExcel } from "@/utils/excelExport";
 import { AdminEnquiry } from "@/types/api-types/API-types";
+import { ExportOptions } from "@/components/enquiry/ExportConfirmationModal";
+import { toast } from "@/components/ui/use-toast";
 
 export default function AdminEnquiriesPageNew() {
   const {
@@ -27,6 +31,7 @@ export default function AdminEnquiriesPageNew() {
     clearFilters,
     refetch,
     uniqueVehicleLocations,
+    statusCounts,
   } = useAdminEnquiryManagement({
     page: 1,
     limit: 20,
@@ -37,26 +42,26 @@ export default function AdminEnquiriesPageNew() {
     },
   });
 
-    console.log("filteredEnquiries: ", filteredEnquiries);
+  console.log("filteredEnquiries: ", filteredEnquiries);
+  console.log("statusCounts from API: ", statusCounts);
+
+  // Use API status counts directly (already calculated in the hook)
+  const stats = {
+    total: statusCounts.NEW + statusCounts.CONTACTED + statusCounts.CANCELLED + statusCounts.DECLINED + statusCounts.AGENTVIEW + statusCounts.EXPIRED,
+    newEnquiries: statusCounts.NEW || 0,
+    contactedEnquiries: statusCounts.CONTACTED || 0,
+    cancelledEnquiries: statusCounts.CANCELLED || 0,
+    declinedEnquiries: statusCounts.DECLINED || 0,
+    agentviewEnquiries: statusCounts.AGENTVIEW || 0,
+    expiredEnquiries: statusCounts.EXPIRED || 0,
+  };
 
 
   const [locationFilter, setLocationFilter] = useState("all");
   const [revealedPhones, setRevealedPhones] = useState<{
     [key: string]: boolean;
   }>({});
-
-  const getEnquiriesByStatus = (status: string) => {
-    let filtered = filteredEnquiries;
-
-    return filtered.filter((enquiry) => {
-      if (status === "new") return enquiry.status === ENQUIRY_STATUSES.NEW;
-      if (status === "contacted")
-        return enquiry.status === ENQUIRY_STATUSES.ACCEPTED;
-      if (status === "cancelled")
-        return enquiry.status === ENQUIRY_STATUSES.CANCELLED;
-      return false;
-    });
-  };
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   const togglePhoneVisibility = (enquiryId: string) => {
     setRevealedPhones((prev) => ({
@@ -65,14 +70,88 @@ export default function AdminEnquiriesPageNew() {
     }));
   };
 
-  const handleExportToExcel = () => {
-    console.log("Exporting enquiries to Excel...");
-    // Implementation for Excel export would go here
+  const handleExportToExcel = async () => {
+    // Check if there's data to export
+    if (filteredEnquiries.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "No Data to Export",
+        description: "No enquiries to export. Please check your filters or data.",
+      });
+      return;
+    }
+
+    // Open the export confirmation modal
+    setIsExportModalOpen(true);
+  };
+
+  const handleExportConfirm = async (options: ExportOptions) => {
+    try {
+      console.log("Exporting enquiries to Excel...");
+      
+      // Use filtered enquiries for export to respect current filters
+      const dataToExport = filteredEnquiries.length > 0 ? filteredEnquiries : [];
+      
+      let exportResults: string[] = [];
+
+      // Export main enquiries data if selected
+      if (options.exportEnquiries) {
+        const result = exportEnquiriesToExcel(dataToExport, {
+          filename: 'admin-enquiries-export',
+          includeTimestamp: true,
+        });
+
+        if (result.success) {
+          console.log(`✅ Successfully exported ${result.recordCount} enquiries to ${result.filename}`);
+          exportResults.push(`✅ Exported ${result.recordCount} enquiries`);
+        } else {
+          console.error("❌ Export failed:", result.error);
+          throw new Error(`Export failed: ${result.error}`);
+        }
+      }
+
+      // Export statistics if selected
+      if (options.exportStatistics) {
+        const statsResult = exportEnquiryStatsToExcel(stats, statusCounts, {
+          filename: 'admin-enquiry-statistics',
+          includeTimestamp: true,
+        });
+        
+        if (statsResult.success) {
+          console.log(`✅ Successfully exported statistics to ${statsResult.filename}`);
+          exportResults.push(`✅ Exported summary statistics`);
+        } else {
+          console.error("❌ Failed to export statistics:", statsResult.error);
+          throw new Error(`Statistics export failed: ${statsResult.error}`);
+        }
+      }
+
+      // Show success toast notification
+      if (exportResults.length > 0) {
+        console.log("✅ Export completed successfully");
+        toast({
+          title: "Export Completed Successfully",
+          description: exportResults.join('\n'),
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error("❌ Export error:", error);
+      toast({
+        variant: "destructive",
+        title: "Export Failed",
+        description: "An unexpected error occurred during export. Please try again.",
+      });
+    }
   };
 
   const handleVehicleClick = (enquiry: AdminEnquiry) => {
-    console.log("Navigate to vehicle:", enquiry.vehicle.name);
-    // Implementation for vehicle navigation would go here
+    if (enquiry.vehicle.carLink) {
+      adminEnquiryUtils.openCarLink(enquiry);
+    } else {
+      console.log("Navigate to vehicle:", enquiry.vehicle.name);
+      // Fallback navigation implementation would go here
+    }
   };
 
   const handleStatusChange = (enquiry: AdminEnquiry) => {
@@ -138,9 +217,11 @@ export default function AdminEnquiriesPageNew() {
             />
 
             <EnquiryStatsCards
-              pendingCount={getEnquiriesByStatus("new").length}
-              acceptedCount={getEnquiriesByStatus("contacted").length}
-              cancelledCount={getEnquiriesByStatus("cancelled").length}
+              totalCount={stats.total}
+              pendingCount={stats.newEnquiries}
+              acceptedCount={stats.contactedEnquiries}
+              cancelledCount={stats.cancelledEnquiries}
+              expiredCount={stats.expiredEnquiries}
             />
 
             <EnquiryTable
@@ -160,6 +241,14 @@ export default function AdminEnquiriesPageNew() {
             />
           </>
         )}
+
+        {/* Export Confirmation Modal */}
+        <ExportConfirmationModal
+          isOpen={isExportModalOpen}
+          onClose={() => setIsExportModalOpen(false)}
+          onConfirm={handleExportConfirm}
+          enquiryCount={filteredEnquiries.length}
+        />
       </div>
     </main>
   );

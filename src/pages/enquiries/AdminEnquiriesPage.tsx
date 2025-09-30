@@ -24,9 +24,13 @@ export default function AdminEnquiriesPage() {
     page: 1,
     limit: 20,
     enabled: true,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime:0, 
+    refetchInterval: 60000, // Refetch every 60 seconds
   });
 
+  console.log("filteredEnquiries: ", filteredEnquiries);
+
+  // Use API summary if available, otherwise calculate client-side
   const stats = adminEnquiryUtils.getEnquiryStats(enquiries);
 
   if (isLoading) {
@@ -60,7 +64,7 @@ export default function AdminEnquiriesPage() {
       {/* Header with stats */}
       <div className="bg-white rounded-lg shadow p-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-4">Admin Enquiries</h1>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg">
             <h3 className="text-blue-800 font-medium">Total Enquiries</h3>
             <p className="text-2xl font-bold text-blue-900">{stats.total}</p>
@@ -70,8 +74,12 @@ export default function AdminEnquiriesPage() {
             <p className="text-2xl font-bold text-green-900">{stats.newEnquiries}</p>
           </div>
           <div className="bg-yellow-50 p-4 rounded-lg">
-            <h3 className="text-yellow-800 font-medium">Accepted</h3>
-            <p className="text-2xl font-bold text-yellow-900">{stats.acceptedEnquiries}</p>
+            <h3 className="text-yellow-800 font-medium">Contacted</h3>
+            <p className="text-2xl font-bold text-yellow-900">{stats.contactedEnquiries}</p>
+          </div>
+          <div className="bg-orange-50 p-4 rounded-lg">
+            <h3 className="text-orange-800 font-medium">Expired</h3>
+            <p className="text-2xl font-bold text-orange-900">{stats.expiredEnquiries}</p>
           </div>
           <div className="bg-gray-50 p-4 rounded-lg">
             <h3 className="text-gray-800 font-medium">Unique Vehicles</h3>
@@ -152,6 +160,9 @@ export default function AdminEnquiriesPage() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Created
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -170,7 +181,9 @@ export default function AdminEnquiriesPage() {
                         <div className="text-sm font-medium text-gray-900">
                           {userInfo.name}
                         </div>
-                        <div className="text-sm text-gray-500">{userInfo.email}</div>
+                        {userInfo.email && (
+                          <div className="text-sm text-gray-500">{userInfo.email}</div>
+                        )}
                         <div className="text-sm text-gray-500">{userInfo.phone}</div>
                       </div>
                     </td>
@@ -183,6 +196,11 @@ export default function AdminEnquiriesPage() {
                         <div className="text-sm text-gray-500">
                           📍 {enquiry.vehicle.location}
                         </div>
+                        {enquiry.vehicle.vehicleCode && (
+                          <div className="text-xs text-gray-400">
+                            Code: {enquiry.vehicle.vehicleCode}
+                          </div>
+                        )}
                       </div>
                     </td>
                     
@@ -203,6 +221,9 @@ export default function AdminEnquiriesPage() {
                           ${statusInfo.color === 'green' ? 'bg-green-100 text-green-800' : ''}
                           ${statusInfo.color === 'red' ? 'bg-red-100 text-red-800' : ''}
                           ${statusInfo.color === 'gray' ? 'bg-gray-100 text-gray-800' : ''}
+                          ${statusInfo.color === 'orange' ? 'bg-orange-100 text-orange-800' : ''}
+                          ${statusInfo.color === 'purple' ? 'bg-purple-100 text-purple-800' : ''}
+                          ${statusInfo.color === 'yellow' ? 'bg-yellow-100 text-yellow-800' : ''}
                         `}
                       >
                         {statusInfo.label}
@@ -211,6 +232,27 @@ export default function AdminEnquiriesPage() {
                     
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {adminEnquiryUtils.formatDateTime(enquiry.createdAt)}
+                    </td>
+                    
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex space-x-2">
+                        {enquiry.vehicle.carLink && (
+                          <button
+                            onClick={() => adminEnquiryUtils.openCarLink(enquiry)}
+                            className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded text-xs"
+                            title="View Car Details"
+                          >
+                            🚗 View Car
+                          </button>
+                        )}
+                        <button
+                          onClick={() => navigator.clipboard.writeText(enquiry._id)}
+                          className="text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 px-2 py-1 rounded text-xs"
+                          title="Copy Enquiry ID"
+                        >
+                          📋 Copy ID
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );

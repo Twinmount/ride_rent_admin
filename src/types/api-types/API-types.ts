@@ -637,19 +637,41 @@ export interface AdminEnquiry {
   agent: {
     _id: string;
     name: string;
+    email: string;
     companyName: string;
   };
   vehicle: {
     _id: string;
     name: string;
+    vehicleCode: string;
     location: string;
+    carLink: string;
   };
   user: {
     _id: string;
     name: string;
     phone: string;
-    email: string;
+    email?: string;
   };
+}
+
+export interface EnquiryStatusCounts {
+  NEW: number;
+  CONTACTED: number;
+  CANCELLED: number;
+  DECLINED: number;
+  AGENTVIEW: number;
+  EXPIRED: number;
+}
+
+export interface EnquirySummary {
+  totalEnquiries: number;
+  newEnquiries: number;
+  contactedEnquiries: number;
+  cancelledEnquiries: number;
+  declinedEnquiries: number;
+  agentviewEnquiries: number;
+  expiredEnquiries: number;
 }
 
 export interface AdminEnquiriesResponse {
@@ -660,6 +682,8 @@ export interface AdminEnquiriesResponse {
     limit: number;
     total: number;
     totalNumberOfPages: number;
+    statusCounts?: EnquiryStatusCounts;
+    summary?: EnquirySummary;
   };
   statusCode: number;
 }

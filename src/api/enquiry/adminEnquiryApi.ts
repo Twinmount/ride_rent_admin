@@ -5,7 +5,7 @@ import { AdminEnquiriesResponse } from "@/types/api-types/API-types";
 export interface AdminEnquiryParams {
   page?: number;
   limit?: number;
-  status?: 'NEW' | 'ACCEPTED' | 'REJECTED' | 'CANCELLED';
+  status?: 'NEW' | 'ACCEPTED' | 'REJECTED' | 'CANCELLED' | 'EXPIRED' | 'CONTACTED' | 'DECLINED' | 'AGENTVIEW';
 }
 
 /**

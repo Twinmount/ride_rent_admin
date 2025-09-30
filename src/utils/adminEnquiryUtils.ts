@@ -6,6 +6,10 @@ export const ENQUIRY_STATUSES = {
   ACCEPTED: "ACCEPTED",
   REJECTED: "REJECTED",
   CANCELLED: "CANCELLED",
+  EXPIRED: "EXPIRED",
+  CONTACTED: "CONTACTED",
+  DECLINED: "DECLINED",
+  AGENTVIEW: "AGENTVIEW",
 } as const;
 
 export type EnquiryStatus =
@@ -17,22 +21,63 @@ export const statusConfig = {
     label: "New",
     color: "blue",
     variant: "default",
+    bgColor: "bg-blue-100",
+    textColor: "text-blue-800",
   },
   [ENQUIRY_STATUSES.ACCEPTED]: {
     label: "Accepted",
     color: "green",
     variant: "success",
+    bgColor: "bg-green-100",
+    textColor: "text-green-800",
   },
   [ENQUIRY_STATUSES.REJECTED]: {
     label: "Rejected",
     color: "red",
     variant: "destructive",
+    bgColor: "bg-red-100",
+    textColor: "text-red-800",
   },
   [ENQUIRY_STATUSES.CANCELLED]: {
     label: "Cancelled",
     color: "gray",
     variant: "secondary",
+    bgColor: "bg-gray-100",
+    textColor: "text-gray-800",
   },
+  [ENQUIRY_STATUSES.EXPIRED]: {
+    label: "Expired",
+    color: "orange",
+    variant: "warning",
+    bgColor: "bg-orange-100",
+    textColor: "text-orange-800",
+  },
+  [ENQUIRY_STATUSES.CONTACTED]: {
+    label: "Contacted",
+    color: "purple",
+    variant: "default",
+    bgColor: "bg-purple-100",
+    textColor: "text-purple-800",
+  },
+  [ENQUIRY_STATUSES.DECLINED]: {
+    label: "Declined",
+    color: "rose",
+    variant: "destructive",
+    bgColor: "bg-rose-100",
+    textColor: "text-rose-800",
+  },
+  [ENQUIRY_STATUSES.AGENTVIEW]: {
+    label: "Agent View",
+    color: "amber",
+    variant: "warning",
+    bgColor: "bg-amber-100",
+    textColor: "text-amber-800",
+  },
+};
+
+// Get base domain from environment variables
+const getBaseDomain = (): string => {
+  return import.meta.env.VITE_BASE_DOMAIN || 'https://ride.rent';
 };
 
 /**
@@ -117,7 +162,26 @@ export const adminEnquiryUtils = {
   /**
    * Get enquiry summary statistics
    */
-  getEnquiryStats: (enquiries: AdminEnquiry[]) => {
+  getEnquiryStats: (enquiries: AdminEnquiry[], apiSummary?: any) => {
+    // If API summary is provided, use it (for better performance)
+    if (apiSummary) {
+      return {
+        total: apiSummary.totalEnquiries,
+        statusCounts: {},
+        uniqueVehicles: new Set(enquiries.map((e) => e.vehicle._id)).size,
+        uniqueUsers: new Set(enquiries.map((e) => e.user._id)).size,
+        newEnquiries: apiSummary.newEnquiries,
+        acceptedEnquiries: 0, // Legacy field
+        rejectedEnquiries: 0, // Legacy field
+        cancelledEnquiries: apiSummary.cancelledEnquiries,
+        expiredEnquiries: apiSummary.expiredEnquiries,
+        contactedEnquiries: apiSummary.contactedEnquiries,
+        declinedEnquiries: apiSummary.declinedEnquiries,
+        agentviewEnquiries: apiSummary.agentviewEnquiries,
+      };
+    }
+
+    // Fallback to client-side calculation
     const total = enquiries.length;
     const statusCounts = enquiries.reduce(
       (acc, enquiry) => {
@@ -139,7 +203,31 @@ export const adminEnquiryUtils = {
       acceptedEnquiries: statusCounts[ENQUIRY_STATUSES.ACCEPTED] || 0,
       rejectedEnquiries: statusCounts[ENQUIRY_STATUSES.REJECTED] || 0,
       cancelledEnquiries: statusCounts[ENQUIRY_STATUSES.CANCELLED] || 0,
+      expiredEnquiries: statusCounts[ENQUIRY_STATUSES.EXPIRED] || 0,
+      contactedEnquiries: statusCounts[ENQUIRY_STATUSES.CONTACTED] || 0,
+      declinedEnquiries: statusCounts[ENQUIRY_STATUSES.DECLINED] || 0,
+      agentviewEnquiries: statusCounts[ENQUIRY_STATUSES.AGENTVIEW] || 0,
     };
+  },
+
+  /**
+   * Generate full car link URL
+   */
+  getFullCarLink: (enquiry: AdminEnquiry): string => {
+    if (!enquiry.vehicle.carLink) {
+      return '';
+    }
+    return `${getBaseDomain()}/${enquiry.vehicle.carLink}`;
+  },
+
+  /**
+   * Open car link in new tab
+   */
+  openCarLink: (enquiry: AdminEnquiry): void => {
+    const fullLink = adminEnquiryUtils.getFullCarLink(enquiry);
+    if (fullLink) {
+      window.open(fullLink, '_blank', 'noopener,noreferrer');
+    }
   },
 
   /**

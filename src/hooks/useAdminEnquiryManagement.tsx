@@ -103,6 +103,10 @@ export const useAdminEnquiryManagement = (
   const [statusFilter, setStatusFilter] = useState(
     initialFilters.statusFilter || "all",
   );
+
+  console.log("statusFilter: ", statusFilter);
+
+
   const [dateRange, setDateRange] = useState(initialFilters.dateRange || {});
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [pageSize, setPageSize] = useState(initialLimit);
@@ -114,8 +118,8 @@ export const useAdminEnquiryManagement = (
     status:
       (statusFilter &&
       statusFilter !== "all" &&
-      ["NEW", "ACCEPTED", "REJECTED", "CANCELLED"].includes(statusFilter)
-        ? (statusFilter as "NEW" | "ACCEPTED" | "REJECTED" | "CANCELLED")
+      ["NEW", "ACCEPTED", "REJECTED", "CANCELLED", "EXPIRED", "CONTACTED", "DECLINED", "AGENTVIEW"].includes(statusFilter)
+        ? (statusFilter as "NEW" | "ACCEPTED" | "REJECTED" | "CANCELLED" | "EXPIRED" | "CONTACTED" | "DECLINED" | "AGENTVIEW")
         : initialStatus) || undefined,
   };
 
@@ -133,8 +137,7 @@ export const useAdminEnquiryManagement = (
     enabled,
     refetchInterval,
     staleTime,
-    retry: 3,
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    refetchOnWindowFocus:true
   });
 
   const enquiries = data?.result.list || [];
@@ -145,7 +148,12 @@ export const useAdminEnquiryManagement = (
     totalPages: data?.result.totalNumberOfPages || 0,
   };
 
+  // Get API summary if available for better performance
+  const apiSummary = data?.result.summary;
+  const apiStatusCounts = data?.result.statusCounts;
+
   console.log("enquiries: ", enquiries);
+  console.log("summary from API: ", apiSummary);
 
   // Filter enquiries based on search term and date range (client-side filtering)
   const filteredEnquiries = useMemo(() => {
@@ -157,11 +165,12 @@ export const useAdminEnquiryManagement = (
       filtered = filtered.filter(
         (enquiry: AdminEnquiry) =>
           enquiry.user.name.toLowerCase().includes(searchLower) ||
-          enquiry.user.email.toLowerCase().includes(searchLower) ||
+          (enquiry.user.email && enquiry.user.email.toLowerCase().includes(searchLower)) ||
           enquiry.user.phone.includes(searchTerm) ||
           enquiry.vehicle.name.toLowerCase().includes(searchLower) ||
           enquiry.vehicle.location.toLowerCase().includes(searchLower) ||
-          enquiry.agent.name.toLowerCase().includes(searchLower) ||
+          (enquiry.vehicle.vehicleCode && enquiry.vehicle.vehicleCode.toLowerCase().includes(searchLower)) ||
+          (enquiry.agent.companyName && enquiry.agent.companyName.toLowerCase().includes(searchLower)) ||
           enquiry.message.toLowerCase().includes(searchLower),
       );
     }
@@ -184,7 +193,9 @@ export const useAdminEnquiryManagement = (
 
   // Computed values
   const uniqueAgents = useMemo(() => {
-    const agents = enquiries.map((enquiry: AdminEnquiry) => enquiry.agent.name);
+    const agents = enquiries.map((enquiry: AdminEnquiry) => 
+      enquiry.agent.companyName || enquiry.agent.email || 'Unknown Agent'
+    );
     return [...new Set(agents)].filter(Boolean);
   }, [enquiries]);
 
@@ -196,6 +207,18 @@ export const useAdminEnquiryManagement = (
   }, [enquiries]);
 
   const statusCounts = useMemo(() => {
+    // Use API status counts if available, otherwise calculate client-side
+    if (apiStatusCounts) {
+      return {
+        NEW: apiStatusCounts.NEW || 0,
+        CONTACTED: apiStatusCounts.CONTACTED || 0,
+        CANCELLED: apiStatusCounts.CANCELLED || 0,
+        DECLINED: apiStatusCounts.DECLINED || 0,
+        AGENTVIEW: apiStatusCounts.AGENTVIEW || 0,
+        EXPIRED: apiStatusCounts.EXPIRED || 0,
+      } as Record<string, number>;
+    }
+    
     return enquiries.reduce(
       (counts: Record<string, number>, enquiry: AdminEnquiry) => {
         counts[enquiry.status] = (counts[enquiry.status] || 0) + 1;
@@ -203,7 +226,7 @@ export const useAdminEnquiryManagement = (
       },
       {} as Record<string, number>,
     );
-  }, [enquiries]);
+  }, [enquiries, apiStatusCounts]);
 
   // Actions
   const clearFilters = useCallback(() => {
