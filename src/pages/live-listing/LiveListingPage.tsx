@@ -12,6 +12,8 @@ import { GenericTable } from "@/components/table/GenericTable";
 import { LiveListingVehicleType } from "@/types/api-types/vehicleAPI-types";
 import ListingPageLayout from "@/components/common/ListingPageLayout";
 import { useListingPageState } from "@/hooks/useListingPageState";
+import CompanySearchDialog from "@/components/dialog/CompanySearchDialog";
+import FilterTag from "@/components/FilterTag";
 
 export default function AllListingPage() {
   const {
@@ -22,6 +24,8 @@ export default function AllListingPage() {
     sortOrder,
     setSortOrder,
     searchTerm,
+    selectedCompany,
+    setSelectedCompany,
   } = useListingPageState();
 
   const queryClient = useQueryClient();
@@ -37,6 +41,7 @@ export default function AllListingPage() {
       sortOrder,
       searchTerm,
       state,
+      selectedCompany?.userId,
     ],
     queryFn: () =>
       fetchAllVehicles({
@@ -46,9 +51,9 @@ export default function AllListingPage() {
         approvalStatus: "APPROVED",
         search: searchTerm.trim(),
         stateId: state.stateId as string,
+        userId: selectedCompany?.userId,
       }),
     enabled: !!state.stateId,
-    staleTime: 10000,
   });
 
   const { mutateAsync: toggleVehicleStatus, isPending } = useMutation({
@@ -120,12 +125,28 @@ export default function AllListingPage() {
           or phone number can be used to search the vehicle"
         />
       }
+      extraFilters={
+        <div className="flex items-center gap-2">
+          <CompanySearchDialog onSelect={setSelectedCompany} />
+          {selectedCompany && (
+            <FilterTag
+              label={selectedCompany.companyName}
+              onClear={() => setSelectedCompany(null)}
+            />
+          )}
+        </div>
+      }
     >
       <GenericTable<LiveListingVehicleType>
         columns={LiveListingColumns(handleToggle, isPending)}
         data={data?.result?.list || []}
         loading={isLoading}
         loadingText="Fetching Listings..."
+        noDataText={
+          selectedCompany
+            ? `No Listing found under ${selectedCompany.companyName}`
+            : "No Listings found."
+        }
       />
 
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />

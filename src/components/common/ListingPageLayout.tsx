@@ -7,6 +7,7 @@ type ListingPageLayoutProps = {
   limitDropdown?: ReactNode;
   search?: ReactNode;
   actionButton?: ReactNode;
+  extraFilters?: ReactNode;
   children: ReactNode;
 };
 
@@ -20,13 +21,13 @@ type ListingPageLayoutProps = {
  *
  * Designed for pages with data tables and filtering controls.
  */
-
 export default function ListingPageLayout({
   heading,
   sortDropdown,
   limitDropdown,
   search,
   actionButton,
+  extraFilters,
   children,
 }: ListingPageLayoutProps) {
   return (
@@ -41,7 +42,7 @@ export default function ListingPageLayout({
         )}
       </div>
 
-      <div className="mb-4 mt-3 flex w-full flex-wrap items-start justify-start gap-x-2 max-sm:mt-3">
+      <div className="mb-4 mt-3 flex w-full flex-wrap items-start justify-start gap-2 max-sm:mt-3">
         {search && search}
 
         {actionButton && actionButton}
@@ -51,6 +52,9 @@ export default function ListingPageLayout({
 
         {/* limit dropdown */}
         {limitDropdown && limitDropdown}
+
+        {/* Extra filters */}
+        {extraFilters && extraFilters}
       </div>
 
       {/* Search box */}
