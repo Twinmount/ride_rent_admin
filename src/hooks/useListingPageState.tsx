@@ -1,3 +1,4 @@
+import { CompanyType } from "@/types/api-types/vehicleAPI-types";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -11,6 +12,9 @@ export function useListingPageState(
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState<Limit>(defaultLimit);
   const [sortOrder, setSortOrder] = useState<SortOrder>(defaultSort);
+  const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
+    null,
+  );
 
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search")?.trim() || "";
@@ -23,5 +27,7 @@ export function useListingPageState(
     sortOrder,
     setSortOrder,
     searchTerm,
+    selectedCompany,
+    setSelectedCompany,
   };
 }

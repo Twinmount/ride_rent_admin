@@ -14,6 +14,7 @@ export const fetchAllVehicles = async (urlParams: {
   approvalStatus?: VehicleStatusType;
   search?: string;
   stateId: string;
+  userId?: string | null;
 }): Promise<FetchVehicleTableListingResponse> => {
   try {
     // generating query params
@@ -30,6 +31,10 @@ export const fetchAllVehicles = async (urlParams: {
 
     if (urlParams.search) {
       queryParams.append("search", urlParams.search);
+    }
+
+    if (urlParams.userId) {
+      queryParams.append("userId", urlParams.userId);
     }
 
     const slugWithParams = `${Slug.GET_ALL_VEHICLES}?${queryParams}`;
