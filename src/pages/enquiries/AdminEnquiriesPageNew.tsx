@@ -10,7 +10,10 @@ import {
 import { DataTablePagination } from "@/components/common";
 import { useAdminEnquiryManagement } from "@/hooks/useAdminEnquiryManagement";
 import { adminEnquiryUtils } from "@/utils/adminEnquiryUtils";
-import { exportEnquiriesToExcel, exportEnquiryStatsToExcel } from "@/utils/excelExport";
+import {
+  exportEnquiriesToExcel,
+  exportEnquiryStatsToExcel,
+} from "@/utils/excelExport";
 import { AdminEnquiry } from "@/types/api-types/API-types";
 import { ExportOptions } from "@/components/enquiry/ExportConfirmationModal";
 import { toast } from "@/components/ui/use-toast";
@@ -26,6 +29,8 @@ export default function AdminEnquiriesPageNew() {
     setSearchTerm,
     statusFilter,
     setStatusFilter,
+    locationFilter,
+    setLocationFilter,
     currentPage,
     setCurrentPage,
     clearFilters,
@@ -39,6 +44,7 @@ export default function AdminEnquiriesPageNew() {
     staleTime: 5 * 60 * 1000, // 5 minutes
     initialFilters: {
       statusFilter: "all", // Set default to "all" instead of empty string
+      locationFilter: "all", // Add default location filter
     },
   });
 
@@ -47,7 +53,13 @@ export default function AdminEnquiriesPageNew() {
 
   // Use API status counts directly (already calculated in the hook)
   const stats = {
-    total: statusCounts.NEW + statusCounts.CONTACTED + statusCounts.CANCELLED + statusCounts.DECLINED + statusCounts.AGENTVIEW + statusCounts.EXPIRED,
+    total:
+      statusCounts.NEW +
+      statusCounts.CONTACTED +
+      statusCounts.CANCELLED +
+      statusCounts.DECLINED +
+      statusCounts.AGENTVIEW +
+      statusCounts.EXPIRED,
     newEnquiries: statusCounts.NEW || 0,
     contactedEnquiries: statusCounts.CONTACTED || 0,
     cancelledEnquiries: statusCounts.CANCELLED || 0,
@@ -56,8 +68,6 @@ export default function AdminEnquiriesPageNew() {
     expiredEnquiries: statusCounts.EXPIRED || 0,
   };
 
-
-  const [locationFilter, setLocationFilter] = useState("all");
   const [revealedPhones, setRevealedPhones] = useState<{
     [key: string]: boolean;
   }>({});
@@ -76,7 +86,8 @@ export default function AdminEnquiriesPageNew() {
       toast({
         variant: "destructive",
         title: "No Data to Export",
-        description: "No enquiries to export. Please check your filters or data.",
+        description:
+          "No enquiries to export. Please check your filters or data.",
       });
       return;
     }
@@ -88,21 +99,24 @@ export default function AdminEnquiriesPageNew() {
   const handleExportConfirm = async (options: ExportOptions) => {
     try {
       console.log("Exporting enquiries to Excel...");
-      
+
       // Use filtered enquiries for export to respect current filters
-      const dataToExport = filteredEnquiries.length > 0 ? filteredEnquiries : [];
-      
+      const dataToExport =
+        filteredEnquiries.length > 0 ? filteredEnquiries : [];
+
       let exportResults: string[] = [];
 
       // Export main enquiries data if selected
       if (options.exportEnquiries) {
         const result = exportEnquiriesToExcel(dataToExport, {
-          filename: 'admin-enquiries-export',
+          filename: "admin-enquiries-export",
           includeTimestamp: true,
         });
 
         if (result.success) {
-          console.log(`✅ Successfully exported ${result.recordCount} enquiries to ${result.filename}`);
+          console.log(
+            `✅ Successfully exported ${result.recordCount} enquiries to ${result.filename}`,
+          );
           exportResults.push(`✅ Exported ${result.recordCount} enquiries`);
         } else {
           console.error("❌ Export failed:", result.error);
@@ -113,12 +127,14 @@ export default function AdminEnquiriesPageNew() {
       // Export statistics if selected
       if (options.exportStatistics) {
         const statsResult = exportEnquiryStatsToExcel(stats, statusCounts, {
-          filename: 'admin-enquiry-statistics',
+          filename: "admin-enquiry-statistics",
           includeTimestamp: true,
         });
-        
+
         if (statsResult.success) {
-          console.log(`✅ Successfully exported statistics to ${statsResult.filename}`);
+          console.log(
+            `✅ Successfully exported statistics to ${statsResult.filename}`,
+          );
           exportResults.push(`✅ Exported summary statistics`);
         } else {
           console.error("❌ Failed to export statistics:", statsResult.error);
@@ -131,7 +147,7 @@ export default function AdminEnquiriesPageNew() {
         console.log("✅ Export completed successfully");
         toast({
           title: "Export Completed Successfully",
-          description: exportResults.join('\n'),
+          description: exportResults.join("\n"),
           variant: "default",
         });
       }
@@ -140,7 +156,8 @@ export default function AdminEnquiriesPageNew() {
       toast({
         variant: "destructive",
         title: "Export Failed",
-        description: "An unexpected error occurred during export. Please try again.",
+        description:
+          "An unexpected error occurred during export. Please try again.",
       });
     }
   };

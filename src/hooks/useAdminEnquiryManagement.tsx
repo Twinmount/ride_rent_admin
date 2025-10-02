@@ -29,6 +29,7 @@ export interface UseAdminEnquiryManagementOptions extends AdminEnquiryParams {
   initialFilters?: {
     searchTerm?: string;
     statusFilter?: string;
+    locationFilter?: string;
     dateRange?: {
       start?: string;
       end?: string;
@@ -60,6 +61,8 @@ export interface UseAdminEnquiryManagementReturn {
   setSearchTerm: (term: string) => void;
   statusFilter: string;
   setStatusFilter: (status: string) => void;
+  locationFilter: string;
+  setLocationFilter: (location: string) => void;
   dateRange: {
     start?: string;
     end?: string;
@@ -102,6 +105,9 @@ export const useAdminEnquiryManagement = (
   const [searchTerm, setSearchTerm] = useState(initialFilters.searchTerm || "");
   const [statusFilter, setStatusFilter] = useState(
     initialFilters.statusFilter || "all",
+  );
+  const [locationFilter, setLocationFilter] = useState(
+    initialFilters.locationFilter || "all",
   );
 
   console.log("statusFilter: ", statusFilter);
@@ -155,7 +161,7 @@ export const useAdminEnquiryManagement = (
   console.log("enquiries: ", enquiries);
   console.log("summary from API: ", apiSummary);
 
-  // Filter enquiries based on search term and date range (client-side filtering)
+  // Filter enquiries based on search term, location filter, and date range (client-side filtering)
   const filteredEnquiries = useMemo(() => {
     let filtered = [...enquiries];
 
@@ -175,6 +181,13 @@ export const useAdminEnquiryManagement = (
       );
     }
 
+    // Location filter
+    if (locationFilter && locationFilter !== "all") {
+      filtered = filtered.filter(
+        (enquiry: AdminEnquiry) => enquiry.vehicle.location === locationFilter,
+      );
+    }
+
     // Date range filter
     if (dateRange.start || dateRange.end) {
       filtered = filtered.filter((enquiry: AdminEnquiry) => {
@@ -189,7 +202,7 @@ export const useAdminEnquiryManagement = (
     }
 
     return filtered;
-  }, [enquiries, searchTerm, dateRange]);
+  }, [enquiries, searchTerm, locationFilter, dateRange]);
 
   // Computed values
   const uniqueAgents = useMemo(() => {
@@ -232,6 +245,7 @@ export const useAdminEnquiryManagement = (
   const clearFilters = useCallback(() => {
     setSearchTerm("");
     setStatusFilter("all");
+    setLocationFilter("all");
     setDateRange({});
     setCurrentPage(1);
   }, []);
@@ -255,6 +269,8 @@ export const useAdminEnquiryManagement = (
     setSearchTerm,
     statusFilter,
     setStatusFilter,
+    locationFilter,
+    setLocationFilter,
     dateRange,
     setDateRange,
 

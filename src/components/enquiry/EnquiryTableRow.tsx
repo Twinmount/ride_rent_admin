@@ -54,15 +54,6 @@ export function EnquiryTableRow({
             {statusInfo.label}
           </Badge>
         );
-      case ENQUIRY_STATUSES.ACCEPTED:
-        return (
-          <Badge 
-            className="!bg-green-100 !text-green-800 hover:!bg-green-200 !border-green-200"
-            style={{ backgroundColor: '#dcfce7', color: '#166534', borderColor: '#bbf7d0' }}
-          >
-            {statusInfo.label}
-          </Badge>
-        );
       case ENQUIRY_STATUSES.CONTACTED:
         return (
           <Badge 
@@ -86,24 +77,6 @@ export function EnquiryTableRow({
           <Badge 
             className="!bg-gray-100 !text-gray-800 hover:!bg-gray-200 !border-gray-200"
             style={{ backgroundColor: '#f3f4f6', color: '#374151', borderColor: '#e5e7eb' }}
-          >
-            {statusInfo.label}
-          </Badge>
-        );
-      case ENQUIRY_STATUSES.REJECTED:
-        return (
-          <Badge 
-            className="!bg-red-100 !text-red-800 hover:!bg-red-200 !border-red-200"
-            style={{ backgroundColor: '#fecaca', color: '#991b1b', borderColor: '#fca5a5' }}
-          >
-            {statusInfo.label}
-          </Badge>
-        );
-      case ENQUIRY_STATUSES.DECLINED:
-        return (
-          <Badge 
-            className="!bg-rose-100 !text-rose-800 hover:!bg-rose-200 !border-rose-200"
-            style={{ backgroundColor: '#ffe4e6', color: '#9f1239', borderColor: '#fecdd3' }}
           >
             {statusInfo.label}
           </Badge>

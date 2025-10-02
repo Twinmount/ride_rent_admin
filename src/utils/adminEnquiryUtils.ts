@@ -3,12 +3,12 @@ import { AdminEnquiry } from "@/types/api-types/API-types";
 // Valid enquiry statuses
 export const ENQUIRY_STATUSES = {
   NEW: "NEW",
-  ACCEPTED: "ACCEPTED",
-  REJECTED: "REJECTED",
+  // ACCEPTED: "ACCEPTED",
+  // REJECTED: "REJECTED",
   CANCELLED: "CANCELLED",
   EXPIRED: "EXPIRED",
   CONTACTED: "CONTACTED",
-  DECLINED: "DECLINED",
+  // DECLINED: "DECLINED",
   AGENTVIEW: "AGENTVIEW",
 } as const;
 
@@ -24,20 +24,20 @@ export const statusConfig = {
     bgColor: "bg-blue-100",
     textColor: "text-blue-800",
   },
-  [ENQUIRY_STATUSES.ACCEPTED]: {
-    label: "Accepted",
-    color: "green",
-    variant: "success",
-    bgColor: "bg-green-100",
-    textColor: "text-green-800",
-  },
-  [ENQUIRY_STATUSES.REJECTED]: {
-    label: "Rejected",
-    color: "red",
-    variant: "destructive",
-    bgColor: "bg-red-100",
-    textColor: "text-red-800",
-  },
+  // [ENQUIRY_STATUSES.ACCEPTED]: {
+  //   label: "Accepted",
+  //   color: "green",
+  //   variant: "success",
+  //   bgColor: "bg-green-100",
+  //   textColor: "text-green-800",
+  // },
+  // [ENQUIRY_STATUSES.REJECTED]: {
+  //   label: "Rejected",
+  //   color: "red",
+  //   variant: "destructive",
+  //   bgColor: "bg-red-100",
+  //   textColor: "text-red-800",
+  // },
   [ENQUIRY_STATUSES.CANCELLED]: {
     label: "Cancelled",
     color: "gray",
@@ -52,20 +52,20 @@ export const statusConfig = {
     bgColor: "bg-orange-100",
     textColor: "text-orange-800",
   },
-  [ENQUIRY_STATUSES.CONTACTED]: {
-    label: "Contacted",
-    color: "purple",
-    variant: "default",
-    bgColor: "bg-purple-100",
-    textColor: "text-purple-800",
-  },
-  [ENQUIRY_STATUSES.DECLINED]: {
-    label: "Declined",
-    color: "rose",
-    variant: "destructive",
-    bgColor: "bg-rose-100",
-    textColor: "text-rose-800",
-  },
+  // [ENQUIRY_STATUSES.CONTACTED]: {
+  //   label: "Contacted",
+  //   color: "purple",
+  //   variant: "default",
+  //   bgColor: "bg-purple-100",
+  //   textColor: "text-purple-800",
+  // },
+  // [ENQUIRY_STATUSES.DECLINED]: {
+  //   label: "Declined",
+  //   color: "rose",
+  //   variant: "destructive",
+  //   bgColor: "bg-rose-100",
+  //   textColor: "text-rose-800",
+  // },
   [ENQUIRY_STATUSES.AGENTVIEW]: {
     label: "Agent View",
     color: "amber",
@@ -77,7 +77,7 @@ export const statusConfig = {
 
 // Get base domain from environment variables
 const getBaseDomain = (): string => {
-  return import.meta.env.VITE_BASE_DOMAIN || 'https://ride.rent';
+  return import.meta.env.VITE_BASE_DOMAIN || "https://ride.rent";
 };
 
 /**
@@ -96,12 +96,22 @@ export const adminEnquiryUtils = {
    */
   formatStatus: (status: string) => {
     if (adminEnquiryUtils.isValidStatus(status)) {
-      return statusConfig[status];
+      return (
+        statusConfig[status as keyof typeof statusConfig] || {
+          label: status,
+          color: "gray",
+          variant: "secondary",
+          bgColor: "bg-gray-100",
+          textColor: "text-gray-800",
+        }
+      );
     }
     return {
       label: status,
       color: "gray",
       variant: "secondary",
+      bgColor: "bg-gray-100",
+      textColor: "text-gray-800",
     };
   },
 
@@ -200,12 +210,12 @@ export const adminEnquiryUtils = {
       uniqueVehicles,
       uniqueUsers,
       newEnquiries: statusCounts[ENQUIRY_STATUSES.NEW] || 0,
-      acceptedEnquiries: statusCounts[ENQUIRY_STATUSES.ACCEPTED] || 0,
-      rejectedEnquiries: statusCounts[ENQUIRY_STATUSES.REJECTED] || 0,
+      // acceptedEnquiries: statusCounts[ENQUIRY_STATUSES.ACCEPTED] || 0,
+      // rejectedEnquiries: statusCounts[ENQUIRY_STATUSES.REJECTED] || 0,
       cancelledEnquiries: statusCounts[ENQUIRY_STATUSES.CANCELLED] || 0,
       expiredEnquiries: statusCounts[ENQUIRY_STATUSES.EXPIRED] || 0,
       contactedEnquiries: statusCounts[ENQUIRY_STATUSES.CONTACTED] || 0,
-      declinedEnquiries: statusCounts[ENQUIRY_STATUSES.DECLINED] || 0,
+      // declinedEnquiries: statusCounts[ENQUIRY_STATUSES.DECLINED] || 0,
       agentviewEnquiries: statusCounts[ENQUIRY_STATUSES.AGENTVIEW] || 0,
     };
   },
@@ -215,7 +225,7 @@ export const adminEnquiryUtils = {
    */
   getFullCarLink: (enquiry: AdminEnquiry): string => {
     if (!enquiry.vehicle.carLink) {
-      return '';
+      return "";
     }
     return `${getBaseDomain()}/${enquiry.vehicle.carLink}`;
   },
@@ -226,7 +236,7 @@ export const adminEnquiryUtils = {
   openCarLink: (enquiry: AdminEnquiry): void => {
     const fullLink = adminEnquiryUtils.getFullCarLink(enquiry);
     if (fullLink) {
-      window.open(fullLink, '_blank', 'noopener,noreferrer');
+      window.open(fullLink, "_blank", "noopener,noreferrer");
     }
   },
 
