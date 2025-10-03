@@ -112,7 +112,6 @@ export const useAdminEnquiryManagement = (
 
   console.log("statusFilter: ", statusFilter);
 
-
   const [dateRange, setDateRange] = useState(initialFilters.dateRange || {});
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [pageSize, setPageSize] = useState(initialLimit);
@@ -124,8 +123,25 @@ export const useAdminEnquiryManagement = (
     status:
       (statusFilter &&
       statusFilter !== "all" &&
-      ["NEW", "ACCEPTED", "REJECTED", "CANCELLED", "EXPIRED", "CONTACTED", "DECLINED", "AGENTVIEW"].includes(statusFilter)
-        ? (statusFilter as "NEW" | "ACCEPTED" | "REJECTED" | "CANCELLED" | "EXPIRED" | "CONTACTED" | "DECLINED" | "AGENTVIEW")
+      [
+        "NEW",
+        "ACCEPTED",
+        "REJECTED",
+        "CANCELLED",
+        "EXPIRED",
+        "CONTACTED",
+        "DECLINED",
+        "AGENTVIEW",
+      ].includes(statusFilter)
+        ? (statusFilter as
+            | "NEW"
+            | "ACCEPTED"
+            | "REJECTED"
+            | "CANCELLED"
+            | "EXPIRED"
+            | "CONTACTED"
+            | "DECLINED"
+            | "AGENTVIEW")
         : initialStatus) || undefined,
   };
 
@@ -143,7 +159,7 @@ export const useAdminEnquiryManagement = (
     enabled,
     refetchInterval,
     staleTime,
-    refetchOnWindowFocus:true
+    refetchOnWindowFocus: true,
   });
 
   const enquiries = data?.result.list || [];
@@ -171,12 +187,15 @@ export const useAdminEnquiryManagement = (
       filtered = filtered.filter(
         (enquiry: AdminEnquiry) =>
           enquiry.user.name.toLowerCase().includes(searchLower) ||
-          (enquiry.user.email && enquiry.user.email.toLowerCase().includes(searchLower)) ||
+          (enquiry.user.email &&
+            enquiry.user.email.toLowerCase().includes(searchLower)) ||
           enquiry.user.phone.includes(searchTerm) ||
           enquiry.vehicle.name.toLowerCase().includes(searchLower) ||
           enquiry.vehicle.location.toLowerCase().includes(searchLower) ||
-          (enquiry.vehicle.vehicleCode && enquiry.vehicle.vehicleCode.toLowerCase().includes(searchLower)) ||
-          (enquiry.agent.companyName && enquiry.agent.companyName.toLowerCase().includes(searchLower)) ||
+          (enquiry.vehicle.vehicleCode &&
+            enquiry.vehicle.vehicleCode.toLowerCase().includes(searchLower)) ||
+          (enquiry.agent.companyName &&
+            enquiry.agent.companyName.toLowerCase().includes(searchLower)) ||
           enquiry.message.toLowerCase().includes(searchLower),
       );
     }
@@ -206,8 +225,9 @@ export const useAdminEnquiryManagement = (
 
   // Computed values
   const uniqueAgents = useMemo(() => {
-    const agents = enquiries.map((enquiry: AdminEnquiry) => 
-      enquiry.agent.companyName || enquiry.agent.email || 'Unknown Agent'
+    const agents = enquiries.map(
+      (enquiry: AdminEnquiry) =>
+        enquiry.agent.companyName || enquiry.agent.email || "Unknown Agent",
     );
     return [...new Set(agents)].filter(Boolean);
   }, [enquiries]);
@@ -231,7 +251,7 @@ export const useAdminEnquiryManagement = (
         EXPIRED: apiStatusCounts.EXPIRED || 0,
       } as Record<string, number>;
     }
-    
+
     return enquiries.reduce(
       (counts: Record<string, number>, enquiry: AdminEnquiry) => {
         counts[enquiry.status] = (counts[enquiry.status] || 0) + 1;
