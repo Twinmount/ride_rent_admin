@@ -24,6 +24,7 @@ import { locationsRoutes } from "./route-groups/locationsRoutes";
 import { categoryAndVehicleTypeRoutes } from "./route-groups/categoryAndVehicleTypeRoutes";
 import { linkAndPromotionRoutes } from "./route-groups/linkAndPromotionRoutes";
 import { brandsAndSeriesRoutes } from "./route-groups/brandsAndSeriesRoutes";
+import { supplierRoutes } from "./route-groups/supplierCentralRoutes";
 
 
 // lazy imports
@@ -96,6 +97,9 @@ export const router = createBrowserRouter([
 
               // Career Routes
               ...careersRoutes,
+
+              // Supplier Central Routes
+              ...supplierRoutes,
             ],
           },
         ],

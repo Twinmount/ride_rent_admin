@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Box,
   CloudDownload,
+  Building2,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -81,6 +82,15 @@ export const sidebarContent: SidebarItem[] = [
         link: "/company/registrations/rejected",
       },
       { label: "Promotions", link: "/company/promotions" },
+    ],
+  },
+  {
+    type: "accordion",
+    label: "Supplier Central",
+    baseLink: "/suppliercentral",
+    icon: Building2,
+    items: [
+      { label: "Dashboard", link: "/suppliercentral/dashboard" },
     ],
   },
   // srm

@@ -438,6 +438,121 @@ export interface FetchDashboardAnalytics {
   statusCode: number;
 }
 
+// Updated types (in your types file, e.g., types/api-types/API-types.ts or supplier-central.ts)
+export interface SupplierDetailedResponse {
+  _id: string;
+  companyShortId: string;
+  companyName: string;
+  state: string;
+  lastLogin: string;
+  lastActivity: string;
+  lastEnquiry: string;
+  monthlyEnquiries: number;
+  lifetimeEnquiries: number;
+  monthlyUnlocks: number;
+  lifetimeUnlocks: number;
+  plan: string;
+  monthlyMissed: number;
+  lifetimeMissed: number;
+  monthlyCancelled: number;
+  lifetimeCancelled: number;
+  regNumber: string;
+  agentId: string;
+  joinedDate: string;
+  countryName: string;
+  expireDate: string;
+  missedQueriesCount: number;
+}
+
+export interface FetchSupplierCategoryDetailsResponse {
+  status: string;
+  result: {
+    data: SupplierDetailedResponse[];
+    page: string;
+    limit: string;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  statusCode: number;
+}
+
+export interface FetchSupplierCentralAnalytics {
+  status: string;
+  result: {
+    totalSuppliers: number;
+    subscribed: number;
+    missedSubscriptions: number;
+    inactive: number;
+    orderMissed: number;
+    totalSuppliersList: {
+      data: SupplierCentralDto[];
+      page: string;
+      limit: string;
+      total: number;
+      totalNumberOfPages: number;
+    };
+    subscribedList: {
+      data: SupplierCentralDto[];
+      page: string;
+      limit: string;
+      total: number;
+      totalNumberOfPages: number;
+    };
+    missedSubscriptionsList: {
+      data: SupplierCentralDto[];
+      page: string;
+      limit: string;
+      total: number;
+      totalNumberOfPages: number;
+    };
+    inactiveList: {
+      data: SupplierCentralDto[];
+      page: string;
+      limit: string;
+      total: number;
+      totalNumberOfPages: number;
+    };
+    orderMissedList: {
+      data: SupplierCentralDto[];
+      page: string;
+      limit: string;
+      total: number;
+      totalNumberOfPages: number;
+    };
+  };
+  statusCode: number;
+}
+
+export interface GetSupplierCategoryDetailsParams {
+  category: 'total-suppliers' | 'subscribed' | 'missed-subscriptions' | 'inactive' | 'order-missed';
+  page: number;
+  limit: number;
+  sortOrder: 'ASC' | 'DESC';
+  search?: string;
+  countryId?: string;
+}
+
+export interface SupplierCentralDto {
+  _id: string;
+  companyShortId: string;
+  companyName: string;
+  regNumber: string;
+  createdAt: string;  // ISO string from API
+  countryId: string;
+  countryName: string;
+  location: { 
+    type?: string;
+    coordinates?: number[];
+    address: string;
+  };
+  plan: string; // Assume Plan enum as string
+  expireDate: string;  // ISO string from API
+  hadPremium: boolean;
+  hasMissedEnquiry: boolean;
+  lastLogin: string;  // ISO string from API
+  missedQueriesCount: number;
+  agentId: string;
+}
 // api response types for single file upload
 export interface SingleFileUploadResponse {
   result: {
