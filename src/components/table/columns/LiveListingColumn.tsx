@@ -37,7 +37,20 @@ export const LiveListingColumns: (
   },
   {
     accessorKey: "company.companyName",
-    header: "Company Name",
+    header: "Company",
+    cell: ({ row }) => {
+      const {
+        company: { companyName, companyId },
+      } = row.original;
+      return (
+        <Link
+          to={`/company/registrations/view/${companyId}`}
+          className="line-clamp-1 font-semibold text-blue-600 hover:underline"
+        >
+          {companyName}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: "isDisabled",

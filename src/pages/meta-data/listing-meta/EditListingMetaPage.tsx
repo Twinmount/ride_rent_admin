@@ -1,13 +1,14 @@
 import { fetchListingMetaDataById } from "@/api/meta-data";
 import ListingMetaForm from "@/components/form/ListingMetaForm";
 import FormSkelton from "@/components/skelton/FormSkelton";
+import { useListingMetaTab } from "@/hooks/useListingMetaTab";
 import { useQuery } from "@tanstack/react-query";
-
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditListingMetaPage() {
   const navigate = useNavigate();
+  const { activeTab, getFormPageTitle } = useListingMetaTab({});
 
   const { metaDataId } = useParams<{ metaDataId: string }>();
 
@@ -16,7 +17,18 @@ export default function EditListingMetaPage() {
     queryFn: () => fetchListingMetaDataById(metaDataId as string),
   });
 
-  const metaData = data?.result;
+  const metaData = data?.result
+    ? {
+        ...data.result,
+        stateId: activeTab === "brand" ? "" : data.result.stateId,
+        typeId: activeTab === "vehicleType" ? data.result.typeId || "" : "",
+        brandId: activeTab === "brand" ? data.result.brandId || "" : "",
+        h1: data.result.h1 || "",
+        h2: data.result.h2 || "",
+      }
+    : null;
+
+  const heading = getFormPageTitle("Update");
 
   return (
     <section className="container pb-32 pt-5">
@@ -27,12 +39,16 @@ export default function EditListingMetaPage() {
         >
           <CircleArrowLeft />
         </button>
-        <h3 className="h3-bold text-center sm:text-left">Edit Listing Meta</h3>
+        <h3 className="h3-bold text-center sm:text-left">{heading}</h3>
       </div>
       {isLoading ? (
         <FormSkelton />
       ) : (
-        <ListingMetaForm type="Update" formData={metaData} />
+        <ListingMetaForm
+          type="Update"
+          activeTab={activeTab}
+          formData={metaData}
+        />
       )}
     </section>
   );

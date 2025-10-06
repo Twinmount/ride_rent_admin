@@ -151,6 +151,11 @@ export enum Slug {
 
   GET_ADMIN_DASHBOARD = "/vehicle/admin/analytics",
 
+  // admin enquiries endpoints
+  GET_ADMIN_ENQUIRIES = "/enquiries/admin/all",
+
+  // admin enquiries endpoints
+
   // supplier-central
   GET_SUPPLIER_CENTRAL_HOME_SUMMARY = "/supplier-central/home-summary",
   GET_SUPPLIER_CENTRAL_CATEGORY_DETAILS = "/supplier-central/category-details",
