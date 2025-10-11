@@ -6,8 +6,7 @@ import {
   FetchVehicleTableListingResponse,
 } from "@/types/api-types/vehicleAPI-types";
 
-// fetch all vehicles
-export const fetchAllVehicles = async (urlParams: {
+type FetchAllVehiclesParams = {
   page: number;
   limit: number;
   sortOrder: string;
@@ -15,26 +14,44 @@ export const fetchAllVehicles = async (urlParams: {
   search?: string;
   stateId: string;
   userId?: string | null;
-}): Promise<FetchVehicleTableListingResponse> => {
+  isHighPriority?: boolean;
+};
+
+// fetch all vehicles
+export const fetchAllVehicles = async (
+  values: FetchAllVehiclesParams,
+): Promise<FetchVehicleTableListingResponse> => {
   try {
+    const {
+      page,
+      limit,
+      sortOrder,
+      approvalStatus,
+      search,
+      stateId,
+      userId,
+      isHighPriority,
+    } = values;
+
     // generating query params
     const queryParams = new URLSearchParams({
-      page: urlParams.page.toString(),
-      limit: urlParams.limit.toString(),
-      sortOrder: urlParams.sortOrder,
-      stateId: urlParams.stateId,
+      page: page.toString(),
+      limit: limit.toString(),
+      sortOrder: sortOrder,
+      stateId: stateId,
+      isHighPriority: isHighPriority ? "true" : "false",
     });
 
-    if (urlParams.approvalStatus) {
-      queryParams.append("approvalStatus", urlParams.approvalStatus);
+    if (approvalStatus) {
+      queryParams.append("approvalStatus", approvalStatus);
     }
 
-    if (urlParams.search) {
-      queryParams.append("search", urlParams.search);
+    if (search) {
+      queryParams.append("search", search);
     }
 
-    if (urlParams.userId) {
-      queryParams.append("userId", urlParams.userId);
+    if (userId) {
+      queryParams.append("userId", userId);
     }
 
     const slugWithParams = `${Slug.GET_ALL_VEHICLES}?${queryParams}`;
@@ -126,6 +143,26 @@ export const enableOrDisableVehicle = async ({
       body: {
         vehicleId,
         isDisabled,
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error toggling vehicle visibility", error);
+    throw error;
+  }
+};
+
+export const toggleVehiclePriorityApi = async ({
+  vehicleId,
+}: {
+  vehicleId: string;
+}) => {
+  try {
+    const data = await API.post({
+      slug: Slug.POST_TOGGLE_VEHICLE_PRIORITY,
+      body: {
+        vehicleId,
       },
     });
 
