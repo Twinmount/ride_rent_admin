@@ -15,6 +15,7 @@ export function useListingPageState(
   const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
     null,
   );
+  const [isHighPriority, setIsHighPriority] = useState(false);
 
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search")?.trim() || "";
@@ -29,5 +30,7 @@ export function useListingPageState(
     searchTerm,
     selectedCompany,
     setSelectedCompany,
+    isHighPriority,
+    setIsHighPriority,
   };
 }

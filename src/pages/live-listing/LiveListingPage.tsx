@@ -1,6 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { LiveListingColumns } from "@/components/table/columns/LiveListingColumn";
-import { fetchAllVehicles, enableOrDisableVehicle } from "@/api/listings";
+import {
+  fetchAllVehicles,
+  enableOrDisableVehicle,
+  toggleVehiclePriorityApi,
+} from "@/api/listings";
 import { toast } from "@/components/ui/use-toast";
 import Pagination from "@/components/Pagination";
 import { LimitDropdown } from "@/components/LimitDropdown";
@@ -10,10 +14,11 @@ import { useAdminContext } from "@/context/AdminContext";
 import ListingPageHeading from "../../components/ListingPageHeading";
 import { GenericTable } from "@/components/table/GenericTable";
 import { LiveListingVehicleType } from "@/types/api-types/vehicleAPI-types";
-import ListingPageLayout from "@/components/common/ListingPageLayout";
+import TablePageLayout from "@/components/common/TablePageLayout";
 import { useListingPageState } from "@/hooks/useListingPageState";
 import CompanySearchDialog from "@/components/dialog/CompanySearchDialog";
 import FilterTag from "@/components/FilterTag";
+import { Switch } from "@/components/ui/switch";
 
 export default function AllListingPage() {
   const {
@@ -26,6 +31,8 @@ export default function AllListingPage() {
     searchTerm,
     selectedCompany,
     setSelectedCompany,
+    isHighPriority,
+    setIsHighPriority,
   } = useListingPageState();
 
   const queryClient = useQueryClient();
@@ -42,6 +49,7 @@ export default function AllListingPage() {
       searchTerm,
       state,
       selectedCompany?.userId,
+      isHighPriority,
     ],
     queryFn: () =>
       fetchAllVehicles({
@@ -52,11 +60,15 @@ export default function AllListingPage() {
         search: searchTerm.trim(),
         stateId: state.stateId as string,
         userId: selectedCompany?.userId,
+        isHighPriority,
       }),
     enabled: !!state.stateId,
   });
 
-  const { mutateAsync: toggleVehicleStatus, isPending } = useMutation({
+  const {
+    mutateAsync: toggleVehicleStatus,
+    isPending: isVehicleStatusPending,
+  } = useMutation({
     mutationFn: async ({
       vehicleId,
       isDisabled,
@@ -68,16 +80,7 @@ export default function AllListingPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [
-          "listings",
-          "live-listings",
-          page,
-          limit,
-          sortOrder,
-          searchTerm,
-          state,
-        ],
-        exact: true,
+        queryKey: ["listings", "live-listings"],
       });
       toast({
         title: "Vehicle status updated",
@@ -95,14 +98,47 @@ export default function AllListingPage() {
     },
   });
 
-  const handleToggle = async (vehicleId: string, isDisabled: boolean) => {
+  const { mutateAsync: setVehiclePriority, isPending: isPriorityPending } =
+    useMutation({
+      mutationFn: async ({ vehicleId }: { vehicleId: string }) => {
+        await toggleVehiclePriorityApi({ vehicleId });
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["listings", "live-listings"],
+        });
+        toast({
+          title: "Vehicle Priority Updated",
+          description: "The high priority flag was updated successfully.",
+          className: "bg-yellow text-white",
+        });
+      },
+      onError: (error: any) => {
+        console.log("error updating vehicle priority", error);
+
+        toast({
+          variant: "destructive",
+          title: "Failed to update vehicle priority",
+          description: "An error occurred while toggling high priority.",
+        });
+      },
+    });
+
+  const handleToggleVehicleStatus = async (
+    vehicleId: string,
+    isDisabled: boolean,
+  ) => {
     await toggleVehicleStatus({ vehicleId, isDisabled });
+  };
+
+  const handleToggleVehiclePriority = async (vehicleId: string) => {
+    await setVehiclePriority({ vehicleId });
   };
 
   const totalPages = data?.result?.totalNumberOfPages || 0;
 
   return (
-    <ListingPageLayout
+    <TablePageLayout
       heading={<ListingPageHeading />}
       sortDropdown={
         <SortDropdown
@@ -134,11 +170,25 @@ export default function AllListingPage() {
               onClear={() => setSelectedCompany(null)}
             />
           )}
+
+          <div className="flex items-center">
+            <Switch
+              checked={isHighPriority}
+              onCheckedChange={setIsHighPriority}
+              className={`ml-3 data-[state=checked]:bg-yellow`}
+            />
+            <span className="ml-2 text-sm">High Priority</span>
+          </div>
         </div>
       }
     >
       <GenericTable<LiveListingVehicleType>
-        columns={LiveListingColumns(handleToggle, isPending)}
+        columns={LiveListingColumns(
+          handleToggleVehicleStatus,
+          isVehicleStatusPending,
+          handleToggleVehiclePriority,
+          isPriorityPending,
+        )}
         data={data?.result?.list || []}
         loading={isLoading}
         loadingText="Fetching Listings..."
@@ -148,8 +198,7 @@ export default function AllListingPage() {
             : "No Listings found."
         }
       />
-
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />
-    </ListingPageLayout>
+    </TablePageLayout>
   );
 }
