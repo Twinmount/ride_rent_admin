@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  web-qa:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    ports:
+      - "4002:80"
+    restart: always
