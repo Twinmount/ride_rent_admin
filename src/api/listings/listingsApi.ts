@@ -39,7 +39,6 @@ export const fetchAllVehicles = async (
       limit: limit.toString(),
       sortOrder: sortOrder,
       stateId: stateId,
-      isHighPriority: isHighPriority ? "true" : "false",
     });
 
     if (approvalStatus) {
@@ -52,6 +51,10 @@ export const fetchAllVehicles = async (
 
     if (userId) {
       queryParams.append("userId", userId);
+    }
+
+    if (isHighPriority === true) {
+      queryParams.append("isHighPriority", "true");
     }
 
     const slugWithParams = `${Slug.GET_ALL_VEHICLES}?${queryParams}`;
