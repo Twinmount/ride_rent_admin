@@ -23,7 +23,7 @@ export default function ListingMetaDataPage() {
   const [selectedState, setSelectedState] = useState<StateType | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const activeTab = (searchParams.get("tab") as ListingMetaTabType) || "brand";
+  const activeTab = (searchParams.get("tab") as ListingMetaTabType) || "cars";
 
   const shouldFetchStates = activeTab !== "brand";
 
@@ -52,7 +52,7 @@ export default function ListingMetaDataPage() {
     activeTab === "brand"
       ? !!selectedCategory?.categoryId
       : activeTab === "category"
-        ? !!selectedState?.stateId
+        ? !!selectedState?.stateId && !!selectedCategory?.categoryId
         : !!selectedCategory && !!selectedState?.stateId;
 
   // Fetch meta data using useQuery
@@ -131,8 +131,7 @@ export default function ListingMetaDataPage() {
             <SeoData
               key={item.metaDataId}
               item={item}
-              link={`/meta-data/listing/edit`}
-              activeTab={activeTab}
+              link={`/meta-data/listing/edit/${item.metaDataId}?tab=${activeTab}`}
             />
           ))
         )}

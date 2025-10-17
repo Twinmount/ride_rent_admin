@@ -183,6 +183,7 @@ export type LiveListingVehicleType = {
   vehicleCategoryValue?: string;
   vehicleCode: string;
   isDisabled: boolean;
+  isHighPriority: boolean;
   company: {
     companyId: string;
     userId: string;

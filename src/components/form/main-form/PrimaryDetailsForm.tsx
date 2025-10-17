@@ -31,7 +31,7 @@ import CategoryDropdown from "../dropdowns/CategoryDropdown";
 import VehicleTypesDropdown from "../dropdowns/VehicleTypesDropdown";
 import { save, StorageKeys } from "@/utils/storage";
 import { toast } from "@/components/ui/use-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ApiError, Location } from "@/types/types";
 import { Textarea } from "@/components/ui/textarea";
 import { GcsFilePaths } from "@/constants/enum";
@@ -73,6 +73,7 @@ type PrimaryFormProps = {
   isIndia?: boolean;
   countryId: string;
   companyLocation: Location | null;
+  isAddOrIncomplete?: boolean;
 };
 
 type CityType = {
@@ -92,6 +93,7 @@ export default function PrimaryDetailsForm({
   isIndia = false,
   countryId,
   companyLocation,
+  isAddOrIncomplete,
 }: PrimaryFormProps) {
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
   const [isVideoUploading, setIsVideoUploading] = useState(false);
@@ -110,6 +112,8 @@ export default function PrimaryDetailsForm({
     const code = initialCountryCode || (isIndia ? "+91" : "+971");
     return code.startsWith("+") ? code : `+${code}`;
   });
+
+  const navigate = useNavigate();
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string;
@@ -293,6 +297,8 @@ export default function PrimaryDetailsForm({
           save(StorageKeys.VEHICLE_TYPE_ID, data.result.vehicleType.typeId);
 
           if (onNextTab) onNextTab();
+        } else if (type === "Update" && !isAddOrIncomplete) {
+          navigate("/listings/live");
         }
       }
     } catch (error) {
@@ -319,12 +325,12 @@ export default function PrimaryDetailsForm({
     } finally {
       // invalidating cached data in the listing page
       queryClient.invalidateQueries({
-        queryKey: ["listings", vehicleId],
-        exact: false,
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["primary-details-form", vehicleId],
-        exact: true,
+        queryKey: [
+          "listings",
+          "live-listings",
+          "primary-details-form",
+          vehicleId,
+        ],
       });
     }
   }

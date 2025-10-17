@@ -17,7 +17,7 @@ import { useSearchParams } from "react-router-dom";
 import { useAdminContext } from "@/context/AdminContext";
 import ListingPageHeading from "../../components/ListingPageHeading";
 import { GenericTable } from "@/components/table/GenericTable";
-import ListingPageLayout from "@/components/common/ListingPageLayout";
+import TablePageLayout from "@/components/common/TablePageLayout";
 
 interface GeneralListingPageProps {
   queryKey: any[];
@@ -133,7 +133,7 @@ export default function GeneralListingPage({
   const totalNumberOfPages = data?.result?.totalNumberOfPages || 0;
 
   return (
-    <ListingPageLayout
+    <TablePageLayout
       heading={<ListingPageHeading />}
       sortDropdown={
         <SortDropdown
@@ -179,6 +179,6 @@ export default function GeneralListingPage({
           onSubmit={handleSubmitModal}
         />
       )}
-    </ListingPageLayout>
+    </TablePageLayout>
   );
 }

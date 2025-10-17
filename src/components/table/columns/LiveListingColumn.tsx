@@ -9,10 +9,19 @@ import * as Toast from "@radix-ui/react-toast";
 import { useState } from "react";
 import { useAdminContext } from "@/context/AdminContext";
 
-export const LiveListingColumns: (
-  onToggle: (vehicleId: string, isDisabled: boolean) => void,
-  isPending?: boolean,
-) => ColumnDef<LiveListingVehicleType>[] = (onToggle, isPending) => [
+type LiveListingColumnsFn = (
+  handleToggleVehicleStatus: (vehicleId: string, isDisabled: boolean) => void,
+  isVehicleStatusPending?: boolean,
+  handleToggleVehiclePriority?: (vehicleId: string) => void,
+  vehiclePriorityPending?: boolean,
+) => ColumnDef<LiveListingVehicleType>[];
+
+export const LiveListingColumns: LiveListingColumnsFn = (
+  handleToggleVehicleStatus,
+  isVehicleStatusPending,
+  handleToggleVehiclePriority,
+  vehiclePriorityPending,
+) => [
   {
     accessorKey: "vehicleModel",
     header: "Model",
@@ -35,6 +44,23 @@ export const LiveListingColumns: (
       <span className="whitespace-nowrap">{row.original.vehicleCode}</span>
     ),
   },
+
+  {
+    accessorKey: "isHighPriority",
+    header: "High Priority",
+    cell: ({ row }) => {
+      const { vehicleId, isHighPriority } = row.original;
+      return (
+        <Switch
+          checked={!!isHighPriority}
+          onCheckedChange={() => handleToggleVehiclePriority?.(vehicleId)}
+          disabled={vehiclePriorityPending}
+          className={`${vehiclePriorityPending && "!cursor-wait"} ml-3 data-[state=checked]:bg-yellow`}
+        />
+      );
+    },
+  },
+
   {
     accessorKey: "company.companyName",
     header: "Company",
@@ -54,15 +80,17 @@ export const LiveListingColumns: (
   },
   {
     accessorKey: "isDisabled",
-    header: "Vehicle Status",
+    header: "Disabled Status",
     cell: ({ row }) => {
       const { vehicleId, isDisabled } = row.original;
       return (
         <Switch
           checked={!isDisabled}
-          onCheckedChange={(checked) => onToggle(vehicleId, !checked)}
-          disabled={isPending}
-          className={`${isPending && "!cursor-wait"} ml-3`}
+          onCheckedChange={(checked) =>
+            handleToggleVehicleStatus(vehicleId, !checked)
+          }
+          disabled={isVehicleStatusPending}
+          className={`${isVehicleStatusPending && "!cursor-wait"} ml-3 data-[state=checked]:bg-red-500`}
         />
       );
     },
