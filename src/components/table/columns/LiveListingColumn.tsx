@@ -85,9 +85,9 @@ export const LiveListingColumns: LiveListingColumnsFn = (
       const { vehicleId, isDisabled } = row.original;
       return (
         <Switch
-          checked={!isDisabled}
+          checked={isDisabled}
           onCheckedChange={(checked) =>
-            handleToggleVehicleStatus(vehicleId, !checked)
+            handleToggleVehicleStatus(vehicleId, checked)
           }
           disabled={isVehicleStatusPending}
           className={`${isVehicleStatusPending && "!cursor-wait"} ml-3 data-[state=checked]:bg-red-500`}
