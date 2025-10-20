@@ -1,5 +1,5 @@
 // import { fetchAllSRMCustomers } from "@/api/srm";
-import ListingPageLayout from "@/components/common/ListingPageLayout";
+import TablePageLayout from "@/components/common/TablePageLayout";
 import LinkButton from "@/components/general/LinkButton";
 import { LimitDropdown } from "@/components/LimitDropdown";
 import Pagination from "@/components/Pagination";
@@ -41,7 +41,7 @@ export default function SRMCustomerPage() {
   const list: any = [];
 
   return (
-    <ListingPageLayout
+    <TablePageLayout
       heading={"SRM - Active Trips"}
       sortDropdown={
         <SortDropdown
@@ -75,6 +75,6 @@ export default function SRMCustomerPage() {
       />
 
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />
-    </ListingPageLayout>
+    </TablePageLayout>
   );
 }

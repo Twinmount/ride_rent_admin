@@ -64,6 +64,9 @@ export default function VehiclesFormUpdatePage() {
     resetFaqMutation,
   } = useVehicleUpdateForm(vehicleId, isIndia);
 
+  const isAddOrIncomplete =
+    isAddOrIncompleteSpecifications || isAddOrIncompleteFeatures;
+
   return (
     <section className="container h-auto min-h-screen py-8 pb-10">
       <div className="flex-center mb-5 ml-5 w-fit gap-x-4">
@@ -127,6 +130,7 @@ export default function VehiclesFormUpdatePage() {
                   isIndia={isIndia}
                   countryId={countryId}
                   companyLocation={companyLocation}
+                  isAddOrIncomplete={isAddOrIncomplete}
                 />
               )}
             </Suspense>

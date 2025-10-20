@@ -1,4 +1,4 @@
-import ListingPageLayout from "@/components/common/ListingPageLayout";
+import TablePageLayout from "@/components/common/TablePageLayout";
 import { LimitDropdown } from "@/components/LimitDropdown";
 import Pagination from "@/components/Pagination";
 import SearchBox from "@/components/SearchBox";
@@ -86,7 +86,7 @@ export default function SRMCompletedTripsPage() {
   };
 
   return (
-    <ListingPageLayout
+    <TablePageLayout
       heading={"SRM - Completed Trips"}
       sortDropdown={
         <SortDropdown
@@ -126,6 +126,6 @@ export default function SRMCompletedTripsPage() {
         onClose={() => setSelectedTrip(null)}
         onSubmit={handleDownloadReceipt}
       />
-    </ListingPageLayout>
+    </TablePageLayout>
   );
 }

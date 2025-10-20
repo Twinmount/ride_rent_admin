@@ -1,5 +1,5 @@
 // import { fetchAllSRMActiveTrips } from "@/api/srm";
-import ListingPageLayout from "@/components/common/ListingPageLayout";
+import TablePageLayout from "@/components/common/TablePageLayout";
 import { LimitDropdown } from "@/components/LimitDropdown";
 import Pagination from "@/components/Pagination";
 import SearchBox from "@/components/SearchBox";
@@ -39,7 +39,7 @@ export default function SRMActiveTripsPage() {
   const list: any = [];
 
   return (
-    <ListingPageLayout
+    <TablePageLayout
       heading={"SRM - Active Trips"}
       sortDropdown={
         <SortDropdown
@@ -70,6 +70,6 @@ export default function SRMActiveTripsPage() {
       />
 
       <Pagination page={page} setPage={setPage} totalPages={totalPages} />
-    </ListingPageLayout>
+    </TablePageLayout>
   );
 }

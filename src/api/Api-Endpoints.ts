@@ -97,6 +97,7 @@ export enum Slug {
   GET_ALL_VEHICLES = "/vehicle/listed/all",
   GET_NEW_OR_MODIFIED_VEHICLES = "/vehicle/all/modified",
   PUT_TOGGLE_VEHICLE_VISIBILITY = "/vehicle/toggle-visibility",
+  POST_TOGGLE_VEHICLE_PRIORITY = "/vehicle/high-priority-vehicle",
   GET_LEVELS_FILLED = "/vehicle/level-filled",
   GET_VEHICLE_LISTINGS_COUNT_BY_STATE = "/vehicle/dashboard/count",
   GET_ALL_VEHICLE_LISTINGS_COUNT = "/vehicle/dashboard/count/state",

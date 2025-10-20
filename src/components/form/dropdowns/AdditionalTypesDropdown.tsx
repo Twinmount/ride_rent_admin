@@ -32,6 +32,11 @@ const SERVICE_OPTIONS = [
     label: "Monthly Rentals",
     value: "monthly-rentals",
   },
+  {
+    typeId: "029703ed-928a-4cf0-8c0e-d160670b12da",
+    label: "Self Driving",
+    value: "self-driving",
+  },
 ];
 
 type AdditionalTypesDropdownProps = {

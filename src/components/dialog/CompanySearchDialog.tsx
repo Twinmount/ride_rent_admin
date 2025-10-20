@@ -46,7 +46,7 @@ export default function CompanySearchDialog({
 
   const handleSelect = (company: CompanyType) => {
     onSelect(company);
-    setOpen(false); // close dialog after selecting
+    setOpen(false);
   };
 
   return (
@@ -59,7 +59,7 @@ export default function CompanySearchDialog({
 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Search Company</DialogTitle>
+          <DialogTitle>Filter by Company</DialogTitle>
           <DialogDescription>
             Search and select a company to filter vehicle listings.
           </DialogDescription>

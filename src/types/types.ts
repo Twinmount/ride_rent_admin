@@ -189,8 +189,9 @@ export type CompanyFormType = {
   companyName: string;
   companyLogo: string;
   commercialLicense: string;
-  expireDate: Date | undefined;
-  regNumber: string;
+  expireDate?: Date | undefined;
+  regNumber?: string;
+  noRegNumber?: boolean;
   agentId?: string;
   approvalStatus?: string;
   rejectionReason?: string;
