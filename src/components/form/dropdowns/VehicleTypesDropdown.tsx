@@ -30,36 +30,44 @@ const VehicleTypesDropdown = ({
   isDisabled = false,
 }: VehicleTypesDropdownProps) => {
   const { data, isLoading } = useQuery({
-    queryKey: ['vehicle-types', vehicleCategoryId],
+    queryKey: ["vehicle-types", vehicleCategoryId],
     queryFn: () =>
       fetchAllVehicleTypes({
         page: 1,
         limit: 20,
-        sortOrder: 'ASC',
+        sortOrder: "ASC",
         vehicleCategoryId: vehicleCategoryId as string,
       }),
     enabled: !!vehicleCategoryId,
-  })
+  });
 
-  const [vehicleTypes, setVehicleTypes] = useState<VehicleType[]>([])
+  const [vehicleTypes, setVehicleTypes] = useState<VehicleType[]>([]);
 
   useEffect(() => {
     if (data) {
-      setVehicleTypes(data.result.list)
+      setVehicleTypes(data.result.list);
     }
-  }, [data])
+  }, [data]);
 
   const getPlaceholderText = () => {
     if (isLoading) {
-      return 'Fetching types...'
+      return "Fetching types...";
     } else if (!vehicleCategoryId) {
-      return 'choose a vehicle category first'
+      return "choose a vehicle category first";
     } else if (!vehicleTypes.length) {
-      return 'No vehicle types found'
+      return "No vehicle types found";
     } else {
-      return 'Choose vehicle type'
+      return "Choose vehicle type";
     }
-  }
+  };
+
+  // IDs of service options to be excluded from vehicle types dropdown
+  const SERVICE_OPTION_IDS = [
+    "429e89be-7a73-40d3-b149-a9c62b531d6b", // Car with Driver
+    "1373249a-9fca-4387-b6a3-1decc434e726", // Airport Pickup
+    "de553fb6-84a5-46a4-8e27-71640dfb7b74", // Monthly Rentals
+    "029703ed-928a-4cf0-8c0e-d160670b12da", // Self Driving
+  ];
 
   return (
     <Select
@@ -68,9 +76,9 @@ const VehicleTypesDropdown = ({
       disabled={isDisabled || isLoading || !vehicleCategoryId}
     >
       <SelectTrigger
-        className={`select-field ring-0 focus:ring-0 input-fields ${
+        className={`select-field input-fields ring-0 focus:ring-0 ${
           (isDisabled || isLoading || !vehicleCategoryId) &&
-          '!opacity-60 !cursor-default'
+          "!cursor-default !opacity-60"
         }`}
         disabled={isDisabled || isLoading || !vehicleCategoryId}
       >
@@ -79,20 +87,23 @@ const VehicleTypesDropdown = ({
           placeholder={getPlaceholderText()}
         />
       </SelectTrigger>
+
       <SelectContent>
         {vehicleTypes.length > 0 &&
-          vehicleTypes.map((type) => (
-            <SelectItem
-              key={type.typeId}
-              value={type.typeId} // The value returned to the form
-              className="select-item p-regular-14"
-            >
-              {type.name} {/* The name displayed in the UI */}
-            </SelectItem>
-          ))}
+          vehicleTypes
+            .filter((type) => !SERVICE_OPTION_IDS.includes(type.typeId))
+            .map((type) => (
+              <SelectItem
+                key={type.typeId}
+                value={type.typeId}
+                className="select-item p-regular-14"
+              >
+                {type.name}
+              </SelectItem>
+            ))}
       </SelectContent>
     </Select>
-  )
+  );
 }
 
 export default VehicleTypesDropdown
