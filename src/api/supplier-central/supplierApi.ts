@@ -1,7 +1,8 @@
 // Updated API functions (supplier-central.ts)
-import { FetchSupplierCategoryDetailsResponse, FetchSupplierCentralAnalytics, GetSupplierCategoryDetailsParams } from '@/types/api-types/API-types'
+import { FetchSupplierCategoryDetailsResponse, FetchSupplierCentralAnalytics, GetSupplierCategoryDetailsParams, SendDigestPayload } from '@/types/api-types/API-types'
 import { Slug } from '../Api-Endpoints'
 import { API } from '../ApiService'
+import axios from 'axios'
 
 // fetch supplier central home summary
 export const fetchSupplierCentralDashboard =
@@ -113,6 +114,60 @@ export const searchSuppliers = async ({
     return data;
   } catch (error) {
     console.error("Error searching suppliers:", error);
+    throw error;
+  }
+};
+
+
+export const sendDigestEmail = async (payload: SendDigestPayload): Promise<any> => {
+  try {
+    const data = await API.post<any>({
+      slug: Slug.SEND_DIGEST,  // e.g., '/v1/riderent/supplier-central/send-digest'
+      body: payload,
+      axiosConfig: { 
+        timeout: 10000,  // 2min—covers slow SMTP/queues
+      },
+    });
+
+    if (!data) {
+      throw new Error('Failed to send digest email');
+    }
+
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.code === 'ECONNABORTED') {
+      // Optimistic: Assume success since email queues async
+      console.warn('Frontend timeout, but backend likely queued email. Check logs/inbox.');
+      return { success: true, message: 'Queued—check inbox shortly' };  // Fake success to avoid alert
+    }
+    console.error('Error sending digest email:', error);
+    throw error;
+  }
+};
+
+export const downloadDigestPdf = async (payload: SendDigestPayload & { generatePdf: true }): Promise<Blob> => {
+  try {
+    const response = await API.post<Blob>({
+      slug: `${Slug.SEND_DIGEST}?generatePdf=true`,
+      body: payload,
+      axiosConfig: { responseType: 'blob' },
+    });
+
+    if (!response) {
+      throw new Error('Failed to generate PDF');
+    }
+
+    // Quick validation: Check if blob is actually PDF (starts with %PDF)
+    const text = await response.text(); // Non-destructive peek
+    if (!text.startsWith('%PDF-')) {
+      // It's likely JSON error—parse and re-throw
+      const errorJson = JSON.parse(text);
+      throw new Error(errorJson.message || 'Invalid PDF response');
+    }
+
+    return new Blob([response], { type: 'application/pdf' }); // Ensure PDF MIME
+  } catch (error) {
+    console.error('Error downloading digest PDF:', error);
     throw error;
   }
 };

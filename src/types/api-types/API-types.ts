@@ -563,6 +563,13 @@ export interface SingleFileUploadResponse {
   statusCode: number;
 }
 
+export interface SendDigestPayload {
+  supplierId: string;
+  timePeriod?: 'last_week' | 'last_2weeks' | 'last_month';
+  startDate?: string;  // YYYY-MM-DD
+  endDate?: string;    // YYYY-MM-DD
+}
+
 // api response types for multiple file upload
 export interface MultipleFileUploadResponse {
   result: {

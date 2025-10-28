@@ -162,6 +162,7 @@ export enum Slug {
   GET_SUPPLIER_CENTRAL_CATEGORY_DETAILS = "/supplier-central/category-details",
   EXPORT_SUPPLIER_CENTRAL_SHEET = "/supplier-central/export-sheet",
 SEARCH_SUPPLIERS = "/supplier-central/search",
+SEND_DIGEST = "/supplier-central/send-digest",
   // excel data download endpoints
   GET_DOWNLOAD_VEHICLE_DATA = "/vehicle/download/excel",
   GET_DOWNLOAD_COMPANY_DATA = "/company/download/excel",

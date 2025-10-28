@@ -46,18 +46,14 @@ export const ExportExcelButton = ({
   };
 
   return (
-    <div className="relative inline-block group">
-      <button 
-        onClick={handleExport} 
-        disabled={disabled || isExporting}
-        className="px-3 py-1 text-black rounded disabled:opacity-50 disabled:cursor-not-allowed font-bold"
-        aria-label="Download the data"
-      >
-        <Download className="h-4 w-4" />
-      </button>
-      <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap">
-        Download the data
-      </span>
-    </div>
+    <button 
+      onClick={handleExport} 
+      disabled={disabled || isExporting}
+      className="flex items-center gap-1 px-3 py-2 bg-white shadow-lg text-black rounded-md hover:bg-[#ffa733] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+      aria-label="Export Data"
+    >
+      <Download className="h-4 w-4" />
+      Export Data
+    </button>
   );
 };

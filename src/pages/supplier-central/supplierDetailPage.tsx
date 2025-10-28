@@ -37,14 +37,19 @@ export default function SupplierDetailsPage() {
           <h4 className="font-semibold">
             Supplier status is currently REJECTED,
           </h4>
-          &bull; REASON : {data.result.rejectionReason}
+          &bull; REASON : {data?.result.rejectionReason}
         </div>
       )}
 
       {isLoading ? (
         <FormSkelton />
       ) : (
-        <CompanyForm type="Update" formData={formData} />
+        <CompanyForm 
+          type="Update" 
+          formData={formData} 
+          updateId={supplierId}
+          isSupplierPage={true} // Add this to enable supplier-specific button text and navigation
+        />
       )}
 
       {data?.result.approvalStatus === "APPROVED" && (
