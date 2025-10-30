@@ -35,11 +35,13 @@ import { FormFieldLayout } from "../form-ui";
 type CompanyFormProps = {
   type: "Update";
   formData?: CompanyFormType | null;
+  updateId?: string; // New prop to explicitly pass the ID (e.g., companyId or supplierId)
+  isSupplierPage?: boolean; // New prop to detect if this is from supplier details page
 };
 
-export default function CompanyForm({ type, formData }: CompanyFormProps) {
+export default function CompanyForm({ type, formData, updateId, isSupplierPage = false }: CompanyFormProps) {
   const navigate = useNavigate();
-  const { companyId } = useParams<{ companyId: string }>();
+  const { companyId } = useParams<{ companyId: string }>(); // Keep for company routes, but fallback to prop
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
@@ -72,29 +74,52 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
       return;
     }
 
+    // Use prop first, fallback to param (for backward compatibility with company routes)
+    const idToUse = updateId || companyId;
+
+    if (!idToUse) {
+      toast({
+        variant: "destructive",
+        title: "Update Failed",
+        description: "Missing ID for update. Please refresh and try again.",
+      });
+      return;
+    }
+
     try {
-      const data = await updateCompany(values, companyId as string);
+      const data = await updateCompany(values, idToUse);
 
       if (data) {
         // actually delete the images from the db, if any
         await deleteMultipleFiles(deletedImages);
 
+        const entityName = isSupplierPage ? "Supplier" : "Company";
         toast({
-          title: `Company ${type}ed successfully`,
+          title: `${entityName} ${type}ed successfully`,
           className: "bg-yellow text-white",
         });
-        navigate("/company/registrations/live");
+
+        // Navigate based on page type
+        if (isSupplierPage) {
+          navigate(-1); // Go back to previous page
+        } else {
+          navigate("/company/registrations/live");
+        }
       }
     } catch (error) {
       console.error(error);
       toast({
         variant: "destructive",
-        title: `${type} Company failed`,
+        title: `${isSupplierPage ? "Update" : type} ${isSupplierPage ? "Supplier" : "Company"} failed`,
         description: "Something went wrong",
       });
     } finally {
       queryClient.invalidateQueries({
-        queryKey: ["company-details-page", companyId],
+        queryKey: ["company-details-page", idToUse],
+        exact: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["supplier-details-page", idToUse], // Also invalidate supplier queries for consistency
         exact: true,
       });
       queryClient.invalidateQueries({
@@ -103,6 +128,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
       });
     }
   }
+
+  const buttonText = isSupplierPage ? "Update Supplier" : "Update Company";
 
   return (
     <Form {...form}>
@@ -447,7 +474,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
 
         {/* Submit */}
         <FormSubmitButton
-          text={"Update Company"}
+          text={buttonText}
           isLoading={form.formState.isSubmitting}
         />
       </FormContainer>

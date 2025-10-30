@@ -155,6 +155,14 @@ export enum Slug {
   // admin enquiries endpoints
   GET_ADMIN_ENQUIRIES = "/enquiries/admin/all",
 
+  // admin enquiries endpoints
+
+  // supplier-central
+  GET_SUPPLIER_CENTRAL_HOME_SUMMARY = "/supplier-central/home-summary",
+  GET_SUPPLIER_CENTRAL_CATEGORY_DETAILS = "/supplier-central/category-details",
+  EXPORT_SUPPLIER_CENTRAL_SHEET = "/supplier-central/export-sheet",
+SEARCH_SUPPLIERS = "/supplier-central/search",
+SEND_DIGEST = "/supplier-central/send-digest",
   // excel data download endpoints
   GET_DOWNLOAD_VEHICLE_DATA = "/vehicle/download/excel",
   GET_DOWNLOAD_COMPANY_DATA = "/company/download/excel",
