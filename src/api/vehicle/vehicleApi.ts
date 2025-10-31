@@ -553,14 +553,9 @@ export const getVehicleListingsCountByState = async (
 export const getAllVehicleListingByParentStateCount = async (
   countryId: string,
   parentStateId: string,
-  onlyWithVehicles?: boolean,
 ): Promise<AllVehicleListingResponse> => {
   try {
-    let url = `/vehicle/dashboard/count/${countryId}/${parentStateId}/state`;
-
-    if (onlyWithVehicles) {
-      url += `?onlyWithVehicles=true`;
-    }
+    const url = `/vehicle/dashboard/count/${countryId}/${parentStateId}/state`;
 
     const data = await API.get<AllVehicleListingResponse>({
       slug: url,
@@ -575,18 +570,13 @@ export const getAllVehicleListingByParentStateCount = async (
     console.error("Error fetching all vehicle listing count data:", error);
     throw error;
   }
-};    
+};
 
 export const getAllVehicleListingCount = async (
   countryId: string,
-  onlyWithVehicles?: boolean,
 ): Promise<AllVehicleListingResponse> => {
   try {
-    let url = `/vehicle/dashboard/count/${countryId}/state`;
-
-    if (onlyWithVehicles) {
-      url += `?onlyWithVehicles=true`;
-    }
+    const url = `/vehicle/dashboard/count/${countryId}/state`;
 
     const data = await API.get<AllVehicleListingResponse>({
       slug: url,
