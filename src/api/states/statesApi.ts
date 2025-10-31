@@ -233,7 +233,6 @@ export const fetchAllCountries = async (): Promise<FetchCountriesResponse> => {
 };
 
 // fetch all States
-// fetch all States
 export const fetchAllStates = async (
   countryId?: string | null,
   isParent: boolean = false,
@@ -241,7 +240,6 @@ export const fetchAllStates = async (
   count?: number | null,
   searchTerm?: string | null,
   stateId?: string | null,
-  onlyWithVehicles?: boolean,
 ): Promise<FetchStatesResponse> => {
   try {
     let needParentStateApi = !!parentStateId ? false : isParent ? true : false;
@@ -262,9 +260,6 @@ export const fetchAllStates = async (
     }
     if (searchTerm) {
       params.append("searchTerm", searchTerm);
-    }
-    if (onlyWithVehicles) {
-      params.append("hasVehicle", "true");
     }
 
     let apiPath = needParentStateApi
