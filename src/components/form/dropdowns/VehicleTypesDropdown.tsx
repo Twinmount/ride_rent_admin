@@ -8,20 +8,22 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { fetchAllVehicleTypes } from '@/api/vehicle-types'
+import { SERVICE_OPTIONS } from "@/constants";
 
 type VehicleTypesDropdownProps = {
-  vehicleCategoryId: string | undefined
-  value?: string
-  onChangeHandler: (value: string) => void
-  placeholder?: string
-  isDisabled?: boolean
-}
+  vehicleCategoryId: string | undefined;
+  value?: string;
+  onChangeHandler: (value: string) => void;
+  placeholder?: string;
+  isDisabled?: boolean;
+};
 
 type VehicleType = {
-  typeId: string
-  name: string
-  value: string
-}
+  typeId: string;
+  name: string;
+  value: string;
+};
+
 
 const VehicleTypesDropdown = ({
   vehicleCategoryId,
@@ -61,18 +63,12 @@ const VehicleTypesDropdown = ({
     }
   };
 
-  // IDs of service options to be excluded from vehicle types dropdown
-  const SERVICE_OPTION_IDS = [
-    "429e89be-7a73-40d3-b149-a9c62b531d6b", // Car with Driver
-    "1373249a-9fca-4387-b6a3-1decc434e726", // Airport Pickup
-    "de553fb6-84a5-46a4-8e27-71640dfb7b74", // Monthly Rentals
-    "029703ed-928a-4cf0-8c0e-d160670b12da", // Self Driving
-  ];
+  const SERVICE_OPTION_IDS = SERVICE_OPTIONS.map((option) => option.typeId);
 
   return (
     <Select
       onValueChange={onChangeHandler}
-      value={value} // Handle default value selection
+      value={value}
       disabled={isDisabled || isLoading || !vehicleCategoryId}
     >
       <SelectTrigger
@@ -104,6 +100,7 @@ const VehicleTypesDropdown = ({
       </SelectContent>
     </Select>
   );
-}
+};
+
 
 export default VehicleTypesDropdown
