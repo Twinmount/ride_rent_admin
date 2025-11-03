@@ -51,12 +51,13 @@ export type PrimaryFormType = {
   vehicleBrandId: string;
   vehicleSeriesId: string;
   vehicleModel: string;
-  vehiclePhotos: string[]; // Array of  URLs
+  vehiclePhotos: string[];
+  thumbnail: string;
   vehicleVideos: string[];
   vehicleRegistrationNumber: string;
   isFancyNumber: boolean;
   vehicleRegisteredYear: string;
-  commercialLicenses: string[]; // Array of  URLs
+  commercialLicenses: string[];
   commercialLicenseExpireDate: Date | undefined;
   isLease: boolean;
   isCryptoAccepted: boolean;
