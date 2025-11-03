@@ -948,6 +948,7 @@ export default function PrimaryDetailsForm({
                     setIsFileUploading={setIsThumbnailUploading}
                     bucketFilePath={GcsFilePaths.VEHICLE_THUMBNAILS}
                     setDeletedImages={setDeletedFiles}
+                    acceptedFormats={["webp"]}
                     description={
                       <div>
                         <div>

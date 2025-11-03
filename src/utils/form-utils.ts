@@ -65,3 +65,26 @@ export function clearFileInput(inputId: string): boolean {
     return false;
   }
 }
+
+/**
+ * Validate if a file format is accepted or not.
+ * @param file - The file being checked
+ * @param acceptedFormats - An array of accepted file formats
+ * @returns boolean - true if the file format is accepted, false otherwise
+ */
+export const validateFileFormat = (
+  file: File,
+  acceptedFormats: string[],
+): boolean => {
+  if (!acceptedFormats || acceptedFormats.length === 0) {
+    return true; // No format restriction
+  }
+
+  const fileExtension = file.name.split(".").pop()?.toLowerCase();
+
+  if (!fileExtension || !acceptedFormats.includes(fileExtension)) {
+    return false;
+  }
+
+  return true;
+};
