@@ -221,6 +221,7 @@ export const PrimaryFormSchema = z
     thumbnail: z
       .string()
       .optional()
+      .nullable()
       .refine((val) => !val || val.trim().length > 0, {
         message: "Thumbnail path cannot be empty if provided",
       }),

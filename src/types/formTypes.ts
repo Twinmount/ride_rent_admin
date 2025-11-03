@@ -52,7 +52,7 @@ export type PrimaryFormType = {
   vehicleSeriesId: string;
   vehicleModel: string;
   vehiclePhotos: string[];
-  thumbnail: string;
+  thumbnail: string | null;
   vehicleVideos: string[];
   vehicleRegistrationNumber: string;
   isFancyNumber: boolean;
