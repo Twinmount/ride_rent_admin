@@ -43,3 +43,25 @@ export const handleLevelOneFormSubmission = async (
 
   return data;
 };
+
+/**
+ * Clear a file input field by its ID
+ * @param inputId - The HTML element ID of the file input
+ * @returns boolean - true if cleared successfully, false otherwise
+ */
+export function clearFileInput(inputId: string): boolean {
+  try {
+    const fileInput = document.getElementById(inputId) as HTMLInputElement;
+
+    if (fileInput && fileInput.type === "file") {
+      fileInput.value = "";
+      return true;
+    }
+
+    console.warn(`File input with id "${inputId}" not found`);
+    return false;
+  } catch (error) {
+    console.error("Error clearing file input:", error);
+    return false;
+  }
+}

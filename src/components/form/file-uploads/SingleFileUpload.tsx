@@ -33,6 +33,7 @@ import PreviewImageComponent from "../PreviewImageComponent";
 import { Progress } from "@/components/ui/progress";
 import ImagePreviewModal from "@/components/modal/ImagePreviewModal";
 import { Button } from "@/components/ui/button";
+import { clearFileInput } from "@/utils/form-utils";
 
 type SingleFileUploadProps = {
   name: string;
@@ -96,6 +97,7 @@ const SingleFileUpload = ({
           variant: "destructive",
           title: `Image size exceeds ${maxSizeMB} MB`,
         });
+        clearFileInput(`file-upload-${name}`);
         return;
       }
 
@@ -138,13 +140,8 @@ const SingleFileUpload = ({
       setDeletedImages((prev) => [...prev, imagePath]);
     }
 
-    //  clear the input field memory
-    const fileInput = document.getElementById(
-      `file-upload-${name}`,
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = ""; // Clear the file input field
-    }
+    // Clear the input field memory
+    clearFileInput(`file-upload-${name}`);
 
     setImagePath(null); // Remove image path for PreviewImageComponent
     setValue(name, null); // Remove the value from form
