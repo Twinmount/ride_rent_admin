@@ -33,6 +33,7 @@ import PreviewImageComponent from "../PreviewImageComponent";
 import { Progress } from "@/components/ui/progress";
 import ImagePreviewModal from "@/components/modal/ImagePreviewModal";
 import { Button } from "@/components/ui/button";
+import { clearFileInput, validateFileFormat } from "@/utils/form-utils";
 
 type SingleFileUploadProps = {
   name: string;
@@ -46,6 +47,7 @@ type SingleFileUploadProps = {
   bucketFilePath: GcsFilePaths;
   downloadFileName?: string;
   setDeletedImages: (deletedPaths: (prev: string[]) => string[]) => void;
+  acceptedFormats?: string[];
 };
 
 const SingleFileUpload = ({
@@ -60,6 +62,7 @@ const SingleFileUpload = ({
   bucketFilePath,
   downloadFileName,
   setDeletedImages,
+  acceptedFormats,
 }: SingleFileUploadProps) => {
   const { control, setValue, clearErrors } = useFormContext();
   const [isUploading, setIsUploading] = useState(false);
@@ -90,12 +93,24 @@ const SingleFileUpload = ({
   ) => {
     const file = event.target.files?.[0];
     if (file) {
+      if (!validateFileFormat(file, acceptedFormats || [])) {
+        const formatsText = acceptedFormats?.join(", ").toUpperCase();
+        toast({
+          variant: "destructive",
+          title: "Invalid file format",
+          description: `Only ${formatsText} formats are allowed.`,
+        });
+        clearFileInput(`file-upload-${name}`);
+        return;
+      }
+
       const fileSizeMB = file.size / (1024 * 1024);
       if (fileSizeMB > maxSizeMB) {
         toast({
           variant: "destructive",
           title: `Image size exceeds ${maxSizeMB} MB`,
         });
+        clearFileInput(`file-upload-${name}`);
         return;
       }
 
@@ -138,13 +153,8 @@ const SingleFileUpload = ({
       setDeletedImages((prev) => [...prev, imagePath]);
     }
 
-    //  clear the input field memory
-    const fileInput = document.getElementById(
-      `file-upload-${name}`,
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = ""; // Clear the file input field
-    }
+    // Clear the input field memory
+    clearFileInput(`file-upload-${name}`);
 
     setImagePath(null); // Remove image path for PreviewImageComponent
     setValue(name, null); // Remove the value from form
@@ -173,6 +183,7 @@ const SingleFileUpload = ({
       }
     }
   };
+
   return (
     <>
       <FormItem className="mb-2 flex w-full max-sm:flex-col">
@@ -192,6 +203,11 @@ const SingleFileUpload = ({
                     className="hidden"
                     id={`file-upload-${name}`}
                     disabled={isDisabled || isUploading}
+                    accept={
+                      acceptedFormats
+                        ? acceptedFormats.map((f) => `.${f}`).join(",")
+                        : undefined
+                    }
                   />
                   <div className="mt-2 flex items-center gap-4">
                     {imagePath ? (

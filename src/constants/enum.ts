@@ -9,6 +9,7 @@ export enum GcsFilePaths {
   VEHICLE_REGISTRATION_CARDS = "/vehicles/registration-cards",
   COMMERCIAL_LICENSES = "/vehicles/commercial-licenses",
   BLOG = "/blog",
+  VEHICLE_THUMBNAILS = "/vehicles/thumbnails",
 }
 
 export enum BlogPromotionPlacement {

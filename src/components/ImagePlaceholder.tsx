@@ -28,7 +28,7 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
     return (
       <div
         key={`placeholder-${index}`}
-        className="relative flex items-center justify-center w-16 h-16 bg-gray-100 border rounded-lg"
+        className="relative flex h-16 w-16 items-center justify-center rounded-lg border bg-gray-100"
       >
         <Spinner color="text-yellow" additionalClass="mr-2" />
       </div>
@@ -52,7 +52,7 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
       <label
         key={`placeholder-${index}`}
         htmlFor={`file-upload-${name}`}
-        className={`relative flex flex-col items-center justify-center w-16 h-16 border rounded-lg cursor-pointer bg-gray-50 ${
+        className={`relative flex h-16 w-16 cursor-pointer flex-col items-center justify-center rounded-lg border bg-gray-50 ${
           isUploading ? "cursor-default" : "cursor-pointer"
         }`}
       >
@@ -70,9 +70,7 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
           className={` ${isUploading ? "text-gray-300" : "text-yellow"}`}
         />
         <span
-          className={`text-sm  ${
-            isUploading ? "text-gray-300" : "text-yellow"
-          }`}
+          className={`text-sm ${isUploading ? "text-gray-300" : "text-yellow"}`}
         >
           {labelForVehiclePhotos}
         </span>
@@ -84,7 +82,7 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
   return (
     <div
       key={`placeholder-${index}`}
-      className="relative flex items-center justify-center w-16 h-16 bg-gray-100 border rounded-lg"
+      className="relative flex h-16 w-16 items-center justify-center rounded-lg border bg-gray-100"
     >
       <Image size={24} className="text-gray-300" />
     </div>

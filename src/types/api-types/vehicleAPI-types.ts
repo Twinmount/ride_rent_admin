@@ -354,6 +354,7 @@ export type GetPrimaryForm = {
   vehicleTitle: string;
   vehicleTitleH1: string;
   vehiclePhotos: string[];
+  thumbnail: string | null;
   vehicleVideos: string[];
   commercialLicenses: string[];
   additionalVehicleTypes?: string[];
