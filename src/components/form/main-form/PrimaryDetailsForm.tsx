@@ -1413,26 +1413,45 @@ export default function PrimaryDetailsForm({
                 )}
 
                 {/* Cash */}
-                {isIndia && (
-                  <FormField
-                    control={form.control}
-                    name="isCashSupported"
-                    render={({ field }) => (
-                      <div className="mb-2">
-                        <FormCheckbox
-                          id="isCash"
-                          label="Cash"
-                          checked={field.value}
-                          onChange={field.onChange}
-                        />
-                        <FormDescription className="ml-7 mt-1">
-                          Select if your accepts payments via Cash.
-                        </FormDescription>
-                        <FormMessage className="ml-2" />
-                      </div>
-                    )}
-                  />
-                )}
+
+                <FormField
+                  control={form.control}
+                  name="isCashSupported"
+                  render={({ field }) => (
+                    <div className="mb-2">
+                      <FormCheckbox
+                        id="isCash"
+                        label="Cash"
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormDescription className="ml-7 mt-1">
+                        Select if your accepts payments via Cash.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
+                    </div>
+                  )}
+                />
+
+                {/* UPI */}
+                <FormField
+                  control={form.control}
+                  name="isUPIAccepted"
+                  render={({ field }) => (
+                    <div className="mb-2">
+                      <FormCheckbox
+                        id="isUPI"
+                        label="UPI"
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormDescription className="ml-7 mt-1">
+                        Select if your accepts payments via UPI.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
+                    </div>
+                  )}
+                />
               </div>
             </FormItemWrapper>
           </div>
