@@ -24,8 +24,7 @@ export function useFetchGlobalStates() {
 
   const { data: parentStateList, isLoading: isParentStateLoading } = useQuery({
     queryKey: ["parent-states-with-listing-count", country.countryId],
-    queryFn: () =>
-      fetchAllStates(country.countryId, true, null, null, null, null, true),
+    queryFn: () => fetchAllStates(country.countryId, true),
     enabled:
       !!country.countryValue &&
       !isCountryLoading &&
@@ -49,9 +48,8 @@ export function useFetchGlobalStates() {
         ? getAllVehicleListingByParentStateCount(
             country.countryId,
             parentState.stateId,
-            true,
           )
-        : getAllVehicleListingCount(country.countryId, true),
+        : getAllVehicleListingCount(country.countryId),
     enabled:
       country.countryValue === "India"
         ? !!country.countryValue && !isCountryLoading && !!parentState.stateId

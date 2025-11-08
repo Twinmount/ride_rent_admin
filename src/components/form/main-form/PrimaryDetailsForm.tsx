@@ -63,6 +63,7 @@ import {
 import StatesDropdownForVehicleForm from "../dropdowns/StatesDropdownForVehicleForm";
 import LocationPicker from "../LocationPicker";
 import { saveRentalPricesApi } from "../SeriesPriceTable";
+import SingleFileUpload from "../file-uploads/SingleFileUpload";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -96,6 +97,7 @@ export default function PrimaryDetailsForm({
   isAddOrIncomplete,
 }: PrimaryFormProps) {
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
+  const [isThumbnailUploading, setIsThumbnailUploading] = useState(false);
   const [isVideoUploading, setIsVideoUploading] = useState(false);
   const [isLicenseUploading, setIsLicenseUploading] = useState(false);
   const [isLocationImporting, setIsLocationImporting] = useState(false);
@@ -104,16 +106,22 @@ export default function PrimaryDetailsForm({
   const [hideCommercialLicenses, setHideCommercialLicenses] = useState(false);
   const [isPriceEditModalOpen, setIsPriceEditModalOpen] = useState(false);
   const [priceEditModalProps, setPriceEditModalProps] = useState<any>(null);
-
   const [cities, setCities] = useState<CityType[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [temporaryCities, setTemporaryCities] = useState<CityType[]>([]);
+  const [originalVehiclePhotos, setOriginalVehiclePhotos] = useState<string[]>(
+    [],
+  );
+  const [showPhotoChangeWarning, setShowPhotoChangeWarning] = useState(true);
+
   const [countryCode, setCountryCode] = useState<string>(() => {
     const code = initialCountryCode || (isIndia ? "+91" : "+971");
     return code.startsWith("+") ? code : `+${code}`;
   });
 
   const navigate = useNavigate();
+
+  const thumbnailWarningRef = useRef<HTMLDivElement>(null);
 
   const { vehicleId, userId } = useParams<{
     vehicleId: string;
@@ -147,6 +155,28 @@ export default function PrimaryDetailsForm({
       setCountryCode(normalizedCode);
     }
   }, [initialCountryCode]);
+
+  useEffect(() => {
+    if (type === "Update" && formData?.vehiclePhotos) {
+      setOriginalVehiclePhotos([...formData.vehiclePhotos]);
+    }
+  }, [type, formData?.vehiclePhotos]);
+
+  useEffect(() => {
+    if (type === "Update" && originalVehiclePhotos.length > 0) {
+      const currentPhotos = form.watch("vehiclePhotos") || [];
+
+      // Check if photos changed
+      const sortedOriginal = [...originalVehiclePhotos].sort();
+      const sortedCurrent = [...currentPhotos].sort();
+
+      const hasChanged =
+        sortedOriginal.length !== sortedCurrent.length ||
+        !sortedOriginal.every((photo, index) => photo === sortedCurrent[index]);
+
+      setShowPhotoChangeWarning(hasChanged);
+    }
+  }, [form.watch("vehiclePhotos"), originalVehiclePhotos, type]);
 
   useEffect(() => {
     if (formData?.tempCitys && Array.isArray(formData.tempCitys)) {
@@ -209,8 +239,25 @@ export default function PrimaryDetailsForm({
       return;
     }
 
-    if (isPhotosUploading || isLicenseUploading || isVideoUploading) {
+    if (
+      isPhotosUploading ||
+      isLicenseUploading ||
+      isVideoUploading ||
+      isThumbnailUploading
+    ) {
       showFileUploadInProgressToast();
+      return;
+    }
+
+    // if photo changed, show warning
+    if (showPhotoChangeWarning && values.thumbnail) {
+      if (thumbnailWarningRef.current) {
+        thumbnailWarningRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+
       return;
     }
 
@@ -365,7 +412,7 @@ export default function PrimaryDetailsForm({
             render={({ field }) => (
               <FormItem className="mt-4 flex items-center justify-end">
                 <FormLabel className="mb-0 mr-2 mt-2">
-                  Disable Price Matchin :{" "}
+                  Disable Price Matching :{" "}
                 </FormLabel>
                 <FormControl>
                   <Switch
@@ -598,8 +645,8 @@ export default function PrimaryDetailsForm({
                     description={
                       <>
                         <span className="w-full max-w-[90%]">
-                          Provide url label. This will be used for creating url
-                          <strong> of the vehicle details page</strong>
+                          Provide url label. This will be used for creating
+                          <strong>url of the vehicle details page</strong>
                         </span>{" "}
                         <span className="ml-auto"> {`${charCount}/50`}</span>
                       </>
@@ -883,6 +930,64 @@ export default function PrimaryDetailsForm({
                 isImageAccepted={true}
               />
             )}
+          />
+
+          {/* Vehicle Thumbnail field */}
+          <FormField
+            control={form.control}
+            name="thumbnail"
+            render={({ field }) => {
+              {
+                const FILE_SIZE_LIMIT = 0.1; //100kb
+                return (
+                  <SingleFileUpload
+                    name={field.name}
+                    label="Vehicle Thumbnail"
+                    existingFile={formData?.thumbnail || null}
+                    maxSizeMB={FILE_SIZE_LIMIT}
+                    setIsFileUploading={setIsThumbnailUploading}
+                    bucketFilePath={GcsFilePaths.VEHICLE_THUMBNAILS}
+                    setDeletedImages={setDeletedFiles}
+                    acceptedFormats={["webp"]}
+                    description={
+                      <div>
+                        <div>
+                          Upload an optimized thumbnail (WebP format, max{" "}
+                          {FILE_SIZE_LIMIT * 1024}KB) for listing cards. If not
+                          provided, the first vehicle photo will be used.
+                        </div>
+                        {showPhotoChangeWarning &&
+                          form.getValues("thumbnail") && (
+                            <div
+                              ref={thumbnailWarningRef}
+                              className="mt-2 flex items-center justify-between gap-3 rounded-md border border-blue-300 bg-blue-50 p-3"
+                            >
+                              <div className="flex items-start gap-2">
+                                <span className="text-blue-600">ℹ️</span>
+                                <p className="text-sm text-blue-700">
+                                  Vehicle photos have been modified. You may
+                                  want to review if the thumbnail still
+                                  represents the vehicle accurately.
+                                </p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setShowPhotoChangeWarning(false);
+                                }}
+                                className="flex-shrink-0 rounded-md border border-blue-300 bg-white px-3 py-1.5 text-xs font-medium text-blue-700 shadow-sm transition-colors hover:bg-blue-50"
+                              >
+                                Dismiss
+                              </button>
+                            </div>
+                          )}
+                      </div>
+                    }
+                  />
+                );
+              }
+            }}
           />
 
           {/* Vehicle Videos */}
@@ -1308,26 +1413,45 @@ export default function PrimaryDetailsForm({
                 )}
 
                 {/* Cash */}
-                {isIndia && (
-                  <FormField
-                    control={form.control}
-                    name="isCashSupported"
-                    render={({ field }) => (
-                      <div className="mb-2">
-                        <FormCheckbox
-                          id="isCash"
-                          label="Cash"
-                          checked={field.value}
-                          onChange={field.onChange}
-                        />
-                        <FormDescription className="ml-7 mt-1">
-                          Select if your accepts payments via Cash.
-                        </FormDescription>
-                        <FormMessage className="ml-2" />
-                      </div>
-                    )}
-                  />
-                )}
+
+                <FormField
+                  control={form.control}
+                  name="isCashSupported"
+                  render={({ field }) => (
+                    <div className="mb-2">
+                      <FormCheckbox
+                        id="isCash"
+                        label="Cash"
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormDescription className="ml-7 mt-1">
+                        Select if your accepts payments via Cash.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
+                    </div>
+                  )}
+                />
+
+                {/* UPI */}
+                <FormField
+                  control={form.control}
+                  name="isUPIAccepted"
+                  render={({ field }) => (
+                    <div className="mb-2">
+                      <FormCheckbox
+                        id="isUPI"
+                        label="UPI"
+                        checked={field.value}
+                        onChange={field.onChange}
+                      />
+                      <FormDescription className="ml-7 mt-1">
+                        Select if your accepts payments via UPI.
+                      </FormDescription>
+                      <FormMessage className="ml-2" />
+                    </div>
+                  )}
+                />
               </div>
             </FormItemWrapper>
           </div>

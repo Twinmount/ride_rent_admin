@@ -218,6 +218,13 @@ export const PrimaryFormSchema = z
     vehiclePhotos: z
       .array(z.string().min(1, "vehicle photo is required"))
       .min(1, "At least one vehicle photo is required"),
+    thumbnail: z
+      .string()
+      .optional()
+      .nullable()
+      .refine((val) => !val || val.trim().length > 0, {
+        message: "Thumbnail path cannot be empty if provided",
+      }),
     vehicleVideos: z.array(z.string().optional()),
     commercialLicenses: z.array(z.string().optional()),
     commercialLicenseExpireDate: z.date().optional(),
@@ -260,6 +267,7 @@ export const PrimaryFormSchema = z
     isCreditOrDebitCardsSupported: z.boolean().default(false),
     isTabbySupported: z.boolean().default(false),
     isCashSupported: z.boolean().default(false),
+    isUPIAccepted: z.boolean().default(false),
     isVehicleModified: z.boolean().default(false),
     location: z
       .object({
@@ -324,40 +332,44 @@ export const OTPFormSchema = z.object({
 });
 
 // Company Form Schema
-export const CompanyFormSchema = (isIndia: boolean) => z.object({
-  companyName: z
-    .string()
-    .min(1, "Company name is required")
-    .max(50, "Maximum 50 characters allowed"),
-  companyLogo: z.string().min(1, "Company logo is required"),
-  commercialLicense: z.string().min(1, "Commercial License is required"),
-  expireDate: isIndia ? z.date().optional() : z.date(),
-  noRegNumber: isIndia ? z.boolean().optional().default(false) : z.boolean().optional().default(false),
-  regNumber: z.string().optional(),
-  companyAddress: z
-    .string()
-    .min(5, "Company address is required")
-    .max(150, "Address can be up to 150 characters"),
-  companyLanguages: z
-    .array(z.string())
-    .min(1, "At least one language must be selected"),
-  companyMetaTitle: z
-    .string()
-    .min(1, "Meta title is required")
-    .max(80, "Meta title must be 80 characters or less"),
-  companyMetaDescription: z
-    .string()
-    .min(1, "Meta description is required")
-    .max(500, "Meta description must be 500 characters or less"),
-  location: z
+export const CompanyFormSchema = (isIndia: boolean) =>
+  z
     .object({
-      lat: z.number(),
-      lng: z.number(),
-      address: z.string(),
+      companyName: z
+        .string()
+        .min(1, "Company name is required")
+        .max(50, "Maximum 50 characters allowed"),
+      companyLogo: z.string().min(1, "Company logo is required"),
+      commercialLicense: z.string().min(1, "Commercial License is required"),
+      expireDate: isIndia ? z.date().optional() : z.date(),
+      noRegNumber: isIndia
+        ? z.boolean().optional().default(false)
+        : z.boolean().optional().default(false),
+      regNumber: z.string().optional(),
+      companyAddress: z
+        .string()
+        .min(5, "Company address is required")
+        .max(150, "Address can be up to 150 characters"),
+      companyLanguages: z
+        .array(z.string())
+        .min(1, "At least one language must be selected"),
+      companyMetaTitle: z
+        .string()
+        .min(1, "Meta title is required")
+        .max(80, "Meta title must be 80 characters or less"),
+      companyMetaDescription: z
+        .string()
+        .min(1, "Meta description is required")
+        .max(500, "Meta description must be 500 characters or less"),
+      location: z
+        .object({
+          lat: z.number(),
+          lng: z.number(),
+          address: z.string(),
+        })
+        .optional(),
     })
-    .optional(),
-})
-.superRefine((data, ctx) => {
+    .superRefine((data, ctx) => {
       const noReg = (data as any).noRegNumber;
       const reg = (data as any).regNumber;
       if (!noReg) {
@@ -370,7 +382,8 @@ export const CompanyFormSchema = (isIndia: boolean) => z.object({
           });
         } else if (isIndia) {
           // if India, validate GST format
-          const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}Z[A-Z0-9]{1}$/;
+          const gstRegex =
+            /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}Z[A-Z0-9]{1}$/;
           if (!gstRegex.test(reg)) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,

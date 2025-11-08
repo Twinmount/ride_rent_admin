@@ -153,6 +153,7 @@ export type SingleVehicleType = {
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
   isCashSupported: boolean;
+  isUPIAccepted: boolean;
   updatedAt: string;
   createdAt: string;
   vehicleStateValue?: string;
@@ -354,6 +355,7 @@ export type GetPrimaryForm = {
   vehicleTitle: string;
   vehicleTitleH1: string;
   vehiclePhotos: string[];
+  thumbnail: string | null;
   vehicleVideos: string[];
   commercialLicenses: string[];
   additionalVehicleTypes?: string[];
@@ -364,6 +366,7 @@ export type GetPrimaryForm = {
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
   isCashSupported: boolean;
+  isUPIAccepted: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
   tempCitys: CityType[];
