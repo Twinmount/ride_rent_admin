@@ -4,12 +4,12 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { TableCell, TableRow } from "@/components/ui/table";
 import {
   MapPin,
-  Phone,
-  Copy,
+  // Phone,
+  // Copy,
   Mail,
   ExternalLink,
   ArrowUpDown,
-  MessageCircle,
+  // MessageCircle,
 } from "lucide-react";
 import { adminEnquiryUtils, ENQUIRY_STATUSES } from "@/utils/adminEnquiryUtils";
 import { AdminEnquiry } from "@/types/api-types/API-types";
@@ -27,7 +27,7 @@ interface EnquiryTableRowProps {
 export function EnquiryTableRow({
   enquiry,
   // isPhoneRevealed,
-  onTogglePhoneVisibility,
+  // onTogglePhoneVisibility,
   onVehicleClick,
   onStatusChange,
 }: EnquiryTableRowProps) {
