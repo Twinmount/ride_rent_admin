@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -9,6 +10,7 @@ import {
   Mail,
   ExternalLink,
   ArrowUpDown,
+  CopyIcon,
   // MessageCircle,
 } from "lucide-react";
 import { adminEnquiryUtils, ENQUIRY_STATUSES } from "@/utils/adminEnquiryUtils";
@@ -31,6 +33,8 @@ export function EnquiryTableRow({
   onVehicleClick,
   onStatusChange,
 }: EnquiryTableRowProps) {
+  const [copied, setCopied] = useState(false);
+
   const userInfo = adminEnquiryUtils.formatUserInfo(enquiry);
 
   // Generate avatar initials from user name
@@ -131,6 +135,12 @@ export function EnquiryTableRow({
     }
   };
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(userInfo.phone);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000); // Reset "Copied!" message after 2 seconds
+  };
+
   const whatsappUrl = generateWhatsappUrl({
     whatsappPhone: userInfo.phone,
     whatsappCountryCode: userInfo.countryCode,
@@ -171,10 +181,25 @@ export function EnquiryTableRow({
         {whatsappUrl ? (
           <Link
             to={whatsappUrl}
-            className="inline-flex items-center gap-2 transition-colors hover:text-green-700 hover:underline"
+            className="relative inline-flex items-center gap-2 transition-colors hover:text-green-700 hover:underline"
           >
             <WhatsAppIcon className="h-4 w-4" />
             <span className="text-sm font-medium">{userInfo.phone}</span>
+            <button
+              onClick={(e) => {
+                e.preventDefault(); // Prevent navigating when clicking the copy button
+                handleCopy();
+              }}
+              title="Copy phone number"
+            >
+              {copied ? (
+                <div className="animate-fade-in-out absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-gray-800 px-2 py-1 text-xs text-white shadow-lg">
+                  Copied!
+                </div>
+              ) : (
+                <CopyIcon className="h-3 w-3 text-gray-600" />
+              )}
+            </button>
           </Link>
         ) : (
           <div className="inline-flex items-center gap-2">
