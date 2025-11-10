@@ -163,6 +163,7 @@ export const adminEnquiryUtils = {
       return {
         name: enquiry.user.name,
         phone: enquiry.user.phone,
+        countryCode: enquiry.user.countryCode,
         email: enquiry.user.email,
       };
     }
