@@ -23,7 +23,6 @@ export function EnquiryTableRow({
 }: EnquiryTableRowProps) {
   const userInfo = adminEnquiryUtils.formatUserInfo(enquiry);
 
-
   // Generate avatar initials from user name
   const getAvatarInitials = (name: string) => {
     return name
@@ -41,51 +40,70 @@ export function EnquiryTableRow({
   // };
 
   const getStatusBadge = (status: string) => {
-    console.log("status: [getStatusBadge]", status);
     const statusInfo = adminEnquiryUtils.formatStatus(status);
 
     switch (status) {
       case ENQUIRY_STATUSES.NEW:
         return (
-          <Badge 
-            className="!bg-blue-100 !text-blue-800 hover:!bg-blue-200 !border-blue-200"
-            style={{ backgroundColor: '#dbeafe', color: '#1e40af', borderColor: '#bfdbfe' }}
+          <Badge
+            className="!border-blue-200 !bg-blue-100 !text-blue-800 hover:!bg-blue-200"
+            style={{
+              backgroundColor: "#dbeafe",
+              color: "#1e40af",
+              borderColor: "#bfdbfe",
+            }}
           >
             {statusInfo.label}
           </Badge>
         );
       case ENQUIRY_STATUSES.CONTACTED:
         return (
-          <Badge 
-            className="!bg-purple-100 !text-purple-800 hover:!bg-purple-200 !border-purple-200"
-            style={{ backgroundColor: '#f3e8ff', color: '#6b21a8', borderColor: '#e9d5ff' }}
+          <Badge
+            className="!border-purple-200 !bg-purple-100 !text-purple-800 hover:!bg-purple-200"
+            style={{
+              backgroundColor: "#f3e8ff",
+              color: "#6b21a8",
+              borderColor: "#e9d5ff",
+            }}
           >
             {statusInfo.label}
           </Badge>
         );
       case ENQUIRY_STATUSES.EXPIRED:
         return (
-          <Badge 
+          <Badge
             className="!bg-orange-100 !text-orange-800 hover:!bg-orange-200 !border-orange-200"
-            style={{ backgroundColor: '#fed7aa', color: '#9a3412', borderColor: '#fde68a' }}
+            style={{
+              backgroundColor: "#fed7aa",
+              color: "#9a3412",
+              borderColor: "#fde68a",
+            }}
           >
             {statusInfo.label}
           </Badge>
         );
       case ENQUIRY_STATUSES.CANCELLED:
         return (
-          <Badge 
-            className="!bg-gray-100 !text-gray-800 hover:!bg-gray-200 !border-gray-200"
-            style={{ backgroundColor: '#f3f4f6', color: '#374151', borderColor: '#e5e7eb' }}
+          <Badge
+            className="!border-gray-200 !bg-gray-100 !text-gray-800 hover:!bg-gray-200"
+            style={{
+              backgroundColor: "#f3f4f6",
+              color: "#374151",
+              borderColor: "#e5e7eb",
+            }}
           >
             {statusInfo.label}
           </Badge>
         );
       case ENQUIRY_STATUSES.AGENTVIEW:
         return (
-          <Badge 
-            className="!bg-amber-100 !text-amber-800 hover:!bg-amber-200 !border-amber-200"
-            style={{ backgroundColor: '#fef3c7', color: '#92400e', borderColor: '#fde68a' }}
+          <Badge
+            className="!border-amber-200 !bg-amber-100 !text-amber-800 hover:!bg-amber-200"
+            style={{
+              backgroundColor: "#fef3c7",
+              color: "#92400e",
+              borderColor: "#fde68a",
+            }}
           >
             {statusInfo.label}
           </Badge>
@@ -119,7 +137,7 @@ export function EnquiryTableRow({
       <TableCell>
         <div className="flex items-center gap-1 text-sm">
           <Mail className="h-3 w-3 text-muted-foreground" />
-          <span>{userInfo.email || 'N/A'}</span>
+          <span>{userInfo.email || "N/A"}</span>
         </div>
       </TableCell>
       <TableCell>

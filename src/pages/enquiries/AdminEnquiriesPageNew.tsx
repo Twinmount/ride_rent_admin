@@ -48,9 +48,6 @@ export default function AdminEnquiriesPageNew() {
     },
   });
 
-  console.log("filteredEnquiries: ", filteredEnquiries);
-  console.log("statusCounts from API: ", statusCounts);
-
   // Use API status counts directly (already calculated in the hook)
   const stats = {
     total:
