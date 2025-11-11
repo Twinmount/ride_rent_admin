@@ -171,7 +171,37 @@ export const toggleVehiclePriorityApi = async ({
 
     return data;
   } catch (error) {
-    console.error("Error toggling vehicle visibility", error);
+    console.error("Error toggling vehicle priority", error);
+    throw error;
+  }
+};
+
+export const toggleVehiclePriceOfferApi = async ({
+  vehicleId,
+  enabled,
+  durationHours,
+  cycleDurationHours,
+}: {
+  vehicleId: string;
+  enabled: boolean;
+  durationHours?: number;
+  cycleDurationHours?: number;
+}) => {
+  try {
+    const data = await API.put({
+      slug: Slug.PUT_TOGGLE_VEHICLE_PRICE_OFFER,
+      body: {
+        vehicleId,
+        enabled,
+        ...(enabled && durationHours && cycleDurationHours
+          ? { durationHours, cycleDurationHours }
+          : {}),
+      },
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error toggling vehicle price offer", error);
     throw error;
   }
 };

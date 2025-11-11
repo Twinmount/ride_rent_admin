@@ -175,6 +175,13 @@ export type GeneralListingVehicleType = {
   };
 };
 
+export type PriceOfferType = {
+  startTime: Date | string;
+  durationHours: number;
+  cycleDurationHours: number;
+  expiryTime: Date | string;
+};
+
 // Define a simplified type for table data
 export type LiveListingVehicleType = {
   vehicleId: string;
@@ -190,6 +197,7 @@ export type LiveListingVehicleType = {
     userId: string;
     companyName: string;
   };
+  priceOffer: PriceOfferType | null;
 };
 
 export interface FetchVehicleTableListingResponse {

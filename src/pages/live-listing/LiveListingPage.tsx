@@ -19,6 +19,7 @@ import { useListingPageState } from "@/hooks/useListingPageState";
 import CompanySearchDialog from "@/components/dialog/CompanySearchDialog";
 import FilterTag from "@/components/FilterTag";
 import { Switch } from "@/components/ui/switch";
+import PriceOfferDialog from "@/components/dialog/PriceOfferDialog";
 
 export default function AllListingPage() {
   const {
@@ -33,6 +34,8 @@ export default function AllListingPage() {
     setSelectedCompany,
     isHighPriority,
     setIsHighPriority,
+    offerDialogVehicle,
+    setOfferDialogVehicle,
   } = useListingPageState();
 
   const queryClient = useQueryClient();
@@ -138,67 +141,75 @@ export default function AllListingPage() {
   const totalPages = data?.result?.totalNumberOfPages || 0;
 
   return (
-    <TablePageLayout
-      heading={<ListingPageHeading />}
-      sortDropdown={
-        <SortDropdown
-          sortOrder={sortOrder}
-          setSortOrder={setSortOrder}
-          isLoading={isLoading}
-        />
-      }
-      limitDropdown={
-        <LimitDropdown
-          limit={limit}
-          setLimit={setLimit}
-          isLoading={isLoading}
-        />
-      }
-      search={
-        <SearchBox
-          placeholder="Search vehicle"
-          searchDescription="vehicle model,vehicle registration number, vehicle code, year of manufacture
-          or phone number can be used to search the vehicle"
-        />
-      }
-      extraFilters={
-        <div className="flex items-center gap-2">
-          <CompanySearchDialog onSelect={setSelectedCompany} />
-          {selectedCompany && (
-            <FilterTag
-              label={selectedCompany.companyName}
-              onClear={() => setSelectedCompany(null)}
-            />
-          )}
-
-          <div className="flex items-center">
-            <Switch
-              checked={isHighPriority}
-              onCheckedChange={setIsHighPriority}
-              className={`ml-3 data-[state=checked]:bg-yellow`}
-            />
-            <span className="ml-2 text-sm">High Priority</span>
-          </div>
-        </div>
-      }
-    >
-      <GenericTable<LiveListingVehicleType>
-        columns={LiveListingColumns(
-          handleToggleVehicleStatus,
-          isVehicleStatusPending,
-          handleToggleVehiclePriority,
-          isPriorityPending,
-        )}
-        data={data?.result?.list || []}
-        loading={isLoading}
-        loadingText="Fetching Listings..."
-        noDataText={
-          selectedCompany
-            ? `No Listing found under ${selectedCompany.companyName}`
-            : "No Listings found."
+    <>
+      <TablePageLayout
+        heading={<ListingPageHeading />}
+        sortDropdown={
+          <SortDropdown
+            sortOrder={sortOrder}
+            setSortOrder={setSortOrder}
+            isLoading={isLoading}
+          />
         }
+        limitDropdown={
+          <LimitDropdown
+            limit={limit}
+            setLimit={setLimit}
+            isLoading={isLoading}
+          />
+        }
+        search={
+          <SearchBox
+            placeholder="Search vehicle"
+            searchDescription="vehicle model,vehicle registration number, vehicle code, year of manufacture
+          or phone number can be used to search the vehicle"
+          />
+        }
+        extraFilters={
+          <div className="flex items-center gap-2">
+            <CompanySearchDialog onSelect={setSelectedCompany} />
+            {selectedCompany && (
+              <FilterTag
+                label={selectedCompany.companyName}
+                onClear={() => setSelectedCompany(null)}
+              />
+            )}
+
+            <div className="flex items-center">
+              <Switch
+                checked={isHighPriority}
+                onCheckedChange={setIsHighPriority}
+                className={`ml-3 data-[state=checked]:bg-yellow`}
+              />
+              <span className="ml-2 text-sm">High Priority</span>
+            </div>
+          </div>
+        }
+      >
+        <GenericTable<LiveListingVehicleType>
+          columns={LiveListingColumns(
+            handleToggleVehicleStatus,
+            isVehicleStatusPending,
+            handleToggleVehiclePriority,
+            isPriorityPending,
+            setOfferDialogVehicle,
+          )}
+          data={data?.result?.list || []}
+          loading={isLoading}
+          loadingText="Fetching Listings..."
+          noDataText={
+            selectedCompany
+              ? `No Listing found under ${selectedCompany.companyName}`
+              : "No Listings found."
+          }
+        />
+        <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+      </TablePageLayout>
+
+      <PriceOfferDialog
+        vehicle={offerDialogVehicle}
+        onClose={() => setOfferDialogVehicle(null)}
       />
-      <Pagination page={page} setPage={setPage} totalPages={totalPages} />
-    </TablePageLayout>
+    </>
   );
 }

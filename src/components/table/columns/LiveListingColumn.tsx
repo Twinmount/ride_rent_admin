@@ -8,12 +8,24 @@ import { Copy, ExternalLink } from "lucide-react";
 import * as Toast from "@radix-ui/react-toast";
 import { useState } from "react";
 import { useAdminContext } from "@/context/AdminContext";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  getOfferSummary,
+  getOfferTimeRemaining,
+  isOfferActive,
+} from "@/helpers/price-offer.helper";
 
 type LiveListingColumnsFn = (
   handleToggleVehicleStatus: (vehicleId: string, isDisabled: boolean) => void,
   isVehicleStatusPending?: boolean,
   handleToggleVehiclePriority?: (vehicleId: string) => void,
   vehiclePriorityPending?: boolean,
+  onOpenOfferDialog?: (vehicle: LiveListingVehicleType) => void,
 ) => ColumnDef<LiveListingVehicleType>[];
 
 export const LiveListingColumns: LiveListingColumnsFn = (
@@ -21,19 +33,79 @@ export const LiveListingColumns: LiveListingColumnsFn = (
   isVehicleStatusPending,
   handleToggleVehiclePriority,
   vehiclePriorityPending,
+  onOpenOfferDialog,
 ) => [
   {
     accessorKey: "vehicleModel",
     header: "Model",
     cell: ({ row }) => {
       const { vehicleId, vehicleModel, company } = row.original;
+      const MAX_LENGTH = 50;
+      const displayText =
+        vehicleModel.length > MAX_LENGTH
+          ? `${vehicleModel.substring(0, MAX_LENGTH)}...`
+          : vehicleModel;
+
       return (
         <Link
           to={`/listings/edit/${vehicleId}/${company.companyId}/${company.userId}`}
           className="font-semibold text-blue-600 hover:underline"
+          title={vehicleModel.length > MAX_LENGTH ? vehicleModel : undefined}
         >
-          {vehicleModel}
+          {displayText}
         </Link>
+      );
+    },
+  },
+
+  {
+    accessorKey: "priceOffer",
+    header: "Price Offer (Beta)",
+    cell: ({ row }) => {
+      const vehicle = row.original;
+      const hasActiveOffer = isOfferActive(vehicle);
+      const timeRemaining = getOfferTimeRemaining(vehicle);
+      const summary = getOfferSummary(vehicle);
+
+      return (
+        <div className="flex items-center gap-2">
+          <Switch
+            checked={hasActiveOffer}
+            onCheckedChange={() => onOpenOfferDialog?.(vehicle)}
+            className="data-[state=checked]:bg-green-500"
+          />
+
+          {hasActiveOffer && timeRemaining && (
+            <TooltipProvider>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <span className="cursor-help rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                    {timeRemaining}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <div className="space-y-1 text-xs">
+                    <p>
+                      <strong>Start:</strong> {summary?.startTime}
+                    </p>
+                    <p>
+                      <strong>End:</strong> {summary?.endTime}
+                    </p>
+                    <p>
+                      <strong>Duration:</strong> {summary?.duration}
+                    </p>
+                    <p>
+                      <strong>Loop:</strong> {summary?.loopDuration}
+                    </p>
+                    <p>
+                      <strong>Progress:</strong> {summary?.currentCycle}
+                    </p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
       );
     },
   },
