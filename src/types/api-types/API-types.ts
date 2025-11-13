@@ -523,10 +523,15 @@ export interface FetchSupplierCentralAnalytics {
 }
 
 export interface GetSupplierCategoryDetailsParams {
-  category: 'total-suppliers' | 'subscribed' | 'missed-subscriptions' | 'inactive' | 'order-missed';
+  category:
+    | "total-suppliers"
+    | "subscribed"
+    | "missed-subscriptions"
+    | "inactive"
+    | "order-missed";
   page: number;
   limit: number;
-  sortOrder: 'ASC' | 'DESC';
+  sortOrder: "ASC" | "DESC";
   search?: string;
   countryId?: string;
 }
@@ -536,19 +541,19 @@ export interface SupplierCentralDto {
   companyShortId: string;
   companyName: string;
   regNumber: string;
-  createdAt: string;  // ISO string from API
+  createdAt: string; // ISO string from API
   countryId: string;
   countryName: string;
-  location: { 
+  location: {
     type?: string;
     coordinates?: number[];
     address: string;
   };
   plan: string; // Assume Plan enum as string
-  expireDate: string;  // ISO string from API
+  expireDate: string; // ISO string from API
   hadPremium: boolean;
   hasMissedEnquiry: boolean;
-  lastLogin: string;  // ISO string from API
+  lastLogin: string; // ISO string from API
   missedQueriesCount: number;
   agentId: string;
 }
@@ -565,9 +570,9 @@ export interface SingleFileUploadResponse {
 
 export interface SendDigestPayload {
   supplierId: string;
-  timePeriod?: 'last_week' | 'last_2weeks' | 'last_month';
-  startDate?: string;  // YYYY-MM-DD
-  endDate?: string;    // YYYY-MM-DD
+  timePeriod?: "last_week" | "last_2weeks" | "last_month";
+  startDate?: string; // YYYY-MM-DD
+  endDate?: string; // YYYY-MM-DD
 }
 
 // api response types for multiple file upload
@@ -773,6 +778,7 @@ export interface AdminEnquiry {
     _id: string;
     name: string;
     phone: string;
+    countryCode: string;
     email?: string;
   };
 }

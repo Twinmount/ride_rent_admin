@@ -110,8 +110,6 @@ export const useAdminEnquiryManagement = (
     initialFilters.locationFilter || "all",
   );
 
-  console.log("statusFilter: ", statusFilter);
-
   const [dateRange, setDateRange] = useState(initialFilters.dateRange || {});
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [pageSize, setPageSize] = useState(initialLimit);
@@ -170,12 +168,10 @@ export const useAdminEnquiryManagement = (
     totalPages: data?.result.totalNumberOfPages || 0,
   };
 
-  // Get API summary if available for better performance
-  const apiSummary = data?.result.summary;
-  const apiStatusCounts = data?.result.statusCounts;
-
   console.log("enquiries: ", enquiries);
-  console.log("summary from API: ", apiSummary);
+
+  // Get API summary if available for better performance
+  const apiStatusCounts = data?.result.statusCounts;
 
   // Filter enquiries based on search term, location filter, and date range (client-side filtering)
   const filteredEnquiries = useMemo(() => {
