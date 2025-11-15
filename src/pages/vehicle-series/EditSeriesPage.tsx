@@ -23,7 +23,7 @@ export default function EditBrandPage() {
   return (
     <PageLayout heading="Edit Vehicle Series" shouldRenderNavigation>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="flex-center mb-6 gap-x-2">
+        <TabsList className="flex-center mb-6 gap-x-2 bg-transparent">
           <TabsTrigger
             value="primary"
             className="h-9 max-sm:px-2 max-sm:text-sm"

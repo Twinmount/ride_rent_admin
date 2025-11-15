@@ -2,13 +2,13 @@ import { lazy } from "react";
 
 // blogs promotions page import
 const ManageAdvisorBlogsPage = lazy(
-  () => import("../../pages/advisor/ManageAdvisorBlogsPage"),
+  () => import("../../pages/advisor-blogs/ManageAdvisorBlogsPage"),
 );
 const AddAdvisorBlogPage = lazy(
-  () => import("../../pages/advisor/AddAdvisorBlogPage"),
+  () => import("../../pages/advisor-blogs/AddAdvisorBlogPage"),
 );
 const EditAdvisorBlogPage = lazy(
-  () => import("../../pages/advisor/EditAdvisorBlogPage"),
+  () => import("../../pages/advisor-blogs/EditAdvisorBlogPage"),
 );
 
 // blogs page import
