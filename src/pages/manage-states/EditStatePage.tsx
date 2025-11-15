@@ -1,5 +1,4 @@
-import { CircleArrowLeft } from "lucide-react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import StateForm from "@/components/form/StateForm";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -19,11 +18,11 @@ import HomepageBannerForm from "@/components/form/HomepageBannerForm";
 import RidePromotionForm from "@/components/form/RidePromotionForm";
 import { fetchAllRidePromotions } from "@/api/ride-promotions";
 import { ContentFor } from "@/types/types";
+import PageLayout from "@/components/common/PageLayout";
 
 type TabsTypes = "primary" | "faq" | "banner" | "ride-promotion";
 
 export default function EditLocationPage() {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const [searchParams] = useSearchParams();
@@ -99,105 +98,95 @@ export default function EditLocationPage() {
   };
 
   return (
-    <section className="container min-h-screen pb-32 pt-5">
-      <div className="flex-center mb-5 ml-5 w-fit gap-x-4">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex-center w-fit border-none outline-none transition-colors hover:text-yellow"
-        >
-          <CircleArrowLeft />
-        </button>
-        <h1 className="h3-bold text-center sm:text-left">
-          Update {!!parentStateId ? "Location" : "State"}
-        </h1>
-      </div>
-      <div>
-        <Tabs
-          value={activeTab}
-          onValueChange={handleTabChange}
-          className="w-full"
-        >
-          <TabsList className="flex-center mb-6 gap-x-2">
-            <TabsTrigger
-              value="primary"
-              className="h-9 max-sm:px-2 max-sm:text-sm"
-            >
-              {!!parentStateId ? "Location" : "State"} Details
+    <PageLayout
+      heading={`Update ${!!parentStateId ? "Location" : "State"}`}
+      shouldRenderNavigation
+    >
+      <Tabs
+        value={activeTab}
+        onValueChange={handleTabChange}
+        className="w-full"
+      >
+        <TabsList className="flex-center mb-6 gap-x-2">
+          <TabsTrigger
+            value="primary"
+            className="h-9 max-sm:px-2 max-sm:text-sm"
+          >
+            {!!parentStateId ? "Location" : "State"} Details
+          </TabsTrigger>
+          <TabsTrigger
+            value="banner"
+            className="h-9 max-sm:px-2 max-sm:text-sm"
+          >
+            Homepage Banner
+          </TabsTrigger>
+          {!(!parentStateId && isIndia) && (
+            <TabsTrigger value="faq" className={`max-sm:px-2`}>
+              FAQ
             </TabsTrigger>
-            <TabsTrigger
-              value="banner"
-              className="h-9 max-sm:px-2 max-sm:text-sm"
-            >
-              Homepage Banner
-            </TabsTrigger>
-            {!(!parentStateId && isIndia) && (
-              <TabsTrigger value="faq" className={`max-sm:px-2`}>
-                FAQ
-              </TabsTrigger>
+          )}
+          <TabsTrigger
+            value="ride-promotion"
+            className="h-9 max-sm:px-2 max-sm:text-sm"
+          >
+            Ride Promotion
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="primary" className="flex-center">
+          <Suspense fallback={<LazyLoader />}>
+            {isLoading ? (
+              <FormSkelton />
+            ) : (
+              <StateForm
+                key={JSON.stringify(data?.result)}
+                type="Update"
+                formData={data?.result}
+                parentStateId={parentStateId}
+              />
             )}
-            <TabsTrigger
-              value="ride-promotion"
-              className="h-9 max-sm:px-2 max-sm:text-sm"
-            >
-              Ride Promotion
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="primary" className="flex-center">
-            <Suspense fallback={<LazyLoader />}>
-              {isLoading ? (
-                <FormSkelton />
-              ) : (
-                <StateForm
-                  key={JSON.stringify(data?.result)}
-                  type="Update"
-                  formData={data?.result}
-                  parentStateId={parentStateId}
-                />
-              )}
-            </Suspense>
-          </TabsContent>
-          <TabsContent value="banner" className="flex-center">
-            <Suspense fallback={<LazyLoader />}>
-              {isBannerFetching ? (
-                <FormSkelton />
-              ) : (
-                <HomepageBannerForm
-                  id={stateId as string}
-                  bannerFor={contentFor}
-                  data={bannerData?.result || []}
-                />
-              )}
-            </Suspense>
-          </TabsContent>
-          <TabsContent value="faq" className="flex-center">
-            <Suspense fallback={<LazyLoader />}>
-              {isFaqFetching ? (
-                <FormSkelton />
-              ) : (
-                <StateFaqForm
-                  data={faqData?.result || defaultStateFaq}
-                  updateFaqMutation={updateFaqMutation}
-                  stateValue={data?.result?.stateValue || ""}
-                />
-              )}
-            </Suspense>
-          </TabsContent>
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="banner" className="flex-center">
+          <Suspense fallback={<LazyLoader />}>
+            {isBannerFetching ? (
+              <FormSkelton />
+            ) : (
+              <HomepageBannerForm
+                id={stateId as string}
+                bannerFor={contentFor}
+                data={bannerData?.result || []}
+              />
+            )}
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="faq" className="flex-center">
+          <Suspense fallback={<LazyLoader />}>
+            {isFaqFetching ? (
+              <FormSkelton />
+            ) : (
+              <StateFaqForm
+                data={faqData?.result || defaultStateFaq}
+                updateFaqMutation={updateFaqMutation}
+                stateValue={data?.result?.stateValue || ""}
+              />
+            )}
+          </Suspense>
+        </TabsContent>
 
-          <TabsContent value="ride-promotion" className="flex-center">
-            <Suspense fallback={<LazyLoader />}>
-              {isPromotionFetching ? (
-                <FormSkelton />
-              ) : (
-                <RidePromotionForm
-                  id={stateId as string}
-                  promotionFor={contentFor}
-                  formData={promotionData?.result || null}
-                />
-              )}
-            </Suspense>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </section>
+        <TabsContent value="ride-promotion" className="flex-center">
+          <Suspense fallback={<LazyLoader />}>
+            {isPromotionFetching ? (
+              <FormSkelton />
+            ) : (
+              <RidePromotionForm
+                id={stateId as string}
+                promotionFor={contentFor}
+                formData={promotionData?.result || null}
+              />
+            )}
+          </Suspense>
+        </TabsContent>
+      </Tabs>
+    </PageLayout>
   );
 }
