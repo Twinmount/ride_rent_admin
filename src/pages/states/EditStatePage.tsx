@@ -7,7 +7,7 @@ import {
   fetchStateById,
   getHomePageBanner,
   getStateFaqFn,
-  upadteStateFaqFn,
+  updateStateFaqFn,
 } from "@/api/states";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense, useState } from "react";
@@ -74,7 +74,7 @@ export default function EditLocationPage() {
   });
 
   const updateFaqMutation = useMutation({
-    mutationFn: upadteStateFaqFn,
+    mutationFn: updateStateFaqFn,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["faq-state", stateId] });
     },
@@ -107,7 +107,7 @@ export default function EditLocationPage() {
         onValueChange={handleTabChange}
         className="w-full"
       >
-        <TabsList className="flex-center mb-6 gap-x-2">
+        <TabsList className="flex-center mb-6 gap-x-2 bg-transparent">
           <TabsTrigger
             value="primary"
             className="h-9 max-sm:px-2 max-sm:text-sm"

@@ -5,7 +5,7 @@ import {
   GetPrimaryForm,
   SpecificationFormData,
 } from "@/types/api-types/vehicleAPI-types";
-import { PrimaryFormType } from "@/types/formTypes";
+import { FAQItemType, PrimaryFormType } from "@/types/formTypes";
 import { TabsTypes } from "@/types/types";
 import imageCompression from "browser-image-compression";
 import { deleteFile } from "@/api/file-upload";
@@ -607,4 +607,8 @@ export const reorderFeatureValues = (
       values: [...feature.values].sort(sortFn),
     };
   });
+};
+
+export const isFaqEmpty = (faq: FAQItemType): boolean => {
+  return faq.question.trim() === "" || faq.answer.trim() === "";
 };

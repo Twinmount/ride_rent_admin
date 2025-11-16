@@ -7,6 +7,7 @@ import {
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import { BlogPromotionFormType } from "@/types/types";
+import { RideBlogFaqData } from "@/components/form/RideBlogFaqForm";
 
 export interface BlogType {
   blogTitle: string;
@@ -225,6 +226,34 @@ export const deleteBlogPromotion = async (promotionId: string) => {
     return data;
   } catch (error) {
     console.error("Error deleting States:", error);
+    throw error;
+  }
+};
+
+export const addRideBlogFaq = async (requestBody: RideBlogFaqData) => {
+  try {
+    const data = await API.post({
+      slug: Slug.ADD_RIDE_BLOG_FAQ,
+      body: requestBody,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error adding ride blog faq:", error);
+    throw error;
+  }
+};
+
+export const updateRideBlogFaq = async (requestBody: RideBlogFaqData) => {
+  try {
+    const data = await API.post({
+      slug: Slug.PUT_RIDE_BLOG_FAQ,
+      body: requestBody,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error updating ride blog faq:", error);
     throw error;
   }
 };
