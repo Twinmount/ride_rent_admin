@@ -37,7 +37,9 @@ const RideBlogFaqForm = ({
   mutateFunction,
 }: RideBlogFaqFormProps) => {
   const [faqs, setFaqs] = useState<FAQItemType[]>(data.faqs);
-  const [editingIndex, setEditingIndex] = useState<number | null>(0);
+  const [editingIndex, setEditingIndex] = useState<number | null>(
+    type === "Add" ? 0 : null,
+  );
   const [errors, setErrors] = useState<{ [key: number]: string }>({});
 
   const handleChange = (
@@ -222,10 +224,10 @@ const RideBlogFaqForm = ({
 
         <FormSubmitButton
           text={type === "Add" ? "Add Blog FAQ" : "Update Blog FAQ"}
-          isLoading={mutateFunction.isLoading}
+          isLoading={mutateFunction.isPending}
           onClick={handleSave}
           disabled={
-            mutateFunction.isLoading ||
+            mutateFunction.isPending ||
             faqs.length === 0 ||
             faqs.every(isFaqEmpty)
           }
