@@ -2,34 +2,28 @@ import { lazy } from "react";
 
 // country  pages
 const ManageCountryPage = lazy(
-  () => import("../../pages/manage-countries/ManageCountryPage"),
+  () => import("../../pages/countries/ManageCountryPage"),
 );
 const AddCountryPage = lazy(
-  () => import("../../pages/manage-countries/AddCountryPage"),
+  () => import("../../pages/countries/AddCountryPage"),
 );
 const EditCountryPage = lazy(
-  () => import("../../pages/manage-countries/EditCountryPage"),
+  () => import("../../pages/countries/EditCountryPage"),
 );
 
 // states pages
 const ManageStatesPage = lazy(
-  () => import("../../pages/manage-states/ManageStatesPage"),
+  () => import("../../pages/states/ManageStatesPage"),
 );
-const AddStatePage = lazy(
-  () => import("../../pages/manage-states/AddStatePage"),
-);
-const EditStatePage = lazy(
-  () => import("../../pages/manage-states/EditStatePage"),
-);
+const AddStatePage = lazy(() => import("../../pages/states/AddStatePage"));
+const EditStatePage = lazy(() => import("../../pages/states/EditStatePage"));
 
 // city pages imports
 const ManageCitiesPage = lazy(
-  () => import("../../pages/manage-cities/ManageCitiesPage"),
+  () => import("../../pages/cities/ManageCitiesPage"),
 );
-const AddCityPage = lazy(() => import("../../pages/manage-cities/AddCityPage"));
-const EditCityPage = lazy(
-  () => import("../../pages/manage-cities/EditCityPage"),
-);
+const AddCityPage = lazy(() => import("../../pages/cities/AddCityPage"));
+const EditCityPage = lazy(() => import("../../pages/cities/EditCityPage"));
 
 export const locationsRoutes = [
   // state route

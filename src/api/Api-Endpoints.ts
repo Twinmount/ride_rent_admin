@@ -189,6 +189,11 @@ export enum Slug {
   DELETE_BLOG_PROMOTION = "/blogs-promotions",
   GET_ALL_BLOG_PROMOTIONS = "/blogs-promotions/list",
 
+  // Ride Blog Faq Endpoints
+  ADD_RIDE_BLOG_FAQ = "/blog-faqs",
+  GET_RIDE_BLOG_FAQ = "/blog-faqs",
+  PUT_RIDE_BLOG_FAQ = "/blog-faqs",
+
   // Advisor Blog Promotions Endpoints
   ADD_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
   GET_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",

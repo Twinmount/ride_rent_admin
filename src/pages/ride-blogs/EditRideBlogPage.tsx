@@ -1,41 +1,113 @@
-import { CircleArrowLeft } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-
-import { fetchBlogById } from "@/api/blogs";
-import LazyLoader from "@/components/skelton/LazyLoader";
+import { useParams } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { fetchBlogById, getRideBlogFaq, updateRideBlogFaq } from "@/api/blogs";
 import RideBlogForm from "@/components/form/main-form/RideBlogForm";
+import RideBlogFaqForm from "@/components/form/RideBlogFaqForm";
 import { useAdminContext } from "@/context/AdminContext";
+import PageLayout from "@/components/common/PageLayout";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { toast } from "@/components/ui/use-toast";
+import FormSkelton from "@/components/skelton/FormSkelton";
+
+type BlogTabs = "details" | "faq";
 
 export default function EditRideBlogPage() {
-  const navigate = useNavigate();
   const { country } = useAdminContext();
-
   const { blogId } = useParams<{ blogId: string }>();
+  const [activeTab, setActiveTab] = useState<BlogTabs>("details");
+  const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery({
+  // Fetch blog details
+  const { data: blogData, isLoading: isBlogLoading } = useQuery({
     queryKey: ["ride-blogs", blogId],
     queryFn: () => fetchBlogById(blogId as string),
   });
 
+  // Fetch blog FAQ
+  const { data: faqData, isLoading: isFaqLoading } = useQuery({
+    queryKey: ["faq-blog", blogId],
+    queryFn: () => getRideBlogFaq(blogId as string),
+    enabled: !!blogId,
+  });
+
+  // Update FAQ mutation
+  const updateBlogFaqMutation = useMutation({
+    mutationFn: updateRideBlogFaq,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["faq-blog", blogId] });
+      toast({
+        title: "Blog FAQ updated successfully",
+        className: "bg-yellow text-white",
+      });
+    },
+    onError: (err) => {
+      console.error("Error updating blog FAQ:", err);
+      toast({
+        variant: "destructive",
+        title: "Error updating blog FAQ",
+        description: "An error occurred while updating the blog FAQ.",
+      });
+    },
+  });
+
+  // Default FAQ data if none exists
+  const defaultData = {
+    blogId: blogId as string,
+    faqs: faqData?.result?.faqs || [
+      {
+        question: "",
+        answer: "",
+      },
+    ],
+  };
+
   return (
-    <section className="container min-h-screen pb-32 pt-5">
-      <div className="flex-center mb-5 ml-5 w-fit gap-x-4">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex-center w-fit border-none outline-none transition-colors hover:text-yellow"
-        >
-          <CircleArrowLeft />
-        </button>
-        <h1 className="h3-bold text-center sm:text-left">
-          Update Ride Blog under {country.countryName}
-        </h1>
-      </div>
-      {isLoading ? (
-        <LazyLoader />
-      ) : (
-        <RideBlogForm type="Update" formData={data?.result} />
-      )}
-    </section>
+    <PageLayout
+      shouldRenderNavigation={true}
+      heading={`Update Ride Blog under ${country.countryName}`}
+    >
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value as BlogTabs)}
+        className="w-full"
+      >
+        <TabsList className="flex-center mb-6 gap-x-2 bg-transparent">
+          <TabsTrigger
+            value="details"
+            className="h-9 max-sm:px-2 max-sm:text-sm"
+          >
+            Blog Details
+          </TabsTrigger>
+          <TabsTrigger
+            disabled={isFaqLoading}
+            value="faq"
+            className="h-9 max-sm:px-2 max-sm:text-sm"
+          >
+            FAQ
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="details" className="flex-center">
+          {isBlogLoading ? (
+            <FormSkelton />
+          ) : (
+            <RideBlogForm type="Update" formData={blogData?.result} />
+          )}
+        </TabsContent>
+
+        <TabsContent value="faq" className="flex-center">
+          {isFaqLoading ? (
+            <FormSkelton />
+          ) : (
+            <RideBlogFaqForm
+              type="Update"
+              data={defaultData}
+              mutateFunction={updateBlogFaqMutation}
+            />
+          )}
+        </TabsContent>
+      </Tabs>
+    </PageLayout>
   );
 }
