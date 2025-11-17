@@ -1434,24 +1434,26 @@ export default function PrimaryDetailsForm({
                 />
 
                 {/* UPI */}
-                <FormField
-                  control={form.control}
-                  name="isUPIAccepted"
-                  render={({ field }) => (
-                    <div className="mb-2">
-                      <FormCheckbox
-                        id="isUPI"
-                        label="UPI"
-                        checked={field.value}
-                        onChange={field.onChange}
-                      />
-                      <FormDescription className="ml-7 mt-1">
-                        Select if your accepts payments via UPI.
-                      </FormDescription>
-                      <FormMessage className="ml-2" />
-                    </div>
-                  )}
-                />
+                {isIndia && (
+                  <FormField
+                    control={form.control}
+                    name="isUPISupported"
+                    render={({ field }) => (
+                      <div className="mb-2">
+                        <FormCheckbox
+                          id="isUPI"
+                          label="UPI"
+                          checked={field.value}
+                          onChange={field.onChange}
+                        />
+                        <FormDescription className="ml-7 mt-1">
+                          Select if your accepts payments via UPI.
+                        </FormDescription>
+                        <FormMessage className="ml-2" />
+                      </div>
+                    )}
+                  />
+                )}
               </div>
             </FormItemWrapper>
           </div>

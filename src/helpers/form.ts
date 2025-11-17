@@ -385,7 +385,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     isCreditOrDebitCardsSupported: data.isCreditOrDebitCardsSupported,
     isTabbySupported: data.isTabbySupported,
     isCashSupported: data.isCashSupported,
-    isUPIAccepted: data.isUPIAccepted,
+    isUPISupported: data.isUPISupported,
     vehicleMetaTitle: data.vehicleMetaTitle,
     vehicleMetaDescription: data.vehicleMetaDescription,
     tempCitys: data.tempCitys || [],
