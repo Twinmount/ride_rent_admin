@@ -99,6 +99,7 @@ export enum Slug {
   GET_NEW_MODIFIED_VEHICLES = "/vehicle/all/modified/with-state-location",
   PUT_TOGGLE_VEHICLE_VISIBILITY = "/vehicle/toggle-visibility",
   POST_TOGGLE_VEHICLE_PRIORITY = "/vehicle/high-priority-vehicle",
+  PUT_TOGGLE_VEHICLE_PRICE_OFFER = "/vehicle/toggle-price-offer",
   GET_LEVELS_FILLED = "/vehicle/level-filled",
   GET_VEHICLE_LISTINGS_COUNT_BY_STATE = "/vehicle/dashboard/count",
   GET_ALL_VEHICLE_LISTINGS_COUNT = "/vehicle/dashboard/count/state",
@@ -162,8 +163,8 @@ export enum Slug {
   GET_SUPPLIER_CENTRAL_HOME_SUMMARY = "/supplier-central/home-summary",
   GET_SUPPLIER_CENTRAL_CATEGORY_DETAILS = "/supplier-central/category-details",
   EXPORT_SUPPLIER_CENTRAL_SHEET = "/supplier-central/export-sheet",
-SEARCH_SUPPLIERS = "/supplier-central/search",
-SEND_DIGEST = "/supplier-central/send-digest",
+  SEARCH_SUPPLIERS = "/supplier-central/search",
+  SEND_DIGEST = "/supplier-central/send-digest",
   // excel data download endpoints
   GET_DOWNLOAD_VEHICLE_DATA = "/vehicle/download/excel",
   GET_DOWNLOAD_COMPANY_DATA = "/company/download/excel",
@@ -188,6 +189,11 @@ SEND_DIGEST = "/supplier-central/send-digest",
   PUT_BLOG_PROMOTION = "/blogs-promotions",
   DELETE_BLOG_PROMOTION = "/blogs-promotions",
   GET_ALL_BLOG_PROMOTIONS = "/blogs-promotions/list",
+
+  // Ride Blog Faq Endpoints
+  ADD_RIDE_BLOG_FAQ = "/blog-faqs",
+  GET_RIDE_BLOG_FAQ = "/blog-faqs",
+  PUT_RIDE_BLOG_FAQ = "/blog-faqs",
 
   // Advisor Blog Promotions Endpoints
   ADD_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",

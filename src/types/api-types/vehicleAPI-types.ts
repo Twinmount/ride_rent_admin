@@ -153,7 +153,7 @@ export type SingleVehicleType = {
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
   isCashSupported: boolean;
-  isUPIAccepted: boolean;
+  isUPISupported: boolean;
   updatedAt: string;
   createdAt: string;
   vehicleStateValue?: string;
@@ -195,6 +195,12 @@ export type CompanyListingVehicleType = {
   state: StateType;
   parameterField?: string;
 };
+export type PriceOfferType = {
+  startTime: Date | string;
+  durationHours: number;
+  cycleDurationHours: number;
+  expiryTime: Date | string;
+};
 
 // Define a simplified type for table data
 export type LiveListingVehicleType = {
@@ -211,6 +217,7 @@ export type LiveListingVehicleType = {
     userId: string;
     companyName: string;
   };
+  priceOffer: PriceOfferType | null;
 };
 
 export interface FetchVehicleTableListingResponse {
@@ -387,7 +394,7 @@ export type GetPrimaryForm = {
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
   isCashSupported: boolean;
-  isUPIAccepted: boolean;
+  isUPISupported: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
   tempCitys: CityType[];

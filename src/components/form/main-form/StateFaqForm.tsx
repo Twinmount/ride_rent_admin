@@ -16,15 +16,11 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-
-type FAQItem = {
-  question: string;
-  answer: string;
-};
+import { FAQItemType } from "@/types/formTypes";
 
 type StateFAQ = {
   stateId: string;
-  faqs: FAQItem[];
+  faqs: FAQItemType[];
   updatedAt?: string;
 };
 
@@ -116,10 +112,14 @@ const StateFaqForm = ({
   updateFaqMutation: any;
   stateValue: string;
 }) => {
-  const [faqs, setFaqs] = useState<FAQItem[]>(data.faqs);
+  const [faqs, setFaqs] = useState<FAQItemType[]>(data.faqs);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const handleChange = (index: number, field: keyof FAQItem, value: string) => {
+  const handleChange = (
+    index: number,
+    field: keyof FAQItemType,
+    value: string,
+  ) => {
     setFaqs((prev) =>
       prev.map((faq, i) => (i === index ? { ...faq, [field]: value } : faq)),
     );

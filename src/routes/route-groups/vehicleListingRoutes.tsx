@@ -2,17 +2,17 @@ import { lazy } from "react";
 import { Navigate } from "react-router-dom";
 
 const LiveListingPage = lazy(
-  () => import("../../pages/live-listing/LiveListingPage"),
+  () => import("../../pages/vehicle-listing/LiveListingPage"),
 );
 
 const GeneralListingPage = lazy(
-  () => import("../../pages/live-listing/GeneralListingPage"),
+  () => import("../../pages/vehicle-listing/GeneralListingPage"),
 );
 const VehiclesFormUpdatePage = lazy(
-  () => import("../../pages/live-listing/VehiclesFormUpdatePage"),
+  () => import("../../pages/vehicle-listing/VehiclesFormUpdatePage"),
 );
 const VehiclesFormAddPage = lazy(
-  () => import("../../pages/live-listing/VehiclesFormAddPage"),
+  () => import("../../pages/vehicle-listing/VehiclesFormAddPage"),
 );
 
 export const vehicleListingRoutes = [

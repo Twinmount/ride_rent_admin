@@ -1,19 +1,19 @@
 import { lazy } from "react";
 // brands page import
-const BrandsPage = lazy(() => import("../../pages/manage-brands/BrandsPage"));
+const BrandsPage = lazy(() => import("../../pages/vehicle-brands/BrandsPage"));
 const AddBrandPage = lazy(
-  () => import("../../pages/manage-brands/AddBrandPage"),
+  () => import("../../pages/vehicle-brands/AddBrandPage"),
 );
 const EditBrandPage = lazy(
-  () => import("../../pages/manage-brands/EditBrandPage"),
+  () => import("../../pages/vehicle-brands/EditBrandPage"),
 );
 
-const SeriesPage = lazy(() => import("../../pages/manage-series/SeriesPage"));
+const SeriesPage = lazy(() => import("../../pages/vehicle-series/SeriesPage"));
 const AddSeriesPage = lazy(
-  () => import("../../pages/manage-series/AddSeriesPage"),
+  () => import("../../pages/vehicle-series/AddSeriesPage"),
 );
 const EditSeriesPage = lazy(
-  () => import("../../pages/manage-series/EditSeriesPage"),
+  () => import("../../pages/vehicle-series/EditSeriesPage"),
 );
 
 export const brandsAndSeriesRoutes = [

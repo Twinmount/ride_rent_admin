@@ -84,7 +84,7 @@ export type PrimaryFormType = {
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
   isCashSupported: boolean;
-  isUPIAccepted: boolean;
+  isUPISupported: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
   tempCitys?: CityType[];
@@ -119,3 +119,8 @@ export type RidePromotionCardType = z.infer<typeof RidePromotionCardSchema>;
  * Type for the entire promotion form
  */
 export type RidePromotionFormType = z.infer<typeof RidePromotionFormSchema>;
+
+export type FAQItemType = {
+  question: string;
+  answer: string;
+};

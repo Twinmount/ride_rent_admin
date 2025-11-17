@@ -42,6 +42,7 @@ export const buildCommonPrimaryDetails = (
     isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
     isTabbySupported: values.isTabbySupported,
     isCashSupported: values.isCashSupported,
+    isUPISupported: values.isUPISupported,
     vehicleMetaTitle: values.vehicleMetaTitle,
     vehicleMetaDescription: values.vehicleMetaDescription,
     location: values.location,

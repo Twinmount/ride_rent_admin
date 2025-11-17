@@ -1,3 +1,5 @@
+import { FAQItemType } from "../formTypes";
+
 // single blog type
 export interface BlogType {
   blogId: string;
@@ -70,6 +72,15 @@ export interface FetchAdvisorBlogPromotionsResponse {
 //  states (by id)  API response
 export interface FetchSpecificBlogPromotionResponse {
   result: BlogPromotionType;
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchRideBlogFaqResponse {
+  result: {
+    blogId: string;
+    faqs: FAQItemType[];
+  };
   status: string;
   statusCode: number;
 }
