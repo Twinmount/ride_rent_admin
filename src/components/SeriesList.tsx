@@ -1,5 +1,5 @@
 import { BrandType, SeriesListType } from "@/types/api-types/API-types";
-import { useFetchSeries } from "@/pages/manage-series/SeriesPage.hooks";
+import { useFetchSeries } from "@/pages/vehicle-series/SeriesPage.hooks";
 import { SeriesListingColumns } from "./table/columns/SeriesListingsColumn";
 import Pagination from "./Pagination";
 import { useState } from "react";

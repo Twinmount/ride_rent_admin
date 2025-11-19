@@ -96,6 +96,7 @@ export enum Slug {
   DELETE_VEHICLE = "/vehicle",
   GET_ALL_VEHICLES = "/vehicle/listed/all",
   GET_NEW_OR_MODIFIED_VEHICLES = "/vehicle/all/modified",
+  GET_NEW_MODIFIED_VEHICLES = "/vehicle/all/modified/with-state-location",
   PUT_TOGGLE_VEHICLE_VISIBILITY = "/vehicle/toggle-visibility",
   POST_TOGGLE_VEHICLE_PRIORITY = "/vehicle/high-priority-vehicle",
   PUT_TOGGLE_VEHICLE_PRICE_OFFER = "/vehicle/toggle-price-offer",
@@ -188,6 +189,11 @@ export enum Slug {
   PUT_BLOG_PROMOTION = "/blogs-promotions",
   DELETE_BLOG_PROMOTION = "/blogs-promotions",
   GET_ALL_BLOG_PROMOTIONS = "/blogs-promotions/list",
+
+  // Ride Blog Faq Endpoints
+  ADD_RIDE_BLOG_FAQ = "/blog-faqs",
+  GET_RIDE_BLOG_FAQ = "/blog-faqs",
+  PUT_RIDE_BLOG_FAQ = "/blog-faqs",
 
   // Advisor Blog Promotions Endpoints
   ADD_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { BrandType, CategoryType } from "@/types/api-types/API-types";
-import { useFetchSeriesBrands } from "@/pages/manage-series/SeriesPage.hooks";
+import { useFetchSeriesBrands } from "@/pages/vehicle-series/SeriesPage.hooks";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {

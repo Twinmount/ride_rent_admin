@@ -14,6 +14,7 @@ import {
   CloudDownload,
   Building2,
   MessageSquare,
+  AlertCircle,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -67,6 +68,12 @@ export const sidebarContent: SidebarItem[] = [
     label: "Supplier Central",
     link: "/suppliercentral/dashboard",
     icon: Building2,
+  },
+  {
+    type: "link",
+    label: "Updates",
+    link: "/alert-updates/dashboard",
+    icon: AlertCircle,
   },
   // Vehicle Listings routes
   {

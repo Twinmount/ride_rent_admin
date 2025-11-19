@@ -186,7 +186,7 @@ export const getPrimaryFormDefaultValues = (
   isCreditOrDebitCardsSupported: false,
   isTabbySupported: false,
   isCashSupported: false,
-  isUPIAccepted: false,
+  isUPISupported: false,
   vehicleMetaTitle: "",
   vehicleMetaDescription: "",
   tempCitys: [],
