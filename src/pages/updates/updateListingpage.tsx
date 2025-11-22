@@ -17,6 +17,7 @@ import { CircleArrowLeft, RefreshCw } from "lucide-react";
 import AlertListingPageHeading from "@/components/updatesListingPageHeading";
 import { GeneralCompanyListingColumns } from "@/components/table/columns/UpdateListingColumn";
 import { fetchAllVehiclesV2} from "@/api/listings/updatelistingApi";
+import { useAdminContext } from "@/context/AdminContext";
 
 interface VehiclesWithStateLocationPageProps {
   queryKey: any[];
@@ -37,8 +38,20 @@ export default function VehiclesWithStateLocationPage({
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
   const [selectedVehicle, setSelectedVehicle] =
     useState<CompanyListingVehicleType | null>(null);
+      const { country } = useAdminContext();
 
+const getCountryId = (): string => {
+  try {
+    const stored = localStorage.getItem("selectedCountry");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed?.countryId) return parsed.countryId;
+    }
+  } catch {}
+  return 'ee8a7c95-303d-4f55-bd6c-85063ff1cf48'; // UAE
+};
 
+  const activeCountryId = getCountryId();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -46,7 +59,7 @@ export default function VehiclesWithStateLocationPage({
   const searchTerm = searchParams.get("search") || "";
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: [...queryKey, page, limit, sortOrder, searchTerm, approvalStatus,
+    queryKey: [...queryKey, page, limit, sortOrder, searchTerm, approvalStatus, activeCountryId,
     isModified ?? false,
     newRegistration ?? false,],
     queryFn: () =>
@@ -58,6 +71,7 @@ export default function VehiclesWithStateLocationPage({
       approvalStatus,
       newRegistration,
       search: searchTerm.trim(),
+      countryId: activeCountryId, // ← This is perfect
       }),
     // enabled: !!state.stateId,
     staleTime: 10 * 1000,
@@ -143,7 +157,7 @@ const handleSubmitModal = async (values: {
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({
-      queryKey: [...queryKey, page, limit, sortOrder, searchTerm, approvalStatus,
+      queryKey: [...queryKey, page, limit, sortOrder, searchTerm, approvalStatus,country,
     isModified ?? false,
     newRegistration ?? false,],
       exact: true,
