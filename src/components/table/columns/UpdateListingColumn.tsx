@@ -1,4 +1,3 @@
-// Updated: GeneralCompanyListingColumns (in @/components/table/columns/UpdateListingColumn)
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -9,7 +8,6 @@ export const GeneralCompanyListingColumns = (
   isModified: boolean = false, // Accept isModified prop
 ): ColumnDef<CompanyListingVehicleType>[] => {
   const baseColumns: ColumnDef<CompanyListingVehicleType>[] = [
-    // UPDATED: Reordered as per request: agentId first - Now clickable as a Link to company details page
     {
       accessorKey: "company.agentId",
       header: "Agent ID",
@@ -22,19 +20,20 @@ export const GeneralCompanyListingColumns = (
         </Link>
       ),
     },
-    // companyname (Company Name)
     {
       accessorKey: "company.companyName",
       header: "Company Name",
       cell: ({ row }) => {
+        const companyName = row.original.company.companyName || "N/A";
         return (
-          <span className="whitespace-nowrap">
-            {row.original.company.companyName}
-          </span>
+          <div className="max-w-[180px] truncate" title={companyName}>
+            <span className="block truncate font-medium text-gray-800">
+              {companyName}
+            </span>
+          </div>
         );
       },
     },
-    // date time (Agent Date Time)
     {
       accessorKey: "agentDateTime",
       header: "Date Time",
@@ -43,7 +42,6 @@ export const GeneralCompanyListingColumns = (
         return <span className="whitespace-nowrap">{dateTime}</span>;
       },
     },
-    // vehicle id (NEW: Added explicit Vehicle ID column)
    {
       accessorKey: "vehicleId",
       header: "Vehicle Code",

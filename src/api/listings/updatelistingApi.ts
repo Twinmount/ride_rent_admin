@@ -6,7 +6,6 @@ import {
 } from "@/types/api-types/vehicleAPI-types";
 
 
-// fetch vehicles with state and location
 export const fetchAllVehiclesV2 = async (urlParams: {
   page: number;
   limit: number;
@@ -16,6 +15,7 @@ export const fetchAllVehiclesV2 = async (urlParams: {
   userId?: string;
   newRegistration?: boolean;
   search?: string;
+  countryId?: string; // Add this
 }): Promise<FetchAllVehiclesResponse> => {
   try {
     const queryParams = new URLSearchParams({
@@ -27,6 +27,10 @@ export const fetchAllVehiclesV2 = async (urlParams: {
     if (urlParams.approvalStatus) {
       queryParams.append("approvalStatus", urlParams.approvalStatus);
     }
+
+    if (urlParams.countryId) {
+    queryParams.append("countryId", urlParams.countryId);
+  }
 
     if (urlParams.isModified === true || urlParams.isModified === false) {
       queryParams.append("isModified", urlParams.isModified.toString());
