@@ -1,4 +1,4 @@
-import { useAdminContext } from "@/context/AdminContext";
+// import { useAdminContext } from "@/context/AdminContext";
 import { useLocation } from "react-router-dom";
 
 type PathStatusMap = {
@@ -10,7 +10,7 @@ type PathStatusMap = {
 
 export default function AlertListingPageHeading() {
   const location = useLocation();
-  const { state } = useAdminContext();
+  // const { state } = useAdminContext();
 
   // Map paths to their corresponding statuses and titles
   const pathToStatus: PathStatusMap = {
@@ -31,7 +31,7 @@ export default function AlertListingPageHeading() {
 
   return (
     <h2 className="text-3xl font-semibold max-sm:mb-4 max-sm:text-2xl">
-      {title} in {state.stateName}
+      {title}
     </h2>
   );
 }
