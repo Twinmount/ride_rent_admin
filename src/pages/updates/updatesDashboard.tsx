@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAdminContext } from "@/context/AdminContext";
 import { VehicleStatusType } from "@/types/formTypes"; // Adjust import path if needed based on your project structure
-import { fetchVehiclesWithStateAndLocation } from "@/api/listings/updatelistingApi";
+import { fetchAllVehiclesV2 } from "@/api/listings/updatelistingApi";
 
 const AlertDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const AlertDashboard: React.FC = () => {
     newRegistration?: boolean
   ) => {
     if (!state.stateId) return 0;
-    const data = await fetchVehiclesWithStateAndLocation({
+    const data = await fetchAllVehiclesV2({
       page: 1,
       limit: 1,
       sortOrder: "DESC" as const,
@@ -24,7 +24,6 @@ const AlertDashboard: React.FC = () => {
       approvalStatus,
       newRegistration,
       search: "",
-      stateId: state.stateId as string,
     });
     // Assuming the API response includes `totalCount` in `result` (e.g., data.result.totalCount).
     // If not, adjust to `data.result.totalNumberOfPages * limit` for an approximation,
