@@ -7,7 +7,7 @@ import {
 
 
 // fetch vehicles with state and location
-export const fetchVehiclesWithStateAndLocation = async (urlParams: {
+export const fetchAllVehiclesV2 = async (urlParams: {
   page: number;
   limit: number;
   sortOrder: string;
@@ -16,15 +16,12 @@ export const fetchVehiclesWithStateAndLocation = async (urlParams: {
   userId?: string;
   newRegistration?: boolean;
   search?: string;
-  stateId: string;
 }): Promise<FetchAllVehiclesResponse> => {
   try {
-    // generating query params
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
-      stateId: urlParams.stateId,
     });
 
     if (urlParams.approvalStatus) {
@@ -40,10 +37,7 @@ export const fetchVehiclesWithStateAndLocation = async (urlParams: {
     }
 
     if (urlParams.newRegistration) {
-      queryParams.append(
-        "newRegistration",
-        urlParams.newRegistration.toString(),
-      );
+      queryParams.append("newRegistration", urlParams.newRegistration.toString());
     }
 
     if (urlParams.search) {

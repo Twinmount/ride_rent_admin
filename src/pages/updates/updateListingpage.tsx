@@ -13,12 +13,12 @@ import VehicleStatusModal from "@/components/VehicleStatusModal";
 import { toast } from "@/components/ui/use-toast";
 import SearchBox from "@/components/SearchBox";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useAdminContext } from "@/context/AdminContext";
+// import { useAdminContext } from "@/context/AdminContext";
 import { GenericTable } from "@/components/table/GenericTable";
 import { CircleArrowLeft, RefreshCw } from "lucide-react";
 import AlertListingPageHeading from "@/components/updatesListingPageHeading";
 import { GeneralCompanyListingColumns } from "@/components/table/columns/UpdateListingColumn";
-import { fetchVehiclesWithStateAndLocation } from "@/api/listings/updatelistingApi";
+import { fetchAllVehiclesV2} from "@/api/listings/updatelistingApi";
 
 interface VehiclesWithStateLocationPageProps {
   queryKey: any[];
@@ -40,7 +40,7 @@ export default function VehiclesWithStateLocationPage({
   const [selectedVehicle, setSelectedVehicle] =
     useState<CompanyListingVehicleType | null>(null);
 
-  const { state } = useAdminContext();
+  // const { state } = useAdminContext();
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -49,9 +49,9 @@ export default function VehiclesWithStateLocationPage({
   const searchTerm = searchParams.get("search") || "";
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: [...queryKey, page, limit, sortOrder, searchTerm, state],
+    queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
     queryFn: () =>
-      fetchVehiclesWithStateAndLocation({
+      fetchAllVehiclesV2({
         page,
         limit,
         sortOrder,
@@ -59,16 +59,15 @@ export default function VehiclesWithStateLocationPage({
         approvalStatus,
         newRegistration,
         search: searchTerm.trim(),
-        stateId: state.stateId as string,
       }),
-    enabled: !!state.stateId,
+    // enabled: !!state.stateId,
     staleTime: 10 * 1000,
   });
 
   // Reset page to 1 when search or state changes
   useEffect(() => {
     setPage(1);
-  }, [searchTerm, state?.stateId]);
+  }, [searchTerm]);
 
   const handleOpenModal = (vehicle: CompanyListingVehicleType) => {
     setSelectedVehicle(vehicle);
@@ -110,7 +109,7 @@ export default function VehiclesWithStateLocationPage({
         if (data) {
           queryClient.invalidateQueries({ queryKey: ["vehicles", "listings"] });
           queryClient.invalidateQueries({
-            queryKey: [...queryKey, page, limit, sortOrder, searchTerm, state],
+            queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
             exact: true,
           });
           queryClient.invalidateQueries({
@@ -141,7 +140,7 @@ export default function VehiclesWithStateLocationPage({
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({
-      queryKey: [...queryKey, page, limit, sortOrder, searchTerm, state],
+      queryKey: [...queryKey, page, limit, sortOrder, searchTerm],
       exact: true,
     });
   };
