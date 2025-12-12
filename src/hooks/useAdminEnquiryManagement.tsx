@@ -110,8 +110,6 @@ export const useAdminEnquiryManagement = (
     initialFilters.locationFilter || "all",
   );
 
-  console.log("statusFilter: ", statusFilter);
-
   const [dateRange, setDateRange] = useState(initialFilters.dateRange || {});
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [pageSize, setPageSize] = useState(initialLimit);
@@ -170,12 +168,10 @@ export const useAdminEnquiryManagement = (
     totalPages: data?.result.totalNumberOfPages || 0,
   };
 
-  // Get API summary if available for better performance
-  const apiSummary = data?.result.summary;
-  const apiStatusCounts = data?.result.statusCounts;
-
   console.log("enquiries: ", enquiries);
-  console.log("summary from API: ", apiSummary);
+
+  // Get API summary if available for better performance
+  const apiStatusCounts = data?.result.statusCounts;
 
   // Filter enquiries based on search term, location filter, and date range (client-side filtering)
   const filteredEnquiries = useMemo(() => {
@@ -186,34 +182,42 @@ export const useAdminEnquiryManagement = (
       const searchLower = searchTerm.toLowerCase();
       filtered = filtered.filter(
         (enquiry: AdminEnquiry) =>
-          enquiry.user.name.toLowerCase().includes(searchLower) ||
-          (enquiry.user.email &&
-            enquiry.user.email.toLowerCase().includes(searchLower)) ||
-          enquiry.user.phone.includes(searchTerm) ||
-          enquiry.vehicle.name.toLowerCase().includes(searchLower) ||
-          enquiry.vehicle.location.toLowerCase().includes(searchLower) ||
-          (enquiry.vehicle.vehicleCode &&
-            enquiry.vehicle.vehicleCode.toLowerCase().includes(searchLower)) ||
-          (enquiry.agent.companyName &&
-            enquiry.agent.companyName.toLowerCase().includes(searchLower)) ||
-          enquiry.message.toLowerCase().includes(searchLower),
+          enquiry?.user?.name?.toLowerCase()?.includes(searchLower) ||
+          (enquiry?.user?.email &&
+            enquiry?.user?.email?.toLowerCase()?.includes(searchLower)) ||
+          enquiry?.user?.phone?.includes(searchTerm) ||
+          enquiry?.vehicle?.name?.toLowerCase()?.includes(searchLower) ||
+          enquiry?.vehicle?.location?.toLowerCase()?.includes(searchLower) ||
+          (enquiry?.vehicle?.vehicleCode &&
+            enquiry?.vehicle?.vehicleCode
+              ?.toLowerCase()
+              ?.includes(searchLower)) ||
+          (enquiry?.agent?.companyName &&
+            enquiry?.agent?.companyName
+              ?.toLowerCase()
+              ?.includes(searchLower)) ||
+          enquiry?.message?.toLowerCase()?.includes(searchLower),
       );
     }
 
     // Location filter
     if (locationFilter && locationFilter !== "all") {
       filtered = filtered.filter(
-        (enquiry: AdminEnquiry) => enquiry.vehicle.location === locationFilter,
+        (enquiry: AdminEnquiry) =>
+          enquiry?.vehicle?.location === locationFilter,
       );
     }
 
     // Date range filter
     if (dateRange.start || dateRange.end) {
       filtered = filtered.filter((enquiry: AdminEnquiry) => {
-        const enquiryDate = new Date(enquiry.createdAt);
+        const enquiryDate = enquiry?.createdAt
+          ? new Date(enquiry.createdAt)
+          : null;
         const startDate = dateRange.start ? new Date(dateRange.start) : null;
         const endDate = dateRange.end ? new Date(dateRange.end) : null;
 
+        if (!enquiryDate) return false;
         if (startDate && enquiryDate < startDate) return false;
         if (endDate && enquiryDate > endDate) return false;
         return true;

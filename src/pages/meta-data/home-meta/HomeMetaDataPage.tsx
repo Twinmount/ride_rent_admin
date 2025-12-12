@@ -57,7 +57,7 @@ export default function HomeMetaData() {
             <SeoData
               key={item.metaDataId}
               item={item}
-              link="/meta-data/home/edit"
+              link={`/meta-data/home/edit/${item.metaDataId}`}
             />
           ))
         )}

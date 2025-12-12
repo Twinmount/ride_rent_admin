@@ -28,15 +28,20 @@ import { FormItemWrapper } from "../form-ui/FormItemWrapper";
 import { FormSubmitButton } from "../form-ui/FormSubmitButton";
 import { CompanyFormType } from "@/types/types";
 import LocationPicker from "../LocationPicker";
+import { FormCheckbox } from "../form-ui";
+import { FormFieldLayout } from "../form-ui";
+
 
 type CompanyFormProps = {
   type: "Update";
   formData?: CompanyFormType | null;
+  updateId?: string; // New prop to explicitly pass the ID (e.g., companyId or supplierId)
+  isSupplierPage?: boolean; // New prop to detect if this is from supplier details page
 };
 
-export default function CompanyForm({ type, formData }: CompanyFormProps) {
+export default function CompanyForm({ type, formData, updateId, isSupplierPage = false }: CompanyFormProps) {
   const navigate = useNavigate();
-  const { companyId } = useParams<{ companyId: string }>();
+  const { companyId } = useParams<{ companyId: string }>(); // Keep for company routes, but fallback to prop
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
@@ -56,40 +61,65 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
       : CompanyFormDefaultValues;
 
   // creating form
-  const form = useForm<z.infer<typeof CompanyFormSchema>>({
-    resolver: zodResolver(CompanyFormSchema),
-    defaultValues: initialValues,
+  type CompanySchemaType = z.infer<ReturnType<typeof CompanyFormSchema>>;
+
+  const form = useForm<CompanySchemaType>({
+    resolver: zodResolver(CompanyFormSchema(isIndia)),
+    defaultValues: initialValues as any,
   });
 
-  async function onSubmit(values: z.infer<typeof CompanyFormSchema>) {
+  async function onSubmit(values: CompanySchemaType) {
     if (isFileUploading) {
       showFileUploadInProgressToast();
       return;
     }
 
+    // Use prop first, fallback to param (for backward compatibility with company routes)
+    const idToUse = updateId || companyId;
+
+    if (!idToUse) {
+      toast({
+        variant: "destructive",
+        title: "Update Failed",
+        description: "Missing ID for update. Please refresh and try again.",
+      });
+      return;
+    }
+
     try {
-      const data = await updateCompany(values, companyId as string);
+      const data = await updateCompany(values, idToUse);
 
       if (data) {
         // actually delete the images from the db, if any
         await deleteMultipleFiles(deletedImages);
 
+        const entityName = isSupplierPage ? "Supplier" : "Company";
         toast({
-          title: `Company ${type}ed successfully`,
+          title: `${entityName} ${type}ed successfully`,
           className: "bg-yellow text-white",
         });
-        navigate("/company/registrations/live");
+
+        // Navigate based on page type
+        if (isSupplierPage) {
+          navigate(-1); // Go back to previous page
+        } else {
+          navigate("/company/registrations/live");
+        }
       }
     } catch (error) {
       console.error(error);
       toast({
         variant: "destructive",
-        title: `${type} Company failed`,
+        title: `${isSupplierPage ? "Update" : type} ${isSupplierPage ? "Supplier" : "Company"} failed`,
         description: "Something went wrong",
       });
     } finally {
       queryClient.invalidateQueries({
-        queryKey: ["company-details-page", companyId],
+        queryKey: ["company-details-page", idToUse],
+        exact: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["supplier-details-page", idToUse], // Also invalidate supplier queries for consistency
         exact: true,
       });
       queryClient.invalidateQueries({
@@ -98,6 +128,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
       });
     }
   }
+
+  const buttonText = isSupplierPage ? "Update Supplier" : "Update Company";
 
   return (
     <Form {...form}>
@@ -198,30 +230,34 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
         />
 
         {/* expiry date */}
-        <FormField
-          control={form.control}
-          name="expireDate"
-          render={({ field }) => (
-            <FormItemWrapper
-              label="Expiry Date"
-              description={`Enter the expiry of your
-                ${isIndia && !isIndividual
-                  ? " Commercial License / GST Registration / Trade License"
-                  : isIndia && isIndividual
-                    ? " Commercial Registration / Tourist Permit"
-                    : " Commercial License / Trade License"
-                }{" "}
-                &#40;DD/MM/YYYY&#41;.`}
-            >
-              <DatePicker
-                selected={field.value}
-                onChange={(date: Date | null) => field.onChange(date)}
-                dateFormat="MM/dd/yyyy"
-                wrapperClassName="datePicker text-base -ml-4 "
-              />
-            </FormItemWrapper>
-          )}
-        />
+        {!isIndia && (
+          <FormField
+            control={form.control}
+            name="expireDate"
+            render={({ field }) => (
+              <FormFieldLayout
+                label="Expiry Date"
+                description={
+                  <span>
+                    Enter the expiry of your{" "}
+                    {isIndia
+                      ? `Company Registration / GST Registration / Trade License`
+                      : "Commercial License/Trade License"}{" "}
+                    &#40;DD/MM/YYYY&#41;.
+                  </span>
+                }
+              >
+                <DatePicker
+                  selected={field.value}
+                  onChange={(date: Date | null) => field.onChange(date)}
+                  dateFormat="dd/MM/yyyy"
+                  wrapperClassName="datePicker text-base  "
+                  placeholderText="DD/MM/YYYY"
+                />
+              </FormFieldLayout>
+            )}
+          />
+        )}
 
         {/* registration number */}
         <FormField
@@ -230,16 +266,16 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           render={({ field }) => (
             <FormItemWrapper
               label={`${isIndia && !isIndividual
-                  ? "GST Number"
-                  : isIndia && isIndividual
-                    ? "PAN Number"
-                    : "Registration Number / Trade License Number"
+                ? "GST Number"
+                : isIndia && isIndividual
+                  ? "PAN Number"
+                  : "Registration Number / Trade License Number"
                 }`}
               description={`${isIndia && !isIndividual
-                  ? `Enter your company GST number. The number should be a combination of letters and numbers, without any spaces or special characters.`
-                  : isIndia && isIndividual
-                    ? "Enter your company PAN. The number should be a combination of letters and numbers, without any spaces or special characters."
-                    : `Enter your company registration number. The number should be a combination of letters and numbers, without any spaces or special characters, up to 15 characters.`
+                ? `Enter your company GST number. The number should be a combination of letters and numbers, without any spaces or special characters.`
+                : isIndia && isIndividual
+                  ? "Enter your company PAN. The number should be a combination of letters and numbers, without any spaces or special characters."
+                  : `Enter your company registration number. The number should be a combination of letters and numbers, without any spaces or special characters, up to 15 characters.`
                 }`}
             >
               <Input
@@ -255,6 +291,30 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
           )}
         />
 
+        {/* no registration checkbox for India */}
+        {isIndia && !isIndividual && (
+          <FormField
+            control={form.control}
+            name="noRegNumber"
+            render={({ field }) => (
+              <FormFieldLayout label="No GST / Registration Number" description="Check if your company does not have a GST number.">
+                <FormCheckbox
+                  id={field.name}
+                  checked={!!field.value}
+                  onChange={(checked) => {
+                    field.onChange(checked);
+                    if (checked) {
+                      // clear regNumber when checkbox is checked
+                      form.setValue("regNumber", "");
+                    }
+                  }}
+                  label={"I do not have a GST number"}
+                />
+              </FormFieldLayout>
+            )}
+          />
+        )}
+
         {/* company languages */}
         <FormField
           control={form.control}
@@ -263,8 +323,8 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
             <FormItemWrapper
               label="Supported Languages"
               description={`${isIndividual
-                  ? "Select all the languages you can speak or understand. These will be shown on your public profile to help customers communicate comfortably with you."
-                  : "Select all the languages your staff can speak or understand. These will be displayed on your company's public profile page, helping customers feel comfortable with communication."
+                ? "Select all the languages you can speak or understand. These will be shown on your public profile to help customers communicate comfortably with you."
+                : "Select all the languages your staff can speak or understand. These will be displayed on your company's public profile page, helping customers feel comfortable with communication."
                 }`}
             >
               <CompanyLanguagesDropdown
@@ -414,7 +474,7 @@ export default function CompanyForm({ type, formData }: CompanyFormProps) {
 
         {/* Submit */}
         <FormSubmitButton
-          text={"Update Company"}
+          text={buttonText}
           isLoading={form.formState.isSubmitting}
         />
       </FormContainer>

@@ -10,7 +10,7 @@ export const buildCommonPrimaryDetails = (
   isCarsCategory: boolean,
 ): Record<string, any> => {
   console.log(values);
-  
+
   return {
     countryCode,
     vehicleCategoryId: values.vehicleCategoryId,
@@ -35,12 +35,14 @@ export const buildCommonPrimaryDetails = (
     cityIds: values.cityIds,
     rentalDetails: JSON.stringify(values.rentalDetails),
     vehiclePhotos: values.vehiclePhotos,
+    thumbnail: values.thumbnail || null,
     vehicleVideos: values.vehicleVideos,
     commercialLicenses: values.commercialLicenses,
     securityDeposit: values.securityDeposit,
     isCreditOrDebitCardsSupported: values.isCreditOrDebitCardsSupported,
     isTabbySupported: values.isTabbySupported,
     isCashSupported: values.isCashSupported,
+    isUPISupported: values.isUPISupported,
     vehicleMetaTitle: values.vehicleMetaTitle,
     vehicleMetaDescription: values.vehicleMetaDescription,
     location: values.location,

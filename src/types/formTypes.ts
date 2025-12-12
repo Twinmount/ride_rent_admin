@@ -51,12 +51,13 @@ export type PrimaryFormType = {
   vehicleBrandId: string;
   vehicleSeriesId: string;
   vehicleModel: string;
-  vehiclePhotos: string[]; // Array of  URLs
+  vehiclePhotos: string[];
+  thumbnail: string | null;
   vehicleVideos: string[];
   vehicleRegistrationNumber: string;
   isFancyNumber: boolean;
   vehicleRegisteredYear: string;
-  commercialLicenses: string[]; // Array of  URLs
+  commercialLicenses: string[];
   commercialLicenseExpireDate: Date | undefined;
   isLease: boolean;
   isCryptoAccepted: boolean;
@@ -83,6 +84,7 @@ export type PrimaryFormType = {
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
   isCashSupported: boolean;
+  isUPISupported: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
   tempCitys?: CityType[];
@@ -117,3 +119,8 @@ export type RidePromotionCardType = z.infer<typeof RidePromotionCardSchema>;
  * Type for the entire promotion form
  */
 export type RidePromotionFormType = z.infer<typeof RidePromotionFormSchema>;
+
+export type FAQItemType = {
+  question: string;
+  answer: string;
+};

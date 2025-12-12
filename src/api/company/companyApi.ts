@@ -67,6 +67,7 @@ export const updateCompany = async (
           : undefined,
         regNumber: values.regNumber,
         companyLogo: values.companyLogo, // Assuming this is a URL or string
+        noRegNumber: values.noRegNumber,
         commercialLicense: values.commercialLicense, // Assuming this is a URL or string
         companyAddress: values.companyAddress,
         companyLanguages: values.companyLanguages,

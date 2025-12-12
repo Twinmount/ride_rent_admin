@@ -2,23 +2,23 @@ import { lazy } from "react";
 
 // vehicle categories page imports
 const ManageCategoriesPage = lazy(
-  () => import("../../pages/manage-categories/ManageCategoriesPage"),
+  () => import("../../pages/vehicle-categories/ManageCategoriesPage"),
 );
 const AddCategoryPage = lazy(
-  () => import("../../pages/manage-categories/AddCategoryPage"),
+  () => import("../../pages/vehicle-categories/AddCategoryPage"),
 );
 const EditCategoryPage = lazy(
-  () => import("../../pages/manage-categories/EditCategoryPage"),
+  () => import("../../pages/vehicle-categories/EditCategoryPage"),
 );
 
 // vehicle types page import
 const ManageTypesPage = lazy(
-  () => import("../../pages/manage-types/ManageTypesPage"),
+  () => import("../../pages/vehicle-types/ManageTypesPage"),
 );
 const EditTypePage = lazy(
-  () => import("../../pages/manage-types/EditTypePage"),
+  () => import("../../pages/vehicle-types/EditTypePage"),
 );
-const AddTypePage = lazy(() => import("../../pages/manage-types/AddTypePage"));
+const AddTypePage = lazy(() => import("../../pages/vehicle-types/AddTypePage"));
 
 export const categoryAndVehicleTypeRoutes = [
   {

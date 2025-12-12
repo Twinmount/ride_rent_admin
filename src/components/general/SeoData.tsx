@@ -12,16 +12,14 @@ import {
   HomeMetaListData,
   ListingMetaListData,
 } from "@/types/api-types/API-types";
-import { ListingMetaTabType } from "../ListingMetaTab";
 
 // Define props for the SeoData component
 interface SeoDataProps {
   item: HomeMetaListData | ListingMetaListData;
   link: string;
-  activeTab?: ListingMetaTabType;
 }
 
-export default function SeoData({ item, link, activeTab }: SeoDataProps) {
+export default function SeoData({ item, link }: SeoDataProps) {
   // Local state for expanding/collapsing
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -29,10 +27,6 @@ export default function SeoData({ item, link, activeTab }: SeoDataProps) {
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
-
-  const formattedLink = activeTab
-    ? `${link}/${item.metaDataId}?tab=${activeTab}`
-    : `/${link}/${item.metaDataId}`;
 
   return (
     <div
@@ -92,7 +86,7 @@ export default function SeoData({ item, link, activeTab }: SeoDataProps) {
 
         {/* Expand/Collapse Button */}
         <div className="flex h-20 w-7 flex-col items-center justify-between rounded-full p-0 max-md:ml-auto max-md:mt-2 max-md:h-7 max-md:w-fit max-md:flex-row md:ml-4 md:mt-0">
-          <Link to={`${formattedLink}`}>
+          <Link to={link}>
             <FilePenLine className="hover:text-yellow" />
           </Link>
 

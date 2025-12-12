@@ -8,23 +8,104 @@ import { Copy, ExternalLink } from "lucide-react";
 import * as Toast from "@radix-ui/react-toast";
 import { useState } from "react";
 import { useAdminContext } from "@/context/AdminContext";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  getOfferSummary,
+  getOfferTimeRemaining,
+  isOfferActive,
+} from "@/helpers/price-offer.helper";
 
-export const LiveListingColumns: (
-  onToggle: (vehicleId: string, isDisabled: boolean) => void,
-  isPending?: boolean,
-) => ColumnDef<LiveListingVehicleType>[] = (onToggle, isPending) => [
+type LiveListingColumnsFn = (
+  handleToggleVehicleStatus: (vehicleId: string, isDisabled: boolean) => void,
+  isVehicleStatusPending?: boolean,
+  handleToggleVehiclePriority?: (vehicleId: string) => void,
+  vehiclePriorityPending?: boolean,
+  onOpenOfferDialog?: (vehicle: LiveListingVehicleType) => void,
+) => ColumnDef<LiveListingVehicleType>[];
+
+export const LiveListingColumns: LiveListingColumnsFn = (
+  handleToggleVehicleStatus,
+  isVehicleStatusPending,
+  handleToggleVehiclePriority,
+  vehiclePriorityPending,
+  onOpenOfferDialog,
+) => [
   {
     accessorKey: "vehicleModel",
     header: "Model",
     cell: ({ row }) => {
       const { vehicleId, vehicleModel, company } = row.original;
+      const MAX_LENGTH = 50;
+      const displayText =
+        vehicleModel.length > MAX_LENGTH
+          ? `${vehicleModel.substring(0, MAX_LENGTH)}...`
+          : vehicleModel;
+
       return (
         <Link
           to={`/listings/edit/${vehicleId}/${company.companyId}/${company.userId}`}
           className="font-semibold text-blue-600 hover:underline"
+          title={vehicleModel.length > MAX_LENGTH ? vehicleModel : undefined}
         >
-          {vehicleModel}
+          {displayText}
         </Link>
+      );
+    },
+  },
+
+  {
+    accessorKey: "priceOffer",
+    header: "Price Offer (Beta)",
+    cell: ({ row }) => {
+      const vehicle = row.original;
+      const hasActiveOffer = isOfferActive(vehicle);
+      const timeRemaining = getOfferTimeRemaining(vehicle);
+      const summary = getOfferSummary(vehicle);
+
+      return (
+        <div className="flex items-center gap-2">
+          <Switch
+            checked={hasActiveOffer}
+            onCheckedChange={() => onOpenOfferDialog?.(vehicle)}
+            className="data-[state=checked]:bg-green-500"
+          />
+
+          {hasActiveOffer && timeRemaining && (
+            <TooltipProvider>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <span className="cursor-help rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                    {timeRemaining}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <div className="space-y-1 text-xs">
+                    <p>
+                      <strong>Start:</strong> {summary?.startTime}
+                    </p>
+                    <p>
+                      <strong>End:</strong> {summary?.endTime}
+                    </p>
+                    <p>
+                      <strong>Duration:</strong> {summary?.duration}
+                    </p>
+                    <p>
+                      <strong>Loop:</strong> {summary?.loopDuration}
+                    </p>
+                    <p>
+                      <strong>Progress:</strong> {summary?.currentCycle}
+                    </p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
       );
     },
   },
@@ -35,6 +116,23 @@ export const LiveListingColumns: (
       <span className="whitespace-nowrap">{row.original.vehicleCode}</span>
     ),
   },
+
+  {
+    accessorKey: "isHighPriority",
+    header: "High Priority",
+    cell: ({ row }) => {
+      const { vehicleId, isHighPriority } = row.original;
+      return (
+        <Switch
+          checked={!!isHighPriority}
+          onCheckedChange={() => handleToggleVehiclePriority?.(vehicleId)}
+          disabled={vehiclePriorityPending}
+          className={`${vehiclePriorityPending && "!cursor-wait"} ml-3 data-[state=checked]:bg-yellow`}
+        />
+      );
+    },
+  },
+
   {
     accessorKey: "company.companyName",
     header: "Company",
@@ -54,15 +152,17 @@ export const LiveListingColumns: (
   },
   {
     accessorKey: "isDisabled",
-    header: "Vehicle Status",
+    header: "Disabled Status",
     cell: ({ row }) => {
       const { vehicleId, isDisabled } = row.original;
       return (
         <Switch
-          checked={!isDisabled}
-          onCheckedChange={(checked) => onToggle(vehicleId, !checked)}
-          disabled={isPending}
-          className={`${isPending && "!cursor-wait"} ml-3`}
+          checked={isDisabled}
+          onCheckedChange={(checked) =>
+            handleToggleVehicleStatus(vehicleId, checked)
+          }
+          disabled={isVehicleStatusPending}
+          className={`${isVehicleStatusPending && "!cursor-wait"} ml-3 data-[state=checked]:bg-red-500`}
         />
       );
     },

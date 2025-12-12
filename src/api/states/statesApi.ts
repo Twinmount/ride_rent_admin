@@ -389,7 +389,7 @@ type UpdateStateFAQPayload = {
   faqs: StateFAQItem[];
 };
 
-export const upadteStateFaqFn = async (requestBody: UpdateStateFAQPayload) => {
+export const updateStateFaqFn = async (requestBody: UpdateStateFAQPayload) => {
   try {
     const data = await API.post({
       slug: Slug.PUT_STATE_FAQ,

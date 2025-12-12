@@ -1,6 +1,7 @@
 import { CompanyType } from "@/types/api-types/vehicleAPI-types";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { LiveListingVehicleType } from "@/types/api-types/vehicleAPI-types";
 
 export type SortOrder = "ASC" | "DESC";
 export type Limit = 10 | 15 | 20 | 30;
@@ -15,6 +16,9 @@ export function useListingPageState(
   const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
     null,
   );
+  const [isHighPriority, setIsHighPriority] = useState(false);
+  const [offerDialogVehicle, setOfferDialogVehicle] =
+    useState<LiveListingVehicleType | null>(null);
 
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search")?.trim() || "";
@@ -29,5 +33,9 @@ export function useListingPageState(
     searchTerm,
     selectedCompany,
     setSelectedCompany,
+    isHighPriority,
+    setIsHighPriority,
+    offerDialogVehicle,
+    setOfferDialogVehicle,
   };
 }

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import PageHeading from "../general/PageHeading";
 
-type ListingPageLayoutProps = {
+type TablePageLayoutProps = {
   heading: string | ReactNode;
   sortDropdown?: ReactNode;
   limitDropdown?: ReactNode;
@@ -12,7 +12,7 @@ type ListingPageLayoutProps = {
 };
 
 /**
- * ListingPageLayout
+ * TablePageLayout
  *
  * A layout wrapper for  listing pages.
  * Provides a consistent structure with a heading,
@@ -21,7 +21,7 @@ type ListingPageLayoutProps = {
  *
  * Designed for pages with data tables and filtering controls.
  */
-export default function ListingPageLayout({
+export default function TablePageLayout({
   heading,
   sortDropdown,
   limitDropdown,
@@ -29,7 +29,7 @@ export default function ListingPageLayout({
   actionButton,
   extraFilters,
   children,
-}: ListingPageLayoutProps) {
+}: TablePageLayoutProps) {
   return (
     <section className="container mx-auto min-h-screen py-5 md:py-7">
       {/* Heading & controls */}

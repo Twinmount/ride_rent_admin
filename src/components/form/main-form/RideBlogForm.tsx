@@ -34,9 +34,14 @@ import DeleteModal from "@/components/modal/DeleteModal";
 type RideBlogFormProps = {
   type: "Add" | "Update";
   formData?: BlogFormType | null;
+  setSearchParams?: (params: { blogId: string }) => void;
 };
 
-export default function RideBlogForm({ type, formData }: RideBlogFormProps) {
+export default function RideBlogForm({
+  type,
+  formData,
+  setSearchParams,
+}: RideBlogFormProps) {
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
@@ -88,7 +93,12 @@ export default function RideBlogForm({ type, formData }: RideBlogFormProps) {
         queryClient.invalidateQueries({
           queryKey: ["ride-blogs"],
         });
-        navigate("/ride-blogs/list");
+        if (type === "Add" && setSearchParams) {
+          const createdBlogId = data.result?.blogId;
+          setSearchParams({ blogId: createdBlogId });
+        } else {
+          navigate("/ride-blogs/list");
+        }
       }
     } catch (error) {
       console.error(error);

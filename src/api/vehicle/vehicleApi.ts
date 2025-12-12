@@ -13,7 +13,7 @@ import {
   GetSpecificationFormFieldsResponse,
   VehicleListingResponse,
 } from "@/types/api-types/vehicleAPI-types";
-import { PrimaryFormType } from "@/types/formTypes";
+import { FAQItemType, PrimaryFormType } from "@/types/formTypes";
 import { buildCommonPrimaryDetails } from ".";
 import { extractPhoneNumber } from "@/helpers/form";
 
@@ -309,15 +309,10 @@ export const updateSpecifications = async (
   }
 };
 
-type FAQItem = {
-  question: string;
-  answer: string;
-};
-
 type VehicleFAQ = {
   vehicleId: string;
   isCustomized?: boolean;
-  faqList: FAQItem[];
+  faqList: FAQItemType[];
   createdAt?: Date | null;
   updatedAt?: Date | null;
 };

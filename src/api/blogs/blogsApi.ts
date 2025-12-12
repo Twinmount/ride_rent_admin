@@ -1,12 +1,14 @@
 import {
   FetchBlogPromotionsResponse,
   FetchBlogsResponse,
+  FetchRideBlogFaqResponse,
   FetchSpecificBlogPromotionResponse,
   FetchSpecificBlogResponse,
 } from "@/types/api-types/blogApi-types";
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import { BlogPromotionFormType } from "@/types/types";
+import { RideBlogFaqData } from "@/components/form/RideBlogFaqForm";
 
 export interface BlogType {
   blogTitle: string;
@@ -29,7 +31,7 @@ export interface FetchAllBlogsRequest {
 // add state
 export const addBlog = async (values: BlogType) => {
   try {
-    const data = await API.post({
+    const data = await API.post<FetchSpecificBlogResponse>({
       slug: Slug.ADD_BLOG,
       body: values,
     });
@@ -50,7 +52,7 @@ export const updateBlog = async (values: BlogType, blogId: string) => {
     };
 
     // Send the FormData object using the API put method
-    const data = await API.put({
+    const data = await API.put<FetchSpecificBlogResponse>({
       slug: Slug.PUT_BLOG, // Use the correct slug
       body: requestBody,
     });
@@ -225,6 +227,49 @@ export const deleteBlogPromotion = async (promotionId: string) => {
     return data;
   } catch (error) {
     console.error("Error deleting States:", error);
+    throw error;
+  }
+};
+
+export const addRideBlogFaq = async (requestBody: RideBlogFaqData) => {
+  try {
+    const data = await API.post({
+      slug: Slug.ADD_RIDE_BLOG_FAQ,
+      body: requestBody,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error adding ride blog faq:", error);
+    throw error;
+  }
+};
+
+export const updateRideBlogFaq = async (requestBody: RideBlogFaqData) => {
+  try {
+    const data = await API.put({
+      slug: `${Slug.PUT_RIDE_BLOG_FAQ}/${requestBody.blogId}`,
+      body: requestBody,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error updating ride blog faq:", error);
+    throw error;
+  }
+};
+
+export const getRideBlogFaq = async (blogId: string) => {
+  try {
+    const apiUrl = `${Slug.GET_RIDE_BLOG_FAQ}/${blogId}`;
+
+    const data = await API.get<FetchRideBlogFaqResponse>({
+      slug: apiUrl,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error getting ride blog faq:", error);
     throw error;
   }
 };

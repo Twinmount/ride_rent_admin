@@ -153,12 +153,15 @@ export type SingleVehicleType = {
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
   isCashSupported: boolean;
+  isUPISupported: boolean;
   updatedAt: string;
   createdAt: string;
   vehicleStateValue?: string;
   vehicleCategoryValue?: string;
   vehicleTitle?: string;
   disablePriceMatching?: boolean;
+  agentDateTime?: string;
+  location?: Location;
 };
 
 export type GeneralListingVehicleType = {
@@ -171,7 +174,32 @@ export type GeneralListingVehicleType = {
     companyId: string;
     userId: string;
     companyName: string;
+    agentId: string;
   };
+};
+
+export type CompanyListingVehicleType = {
+  vehicleId: string;
+  vehicleModel: string;
+  vehicleCode: string;
+  approvalStatus: "APPROVED" | "PENDING" | "UNDER_REVIEW" | "REJECTED";
+  rejectionReason?: string;
+  company: {
+    companyId: string;
+    userId: string;
+    companyName: string;
+    agentId: string;
+  };
+  agentDateTime: string;
+  location: Location;
+  state: StateType;
+  parameterField?: string;
+};
+export type PriceOfferType = {
+  startTime: Date | string;
+  durationHours: number;
+  cycleDurationHours: number;
+  expiryTime: Date | string;
 };
 
 // Define a simplified type for table data
@@ -183,11 +211,13 @@ export type LiveListingVehicleType = {
   vehicleCategoryValue?: string;
   vehicleCode: string;
   isDisabled: boolean;
+  isHighPriority: boolean;
   company: {
     companyId: string;
     userId: string;
     companyName: string;
   };
+  priceOffer: PriceOfferType | null;
 };
 
 export interface FetchVehicleTableListingResponse {
@@ -353,6 +383,7 @@ export type GetPrimaryForm = {
   vehicleTitle: string;
   vehicleTitleH1: string;
   vehiclePhotos: string[];
+  thumbnail: string | null;
   vehicleVideos: string[];
   commercialLicenses: string[];
   additionalVehicleTypes?: string[];
@@ -363,6 +394,7 @@ export type GetPrimaryForm = {
   isCreditOrDebitCardsSupported: boolean;
   isTabbySupported: boolean;
   isCashSupported: boolean;
+  isUPISupported: boolean;
   vehicleMetaTitle: string;
   vehicleMetaDescription: string;
   tempCitys: CityType[];
