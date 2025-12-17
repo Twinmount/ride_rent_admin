@@ -186,9 +186,10 @@ export const LiveListingColumns: LiveListingColumnsFn = (
       const { country } = useAdminContext();
       const countryName = country.countryValue;
       const isIndia = countryName === "India";
-      const appUrl = apiBaseUrl.includes("prod")
-        ? "https://ride.rent"
-        : "https://dev.ride.rent";
+      const appUrl = apiBaseUrl.includes("dev")
+        ? "https://dev.ride.rent"
+        : "https://ride.rent";
+
       const url = `${appUrl}/${isIndia ? "in" : "ae"}/${vehicleStateValue}/${vehicleCategoryValue}/${modelDetails}-for-rent/${vehicleCode.toLowerCase()}`;
 
       // Inline Toast + Copy Component
