@@ -39,6 +39,7 @@ export default function VehiclesFormUpdatePage() {
   const { data: companyData, isLoading: isCompanyLoading } = useQuery({
     queryKey: ["company", companyId],
     queryFn: () => getCompanyById(companyId as string),
+    staleTime: 0,
     enabled: !!companyId,
   });
 
