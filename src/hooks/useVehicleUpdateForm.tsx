@@ -23,7 +23,8 @@ export const useVehicleUpdateForm = (
   const { data, isLoading } = useQuery({
     queryKey: ["primary-details-form", vehicleId],
     queryFn: () => getPrimaryDetailsFormData(vehicleId as string),
-    staleTime: 60000,
+    staleTime: 0,
+    gcTime: 0,
     enabled: !!vehicleId,
   });
 
@@ -35,12 +36,16 @@ export const useVehicleUpdateForm = (
   } = useQuery({
     queryKey: ["getLevelsFilled", vehicleId],
     queryFn: () => getLevelsFilled(vehicleId as string),
+    staleTime: 0,
+    gcTime: 0,
     enabled: !!vehicleId,
   });
 
   const { data: faqData, isFetching: isFaqFetching } = useQuery({
     queryKey: ["faq-template", vehicleId],
     queryFn: () => getFaqTemplate(vehicleId as string),
+    staleTime: 0,
+    gcTime: 0,
     enabled: !!vehicleId && activeTab === "faq",
   });
 
@@ -77,6 +82,7 @@ export const useVehicleUpdateForm = (
     queryClient.prefetchQuery({
       queryKey: ["getLevelsFilled", vehicleId],
       queryFn: () => getLevelsFilled(vehicleId as string),
+      staleTime: 0,
     });
   }, [vehicleId, queryClient]);
 

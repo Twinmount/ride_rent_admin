@@ -345,7 +345,20 @@ export default function PrimaryDetailsForm({
 
           if (onNextTab) onNextTab();
         } else if (type === "Update" && !isAddOrIncomplete) {
-          navigate("/listings/live");
+          // invalidating cached data in the listing page
+          queryClient.invalidateQueries({
+            queryKey: [
+              "listings",
+              "live-listings",
+              "primary-details-form",
+              "primary-details-form-default",
+              vehicleId,
+            ],
+          });
+          // navigate after 300ms
+          setTimeout(() => {
+            navigate("/listings/live");
+          }, 300);
         }
       }
     } catch (error) {
@@ -376,6 +389,7 @@ export default function PrimaryDetailsForm({
           "listings",
           "live-listings",
           "primary-details-form",
+          "primary-details-form-default",
           vehicleId,
         ],
       });
