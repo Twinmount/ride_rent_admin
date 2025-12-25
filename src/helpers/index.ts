@@ -1,3 +1,5 @@
+import { ENV } from "@/config/env.config";
+
 // generate blog url
 export function generateBlogHref(title: string): string {
   return title
@@ -25,3 +27,67 @@ export const truncateText = (text: string, limit: number) => {
   }
   return text;
 };
+
+/**
+ * Extract path from full URL
+ * @param url - Full URL (e.g., "https://ride.rent/ae/dubai/cars")
+ * @returns Object with path and validation status
+ */
+export function validateAndExtractPathForRevalidation(url: string): {
+  isValid: boolean;
+  path: string;
+  error?: string;
+} {
+  const baseDomain = ENV.BASE_DOMAIN;
+
+  // Trim whitespace
+  const trimmedUrl = url.trim();
+
+  // Check if empty
+  if (!trimmedUrl) {
+    return {
+      isValid: false,
+      path: "",
+      error: "URL cannot be empty",
+    };
+  }
+
+  try {
+    // Parse URL
+    const urlObj = new URL(trimmedUrl);
+
+    // Check if URL starts with base domain
+    if (!trimmedUrl.startsWith(baseDomain)) {
+      return {
+        isValid: false,
+        path: "",
+        error: `URL must start with ${baseDomain}`,
+      };
+    }
+
+    // Extract path (everything after domain)
+    const path = urlObj.pathname; // e.g., "/ae/dubai/cars"
+
+    // Validate path format (must start with /)
+    if (!path.startsWith("/")) {
+      return {
+        isValid: false,
+        path: "",
+        error: "Invalid path format",
+      };
+    }
+
+    // Success
+    return {
+      isValid: true,
+      path: path,
+    };
+  } catch (error) {
+    // Invalid URL format
+    return {
+      isValid: false,
+      path: "",
+      error: "Invalid URL format. Please paste a valid URL.",
+    };
+  }
+}

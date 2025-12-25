@@ -1,3 +1,4 @@
+import { ENV } from "@/config/env.config";
 import { AdminEnquiry } from "@/types/api-types/API-types";
 
 // Valid enquiry statuses
@@ -77,7 +78,7 @@ export const statusConfig = {
 
 // Get base domain from environment variables
 const getBaseDomain = (): string => {
-  return import.meta.env.VITE_BASE_DOMAIN || "https://ride.rent";
+  return ENV.BASE_DOMAIN || "https://ride.rent";
 };
 
 /**
