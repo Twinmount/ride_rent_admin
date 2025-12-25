@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { RefreshCw, Check, AlertCircle } from "lucide-react";
 import { CACHE_TAGS } from "@/constants/cache.constants";
 import {
@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { convertToLabel } from "@/helpers";
 
 interface TagRevalidationTabProps {
   tagInput: string;
@@ -53,16 +54,17 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
   };
 
   // Options for quick revalidation
-  const revalidateTagOptions = [
-    { label: "Homepage Banner", value: CACHE_TAGS.HOMEPAGE_BANNER },
-    {
-      label: "Homepage Featured Vehicles",
-      value: CACHE_TAGS.FEATURED_VEHICLES,
-    },
-    { label: "Homepage FAQ", value: CACHE_TAGS.HOMEPAGE_FAQ },
-    { label: "Vehicle Details FAQ", value: CACHE_TAGS.VEHICLE_DETAILS_FAQ },
-    { label: "Similar Vehicles", value: CACHE_TAGS.SIMILAR_VEHICLES },
-  ];
+  const revalidateTagOptions = useMemo(() => {
+    return Object.entries(CACHE_TAGS)
+      .filter(
+        ([key]) =>
+          typeof CACHE_TAGS[key as keyof typeof CACHE_TAGS] === "string",
+      ) // Exclude functions
+      .map(([key, value]) => ({
+        label: convertToLabel(key), // Format: HOMEPAGE_BANNER → Homepage Banner
+        value: value as string,
+      }));
+  }, []);
 
   // Vehicle prefix options
   const vehiclePrefixOptions = [
@@ -249,7 +251,7 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
           <button
             onClick={() => onRevalidate(tagInput)}
             disabled={!tagInput.trim() || isLoading}
-            className="flex items-center gap-2 rounded-lg bg-gray-100 px-6 py-2 font-semibold text-gray-700 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg bg-gray-700 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (
               <RefreshCw className="h-4 w-4 animate-spin" />

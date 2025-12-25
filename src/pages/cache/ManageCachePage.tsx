@@ -1,15 +1,16 @@
 import { FC, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { RefreshCw, Tag, Route, AlertCircle } from "lucide-react";
+import { RefreshCw, Tag, Route, Info } from "lucide-react";
 import { revalidatePath, revalidateTag } from "@/api/cache";
 import { toast } from "@/components/ui/use-toast";
 import { TagRevalidationTab } from "@/components/tabs/TagRevalidationTab";
 import { PathRevalidationTab } from "@/components/tabs/PathRevalidationTab";
+import { CacheInfoTab } from "@/components/tabs/CacheInfoTab";
 
-type TabType = "path" | "tag";
+type TabType = "info" | "path" | "tag";
 
 const ManageCachePage: FC = () => {
-  const [activeTab, setActiveTab] = useState<TabType>("path");
+  const [activeTab, setActiveTab] = useState<TabType>("info");
   const [pathInput, setPathInput] = useState("");
   const [tagInput, setTagInput] = useState("");
 
@@ -91,13 +92,27 @@ const ManageCachePage: FC = () => {
             Cache Management
           </h2>
           <p className="mt-2 text-gray-600">
-            Manage Next.js platform cache - revalidate by path or tag
+            Manage Next.js platform cache - view cached sections and revalidate
           </p>
         </div>
 
         {/* Tab Navigation */}
         <div className="mb-6 rounded-lg bg-white shadow">
           <div className="flex border-b">
+            {/* Info Tab */}
+            <button
+              onClick={() => setActiveTab("info")}
+              className={`flex flex-1 items-center justify-center gap-2 px-6 py-4 font-semibold transition-colors ${
+                activeTab === "info"
+                  ? "border-b-2 border-yellow text-yellow"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <Info className="h-5 w-5" />
+              Cache Info
+            </button>
+
+            {/* Path Tab */}
             <button
               onClick={() => setActiveTab("path")}
               className={`flex flex-1 items-center justify-center gap-2 px-6 py-4 font-semibold transition-colors ${
@@ -107,8 +122,10 @@ const ManageCachePage: FC = () => {
               }`}
             >
               <Route className="h-5 w-5" />
-              Path-based Revalidation
+              Path Revalidation
             </button>
+
+            {/* Tag Tab */}
             <button
               onClick={() => setActiveTab("tag")}
               className={`flex flex-1 items-center justify-center gap-2 px-6 py-4 font-semibold transition-colors ${
@@ -118,13 +135,15 @@ const ManageCachePage: FC = () => {
               }`}
             >
               <Tag className="h-5 w-5" />
-              Tag-based Revalidation
+              Tag Revalidation
             </button>
           </div>
 
           {/* Tab Content */}
           <div className="p-6">
-            {activeTab === "path" ? (
+            {activeTab === "info" ? (
+              <CacheInfoTab />
+            ) : activeTab === "path" ? (
               <PathRevalidationTab
                 pathInput={pathInput}
                 setPathInput={setPathInput}
@@ -139,24 +158,6 @@ const ManageCachePage: FC = () => {
                 isLoading={isLoading}
               />
             )}
-          </div>
-        </div>
-
-        {/* Info Box */}
-        <div className="flex gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4">
-          <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
-          <div className="text-sm text-blue-800">
-            <p className="mb-1 font-semibold">How it works:</p>
-            <ul className="list-inside list-disc space-y-1">
-              <li>
-                <strong>Path revalidation:</strong> Clears cache for a specific
-                page URL
-              </li>
-              <li>
-                <strong>Tag revalidation:</strong> Clears cache for all nextjs
-                api's using that tag (recommended for bulk updates)
-              </li>
-            </ul>
           </div>
         </div>
       </div>

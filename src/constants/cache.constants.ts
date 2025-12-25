@@ -5,11 +5,14 @@
 export const CACHE_TAGS = {
   // home page
   HOMEPAGE_BANNER: "homepage-banner",
-  FEATURED_VEHICLES: "featured-vehicles",
+  HOMEPAGE_FEATURED_VEHICLES: "featured-vehicles",
+  HOMEPAGE_NEWLY_ARRIVED_VEHICLES: "newly-arrived-vehicles",
+  HOMEPAGE_TOP_BRANDS: "homepage-top-brands",
   HOMEPAGE_FAQ: "homepage-faq",
+  HOMEPAGE_PROMOTIONS: "homepage-promotions",
 
   // vehicle details page
   VEHICLE_DETAILS_FAQ: "vehicle-faq",
-  SIMILAR_VEHICLES: "similar-vehicles",
+  VEHICLE_DETAILS_SIMILAR_VEHICLES: "similar-vehicles",
   byVehicleCode: (vehicleCode: string) => vehicleCode,
 } as const;

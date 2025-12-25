@@ -91,3 +91,11 @@ export function validateAndExtractPathForRevalidation(url: string): {
     };
   }
 }
+
+// Convert key to label, eg: "year_of_manufacture" to "Year Of Manufacture"
+export function convertToLabel(key: string): string {
+  return key
+    .split("_") // Split by underscore
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize first letter
+    .join(" "); // Join with space
+}
