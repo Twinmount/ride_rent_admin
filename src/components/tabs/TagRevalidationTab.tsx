@@ -139,7 +139,7 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
       </div>
 
       {/* Divider */}
-      <div className="relative">
+      {/* <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-gray-300"></div>
         </div>
@@ -148,10 +148,9 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
             Vehicle Details Page
           </span>
         </div>
-      </div>
+      </div> */}
 
-      {/* Specific Vehicle Revalidation */}
-      <div className="pb-12">
+      {/* <div className="pb-12">
         <label className="mb-2 block text-sm font-semibold text-gray-800">
           Revalidate Specific Vehicle{" "}
           <span className="italic text-slate-600">
@@ -159,7 +158,6 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
           </span>
         </label>
         <div className="flex gap-2">
-          {/* Prefix Dropdown */}
           <Select
             value={vehiclePrefix}
             onValueChange={setVehiclePrefix}
@@ -177,12 +175,10 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
             </SelectContent>
           </Select>
 
-          {/* Separator */}
           <div className="flex items-center text-lg font-semibold text-gray-400">
             -
           </div>
 
-          {/* Number Input */}
           <input
             type="text"
             value={vehicleNumber}
@@ -192,7 +188,6 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
             disabled={isLoading}
           />
 
-          {/* Revalidate Button */}
           <button
             onClick={handleVehicleRevalidate}
             disabled={!vehicleNumber.trim() || isLoading}
@@ -207,7 +202,6 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
           </button>
         </div>
 
-        {/* Preview */}
         {vehicleNumber && (
           <p className="mt-2 text-xs text-gray-600">
             Will revalidate:{" "}
@@ -220,9 +214,9 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
         <p className="mt-2 text-xs text-gray-500">
           Select vehicle type (UAE or India) and enter the number part only
         </p>
-      </div>
+      </div> */}
 
-      {/* Divider */}
+      {/* Custom Tag */}
       <div className="relative mt-20">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-gray-300"></div>
@@ -234,7 +228,6 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
         </div>
       </div>
 
-      {/* Custom Tag Input */}
       <div>
         <label className="mb-2 block text-sm font-semibold text-gray-700">
           Enter Custom Tag
