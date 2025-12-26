@@ -226,4 +226,7 @@ export enum Slug {
 
   GET_SRM_VEHICLES = "/srm/vehicles",
   PUT_SRM_VEHICLE = "/srm/vehicle",
+
+  // nextjs cache revalidate route
+  NEXTJS_REVALIDATE_CACHE = "/api/revalidate-cache",
 }
