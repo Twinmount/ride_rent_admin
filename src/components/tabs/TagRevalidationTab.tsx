@@ -24,8 +24,8 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
   isLoading,
 }) => {
   const [selectedTag, setSelectedTag] = useState<string>("");
-  const [vehiclePrefix, setVehiclePrefix] = useState<string>("RDVH");
-  const [vehicleNumber, setVehicleNumber] = useState<string>("");
+  // const [vehiclePrefix, setVehiclePrefix] = useState<string>("RDVH");
+  // const [vehicleNumber, setVehicleNumber] = useState<string>("");
 
   const handleQuickRevalidate = () => {
     if (selectedTag) {
@@ -34,24 +34,24 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
   };
 
   // Handle vehicle number input (only allow numbers and hyphens)
-  const handleVehicleNumberChange = (value: string) => {
-    // Allow only numbers and hyphens
-    const sanitized = value.replace(/[^0-9-]/g, "");
-    setVehicleNumber(sanitized);
-  };
+  // const handleVehicleNumberChange = (value: string) => {
+  //   // Allow only numbers and hyphens
+  //   const sanitized = value.replace(/[^0-9-]/g, "");
+  //   setVehicleNumber(sanitized);
+  // };
 
   // Handle vehicle code revalidation
-  const handleVehicleRevalidate = () => {
-    if (!vehicleNumber.trim()) return;
+  // const handleVehicleRevalidate = () => {
+  //   if (!vehicleNumber.trim()) return;
 
-    // Construct full vehicle code: RDVH-123 or ADVH-456
-    const formattedVehicleCode = `${vehiclePrefix}-${vehicleNumber}`;
+  //   // Construct full vehicle code: RDVH-123 or ADVH-456
+  //   const formattedVehicleCode = `${vehiclePrefix}-${vehicleNumber}`;
 
-    onRevalidate(CACHE_TAGS.byVehicleCode(formattedVehicleCode));
+  //   onRevalidate(CACHE_TAGS.byVehicleCode(formattedVehicleCode));
 
-    // Clear input after revalidation
-    setVehicleNumber("");
-  };
+  //   // Clear input after revalidation
+  //   setVehicleNumber("");
+  // };
 
   // Options for quick revalidation
   const revalidateTagOptions = useMemo(() => {
@@ -67,10 +67,10 @@ export const TagRevalidationTab: FC<TagRevalidationTabProps> = ({
   }, []);
 
   // Vehicle prefix options
-  const vehiclePrefixOptions = [
-    { label: "RDVH (UAE)", value: "RDVH" },
-    { label: "ADVH (India)", value: "ADVH" },
-  ];
+  // const vehiclePrefixOptions = [
+  //   { label: "RDVH (UAE)", value: "RDVH" },
+  //   { label: "ADVH (India)", value: "ADVH" },
+  // ];
 
   return (
     <div className="space-y-6">
