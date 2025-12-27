@@ -14,6 +14,7 @@ import { Textarea } from "../ui/textarea";
 import { sanitizeStringToSlug } from "@/lib/utils";
 // import { FormContainer } from "./form-ui/FormContainer";
 import VehicleCategoryDropdown from "./dropdowns/VehicleCategoryDropdown";
+import RichTextContentEditor from "./RichTextContentEditor";
 import { VehicleSeriesFormDefaultValues } from "@/constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -316,6 +317,20 @@ export default function VehicleSeriesForm({
             );
           }}
         />
+
+        {/* Series Body Content - Rich Text Editor */}
+        <FormField
+          control={form.control}
+          name="seriesBodyContent"
+          render={({ field }) => (
+            <RichTextContentEditor
+              content={field.value || ""}
+              onUpdate={(updatedContent) => field.onChange(updatedContent)}
+            />
+          )}
+        />
+
+        <hr className="my-3 border" />
 
         {/* Vehicle Series Meta Title */}
         <FormField

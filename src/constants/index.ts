@@ -316,6 +316,7 @@ export const VehicleSeriesFormDefaultValues: VehicleSeriesType = {
   vehicleSeriesInfoDescription: "",
   vehicleSeriesMetaTitle: "",
   vehicleSeriesMetaDescription: "",
+  seriesBodyContent: "",
 };
 
 // Job form default values
