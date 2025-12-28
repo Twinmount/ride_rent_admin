@@ -195,6 +195,10 @@ export enum Slug {
   GET_RIDE_BLOG_FAQ = "/blog-faqs",
   PUT_RIDE_BLOG_FAQ = "/blog-faqs",
 
+  // Content FAQ Endpoints (Series FAQs)
+  CONTENT_FAQ = "/content-faq",
+  GET_CONTENT_FAQ_BY_SERIES = "/content-faq/series",
+
   // Advisor Blog Promotions Endpoints
   ADD_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
   GET_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
