@@ -22,20 +22,36 @@ export const revalidateCache = async (
   payload: RevalidatePayload,
 ): Promise<RevalidateResponse> => {
   try {
-    const BASE_DOMAIN = ENV.BASE_DOMAIN;
+    const FQDN_DOMAIN_UAE = ENV.FQDN_DOMAIN_UAE;
+    const FQDN_DOMAIN_INDIA = ENV.FQDN_DOMAIN_INDIA;
 
-    const url = `${BASE_DOMAIN}${Slug.NEXTJS_REVALIDATE_CACHE}`;
+    const urlUAE = `${FQDN_DOMAIN_UAE}${Slug.NEXTJS_REVALIDATE_CACHE}`;
+    const urlIndia = `${FQDN_DOMAIN_INDIA}${Slug.NEXTJS_REVALIDATE_CACHE}`;
 
-    const response = await API.post<RevalidateResponse>({
-      slug: `${url}`,
-      body: payload,
-    });
+    const [uaeResult, indiaResult] = await Promise.all([
+      API.post<RevalidateResponse>({
+        slug: `${urlUAE}`,
+        body: payload,
+      }),
+      API.post<RevalidateResponse>({
+        slug: `${urlIndia}`,
+        body: payload,
+      }),
+    ]);
 
-    if (!response) {
-      throw new Error("Failed to revalidate cache");
+    console.log("✅ UAE cache revalidated:", uaeResult);
+    console.log("✅ India cache revalidated:", indiaResult);
+
+    // Return UAE result (both should be identical)
+    if (!uaeResult) {
+      throw new Error("Failed to revalidate cache in UAE FQDN");
     }
 
-    return response;
+    if (!indiaResult) {
+      throw new Error("Failed to revalidate cache in India FQDN");
+    }
+
+    return uaeResult;
   } catch (error) {
     console.error("Error revalidating cache:", error);
     throw error;
