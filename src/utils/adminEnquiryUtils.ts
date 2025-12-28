@@ -78,7 +78,7 @@ export const statusConfig = {
 
 // Get base domain from environment variables
 const getBaseDomain = (): string => {
-  return ENV.BASE_DOMAIN || "https://ride.rent";
+  return ENV.PUBLIC_SITE_DOMAIN || "https://ride.rent";
 };
 
 /**
