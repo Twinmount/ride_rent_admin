@@ -22,9 +22,9 @@ export const revalidateCache = async (
   payload: RevalidatePayload,
 ): Promise<RevalidateResponse> => {
   try {
-    const BASE_DOMAIN = ENV.BASE_DOMAIN;
+    const PUBLIC_SITE_DOMAIN = ENV.PUBLIC_SITE_DOMAIN;
 
-    const url = `${BASE_DOMAIN}${Slug.NEXTJS_REVALIDATE_CACHE}`;
+    const url = `${PUBLIC_SITE_DOMAIN}${Slug.NEXTJS_REVALIDATE_CACHE}`;
 
     const response = await API.post<RevalidateResponse>({
       slug: `${url}`,

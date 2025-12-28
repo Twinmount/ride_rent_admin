@@ -62,7 +62,7 @@ export const PathRevalidationTab: React.FC<PathRevalidationTabProps> = ({
           <p className="mb-1 font-semibold">How to use:</p>
           <ol className="list-inside list-decimal space-y-1">
             <li>
-              Visit any page on <strong>{ENV.BASE_DOMAIN}</strong>
+              Visit any page on <strong>{ENV.PUBLIC_SITE_DOMAIN}</strong>
             </li>
             <li>Copy the full URL from your browser</li>
             <li>Paste it here to revalidate that page's cache</li>
@@ -82,7 +82,7 @@ export const PathRevalidationTab: React.FC<PathRevalidationTabProps> = ({
                 type="text"
                 value={pathInput}
                 onChange={(e) => handleInputChange(e.target.value)}
-                placeholder={`${ENV.BASE_DOMAIN}/ae/dubai/cars`}
+                placeholder={`${ENV.PUBLIC_SITE_DOMAIN}/ae/dubai/cars`}
                 className={`w-full rounded-lg border px-4 py-2 pr-10 focus:outline-none focus:ring-2 ${
                   validationError
                     ? "border-red-300 focus:ring-red-500"
@@ -142,11 +142,11 @@ export const PathRevalidationTab: React.FC<PathRevalidationTabProps> = ({
         <p className="mt-2 text-xs text-gray-500">
           Example:{" "}
           <code className="rounded bg-gray-100 px-1 py-0.5">
-            {ENV.BASE_DOMAIN}/ae/dubai/cars
+            {ENV.PUBLIC_SITE_DOMAIN}/ae/dubai/cars
           </code>
           <span className="mx-2">OR</span>
           <code className="rounded bg-gray-100 px-1 py-0.5">
-            {ENV.BASE_DOMAIN}/in/banglore/cars
+            {ENV.PUBLIC_SITE_DOMAIN}/in/banglore/cars
           </code>
         </p>
       </div>

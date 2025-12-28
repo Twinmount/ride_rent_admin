@@ -38,7 +38,7 @@ export function validateAndExtractPathForRevalidation(url: string): {
   path: string;
   error?: string;
 } {
-  const baseDomain = ENV.BASE_DOMAIN;
+  const PUBLIC_SITE_DOMAIN = ENV.PUBLIC_SITE_DOMAIN;
 
   // Trim whitespace
   const trimmedUrl = url.trim();
@@ -57,11 +57,11 @@ export function validateAndExtractPathForRevalidation(url: string): {
     const urlObj = new URL(trimmedUrl);
 
     // Check if URL starts with base domain
-    if (!trimmedUrl.startsWith(baseDomain)) {
+    if (!trimmedUrl.startsWith(PUBLIC_SITE_DOMAIN)) {
       return {
         isValid: false,
         path: "",
-        error: `URL must start with ${baseDomain}`,
+        error: `URL must start with ${PUBLIC_SITE_DOMAIN}`,
       };
     }
 
