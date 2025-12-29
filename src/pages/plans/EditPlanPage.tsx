@@ -29,7 +29,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import { PlanType } from "@/types/planTypes";
 
-// Schema for tier details - all fields optional to allow flexible validation
+// Schema for tier details - used for conditional validation
 const tierDetailsSchema = z.object({
     subscriptionPrice: z.coerce.number().min(0, "Must be 0 or greater"),
     individualBoostPrice: z.coerce.number().optional(),
@@ -50,9 +50,47 @@ const planFormSchema = z.object({
     enableT1: z.boolean().default(false),
     enableT2: z.boolean().default(false),
     enableT3: z.boolean().default(false),
-    T1: tierDetailsSchema.optional(),
-    T2: tierDetailsSchema.optional(),
-    T3: tierDetailsSchema.optional(),
+    // Use z.any() to skip automatic validation - we validate conditionally in superRefine
+    T1: z.any().optional(),
+    T2: z.any().optional(),
+    T3: z.any().optional(),
+}).superRefine((data, ctx) => {
+    // Only validate T1 if enableT1 is true
+    if (data.enableT1) {
+        const result = tierDetailsSchema.safeParse(data.T1);
+        if (!result.success) {
+            result.error.issues.forEach(issue => {
+                ctx.addIssue({
+                    ...issue,
+                    path: ['T1', ...issue.path],
+                });
+            });
+        }
+    }
+    // Only validate T2 if enableT2 is true
+    if (data.enableT2) {
+        const result = tierDetailsSchema.safeParse(data.T2);
+        if (!result.success) {
+            result.error.issues.forEach(issue => {
+                ctx.addIssue({
+                    ...issue,
+                    path: ['T2', ...issue.path],
+                });
+            });
+        }
+    }
+    // Only validate T3 if enableT3 is true
+    if (data.enableT3) {
+        const result = tierDetailsSchema.safeParse(data.T3);
+        if (!result.success) {
+            result.error.issues.forEach(issue => {
+                ctx.addIssue({
+                    ...issue,
+                    path: ['T3', ...issue.path],
+                });
+            });
+        }
+    }
 });
 
 type PlanFormValues = z.infer<typeof planFormSchema>;
