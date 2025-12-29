@@ -346,6 +346,7 @@ export const CompanyFormSchema = (isIndia: boolean) =>
         ? z.boolean().optional().default(false)
         : z.boolean().optional().default(false),
       regNumber: z.string().optional(),
+      companyTier: z.enum(["T1", "T2", "T3"]),
       companyAddress: z
         .string()
         .min(5, "Company address is required")

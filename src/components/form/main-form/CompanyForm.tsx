@@ -4,7 +4,13 @@ import * as z from "zod";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { Form, FormField } from "@/components/ui/form";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { CompanyFormDefaultValues } from "@/constants";
 import { CompanyFormSchema } from "@/lib/validator";
@@ -314,6 +320,32 @@ export default function CompanyForm({ type, formData, updateId, isSupplierPage =
             )}
           />
         )}
+
+        {/* company tier */}
+        <FormField
+          control={form.control}
+          name="companyTier"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Company Tier"
+              description="Select the tier level for this company"
+            >
+              <Select
+                onValueChange={field.onChange}
+                value={field.value}
+              >
+                <SelectTrigger className="input-field">
+                  <SelectValue placeholder="Select Tier" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="T1">T1</SelectItem>
+                  <SelectItem value="T2">T2</SelectItem>
+                  <SelectItem value="T3">T3</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormItemWrapper>
+          )}
+        />
 
         {/* company languages */}
         <FormField

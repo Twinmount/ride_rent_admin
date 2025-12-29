@@ -195,6 +195,7 @@ export type CompanyFormType = {
   agentId?: string;
   approvalStatus?: string;
   rejectionReason?: string;
+  companyTier?: string;
   phoneNumber?: string;
   email?: string;
   companyAddress: string;
