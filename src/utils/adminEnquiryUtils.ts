@@ -127,17 +127,21 @@ export const adminEnquiryUtils = {
   },
 
   /**
-   * Format date for display
+   * Format date for display with time
+   * Format: "Dec 7, 2025, 02:10 PM"
    */
   formatDate: (
     dateString: string,
     options?: Intl.DateTimeFormatOptions,
   ): string => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
       ...options,
     });
   },
