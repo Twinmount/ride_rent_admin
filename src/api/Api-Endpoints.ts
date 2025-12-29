@@ -226,4 +226,11 @@ export enum Slug {
 
   GET_SRM_VEHICLES = "/srm/vehicles",
   PUT_SRM_VEHICLE = "/srm/vehicle",
+
+  // Plan Endpoints
+  GET_ALL_PLANS = "/plans",
+  GET_PLAN = "/plans",
+  POST_PLAN = "/plans",
+  PUT_PLAN = "/plans",
+  DELETE_PLAN = "/plans",
 }

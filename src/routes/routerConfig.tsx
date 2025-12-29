@@ -26,6 +26,7 @@ import { linkAndPromotionRoutes } from "./route-groups/linkAndPromotionRoutes";
 import { brandsAndSeriesRoutes } from "./route-groups/brandsAndSeriesRoutes";
 import { supplierRoutes } from "./route-groups/supplierCentralRoutes";
 import { updatesRoutes } from "./route-groups/updatesRoutes";
+import { plansRoutes } from "./route-groups/plansRoutes";
 
 // lazy imports
 const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"));
@@ -107,6 +108,9 @@ export const router = createBrowserRouter([
               ...supplierRoutes,
 
               ...updatesRoutes,
+
+              // Plans Routes
+              ...plansRoutes,
             ],
           },
         ],

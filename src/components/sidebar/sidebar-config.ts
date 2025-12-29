@@ -240,6 +240,13 @@ export const sidebarContent: SidebarItem[] = [
       { label: "Applications", link: "/careers/applications" },
     ],
   },
+  // Plans
+  {
+    type: "link",
+    label: "Plans",
+    icon: Box,
+    link: "/plans",
+  },
   {
     type: "link",
     label: "Downloads",
