@@ -1,7 +1,6 @@
 import { Slug } from "../Api-Endpoints";
 import { API } from "../ApiService";
 import {
-  ContentFaq,
   ContentFaqResponse,
   CreateContentFaqRequest,
   FetchSeriesFaqsResponse,
