@@ -37,7 +37,7 @@ export default function AddVehicleSeriesPage() {
             value="primary"
             className="h-9 max-sm:px-2 max-sm:text-sm"
           >
-            Primary Details
+            Series Details
           </TabsTrigger>
           <TabsTrigger value="faq" className="h-9 max-sm:px-2 max-sm:text-sm">
             FAQ
