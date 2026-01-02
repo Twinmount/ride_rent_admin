@@ -815,3 +815,36 @@ export interface AdminEnquiriesResponse {
   };
   statusCode: number;
 }
+
+// User Types
+export interface OAuthProvider {
+  provider: string;
+  providerAccountId: string;
+  createdAt: string;
+}
+
+export interface User {
+  userId: string;
+  name: string;
+  email: string;
+  phoneNumber: string | null;
+  countryCode: string | null;
+  avatar: string | null;
+  isPhoneVerified: boolean;
+  isEmailVerified: boolean;
+  isPasswordSet: boolean;
+  isOAuthUser: boolean;
+  oauthProviders: OAuthProvider[];
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
+export interface UsersResponse {
+  success: boolean;
+  message: string;
+  data: {
+    totalUsers: number;
+    users: User[];
+  };
+}

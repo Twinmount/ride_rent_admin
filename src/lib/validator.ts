@@ -594,6 +594,7 @@ export const VehicleSeriesSchema = z.object({
     .string()
     .min(1, "Series Meta description is required")
     .max(5000, "Series Meta description cannot exceed 5000 characters"),
+  seriesBodyContent: z.string().optional(),
 });
 
 // Job form schema

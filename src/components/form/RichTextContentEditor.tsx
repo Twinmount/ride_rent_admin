@@ -7,19 +7,19 @@ import {
 } from "@/components/ui/form";
 import JoditRichTextEditor from "./text-editor/JoditTextEditor";
 
-interface BlogContentEditorProps {
+interface RichTextContentEditorProps {
   content?: string;
   onUpdate: (content: string) => void;
 }
 
-export default function BlogContentEditor({
+export default function RichTextContentEditor({
   content = "", // initial content is empty if not provided
   onUpdate,
-}: BlogContentEditorProps) {
+}: RichTextContentEditorProps) {
   return (
     <FormItem className="mb-2 flex w-full flex-col max-sm:flex-col">
       <FormLabel className="ml-2 mt-4 w-full text-left text-lg !font-bold lg:text-xl">
-        Body Of The Blog
+        Rich Text Content
       </FormLabel>
       <FormDescription className="ml-2 w-full">
         Make sure appropriate page structure is maintained here as it will be

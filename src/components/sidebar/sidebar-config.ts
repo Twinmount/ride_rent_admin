@@ -16,6 +16,7 @@ import {
   MessageSquare,
   AlertCircle,
   RefreshCcw,
+  Users,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -62,6 +63,13 @@ export const sidebarContent: SidebarItem[] = [
     label: "Enquiries",
     icon: MessageSquare,
     link: "/enquiries",
+  },
+  // Users route
+  {
+    type: "link",
+    label: "Users",
+    icon: Users,
+    link: "/users",
   },
   // Supplier Central
   {

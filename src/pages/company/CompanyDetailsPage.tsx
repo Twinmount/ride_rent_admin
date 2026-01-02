@@ -11,6 +11,8 @@ export default function CompanyDetailsPage() {
     queryKey: ["company-details-page", companyId],
     queryFn: () => getCompany(companyId as string),
     enabled: !!companyId,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   if (isError) {

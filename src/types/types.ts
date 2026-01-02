@@ -289,6 +289,7 @@ export type VehicleSeriesType = {
   vehicleSeriesInfoDescription: string;
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
+  seriesBodyContent?: string;
 };
 
 // Job
