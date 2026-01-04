@@ -13,6 +13,7 @@ export type CompanyType = {
   phoneNumber: string;
   email: string;
   companyAddress: string;
+  displayAddress: string;
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;
@@ -399,6 +400,7 @@ export type GetPrimaryForm = {
   vehicleMetaDescription: string;
   tempCitys: CityType[];
   location: Location;
+  displayAddress: string;
   isVehicleModified: boolean;
   disablePriceMatching?: boolean;
 };

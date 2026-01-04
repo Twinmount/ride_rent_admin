@@ -198,6 +198,7 @@ export type CompanyFormType = {
   phoneNumber?: string;
   email?: string;
   companyAddress: string;
+  displayAddress: string;
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;

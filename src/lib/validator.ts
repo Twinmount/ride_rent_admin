@@ -278,6 +278,10 @@ export const PrimaryFormSchema = z
       .refine((val) => val.lat && val.lng, {
         message: "Location is required",
       }),
+    displayAddress: z
+      .string()
+      .min(5, "Display address is required")
+      .max(150, "Display address can be up to 150 characters"),
     vehicleMetaTitle: z
       .string()
       .min(1, "Vehicle Meta title is required")
@@ -350,6 +354,10 @@ export const CompanyFormSchema = (isIndia: boolean) =>
         .string()
         .min(5, "Company address is required")
         .max(150, "Address can be up to 150 characters"),
+      displayAddress: z
+        .string()
+        .min(5, "Display address is required")
+        .max(150, "Display address can be up to 150 characters"),
       companyLanguages: z
         .array(z.string())
         .min(1, "At least one language must be selected"),
