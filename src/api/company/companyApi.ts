@@ -39,6 +39,7 @@ export const addCompany = async (values: CompanyFormType, userId: string) => {
         companyLogo: values.companyLogo, // Assuming this is a URL or string
         commercialLicense: values.commercialLicense, // Assuming this is a URL or string
         companyAddress: values.companyAddress,
+        displayAddress: values.displayAddress,
         companyLanguages: values.companyLanguages,
         companyMetaTitle: values.companyMetaTitle,
         companyMetaDescription: values.companyMetaDescription,
@@ -70,6 +71,7 @@ export const updateCompany = async (
         noRegNumber: values.noRegNumber,
         commercialLicense: values.commercialLicense, // Assuming this is a URL or string
         companyAddress: values.companyAddress,
+        displayAddress: values.displayAddress,
         companyLanguages: values.companyLanguages,
         companyMetaTitle: values.companyMetaTitle,
         companyMetaDescription: values.companyMetaDescription,

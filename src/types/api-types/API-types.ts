@@ -307,6 +307,7 @@ export interface companyType {
   phoneNumber: string;
   email: string;
   companyAddress: string;
+  displayAddress: string;
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;
@@ -679,6 +680,7 @@ export interface CompanyPortfolioMetaData {
   phoneNumber: string;
   email: string;
   companyAddress: string;
+  displayAddress: string;
   companyLanguages: string[];
   regNumber: string;
   agentId: string;
