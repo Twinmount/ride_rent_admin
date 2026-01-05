@@ -61,7 +61,10 @@ export function UserTableRow({ user }: UserTableRowProps) {
         <div className="flex items-center gap-2">
           {user.avatar ? (
             <Avatar className="h-8 w-8">
-              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarImage
+                src={user.avatar ?? undefined}
+                alt={user.name ?? undefined}
+              />
             </Avatar>
           ) : (
             <span className="text-sm font-medium text-muted-foreground">
