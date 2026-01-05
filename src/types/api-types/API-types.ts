@@ -827,8 +827,8 @@ export interface OAuthProvider {
 
 export interface User {
   userId: string;
-  name: string;
-  email: string;
+  name: string | null;
+  email: string | null;
   phoneNumber: string | null;
   countryCode: string | null;
   avatar: string | null;

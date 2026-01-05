@@ -10,7 +10,8 @@ interface UserTableRowProps {
 
 export function UserTableRow({ user }: UserTableRowProps) {
   // Generate avatar initials from user name
-  const getAvatarInitials = (name: string) => {
+  const getAvatarInitials = (name: string | null) => {
+    if (!name) return "U";
     return name
       .split(" ")
       .map((word) => word.charAt(0))
@@ -67,13 +68,13 @@ export function UserTableRow({ user }: UserTableRowProps) {
               {getAvatarInitials(user.name)}
             </span>
           )}
-          <span className="font-medium">{user.name}</span>
+          <span className="font-medium">{user.name || "N/A"}</span>
         </div>
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-1 text-sm">
           <Mail className="h-3 w-3 text-muted-foreground" />
-          <span>{user.email}</span>
+          <span>{user.email || "N/A"}</span>
         </div>
       </TableCell>
       <TableCell>
