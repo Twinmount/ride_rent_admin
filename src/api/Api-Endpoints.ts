@@ -160,7 +160,7 @@ export enum Slug {
   // admin enquiries endpoints
 
   // User Endpoints
-  GET_ALL_USERS = "/users",
+  GET_ALL_USERS = "/auth/v1/riderent/auth/users",
 
   // supplier-central
   GET_SUPPLIER_CENTRAL_HOME_SUMMARY = "/supplier-central/home-summary",
