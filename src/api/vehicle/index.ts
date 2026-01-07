@@ -46,6 +46,7 @@ export const buildCommonPrimaryDetails = (
     vehicleMetaTitle: values.vehicleMetaTitle,
     vehicleMetaDescription: values.vehicleMetaDescription,
     location: values.location,
+    displayAddress: values.displayAddress,
     // Include additionalVehicleTypes only if isCarsCategory is true
     ...(isCarsCategory && {
       additionalVehicleTypes: values.additionalVehicleTypes || [],

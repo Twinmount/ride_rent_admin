@@ -1,6 +1,7 @@
+import axios from "axios";
 import { Slug } from "../Api-Endpoints";
-import { API } from "../ApiService";
 import { UsersResponse } from "@/types/api-types/API-types";
+import { StorageKeys, load } from "@/utils/storage";
 
 export interface UserParams {
   page?: number;
@@ -33,19 +34,29 @@ export const fetchUsers = async (
       queryParams.append("search", params.search);
     }
 
-    // Construct the full URL with base URL
+    // Construct the endpoint path
     const endpoint = Slug.GET_ALL_USERS;
     const url = queryParams.toString()
-      ? `${baseURL}${endpoint}?${queryParams.toString()}`
-      : `${baseURL}${endpoint}`;
+      ? `${endpoint}?${queryParams.toString()}`
+      : endpoint;
 
-    const data = await API.get<UsersResponse>({ slug: url });
+    // Get access token for authorization
+    const accessToken = load<string>(StorageKeys.ACCESS_TOKEN);
 
-    if (!data) {
+    // Make request directly with axios to avoid baseURL conflicts
+    const response = await axios.get<UsersResponse>(url, {
+      baseURL: baseURL,
+      headers: {
+        Accept: "application/json",
+        ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      },
+    });
+
+    if (!response.data) {
       throw new Error("Failed to fetch users");
     }
 
-    return data;
+    return response.data;
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error;

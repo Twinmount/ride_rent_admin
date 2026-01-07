@@ -307,6 +307,7 @@ export interface companyType {
   phoneNumber: string;
   email: string;
   companyAddress: string;
+  displayAddress: string;
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;
@@ -679,6 +680,7 @@ export interface CompanyPortfolioMetaData {
   phoneNumber: string;
   email: string;
   companyAddress: string;
+  displayAddress: string;
   companyLanguages: string[];
   regNumber: string;
   agentId: string;
@@ -825,8 +827,8 @@ export interface OAuthProvider {
 
 export interface User {
   userId: string;
-  name: string;
-  email: string;
+  name: string | null;
+  email: string | null;
   phoneNumber: string | null;
   countryCode: string | null;
   avatar: string | null;

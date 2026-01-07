@@ -89,6 +89,7 @@ export type PrimaryFormType = {
   vehicleMetaDescription: string;
   tempCitys?: CityType[];
   location?: Location;
+  displayAddress: string;
   isVehicleModified: boolean;
   disablePriceMatching?: boolean;
 };

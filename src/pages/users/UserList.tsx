@@ -10,11 +10,22 @@ import { UserTableRow } from "@/components/user";
 import { useUserData } from "@/hooks/useUserData";
 import { ArrowUpDown } from "lucide-react";
 
-interface UserListProps {
-  className?: string;
+export interface UserFilters {
+  search: string;
+  emailVerified: string; // "all" | "verified" | "unverified"
+  phoneVerified: string; // "all" | "verified" | "unverified"
+  accountType: string; // "all" | "oauth" | "regular"
 }
 
-export const UserList: React.FC<UserListProps> = ({ className = "" }) => {
+interface UserListProps {
+  className?: string;
+  filters?: UserFilters;
+}
+
+export const UserList: React.FC<UserListProps> = ({
+  className = "",
+  filters,
+}) => {
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
@@ -46,22 +57,79 @@ export const UserList: React.FC<UserListProps> = ({ className = "" }) => {
     return <ArrowUpDown className="h-3 w-3 opacity-50" />;
   };
 
-  // Client-side sorting
-  const sortedUsers = useMemo(() => {
-    if (!sortField) return users;
+  // Client-side filtering and sorting
+  const filteredAndSortedUsers = useMemo(() => {
+    let filtered = [...users];
 
-    return [...users].sort((a, b) => {
+    // Apply filters
+    if (filters) {
+      // Search filter
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase();
+        filtered = filtered.filter((user) => {
+          const name = (user.name || "").toLowerCase();
+          const email = (user.email || "").toLowerCase();
+          const phone = (user.phoneNumber || "").toLowerCase();
+          return (
+            name.includes(searchLower) ||
+            email.includes(searchLower) ||
+            phone.includes(searchLower)
+          );
+        });
+      }
+
+      // Email verification filter
+      if (filters.emailVerified !== "all") {
+        filtered = filtered.filter((user) => {
+          if (filters.emailVerified === "verified") {
+            return user.isEmailVerified === true;
+          } else if (filters.emailVerified === "unverified") {
+            return user.isEmailVerified === false;
+          }
+          return true;
+        });
+      }
+
+      // Phone verification filter
+      if (filters.phoneVerified !== "all") {
+        filtered = filtered.filter((user) => {
+          if (filters.phoneVerified === "verified") {
+            return user.isPhoneVerified === true;
+          } else if (filters.phoneVerified === "unverified") {
+            return user.isPhoneVerified === false;
+          }
+          return true;
+        });
+      }
+
+      // Account type filter
+      if (filters.accountType !== "all") {
+        filtered = filtered.filter((user) => {
+          if (filters.accountType === "oauth") {
+            return user.isOAuthUser === true;
+          } else if (filters.accountType === "regular") {
+            return user.isOAuthUser === false;
+          }
+          return true;
+        });
+      }
+    }
+
+    // Apply sorting
+    if (!sortField) return filtered;
+
+    return filtered.sort((a, b) => {
       let aValue: any;
       let bValue: any;
 
       switch (sortField) {
         case "name":
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
+          aValue = (a.name || "").toLowerCase();
+          bValue = (b.name || "").toLowerCase();
           break;
         case "email":
-          aValue = a.email.toLowerCase();
-          bValue = b.email.toLowerCase();
+          aValue = (a.email || "").toLowerCase();
+          bValue = (b.email || "").toLowerCase();
           break;
         case "createdAt":
           aValue = new Date(a.createdAt).getTime();
@@ -75,7 +143,7 @@ export const UserList: React.FC<UserListProps> = ({ className = "" }) => {
       if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
       return 0;
     });
-  }, [users, sortField, sortDirection]);
+  }, [users, sortField, sortDirection, filters]);
 
   if (isLoading) {
     return (
@@ -165,8 +233,8 @@ export const UserList: React.FC<UserListProps> = ({ className = "" }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedUsers.length > 0 ? (
-            sortedUsers.map((user) => (
+          {filteredAndSortedUsers.length > 0 ? (
+            filteredAndSortedUsers.map((user) => (
               <UserTableRow key={user.userId} user={user} />
             ))
           ) : (

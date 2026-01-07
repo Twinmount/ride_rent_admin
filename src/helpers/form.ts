@@ -390,6 +390,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     vehicleMetaDescription: data.vehicleMetaDescription,
     tempCitys: data.tempCitys || [],
     location: data.location || undefined,
+    displayAddress: data.displayAddress,
     isVehicleModified: data.isVehicleModified,
     disablePriceMatching: data.disablePriceMatching || false,
   };

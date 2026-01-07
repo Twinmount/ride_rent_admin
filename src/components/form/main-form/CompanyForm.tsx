@@ -420,6 +420,50 @@ export default function CompanyForm({
           }}
         />
 
+        {/* Display Address - NEW FIELD */}
+        <FormField
+          control={form.control}
+          name="displayAddress"
+          render={({ field }) => {
+            const [charCount, setCharCount] = useState(
+              field.value?.length || 0,
+            );
+
+            const handleInputChange = (
+              e: React.ChangeEvent<HTMLTextAreaElement>,
+            ) => {
+              const newValue = e.target.value;
+              if (newValue.length <= 150) {
+                setCharCount(newValue.length);
+                field.onChange(e);
+              }
+            };
+
+            return (
+              <FormItemWrapper
+                label="Address to Display"
+                description={
+                  <>
+                    <span className="w-full max-w-[90%]">
+                      Provide the address to display publicly. This address will
+                      be shown on vehicle cards and listings instead of your
+                      company address. 150 characters max.
+                    </span>{" "}
+                    <span className="ml-auto">{`${charCount}/150`}</span>
+                  </>
+                }
+              >
+                <Textarea
+                  placeholder="Address to Display"
+                  {...field}
+                  className={`textarea h-28 rounded-xl transition-all duration-300`}
+                  onChange={handleInputChange}
+                />
+              </FormItemWrapper>
+            );
+          }}
+        />
+
         {/* Company  Meta Title */}
         <FormField
           control={form.control}
