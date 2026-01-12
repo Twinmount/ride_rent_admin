@@ -15,6 +15,8 @@ import {
   Building2,
   MessageSquare,
   AlertCircle,
+  RefreshCcw,
+  Users,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -61,6 +63,13 @@ export const sidebarContent: SidebarItem[] = [
     label: "Enquiries",
     icon: MessageSquare,
     link: "/enquiries",
+  },
+  // Users route
+  {
+    type: "link",
+    label: "Users",
+    icon: Users,
+    link: "/users",
   },
   // Supplier Central
   {
@@ -228,6 +237,13 @@ export const sidebarContent: SidebarItem[] = [
       { label: "Home Page", link: "/meta-data/home" },
       { label: "Listings Page", link: "/meta-data/listing?tab=category" },
     ],
+  },
+  // cache management
+  {
+    type: "link",
+    label: "Cache Center",
+    icon: RefreshCcw,
+    link: "/manage-cache",
   },
   // Careers
   {

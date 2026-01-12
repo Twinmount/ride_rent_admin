@@ -26,7 +26,7 @@ import SingleFileUpload from "../file-uploads/SingleFileUpload";
 import { addBlog, deleteBlogById, updateBlog } from "@/api/blogs";
 import BlogCategoriesDropdown from "../dropdowns/BlogCategoryDropdown";
 import { Textarea } from "@/components/ui/textarea";
-import BlogContentEditor from "../BlogContentEditor";
+import RichTextContentEditor from "../RichTextContentEditor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteMultipleFiles } from "@/helpers/form";
 import DeleteModal from "@/components/modal/DeleteModal";
@@ -428,12 +428,11 @@ export default function RideBlogForm({
 
         <hr className="my-3 border" />
 
-        {/* blog content text editor field*/}
         <FormField
           control={form.control}
           name="blogContent"
           render={({ field }) => (
-            <BlogContentEditor
+            <RichTextContentEditor
               content={field.value}
               onUpdate={(updatedContent) => field.onChange(updatedContent)}
             />

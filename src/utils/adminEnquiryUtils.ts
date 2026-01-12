@@ -1,3 +1,4 @@
+import { ENV } from "@/config/env.config";
 import { AdminEnquiry } from "@/types/api-types/API-types";
 
 // Valid enquiry statuses
@@ -77,7 +78,7 @@ export const statusConfig = {
 
 // Get base domain from environment variables
 const getBaseDomain = (): string => {
-  return import.meta.env.VITE_BASE_DOMAIN || "https://ride.rent";
+  return ENV.PUBLIC_SITE_DOMAIN || "https://ride.rent";
 };
 
 /**
@@ -126,17 +127,21 @@ export const adminEnquiryUtils = {
   },
 
   /**
-   * Format date for display
+   * Format date for display with time
+   * Format: "Dec 7, 2025, 02:10 PM"
    */
   formatDate: (
     dateString: string,
     options?: Intl.DateTimeFormatOptions,
   ): string => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
       ...options,
     });
   },

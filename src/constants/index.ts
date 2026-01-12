@@ -191,6 +191,7 @@ export const getPrimaryFormDefaultValues = (
   vehicleMetaDescription: "",
   tempCitys: [],
   location: undefined,
+  displayAddress: "",
   isVehicleModified: false,
 });
 
@@ -239,6 +240,7 @@ export const CompanyFormDefaultValues: CompanyFormType = {
   phoneNumber: "",
   email: "",
   companyAddress: "", // Default empty value
+  displayAddress: "",
   companyLanguages: [],
   companyMetaTitle: "",
   companyMetaDescription: "",
@@ -316,6 +318,7 @@ export const VehicleSeriesFormDefaultValues: VehicleSeriesType = {
   vehicleSeriesInfoDescription: "",
   vehicleSeriesMetaTitle: "",
   vehicleSeriesMetaDescription: "",
+  seriesBodyContent: "",
 };
 
 // Job form default values

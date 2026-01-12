@@ -34,6 +34,8 @@ const PriceMatchingPage = lazy(() => import("../pages/PriceMatchingPage"));
 const AdminEnquiriesPage = lazy(
   () => import("../pages/enquiries/AdminEnquiriesPageNew"),
 );
+const ManageCachePage = lazy(() => import("../pages/cache/ManageCachePage"));
+const UsersPage = lazy(() => import("../pages/users/UsersPage"));
 
 export const router = createBrowserRouter([
   {
@@ -64,11 +66,17 @@ export const router = createBrowserRouter([
               // enquiries routes
               { path: "/enquiries", element: <AdminEnquiriesPage /> },
 
+              // users routes
+              { path: "/users", element: <UsersPage /> },
+
               // download routes
               { path: "/download", element: <DownloadPage /> },
 
               // price matching route
               { path: "/price-alert", element: <PriceMatchingPage /> },
+
+              // cache manage route
+              { path: "/manage-cache", element: <ManageCachePage /> },
 
               // vehicle listing routes
               ...vehicleListingRoutes,

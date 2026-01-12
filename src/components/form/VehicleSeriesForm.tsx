@@ -14,6 +14,7 @@ import { Textarea } from "../ui/textarea";
 import { sanitizeStringToSlug } from "@/lib/utils";
 // import { FormContainer } from "./form-ui/FormContainer";
 import VehicleCategoryDropdown from "./dropdowns/VehicleCategoryDropdown";
+import RichTextEditorComponent from "./RichTextEditorComponent";
 import { VehicleSeriesFormDefaultValues } from "@/constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -24,11 +25,15 @@ import { FormContainer, FormSubmitButton } from "./form-ui";
 type VehicleSeriesFormProps = {
   type: "Add" | "Update";
   formData?: VehicleSeriesType | null;
+  setSearchParams?: (
+    params: URLSearchParams | ((prev: URLSearchParams) => URLSearchParams),
+  ) => void;
 };
 
 export default function VehicleSeriesForm({
   type,
   formData,
+  setSearchParams,
 }: VehicleSeriesFormProps) {
   const initialValues = formData || VehicleSeriesFormDefaultValues;
 
@@ -59,7 +64,20 @@ export default function VehicleSeriesForm({
           className: "bg-green-500 text-white",
         });
 
-        navigate("/manage-series");
+        if (
+          type === "Add" &&
+          setSearchParams &&
+          (data as any)?.result?.vehicleSeriesId
+        ) {
+          // Set the seriesId in URL params so FAQ tab can be enabled
+          setSearchParams((prev) => {
+            const newParams = new URLSearchParams(prev);
+            newParams.set("seriesId", (data as any).result.vehicleSeriesId);
+            return newParams;
+          });
+        } else {
+          navigate("/manage-series");
+        }
       }
     } catch (error) {
       console.error(error);
@@ -315,6 +333,23 @@ export default function VehicleSeriesForm({
               </FormItemWrapper>
             );
           }}
+        />
+
+        {/* Series Body Content - Rich Text Editor */}
+        <FormField
+          control={form.control}
+          name="seriesBodyContent"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Series Body Content"
+              description="Provide rich text content for the series page. This will be displayed on the frontend."
+            >
+              <RichTextEditorComponent
+                content={field.value || ""}
+                onUpdate={(updatedContent) => field.onChange(updatedContent)}
+              />
+            </FormItemWrapper>
+          )}
         />
 
         {/* Vehicle Series Meta Title */}

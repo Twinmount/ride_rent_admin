@@ -37,13 +37,16 @@ export default function VehiclesFormAddPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["primary-details-form-default", companyId],
     queryFn: () => getPrimaryDetailsFormDefaultData(companyId as string),
-    staleTime: 30000,
+    staleTime: 0,
+    gcTime: 0,
     enabled: !!companyId,
   });
 
   const { data: companyData, isLoading: isCompanyLoading } = useQuery({
     queryKey: ["company", companyId],
     queryFn: () => getCompanyById(companyId as string),
+    staleTime: 0,
+    gcTime: 0,
     enabled: !!companyId,
   });
 

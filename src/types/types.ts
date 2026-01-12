@@ -198,6 +198,7 @@ export type CompanyFormType = {
   phoneNumber?: string;
   email?: string;
   companyAddress: string;
+  displayAddress: string;
   companyLanguages: string[];
   companyMetaTitle: string;
   companyMetaDescription: string;
@@ -289,6 +290,7 @@ export type VehicleSeriesType = {
   vehicleSeriesInfoDescription: string;
   vehicleSeriesMetaTitle: string;
   vehicleSeriesMetaDescription: string;
+  seriesBodyContent?: string;
 };
 
 // Job

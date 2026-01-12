@@ -345,7 +345,20 @@ export default function PrimaryDetailsForm({
 
           if (onNextTab) onNextTab();
         } else if (type === "Update" && !isAddOrIncomplete) {
-          navigate("/listings/live");
+          // invalidating cached data in the listing page
+          queryClient.invalidateQueries({
+            queryKey: [
+              "listings",
+              "live-listings",
+              "primary-details-form",
+              "primary-details-form-default",
+              vehicleId,
+            ],
+          });
+          // navigate after 300ms
+          setTimeout(() => {
+            navigate("/listings/live");
+          }, 300);
         }
       }
     } catch (error) {
@@ -376,6 +389,7 @@ export default function PrimaryDetailsForm({
           "listings",
           "live-listings",
           "primary-details-form",
+          "primary-details-form-default",
           vehicleId,
         ],
       });
@@ -1211,6 +1225,51 @@ export default function PrimaryDetailsForm({
                 </>
               </FormItemWrapper>
             )}
+          />
+
+          {/* Display Address - NEW FIELD */}
+          <FormField
+            control={form.control}
+            name="displayAddress"
+            render={({ field }) => {
+              const [charCount, setCharCount] = useState(
+                field.value?.length || 0,
+              );
+
+              const handleInputChange = (
+                e: React.ChangeEvent<HTMLTextAreaElement>,
+              ) => {
+                const newValue = e.target.value;
+                if (newValue.length <= 150) {
+                  setCharCount(newValue.length);
+                  field.onChange(e);
+                }
+              };
+
+              return (
+                <FormItemWrapper
+                  label="Address to Display"
+                  description={
+                    <>
+                      <span className="w-full max-w-[90%]">
+                        Provide the address to display for this vehicle. By
+                        default, this is set to your company's display address.
+                        You can customize it for this specific vehicle. 150
+                        characters max.
+                      </span>{" "}
+                      <span className="ml-auto">{`${charCount}/150`}</span>
+                    </>
+                  }
+                >
+                  <Textarea
+                    placeholder="Address to Display"
+                    {...field}
+                    className={`textarea h-28 rounded-xl transition-all duration-300`}
+                    onChange={handleInputChange}
+                  />
+                </FormItemWrapper>
+              );
+            }}
           />
 
           {/* Rental Details */}

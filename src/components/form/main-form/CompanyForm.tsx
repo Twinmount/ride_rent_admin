@@ -31,7 +31,6 @@ import LocationPicker from "../LocationPicker";
 import { FormCheckbox } from "../form-ui";
 import { FormFieldLayout } from "../form-ui";
 
-
 type CompanyFormProps = {
   type: "Update";
   formData?: CompanyFormType | null;
@@ -39,7 +38,12 @@ type CompanyFormProps = {
   isSupplierPage?: boolean; // New prop to detect if this is from supplier details page
 };
 
-export default function CompanyForm({ type, formData, updateId, isSupplierPage = false }: CompanyFormProps) {
+export default function CompanyForm({
+  type,
+  formData,
+  updateId,
+  isSupplierPage = false,
+}: CompanyFormProps) {
   const navigate = useNavigate();
   const { companyId } = useParams<{ companyId: string }>(); // Keep for company routes, but fallback to prop
   const [isFileUploading, setIsFileUploading] = useState(false);
@@ -53,11 +57,11 @@ export default function CompanyForm({ type, formData, updateId, isSupplierPage =
   const initialValues =
     formData && type === "Update"
       ? {
-        ...formData,
-        expireDate: formData.expireDate
-          ? new Date(formData.expireDate)
-          : undefined,
-      }
+          ...formData,
+          expireDate: formData.expireDate
+            ? new Date(formData.expireDate)
+            : undefined,
+        }
       : CompanyFormDefaultValues;
 
   // creating form
@@ -99,6 +103,8 @@ export default function CompanyForm({ type, formData, updateId, isSupplierPage =
           className: "bg-yellow text-white",
         });
 
+        revalidateCompanyQueryCache(idToUse);
+
         // Navigate based on page type
         if (isSupplierPage) {
           navigate(-1); // Go back to previous page
@@ -114,19 +120,23 @@ export default function CompanyForm({ type, formData, updateId, isSupplierPage =
         description: "Something went wrong",
       });
     } finally {
-      queryClient.invalidateQueries({
-        queryKey: ["company-details-page", idToUse],
-        exact: true,
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["supplier-details-page", idToUse], // Also invalidate supplier queries for consistency
-        exact: true,
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["companies"],
-        exact: false,
-      });
+      revalidateCompanyQueryCache(idToUse);
     }
+  }
+
+  function revalidateCompanyQueryCache(idToUse: string) {
+    queryClient.invalidateQueries({
+      queryKey: ["company-details-page", idToUse],
+      exact: true,
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["supplier-details-page", idToUse],
+      exact: true,
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["companies"],
+      exact: false,
+    });
   }
 
   const buttonText = isSupplierPage ? "Update Supplier" : "Update Company";
@@ -265,18 +275,20 @@ export default function CompanyForm({ type, formData, updateId, isSupplierPage =
           name="regNumber"
           render={({ field }) => (
             <FormItemWrapper
-              label={`${isIndia && !isIndividual
-                ? "GST Number"
-                : isIndia && isIndividual
-                  ? "PAN Number"
-                  : "Registration Number / Trade License Number"
-                }`}
-              description={`${isIndia && !isIndividual
-                ? `Enter your company GST number. The number should be a combination of letters and numbers, without any spaces or special characters.`
-                : isIndia && isIndividual
-                  ? "Enter your company PAN. The number should be a combination of letters and numbers, without any spaces or special characters."
-                  : `Enter your company registration number. The number should be a combination of letters and numbers, without any spaces or special characters, up to 15 characters.`
-                }`}
+              label={`${
+                isIndia && !isIndividual
+                  ? "GST Number"
+                  : isIndia && isIndividual
+                    ? "PAN Number"
+                    : "Registration Number / Trade License Number"
+              }`}
+              description={`${
+                isIndia && !isIndividual
+                  ? `Enter your company GST number. The number should be a combination of letters and numbers, without any spaces or special characters.`
+                  : isIndia && isIndividual
+                    ? "Enter your company PAN. The number should be a combination of letters and numbers, without any spaces or special characters."
+                    : `Enter your company registration number. The number should be a combination of letters and numbers, without any spaces or special characters, up to 15 characters.`
+              }`}
             >
               <Input
                 placeholder={
@@ -297,7 +309,10 @@ export default function CompanyForm({ type, formData, updateId, isSupplierPage =
             control={form.control}
             name="noRegNumber"
             render={({ field }) => (
-              <FormFieldLayout label="No GST / Registration Number" description="Check if your company does not have a GST number.">
+              <FormFieldLayout
+                label="No GST / Registration Number"
+                description="Check if your company does not have a GST number."
+              >
                 <FormCheckbox
                   id={field.name}
                   checked={!!field.value}
@@ -322,10 +337,11 @@ export default function CompanyForm({ type, formData, updateId, isSupplierPage =
           render={({ field }) => (
             <FormItemWrapper
               label="Supported Languages"
-              description={`${isIndividual
-                ? "Select all the languages you can speak or understand. These will be shown on your public profile to help customers communicate comfortably with you."
-                : "Select all the languages your staff can speak or understand. These will be displayed on your company's public profile page, helping customers feel comfortable with communication."
-                }`}
+              description={`${
+                isIndividual
+                  ? "Select all the languages you can speak or understand. These will be shown on your public profile to help customers communicate comfortably with you."
+                  : "Select all the languages your staff can speak or understand. These will be displayed on your company's public profile page, helping customers feel comfortable with communication."
+              }`}
             >
               <CompanyLanguagesDropdown
                 isIndia={isIndia}
@@ -398,6 +414,50 @@ export default function CompanyForm({ type, formData, updateId, isSupplierPage =
                   {...field}
                   className={`textarea h-28 rounded-xl transition-all duration-300`} // Dynamic height
                   onChange={handleInputChange} // Handle change to track character count
+                />
+              </FormItemWrapper>
+            );
+          }}
+        />
+
+        {/* Display Address - NEW FIELD */}
+        <FormField
+          control={form.control}
+          name="displayAddress"
+          render={({ field }) => {
+            const [charCount, setCharCount] = useState(
+              field.value?.length || 0,
+            );
+
+            const handleInputChange = (
+              e: React.ChangeEvent<HTMLTextAreaElement>,
+            ) => {
+              const newValue = e.target.value;
+              if (newValue.length <= 150) {
+                setCharCount(newValue.length);
+                field.onChange(e);
+              }
+            };
+
+            return (
+              <FormItemWrapper
+                label="Address to Display"
+                description={
+                  <>
+                    <span className="w-full max-w-[90%]">
+                      Provide the address to display publicly. This address will
+                      be shown on vehicle cards and listings instead of your
+                      company address. 150 characters max.
+                    </span>{" "}
+                    <span className="ml-auto">{`${charCount}/150`}</span>
+                  </>
+                }
+              >
+                <Textarea
+                  placeholder="Address to Display"
+                  {...field}
+                  className={`textarea h-28 rounded-xl transition-all duration-300`}
+                  onChange={handleInputChange}
                 />
               </FormItemWrapper>
             );

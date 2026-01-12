@@ -159,6 +159,9 @@ export enum Slug {
 
   // admin enquiries endpoints
 
+  // User Endpoints
+  GET_ALL_USERS = "/auth/v1/riderent/auth/users",
+
   // supplier-central
   GET_SUPPLIER_CENTRAL_HOME_SUMMARY = "/supplier-central/home-summary",
   GET_SUPPLIER_CENTRAL_CATEGORY_DETAILS = "/supplier-central/category-details",
@@ -195,6 +198,10 @@ export enum Slug {
   GET_RIDE_BLOG_FAQ = "/blog-faqs",
   PUT_RIDE_BLOG_FAQ = "/blog-faqs",
 
+  // Content FAQ Endpoints (Series FAQs)
+  CONTENT_FAQ = "/content-faq",
+  GET_CONTENT_FAQ_BY_SERIES = "/content-faq/series",
+
   // Advisor Blog Promotions Endpoints
   ADD_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
   GET_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
@@ -226,4 +233,7 @@ export enum Slug {
 
   GET_SRM_VEHICLES = "/srm/vehicles",
   PUT_SRM_VEHICLE = "/srm/vehicle",
+
+  // nextjs cache revalidate route
+  NEXTJS_REVALIDATE_CACHE = "/api/revalidate-cache",
 }
