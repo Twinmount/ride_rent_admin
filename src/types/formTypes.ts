@@ -3,6 +3,7 @@ import {
   RidePromotionCardSchema,
   RidePromotionFormSchema,
   SRMCustomerDetailsFormSchema,
+  VehicleBucketSchema,
 } from "@/lib/validator";
 
 export type VehicleStatusType =
@@ -120,6 +121,8 @@ export type RidePromotionCardType = z.infer<typeof RidePromotionCardSchema>;
  * Type for the entire promotion form
  */
 export type RidePromotionFormType = z.infer<typeof RidePromotionFormSchema>;
+
+export type VehicleBucketFormType = z.infer<typeof VehicleBucketSchema>;
 
 export type FAQItemType = {
   question: string;

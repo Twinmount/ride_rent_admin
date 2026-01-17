@@ -17,6 +17,7 @@ import {
   AlertCircle,
   RefreshCcw,
   Users,
+  Layers,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -177,6 +178,13 @@ export const sidebarContent: SidebarItem[] = [
     label: "Vehicle Series",
     icon: Group,
     link: "/manage-series",
+  },
+  // Vehicle Bucket
+  {
+    type: "link",
+    label: "Vehicle Bucket",
+    icon: Layers,
+    link: "/manage-vehicle-bucket",
   },
   // Locations routes
   {
