@@ -10,7 +10,7 @@ import { FormItemWrapper } from "./form-ui/FormItemWrapper";
 import StatesDropdown from "./dropdowns/StatesDropdown";
 import { Textarea } from "../ui/textarea";
 import { VehicleBucketFormDefaultValues } from "@/constants";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { addVehicleBucket, updateVehicleBucket } from "@/api/vehicle-bucket";
 import { FormContainer, FormSubmitButton } from "./form-ui";
@@ -18,6 +18,8 @@ import VehicleBucketGroupDropdown from "./dropdowns/VehicleBucketGroupDropdown";
 import VehicleMultiSelectDropdown from "./dropdowns/VehicleMultiSelectDropdown";
 import { VehicleBucketType } from "@/types/api-types/API-types";
 import { sanitizeStringToSlug } from "@/lib/utils";
+import { generateVehicleBucketPublicSiteLink } from "@/utils/helper";
+import { ExternalLink } from "lucide-react";
 
 type VehicleBucketFormProps = {
   type: "Add" | "Update";
@@ -32,6 +34,8 @@ export default function VehicleBucketForm({
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const stateValue = searchParams.get("state");
   const { vehicleBucketId } = useParams<{
     vehicleBucketId: string;
   }>();
@@ -162,36 +166,52 @@ export default function VehicleBucketForm({
         <FormField
           control={form.control}
           name="vehicleBucketValue"
-          render={({ field }) => (
-            <FormItemWrapper
-              label="Vehicle Bucket URL Slug (Auto Generated)"
-              description={
-                <span>
-                  Unique identifier for the URL (e.g.
-                  '/ae/dubai/offer/luxury-cars-dubai').
-                  <br />
-                  Auto-generated from the bucket name.
-                  {field.value && (
-                    <span className="mt-1 block text-xs text-blue-500">
-                      page url : /offers/{field.value}
-                    </span>
-                  )}
-                  {type === "Add" && (
-                    <span className="mt-1 block text-xs text-orange">
-                      Cannot be changed after creation.
-                    </span>
-                  )}
-                </span>
-              }
-            >
-              <Input
-                placeholder="e.g., 'luxury-cars-dubai'"
-                {...field}
-                className={`input-field cursor-not-allowed bg-gray-100 ${type === "Add" ? "border-orange-300" : ""}`}
-                readOnly
-              />
-            </FormItemWrapper>
-          )}
+          render={({ field }) => {
+            const vehicleBucketPublicLink =
+              type === "Update" && stateValue
+                ? generateVehicleBucketPublicSiteLink(stateValue, field.value)
+                : "/offer/" + field.value;
+            return (
+              <FormItemWrapper
+                label="Vehicle Bucket URL Slug (Auto Generated)"
+                description={
+                  <span>
+                    Unique identifier for the URL (e.g.
+                    '/ae/dubai/offer/luxury-cars-dubai').
+                    <br />
+                    Auto-generated from the bucket name.
+                    {type === "Update" && field.value && stateValue ? (
+                      <a
+                        href={vehicleBucketPublicLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 flex items-center justify-start text-xs text-blue-500"
+                      >
+                        <ExternalLink size={12} className="mr-1" />
+                        {vehicleBucketPublicLink}
+                      </a>
+                    ) : (
+                      <span className="mt-1 block text-xs text-orange">
+                        page url eg : {vehicleBucketPublicLink}
+                      </span>
+                    )}
+                    {type === "Add" && (
+                      <span className="mt-1 block text-xs text-orange">
+                        Cannot be changed after creation.
+                      </span>
+                    )}
+                  </span>
+                }
+              >
+                <Input
+                  placeholder="e.g., 'luxury-cars-dubai'"
+                  {...field}
+                  className={`input-field cursor-not-allowed bg-gray-100 ${type === "Add" ? "border-orange-300" : ""}`}
+                  readOnly
+                />
+              </FormItemWrapper>
+            );
+          }}
         />
 
         <FormField

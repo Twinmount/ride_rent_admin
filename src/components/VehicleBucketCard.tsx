@@ -38,14 +38,13 @@ const VehicleBucketCard = ({ data }: VehicleBucketCardProps) => {
     data.displayGroup ===
     VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS.POPULAR_RENTAL_SEARCHES;
 
+  const vehicleBucketEditPageLink = `/manage-vehicle-bucket/edit/${data.id}?state=${data.stateValue}`;
+
   return (
     <div className="group relative flex w-full flex-col justify-between overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:border-gray-200 hover:shadow-md">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 space-y-3">
-          <Link
-            to={`/manage-vehicle-bucket/edit/${data.id}`}
-            className="group/title block"
-          >
+          <Link to={vehicleBucketEditPageLink} className="group/title block">
             <div className="space-y-2">
               <div className="flex flex-wrap items-center gap-2.5">
                 <h3 className="text-lg font-bold leading-tight text-gray-900 transition-colors group-hover/title:text-primary">
@@ -117,7 +116,7 @@ const VehicleBucketCard = ({ data }: VehicleBucketCardProps) => {
 
         {/* Edit Button */}
         <Link
-          to={`/manage-vehicle-bucket/edit/${data.id}`}
+          to={vehicleBucketEditPageLink}
           className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gray-50 text-orange transition-all hover:bg-orange hover:text-white"
           title="Edit Vehicle Bucket"
         >
