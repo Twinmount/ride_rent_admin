@@ -63,6 +63,14 @@ export enum Slug {
   DELETE_RELATED_LINK = "/recomented-links",
   GET_ALL_RELATED_LINKS = "/recomented-links/list",
 
+  // Vehicle Bucket Endpoints
+  ADD_VEHICLE_BUCKET = "/vehicle-bucket",
+  GET_VEHICLE_BUCKET = "/vehicle-bucket",
+  GET_VEHICLE_LIST_FOR_VEHICLE_BUCKET = "/vehicle-bucket/search/vehicles",
+  PUT_VEHICLE_BUCKET = "/vehicle-bucket",
+  DELETE_VEHICLE_BUCKET = "/vehicle-bucket",
+  GET_ALL_VEHICLE_BUCKET_LIST = "/vehicle-bucket/admin/list",
+
   // Promotion old Endpoints
   ADD_PROMOTION = "/promotions",
   GET_PROMOTION = "/promotions",

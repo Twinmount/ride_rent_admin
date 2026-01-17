@@ -66,41 +66,6 @@ const StatesDropdown = ({
     }
   });
 
-  // useEffect(() => {
-  //   if (searchInput.trim() === "") {
-  //     if (selectedState !== null) {
-  //       setFilteredOptions([
-  //         ...options.filter(
-  //           (option) => option.stateId !== selectedState?.stateId,
-  //         ),
-  //         selectedState,
-  //       ]);
-  //     } else {
-  //       setFilteredOptions(options);
-  //     }
-  //   } else {
-  //     const filtered = options.filter(
-  //       (option) =>
-  //         (option.stateName.toLowerCase().includes(searchInput.toLowerCase()) ||
-  //           option.stateValue
-  //             .toLowerCase()
-  //             .includes(searchInput.toLowerCase())) &&
-  //         option.stateId !== selectedState?.stateId,
-  //     );
-
-  //     if (selectedState !== null) {
-  //       setFilteredOptions([
-  //         ...filtered.filter(
-  //           (option) => option.stateId !== selectedState?.stateId,
-  //         ),
-  //         selectedState,
-  //       ]);
-  //     } else {
-  //       setFilteredOptions(filtered);
-  //     }
-  //   }
-  // }, [searchInput, options]);
-
   useEffect(() => {
     const search = searchInput.trim().toLowerCase();
 

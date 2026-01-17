@@ -605,6 +605,50 @@ export const VehicleSeriesSchema = z.object({
   seriesBodyContent: z.string().optional(),
 });
 
+export const VehicleBucketSchema = z.object({
+  stateId: z.string().min(1, "State is required"),
+  displayGroup: z.enum(["POPULAR_RENTAL_SEARCHES", "POPULAR_VEHICLE_PAGES"], {
+    required_error: "Section type is required",
+  }),
+  linkText: z
+    .string()
+    .min(1, "Link text is required")
+    .max(100, "Link text cannot exceed 100 characters"),
+
+  vehicleBucketName: z
+    .string()
+    .min(1, "Vehicle bucket name is required")
+    .max(100, "Vehicle bucket name is too long"),
+  vehicleBucketValue: z
+    .string()
+    .min(1, "Vehicle bucket value (slug) is required")
+    .max(100, "Vehicle bucket value is too long")
+    .regex(
+      /^[a-z0-9-]+$/,
+      "Slug must only contain lowercase letters, numbers, and hyphens",
+    ),
+  vehicleCodes: z
+    .array(z.string())
+    .min(1, "At least one vehicle must be selected")
+    .max(20, "Maximum 20 vehicles can be selected"),
+  pageHeading: z
+    .string()
+    .min(1, "Page heading is required")
+    .max(100, "Page heading cannot exceed 100 characters"),
+  pageSubheading: z
+    .string()
+    .min(1, "Page subheading is required")
+    .max(200, "Page subheading cannot exceed 200 characters"),
+  metaTitle: z
+    .string()
+    .min(1, "Meta title is required")
+    .max(80, "Meta title cannot exceed 80 characters"),
+  metaDescription: z
+    .string()
+    .min(1, "Meta description is required")
+    .max(5000, "Meta description cannot exceed 5000 characters"),
+});
+
 // Job form schema
 
 export const locationOptions = [

@@ -1,3 +1,5 @@
+import { ENV } from "@/config/env.config";
+
 export const generateWhatsappUrl = (vehicle: {
   whatsappPhone: string | undefined | null;
   whatsappCountryCode: string | undefined | null;
@@ -19,4 +21,32 @@ ${whatsappPageLink}`;
   const encodedMessage = encodeURIComponent(message);
 
   return `https://wa.me/${vehicle.whatsappPhone}?text=${encodedMessage}`;
+};
+
+// Helper to generate slug for the offer link
+export const generateVehicleBucketPublicSiteLink = (
+  stateName: string,
+  bucketValue: string,
+) => {
+  const domain = getPublicPlatformDomainWithCountry();
+  return `${domain}/${stateName}/offers/${bucketValue}`;
+};
+
+export const getPublicPlatformDomainWithCountry = (country: string = "ae") => {
+  const countryName = localStorage.getItem("appCountry") || country;
+
+  let domain = "";
+
+  switch (countryName) {
+    case "ae":
+      domain = ENV.PUBLIC_SITE_DOMAIN + "/ae";
+      break;
+    case "in":
+      domain = ENV.PUBLIC_SITE_DOMAIN + "/in";
+      break;
+    default:
+      domain = ENV.PUBLIC_SITE_DOMAIN + "/ae";
+  }
+
+  return domain;
 };

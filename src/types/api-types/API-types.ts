@@ -1,5 +1,5 @@
 import { BannerType } from "@/api/states";
-import { IconConfig, Location } from "../types";
+import { IconConfig, Location, VehicleBucketDisplayGroupType } from "../types";
 import { RidePromotionCardType } from "../formTypes";
 
 // register response
@@ -241,6 +241,69 @@ export interface FetchLinksResponse {
     total: number;
     totalNumberOfPages: number;
   };
+  status: string;
+  statusCode: number;
+}
+
+export interface VehicleBucketType {
+  id?: string;
+  stateId: string;
+  displayGroup: VehicleBucketDisplayGroupType;
+  linkText: string;
+  vehicleBucketName: string;
+  vehicleBucketValue: string;
+  vehicleCodes: string[];
+  pageHeading: string;
+  pageSubheading: string;
+  metaTitle: string;
+  metaDescription: string;
+}
+
+// interface for the vehicle bucket (GET ALL) API response
+export interface FetchVehicleBucketsResponse {
+  status: string;
+  result: {
+    list: VehicleBucketType[]; // Array of vehicle buckets
+    page: number; // Current page number
+    total: number; // Total number of categories
+    totalNumberOfPages: number;
+  };
+  statusCode: number;
+}
+
+export interface VehicleBucketListType extends VehicleBucketType {
+  stateValue: string;
+  pageVisitCount: number;
+}
+
+export interface FetchVehicleBucketListResponse {
+  result: {
+    list: VehicleBucketListType[];
+    page: number;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchSpecificVehicleBucketResponse {
+  result: VehicleBucketType;
+  status: string;
+  statusCode: number;
+}
+
+export interface VehicleQuickSearchType {
+  id: string;
+  vehicleCode: string;
+  vehicleModel: string;
+  brandName: string;
+  vehicleName: string;
+  thumbnailUrl: string;
+}
+
+export interface VehicleBucketSearchResponse {
+  result: VehicleQuickSearchType[];
   status: string;
   statusCode: number;
 }

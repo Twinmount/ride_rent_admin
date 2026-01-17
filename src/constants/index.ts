@@ -3,6 +3,7 @@ import {
   RidePromotionFormType,
   SRMCustomerDetailsFormType,
   SRMVehicleFormType,
+  VehicleBucketFormType,
 } from "@/types/formTypes";
 import {
   AdvisorBlogFormType,
@@ -364,6 +365,19 @@ export const RidePromotionFormDefaultValues: RidePromotionFormType = {
   ],
 };
 
+export const VehicleBucketFormDefaultValues: VehicleBucketFormType = {
+  stateId: "",
+  displayGroup: "POPULAR_RENTAL_SEARCHES",
+  vehicleBucketName: "",
+  vehicleBucketValue: "",
+  linkText: "",
+  vehicleCodes: [],
+  pageHeading: "",
+  pageSubheading: "",
+  metaTitle: "",
+  metaDescription: "",
+};
+
 // form constants
 export const SERVICE_OPTIONS = [
   {
@@ -392,3 +406,11 @@ export const SERVICE_OPTIONS = [
     value: "desert-safari",
   },
 ];
+
+// convert to a object
+export const VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS = {
+  POPULAR_RENTAL_SEARCHES: "POPULAR_RENTAL_SEARCHES",
+  POPULAR_VEHICLE_PAGES: "POPULAR_VEHICLE_PAGES",
+} as const;
+
+// create a type for the above
