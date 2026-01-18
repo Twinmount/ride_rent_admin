@@ -366,12 +366,16 @@ export const RidePromotionFormDefaultValues: RidePromotionFormType = {
 };
 
 export const VehicleBucketFormDefaultValues: VehicleBucketFormType = {
+  bucketMode: "VEHICLE_CODE",
   stateId: "",
   displayGroup: "POPULAR_RENTAL_SEARCHES",
   vehicleBucketName: "",
   vehicleBucketValue: "",
   linkText: "",
   vehicleCodes: [],
+  vehicleCategoryId: "",
+  vehicleTypeId: "",
+  location: undefined,
   pageHeading: "",
   pageSubheading: "",
   metaTitle: "",
@@ -413,4 +417,31 @@ export const VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS = {
   POPULAR_VEHICLE_PAGES: "POPULAR_VEHICLE_PAGES",
 } as const;
 
-// create a type for the above
+export const VEHICLE_BUCKET_MODES_ENUM = {
+  VEHICLE_CODE: "VEHICLE_CODE",
+  VEHICLE_TYPE: "VEHICLE_TYPE",
+  LOCATION_COORDINATES: "LOCATION_COORDINATES",
+} as const;
+
+// Vehicle Bucket Mode Options
+export const VEHICLE_BUCKET_MODES = [
+  {
+    label: "Manual Selection (Vehicle Codes)",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_CODE,
+    description: "Manually select up to 30 specific vehicles",
+  },
+  {
+    label: "Auto-Fetch by Type",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_TYPE,
+    description: "Automatically fetch upto 30 vehicles of a specific type",
+  },
+  {
+    label: "Auto-Fetch by Location",
+    value: VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES,
+    description:
+      "Automatically fetch vehicles up to 30 near specific coordinates within a specific state/type",
+  },
+] as const;
+
+export type VehicleBucketModeType =
+  (typeof VEHICLE_BUCKET_MODES)[number]["value"];

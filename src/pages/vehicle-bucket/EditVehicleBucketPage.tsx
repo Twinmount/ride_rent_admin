@@ -14,7 +14,6 @@ export default function EditVehicleBucketPage() {
     queryFn: () => fetchVehicleBucketById(vehicleBucketId as string),
   });
 
-  // Destructure to get the 'list' array from 'data'
   const vehicleBucketData = data?.result;
 
   return (
