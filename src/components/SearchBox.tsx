@@ -5,11 +5,13 @@ import { Input } from "./ui/input";
 type SearchBoxProps = {
   placeholder?: string;
   searchDescription?: string;
+  className?: string;
 };
 
 function SearchBox({
   placeholder = "search..",
   searchDescription,
+  className,
 }: SearchBoxProps) {
   const [searchValue, setSearchValue] = useState(""); // Update input value immediately
   const [searchParams, setSearchParams] = useSearchParams();
@@ -47,7 +49,7 @@ function SearchBox({
   };
 
   return (
-    <div className="mb-6">
+    <div className={`mb-5 ${className}`}>
       <div
         className={`flex w-full min-w-96 max-w-[500px] flex-col justify-start gap-y-2`}
       >

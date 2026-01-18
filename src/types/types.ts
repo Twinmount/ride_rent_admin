@@ -1,3 +1,4 @@
+import { VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS } from "@/constants";
 import { iconConfigSchema } from "@/lib/validator";
 import { z } from "zod";
 
@@ -316,3 +317,6 @@ export type JobFormType = {
 
 export type ApplicationTypes = "all" | "intern" | "career";
 export type ContentFor = "state" | "country" | "parentState";
+
+export type VehicleBucketDisplayGroupType =
+  keyof typeof VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS;
