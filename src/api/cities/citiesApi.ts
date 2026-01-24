@@ -6,14 +6,9 @@ import {
 } from '@/types/api-types/API-types'
 
 type CityType = {
-  cityName: string;
-  cityValue: string;
-  cityPageHeading?: string;
-  cityPageSubheading?: string;
-  cityMetaTitle?: string;
-  cityMetaDescription?: string;
-  cityBodyContent?: string;
-};
+  cityName: string
+  cityValue: string
+}
 
 // add city
 export const addCity = async (values: CityType, stateId: string) => {

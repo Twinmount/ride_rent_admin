@@ -66,11 +66,6 @@ export const CountryFormDefaultValues: CountryFormType = {
 export const CityFormDefaultValues: CityFormType = {
   cityName: "",
   cityValue: "",
-  cityPageHeading: "",
-  cityPageSubheading: "",
-  cityMetaTitle: "",
-  cityMetaDescription: "",
-  cityBodyContent: "",
 };
 
 // Vehicle Category form default values

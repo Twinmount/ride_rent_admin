@@ -123,23 +123,6 @@ export const CityFormSchema = z.object({
       /^[a-z-]+$/,
       "City value should only contain lowercase letters and hyphens",
     ),
-  cityPageHeading: z
-    .string()
-    .max(100, "Page heading cannot exceed 100 characters")
-    .optional(),
-  cityPageSubheading: z
-    .string()
-    .max(200, "Page subheading cannot exceed 200 characters")
-    .optional(),
-  cityMetaTitle: z
-    .string()
-    .max(80, "Meta title cannot exceed 80 characters")
-    .optional(),
-  cityMetaDescription: z
-    .string()
-    .max(5000, "Meta description cannot exceed 5000 characters")
-    .optional(),
-  cityBodyContent: z.string().optional(),
 });
 // Category Form Schema
 export const CategoryFormSchema = z.object({
