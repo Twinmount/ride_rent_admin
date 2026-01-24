@@ -3,6 +3,7 @@ import { API } from "../ApiService";
 import {
   ContentFaqResponse,
   CreateContentFaqRequest,
+  FetchCityFaqsResponse,
   FetchSeriesFaqsResponse,
   UpdateContentFaqRequest,
 } from "@/types/api-types/contentFaqApi-types";
@@ -11,7 +12,7 @@ import {
  * Create a new FAQ for a series
  */
 export const createSeriesFaq = async (
-  data: CreateContentFaqRequest
+  data: CreateContentFaqRequest,
 ): Promise<ContentFaqResponse> => {
   try {
     const response = await API.post<ContentFaqResponse>({
@@ -35,7 +36,7 @@ export const createSeriesFaq = async (
  */
 export const updateSeriesFaq = async (
   faqId: string,
-  data: UpdateContentFaqRequest
+  data: UpdateContentFaqRequest,
 ): Promise<ContentFaqResponse> => {
   try {
     const response = await API.put<ContentFaqResponse>({
@@ -72,7 +73,7 @@ export const deleteSeriesFaq = async (faqId: string): Promise<void> => {
  * Get all FAQs for a specific series
  */
 export const getSeriesFaqs = async (
-  seriesId: string
+  seriesId: string,
 ): Promise<FetchSeriesFaqsResponse> => {
   try {
     const response = await API.get<FetchSeriesFaqsResponse>({
@@ -94,7 +95,7 @@ export const getSeriesFaqs = async (
  * Get a single FAQ by ID
  */
 export const getSeriesFaqById = async (
-  faqId: string
+  faqId: string,
 ): Promise<ContentFaqResponse> => {
   try {
     const response = await API.get<ContentFaqResponse>({
@@ -111,3 +112,89 @@ export const getSeriesFaqById = async (
     throw error;
   }
 };
+
+// ============ City FAQ Functions ============
+
+/**
+ * Create a new FAQ for a city
+ */
+export const createCityFaq = async (
+  data: CreateContentFaqRequest,
+): Promise<ContentFaqResponse> => {
+  try {
+    const response = await API.post<ContentFaqResponse>({
+      slug: Slug.CONTENT_FAQ,
+      body: data,
+    });
+
+    if (!response) {
+      throw new Error("Failed to create city FAQ");
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error creating city FAQ:", error);
+    throw error;
+  }
+};
+
+/**
+ * Update an existing city FAQ
+ */
+export const updateCityFaq = async (
+  faqId: string,
+  data: UpdateContentFaqRequest,
+): Promise<ContentFaqResponse> => {
+  try {
+    const response = await API.put<ContentFaqResponse>({
+      slug: `${Slug.CONTENT_FAQ}/${faqId}`,
+      body: data,
+    });
+
+    if (!response) {
+      throw new Error("Failed to update city FAQ");
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error updating city FAQ:", error);
+    throw error;
+  }
+};
+
+/**
+ * Delete a city FAQ
+ */
+export const deleteCityFaq = async (faqId: string): Promise<void> => {
+  try {
+    await API.delete({
+      slug: `${Slug.CONTENT_FAQ}/${faqId}?faqType=city`,
+    });
+  } catch (error) {
+    console.error("Error deleting city FAQ:", error);
+    throw error;
+  }
+};
+
+/**
+ * Get all FAQs for a specific city
+ */
+export const getCityFaqs = async (
+  cityId: string,
+): Promise<FetchCityFaqsResponse> => {
+  try {
+    const response = await API.get<FetchCityFaqsResponse>({
+      slug: `${Slug.GET_CONTENT_FAQ_BY_CITY}/${cityId}`,
+    });
+
+    if (!response) {
+      throw new Error("Failed to fetch city FAQs");
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error fetching city FAQs:", error);
+    throw error;
+  }
+};
+

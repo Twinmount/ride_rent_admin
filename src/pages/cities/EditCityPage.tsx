@@ -1,36 +1,102 @@
-import { CircleArrowLeft } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
-import FormSkelton from '@/components/skelton/FormSkelton'
-import { useQuery } from '@tanstack/react-query'
-import { fetchCityById } from '@/api/cities'
-import CityForm from '@/components/form/CityForm'
+import { useParams, useSearchParams } from "react-router-dom";
+import FormSkelton from "@/components/skelton/FormSkelton";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCityById } from "@/api/cities";
+import { getCityFaqs } from "@/api/content-faq";
+import CityForm from "@/components/form/CityForm";
+import CityFaqForm from "@/components/form/CityFaqForm";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useState } from "react";
+import PageLayout from "@/components/common/PageLayout";
+
+type CityTabs = "primary" | "faq";
 
 export default function EditCityPage() {
-  const navigate = useNavigate()
+  const { cityId } = useParams<{ cityId: string }>();
+  const [searchParams] = useSearchParams();
+  const tab = (searchParams?.get("tab") || "primary") as CityTabs;
+  const [activeTab, setActiveTab] = useState<CityTabs>(tab);
 
-  const { cityId } = useParams<{ cityId: string }>()
-
+  // Fetch city details
   const { data, isLoading } = useQuery({
-    queryKey: ['cities', cityId],
+    queryKey: ["cities", cityId],
     queryFn: () => fetchCityById(cityId as string),
-  })
+  });
+  const formData = data?.result;
+
+  // Fetch city FAQs - retry false to avoid spamming 404 if endpoint not ready
+  const {
+    data: faqData,
+    isLoading: isFaqLoading,
+    isError: isFaqError,
+  } = useQuery({
+    queryKey: ["city-faqs", cityId],
+    queryFn: () => getCityFaqs(cityId as string),
+    enabled: !!cityId,
+    retry: false, // Don't retry on 404
+  });
+
+  // Default FAQ data structure
+  // API returns: { status: 'SUCCESS', result: { success: true, data: [...] }, statusCode: 200 }
+  const extractFaqs = () => {
+    if (!faqData || isFaqError) return [];
+    // The API wrapper adds result layer: faqData.result.data contains the FAQs
+    if (Array.isArray((faqData as any)?.result?.data)) {
+      return (faqData as any).result.data;
+    }
+    if (Array.isArray(faqData.data)) {
+      return faqData.data;
+    }
+    return [];
+  };
+
+  const cityFaqData = {
+    cityId: cityId as string,
+    faqs: extractFaqs(),
+  };
+
+  // FAQ tab should only be disabled while actively loading (not on error)
+  const isFaqTabDisabled = isFaqLoading && !isFaqError;
 
   return (
-    <section className="container min-h-screen pt-5 pb-32">
-      <div className="mb-5 ml-5 flex-center w-fit gap-x-4">
-        <button
-          onClick={() => navigate(-1)}
-          className="transition-colors border-none outline-none w-fit flex-center hover:text-yellow"
-        >
-          <CircleArrowLeft />
-        </button>
-        <h1 className="text-center h3-bold sm:text-left">Update City</h1>
-      </div>
-      {isLoading ? (
-        <FormSkelton />
-      ) : (
-        <CityForm type="Update" formData={data?.result} />
-      )}
-    </section>
-  )
+    <PageLayout heading="Update City" shouldRenderNavigation>
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) => setActiveTab(value as CityTabs)}
+        className="w-full"
+      >
+        <TabsList className="flex-center mb-6 gap-x-2 bg-transparent">
+          <TabsTrigger
+            value="primary"
+            className="h-9 max-sm:px-2 max-sm:text-sm"
+          >
+            Primary Details
+          </TabsTrigger>
+          <TabsTrigger
+            value="faq"
+            disabled={isFaqTabDisabled}
+            className="h-9 max-sm:px-2 max-sm:text-sm"
+          >
+            FAQ
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="primary">
+          {isLoading ? (
+            <FormSkelton />
+          ) : (
+            <CityForm type="Update" formData={formData} />
+          )}
+        </TabsContent>
+
+        <TabsContent value="faq" className="flex-center">
+          {isFaqLoading && !isFaqError ? (
+            <FormSkelton />
+          ) : (
+            <CityFaqForm type="Update" data={cityFaqData} />
+          )}
+        </TabsContent>
+      </Tabs>
+    </PageLayout>
+  );
 }
