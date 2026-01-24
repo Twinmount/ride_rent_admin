@@ -201,6 +201,7 @@ export enum Slug {
   // Content FAQ Endpoints (Series FAQs)
   CONTENT_FAQ = "/content-faq",
   GET_CONTENT_FAQ_BY_SERIES = "/content-faq/series",
+  GET_CONTENT_FAQ_BY_CITY = "/content-faq/city",
 
   // Advisor Blog Promotions Endpoints
   ADD_ADVISOR_BLOG_PROMOTION = "/advisor-blogs-promotions",
