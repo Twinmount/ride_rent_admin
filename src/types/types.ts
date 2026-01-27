@@ -125,8 +125,14 @@ export type CategoryFormType = {
 };
 
 export type CityFormType = {
+  cityId?: string;
   cityName: string;
   cityValue: string;
+  cityPageHeading?: string;
+  cityPageSubheading?: string;
+  cityMetaTitle?: string;
+  cityMetaDescription?: string;
+  cityBodyContent?: string;
 };
 
 export type LinkFormType = {
