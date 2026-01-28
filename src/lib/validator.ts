@@ -184,6 +184,25 @@ export const PromotionFormSchema = z.object({
     .string()
     .min(1, "Link is required")
     .url("Link must be a valid URL"),
+  vehicleCategoryId: z.string().optional(),
+  type: z.enum(
+    [
+      "homepage",
+      "listing-page",
+      "city-listing-page",
+      "series-listing-page",
+      "brand-listing-page",
+      "listing-page-filter",
+    ],
+    {
+      required_error: "Promotion type is required",
+    },
+  ),
+  title: z.string().max(100, "Title cannot exceed 100 characters").optional(),
+  subtitle: z
+    .string()
+    .max(200, "Subtitle cannot exceed 200 characters")
+    .optional(),
 });
 
 // blog promotion form schema
