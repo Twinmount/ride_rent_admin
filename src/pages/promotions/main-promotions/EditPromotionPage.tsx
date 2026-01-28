@@ -19,15 +19,17 @@ export default function EditPromotionPage() {
   const promotionData = data?.result
 
   return (
-    <section className="container min-h-screen pt-5 pb-32">
-      <div className="mb-5 ml-5 flex-center w-fit gap-x-4">
+    <section className="container min-h-screen pb-32 pt-5">
+      <div className="flex-center mb-5 ml-5 w-fit gap-x-4">
         <button
           onClick={() => navigate(-1)}
-          className="transition-colors border-none outline-none w-fit flex-center hover:text-yellow"
+          className="flex-center w-fit border-none outline-none transition-colors hover:text-yellow"
+          aria-label="Go back"
+          title="Go back"
         >
           <CircleArrowLeft />
         </button>
-        <h1 className="text-center h3-bold sm:text-left">Update Promotion</h1>
+        <h1 className="h3-bold text-center sm:text-left">Update Promotion</h1>
       </div>
       {isLoading ? (
         <FormSkelton />
@@ -35,5 +37,5 @@ export default function EditPromotionPage() {
         <PromotionForm type="Update" formData={promotionData} />
       )}
     </section>
-  )
+  );
 }
