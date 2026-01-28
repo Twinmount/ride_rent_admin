@@ -12,6 +12,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PromotionFormType } from "@/types/types";
@@ -34,6 +42,7 @@ import { useState } from "react";
 import { GcsFilePaths } from "@/constants/enum";
 import { deleteMultipleFiles } from "@/helpers/form";
 import PromotionFileUpload from "./file-uploads/PromotionsFileUpload";
+import CategoryDropdown from "./dropdowns/CategoryDropdown";
 
 type PromotionFormProps = {
   type: "Add" | "Update";
@@ -119,10 +128,119 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-5 max-w-[700px] mx-auto  bg-white rounded-3xl p-2 md:p-4 py-8 !pb-8  shadow-md"
+        className="mx-auto flex w-full max-w-[700px] flex-col gap-8 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-100 md:p-8"
       >
         <div className="flex flex-col gap-5">
-          {/* type title */}
+          {/* Vehicle Category Dropdown */}
+          <FormField
+            control={form.control}
+            name="vehicleCategoryId"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <FormLabel className="text-base font-semibold text-gray-800">
+                    Vehicle Category
+                  </FormLabel>
+                  <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-400">
+                    Optional
+                  </span>
+                </div>
+
+                <div className="flex w-full flex-col gap-1">
+                  <FormControl>
+                    <CategoryDropdown
+                      onChangeHandler={field.onChange}
+                      value={field.value}
+                      setIsCarsCategory={() => {}}
+                      setHideCommercialLicenses={() => {}}
+                    />
+                  </FormControl>
+                  <FormDescription className="text-xs text-gray-500">
+                    Associate this promotion with a specific vehicle category
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Promotion Type Select */}
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col gap-2">
+                <FormLabel className="text-base font-semibold text-gray-800">
+                  Promotion Type <span className="text-red-500">*</span>
+                </FormLabel>
+
+                <div className="flex w-full flex-col gap-1">
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="h-11 border-gray-200 bg-gray-50 transition-all duration-200 focus:bg-white">
+                        <SelectValue placeholder="Select where to display this promotion" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="homepage">
+                        Home Page Content
+                      </SelectItem>
+                      <SelectItem value="listing-page">
+                        Listing Page Vehicle Card
+                      </SelectItem>
+                      <SelectItem value="city-listing-page">
+                        City Page Quick Link
+                      </SelectItem>
+                      <SelectItem value="series-listing-page">
+                        Series Page Quick Link
+                      </SelectItem>
+                      <SelectItem value="brand-listing-page">
+                        Brand Page Quick Link
+                      </SelectItem>
+                      <SelectItem value="listing-page-filter">
+                        Listing Page Top Filter
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription className="text-xs text-gray-500">
+                    Determines where and how the promotion will be displayed
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Detailed Link Field */}
+          <FormField
+            control={form.control}
+            name="promotionLink"
+            render={({ field }) => (
+              <FormItem className="flex w-full flex-col gap-2">
+                <FormLabel className="text-base font-semibold text-gray-800">
+                  Detailed Link
+                </FormLabel>
+                <div className="flex w-full flex-col gap-1">
+                  <FormControl>
+                    <Input
+                      placeholder="https://example.com/promotion"
+                      {...field}
+                      className="h-11 border-gray-200 bg-gray-50 transition-all duration-200 focus:bg-white"
+                    />
+                  </FormControl>
+                  <FormDescription className="text-xs text-gray-500">
+                    The destination URL when a user clicks the promotion
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* Promotion Image */}
           <FormField
             control={form.control}
             name="promotionImage"
@@ -140,32 +258,71 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
             )}
           />
 
-          {/* type value */}
+          {/* Title Field */}
           <FormField
             control={form.control}
-            name="promotionLink"
+            name="title"
             render={({ field }) => (
-              <FormItem className="flex mb-2 w-full max-sm:flex-col">
-                <FormLabel className="flex justify-between mt-4 ml-2 w-56 text-base max-sm:w-fit lg:text-lg">
-                  Link <span className="mr-5 max-sm:hidden">:</span>
-                </FormLabel>
+              <FormItem className="flex w-full flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <FormLabel className="text-base font-semibold text-gray-800">
+                    Display Title
+                  </FormLabel>
+                  <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-400">
+                    Optional
+                  </span>
+                </div>
 
-                <div className="flex-col items-start w-full">
+                <div className="flex w-full flex-col gap-1">
                   <FormControl>
                     <Input
-                      placeholder="eg: 'https://example.com'"
+                      placeholder="e.g., 'Summer Special'"
                       {...field}
-                      className="input-field"
+                      className="h-11 border-gray-200 bg-gray-50 transition-all duration-200 focus:bg-white"
                     />
                   </FormControl>
-                  <FormDescription className="ml-2">
-                    Provide the link associated with the promotion
+                  <FormDescription className="text-xs text-gray-500">
+                    The main headline text for the promotion
                   </FormDescription>
-                  <FormMessage className="ml-2" />
+                  <FormMessage />
                 </div>
               </FormItem>
             )}
           />
+
+          {/* Subtitle Field (Conditional) */}
+          {form.watch("type") !== "listing-page-filter" && (
+            <FormField
+              control={form.control}
+              name="subtitle"
+              render={({ field }) => (
+                <FormItem className="flex w-full flex-col gap-2 duration-300 animate-in fade-in slide-in-from-top-2">
+                  <div className="flex items-center justify-between">
+                    <FormLabel className="text-base font-semibold text-gray-800">
+                      Subtitle
+                    </FormLabel>
+                    <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-400">
+                      Optional
+                    </span>
+                  </div>
+
+                  <div className="flex w-full flex-col gap-1">
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., 'Limited time offer ending soon'"
+                        {...field}
+                        className="h-11 border-gray-200 bg-gray-50 transition-all duration-200 focus:bg-white"
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs text-gray-500">
+                      Supporting text displayed below the title
+                    </FormDescription>
+                    <FormMessage />
+                  </div>
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         {/* submit  */}
@@ -173,7 +330,7 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="w-full flex-center col-span-2 mt-3 !text-lg !font-semibold button bg-yellow hover:bg-yellow/90"
+          className="flex-center button col-span-2 mt-3 w-full bg-yellow !text-lg !font-semibold hover:bg-yellow/90"
         >
           {form.formState.isSubmitting ? "Processing..." : `${type} Promotion`}
           {form.formState.isSubmitting && <Spinner />}
@@ -193,7 +350,7 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
           ></DeleteModal>
         )}
 
-        <p className="p-0 m-0 -mt-3 text-xs text-center text-red-500">
+        <p className="m-0 -mt-3 p-0 text-center text-xs text-red-500">
           Make sure appropriate state is selected before adding a promotion.
           Currently adding promotion under {state.stateName}
         </p>

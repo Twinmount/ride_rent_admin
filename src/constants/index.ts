@@ -95,6 +95,10 @@ export const RecommendedLinkFormDefaultValues = {
 export const PromotionFormDefaultValue = {
   promotionImage: "",
   promotionLink: "",
+  vehicleCategoryId: "",
+  type: "homepage" as const,
+  title: "",
+  subtitle: "",
 };
 
 // blog promotion form default values

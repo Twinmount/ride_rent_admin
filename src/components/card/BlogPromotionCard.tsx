@@ -1,10 +1,10 @@
 import { Eye, FilePenLine } from "lucide-react";
 import { Link } from "react-router-dom";
-import { PromotionType } from "@/types/api-types/API-types";
+import { BlogPromotionType } from "@/types/api-types/API-types";
 
 interface BlogPromotionCardProps {
-  promotion: PromotionType;
-  onPreview: (promotion: PromotionType) => void;
+  promotion: BlogPromotionType;
+  onPreview: (promotion: BlogPromotionType) => void;
   type: "ride" | "advisor";
 }
 

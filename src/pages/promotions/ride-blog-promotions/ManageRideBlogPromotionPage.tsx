@@ -2,7 +2,7 @@ import { useState } from "react";
 import AdsSkelton from "@/components/skelton/AdsSkelton";
 import PromotionPreviewModal from "@/components/modal/PromotionPreviewModal";
 import { useQuery } from "@tanstack/react-query";
-import { PromotionType } from "@/types/api-types/API-types";
+import { BlogPromotionType } from "@/types/api-types/API-types";
 import { fetchAllBlogPromotions } from "@/api/blogs";
 import Pagination from "@/components/Pagination";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
@@ -16,7 +16,7 @@ export default function ManageRideBlogPromotionsPage() {
   const [selectedPlacementFilter, setSelectedPlacementFilter] =
     useState<string>("all");
   const [selectedPromotion, setSelectedPromotion] =
-    useState<PromotionType | null>(null);
+    useState<BlogPromotionType | null>(null);
 
   const { country } = useAdminContext();
 

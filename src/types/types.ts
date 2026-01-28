@@ -147,9 +147,21 @@ export type RecommendedLinkFormType = {
   link: string;
 };
 
+export type PromotionTypeEnum =
+  | "homepage"
+  | "listing-page"
+  | "city-listing-page"
+  | "series-listing-page"
+  | "brand-listing-page"
+  | "listing-page-filter";
+
 export type PromotionFormType = {
   promotionImage: string;
   promotionLink: string;
+  vehicleCategoryId?: string;
+  type: PromotionTypeEnum;
+  title?: string;
+  subtitle?: string;
 };
 
 export type BlogPromotionPlacementType =
