@@ -193,6 +193,9 @@ export const PromotionFormSchema = z.object({
       "series-listing-page",
       "brand-listing-page",
       "listing-page-filter",
+      "city-quick-links",
+      "series-quick-links",
+      "brand-quick-links",
     ],
     {
       required_error: "Promotion type is required",

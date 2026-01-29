@@ -333,7 +333,10 @@ export interface PromotionType {
     | "city-listing-page"
     | "series-listing-page"
     | "brand-listing-page"
-    | "listing-page-filter";
+    | "listing-page-filter"
+    | "city-quick-links"
+    | "series-quick-links"
+    | "brand-quick-links";
   title?: string;
   subtitle?: string;
 }
