@@ -68,6 +68,17 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
     defaultValues: initialValues,
   });
 
+  // Watch the type to determine valid image aspect ratio hints
+  const watchedType = form.watch("type");
+
+  const getImageDescription = () => {
+    if (watchedType === "listing-page") {
+      return "Upload an image or GIF with a maximum file size of 5MB. Vertical (portrait) aspect ratio (3:4) is preferred. Recommended size: 600px x 800px.";
+    }
+    // Default for homepage, quick-links (city/series/brand), listing-page-filter, etc.
+    return "Upload an image or GIF with a maximum file size of 5MB. Landscape aspect ratio (4:3) is preferred. Recommended size: 800px x 600px.";
+  };
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof PromotionFormSchema>) {
     if (isFileUploading) {
@@ -192,16 +203,25 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
                         Listing Page Vehicle Card
                       </SelectItem>
                       <SelectItem value="city-listing-page">
-                        City Page Quick Link
+                        City Listing Page
                       </SelectItem>
                       <SelectItem value="series-listing-page">
-                        Series Page Quick Link
+                        Series Listing Page
                       </SelectItem>
                       <SelectItem value="brand-listing-page">
-                        Brand Page Quick Link
+                        Brand Listing Page
                       </SelectItem>
                       <SelectItem value="listing-page-filter">
                         Listing Page Top Filter
+                      </SelectItem>
+                      <SelectItem value="city-quick-links">
+                        City Page Quick Links
+                      </SelectItem>
+                      <SelectItem value="series-quick-links">
+                        Series Page Quick Links
+                      </SelectItem>
+                      <SelectItem value="brand-quick-links">
+                        Brand Page Quick Links
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -248,7 +268,7 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
               <PromotionFileUpload
                 name={field.name}
                 label="Promotion Image"
-                description="Upload an image or GIF with a maximum file size of 5MB. Vertical (portrait) aspect ratio is preferred"
+                description={getImageDescription()}
                 existingFile={formData?.promotionImage}
                 maxSizeMB={5}
                 setIsFileUploading={setIsFileUploading}
