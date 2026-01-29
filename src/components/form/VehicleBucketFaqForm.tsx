@@ -24,24 +24,23 @@ import {
   createContentFaq,
   updateContentFaq,
   deleteContentFaq,
-} from "@/api/content-faq";
+} from "@/api/content-faq/contentFaqApi";
 import { ContentFaq, FaqType } from "@/types/api-types/contentFaqApi-types";
 
-export type SeriesFaqData = {
+export type VehicleBucketFaqData = {
   faqs: ContentFaq[];
-  seriesId: string;
+  vehicleBucketId: string;
 };
 
-type SeriesFaqFormProps = {
+type VehicleBucketFaqFormProps = {
   type: "Add" | "Update";
-  data: SeriesFaqData;
+  data: VehicleBucketFaqData;
 };
 
 /**
- * Series FAQ Form component - follows same visual pattern as RideBlogFaqForm
- * but integrates with the /content-faq API for individual FAQ operations
+ * Vehicle Bucket FAQ Form component
  */
-const SeriesFaqForm = ({ type, data }: SeriesFaqFormProps) => {
+const VehicleBucketFaqForm = ({ type, data }: VehicleBucketFaqFormProps) => {
   const [faqs, setFaqs] = useState<ContentFaq[]>(data.faqs);
   const [editingIndex, setEditingIndex] = useState<number | null>(
     type === "Add" && data.faqs.length === 0 ? 0 : null,
@@ -51,7 +50,6 @@ const SeriesFaqForm = ({ type, data }: SeriesFaqFormProps) => {
 
   const queryClient = useQueryClient();
 
-  // Sync local state when data prop changes (after refetch)
   // Filter out any undefined or null values
   useEffect(() => {
     const validFaqs = (data.faqs || []).filter(
@@ -71,7 +69,7 @@ const SeriesFaqForm = ({ type, data }: SeriesFaqFormProps) => {
         );
       }
       queryClient.invalidateQueries({
-        queryKey: ["series-faqs", data.seriesId],
+        queryKey: ["vehicle-bucket-faqs", data.vehicleBucketId],
       });
       toast({
         title: "FAQ added successfully",
@@ -96,7 +94,7 @@ const SeriesFaqForm = ({ type, data }: SeriesFaqFormProps) => {
       updateContentFaq(faqId, faqData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["series-faqs", data.seriesId],
+        queryKey: ["vehicle-bucket-faqs", data.vehicleBucketId],
       });
       toast({
         title: "FAQ updated successfully",
@@ -117,12 +115,13 @@ const SeriesFaqForm = ({ type, data }: SeriesFaqFormProps) => {
 
   // Delete FAQ mutation
   const deleteMutation = useMutation({
-    mutationFn: (faqId: string) => deleteContentFaq(faqId, FaqType.SERIES),
+    mutationFn: (faqId: string) =>
+      deleteContentFaq(faqId, FaqType.VEHICLE_BUCKET),
     onSuccess: (_data, faqId) => {
       // Remove from local state immediately
       setFaqs((prev) => prev.filter((f) => f._id !== faqId));
       queryClient.invalidateQueries({
-        queryKey: ["series-faqs", data.seriesId],
+        queryKey: ["vehicle-bucket-faqs", data.vehicleBucketId],
       });
       toast({
         title: "FAQ deleted successfully",
@@ -188,10 +187,10 @@ const SeriesFaqForm = ({ type, data }: SeriesFaqFormProps) => {
     // Add new FAQ and set it to editing mode
     const newFaq: ContentFaq = {
       _id: "",
-      faqType: FaqType.SERIES,
+      faqType: FaqType.VEHICLE_BUCKET,
       question: "",
       answer: "",
-      targetId: data.seriesId,
+      targetId: data.vehicleBucketId,
     };
     setFaqs((prev) => [...prev, newFaq]);
     setEditingIndex(faqs.length);
@@ -234,10 +233,10 @@ const SeriesFaqForm = ({ type, data }: SeriesFaqFormProps) => {
     setSavingIndex(index);
 
     const faqData = {
-      faqType: FaqType.SERIES,
+      faqType: FaqType.VEHICLE_BUCKET,
       question: faq.question?.trim(),
       answer: faq.answer?.trim(),
-      targetId: data.seriesId,
+      targetId: data.vehicleBucketId,
     };
 
     if (!faq._id) {
@@ -348,4 +347,4 @@ const SeriesFaqForm = ({ type, data }: SeriesFaqFormProps) => {
   );
 };
 
-export default SeriesFaqForm;
+export default VehicleBucketFaqForm;

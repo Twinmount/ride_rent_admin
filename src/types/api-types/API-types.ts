@@ -248,12 +248,13 @@ export interface FetchLinksResponse {
 
 export interface VehicleBucketType {
   id?: string;
-  bucketMode: VehicleBucketModeType;
+  vehicleBucketMode: VehicleBucketModeType;
   stateId: string;
   displayGroup: VehicleBucketDisplayGroupType;
   linkText: string;
   vehicleBucketName: string;
   vehicleBucketValue: string;
+  vehicleBucketDescription: string;
   pageHeading: string;
   pageSubheading: string;
   metaTitle: string;

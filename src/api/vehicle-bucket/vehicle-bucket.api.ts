@@ -32,17 +32,23 @@ export const searchVehicles = async (query: string, stateId?: string) => {
 };
 
 // add link
-export const addVehicleBucket = async (values: VehicleBucketType) => {
+export const addVehicleBucket = async (
+  values: VehicleBucketType,
+): Promise<FetchSpecificVehicleBucketResponse> => {
   try {
     const requestBody = {
       ...values,
     };
 
     // Send the FormData object using the API post method
-    const data = await API.post({
+    const data = await API.post<FetchSpecificVehicleBucketResponse>({
       slug: Slug.ADD_VEHICLE_BUCKET,
       body: requestBody,
     });
+
+    if (!data) {
+      throw new Error("Failed to add vehicle bucket");
+    }
 
     return data;
   } catch (error) {
@@ -54,7 +60,7 @@ export const addVehicleBucket = async (values: VehicleBucketType) => {
 export const updateVehicleBucket = async (
   vehicleBucketId: string,
   values: VehicleBucketType,
-) => {
+): Promise<FetchSpecificVehicleBucketResponse> => {
   try {
     const requestBody = {
       ...values,
@@ -62,10 +68,14 @@ export const updateVehicleBucket = async (
     };
 
     // Send the FormData object using the API put method
-    const data = await API.put({
+    const data = await API.put<FetchSpecificVehicleBucketResponse>({
       slug: `${Slug.PUT_VEHICLE_BUCKET}/${vehicleBucketId}`,
       body: requestBody,
     });
+
+    if (!data) {
+      throw new Error("Failed to update vehicle bucket");
+    }
 
     return data;
   } catch (error) {
@@ -99,6 +109,7 @@ export const fetchAllVehicleBucket = async (urlParams: {
   search: string;
   state: string;
   displayGroup?: string;
+  vehicleBucketMode?: string;
 }): Promise<FetchVehicleBucketListResponse> => {
   try {
     const queryParams = new URLSearchParams({
@@ -108,8 +119,18 @@ export const fetchAllVehicleBucket = async (urlParams: {
       state: urlParams.state,
     });
 
-    if (urlParams.displayGroup && urlParams.displayGroup !== "All") {
+    if (
+      urlParams.displayGroup &&
+      urlParams.displayGroup?.toLowerCase() !== "all"
+    ) {
       queryParams.append("displayGroup", urlParams.displayGroup);
+    }
+
+    if (
+      urlParams.vehicleBucketMode &&
+      urlParams.vehicleBucketMode?.toLowerCase() !== "all"
+    ) {
+      queryParams.append("vehicleBucketMode", urlParams.vehicleBucketMode);
     }
 
     if (urlParams.search) {

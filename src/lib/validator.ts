@@ -607,7 +607,7 @@ export const VehicleSeriesSchema = z.object({
 
 export const VehicleBucketSchema = z
   .object({
-    bucketMode: z.enum(
+    vehicleBucketMode: z.enum(
       ["VEHICLE_CODE", "VEHICLE_TYPE", "LOCATION_COORDINATES"],
       {
         required_error: "Bucket mode is required",
@@ -635,6 +635,10 @@ export const VehicleBucketSchema = z
         /^[a-z0-9-]+$/,
         "Slug must only contain lowercase letters, numbers, and hyphens",
       ),
+    vehicleBucketDescription: z
+      .string()
+      .min(1, "Bucket description is required")
+      .max(300, "Bucket description cannot exceed 300 characters"),
     pageHeading: z
       .string()
       .min(1, "Page heading is required")
@@ -656,18 +660,21 @@ export const VehicleBucketSchema = z
     vehicleCodes: z.array(z.string()).optional(),
     vehicleCategoryId: z.string().optional(),
     vehicleTypeId: z.string().optional(),
-    location: z
-      .object({
-        lat: z.number(),
-        lng: z.number(),
-        address: z.string().optional(),
-      })
-      .optional(),
+    location: z.preprocess(
+      (value) => (value === null ? undefined : value),
+      z
+        .object({
+          lat: z.number(),
+          lng: z.number(),
+          address: z.string().optional(),
+        })
+        .optional(),
+    ),
   })
   .refine(
     (data) => {
       // VEHICLE_CODE mode: vehicleCodes is required
-      if (data.bucketMode === "VEHICLE_CODE") {
+      if (data.vehicleBucketMode === "VEHICLE_CODE") {
         return (
           Array.isArray(data.vehicleCodes) &&
           data.vehicleCodes.length >= 1 &&
@@ -684,7 +691,7 @@ export const VehicleBucketSchema = z
   .refine(
     (data) => {
       // VEHICLE_TYPE mode: vehicleTypeId is required
-      if (data.bucketMode === "VEHICLE_TYPE") {
+      if (data.vehicleBucketMode === "VEHICLE_TYPE") {
         return !!data.vehicleTypeId && data.vehicleTypeId.trim() !== "";
       }
       return true;
@@ -697,7 +704,7 @@ export const VehicleBucketSchema = z
   .refine(
     (data) => {
       // LOCATION_COORDINATES mode: location is required
-      if (data.bucketMode === "LOCATION_COORDINATES") {
+      if (data.vehicleBucketMode === "LOCATION_COORDINATES") {
         return (
           !!data.location &&
           typeof data.location.lat === "number" &&

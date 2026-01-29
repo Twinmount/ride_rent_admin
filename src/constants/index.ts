@@ -366,7 +366,7 @@ export const RidePromotionFormDefaultValues: RidePromotionFormType = {
 };
 
 export const VehicleBucketFormDefaultValues: VehicleBucketFormType = {
-  bucketMode: "VEHICLE_CODE",
+  vehicleBucketMode: "VEHICLE_CODE",
   stateId: "",
   displayGroup: "POPULAR_RENTAL_SEARCHES",
   vehicleBucketName: "",
@@ -376,6 +376,7 @@ export const VehicleBucketFormDefaultValues: VehicleBucketFormType = {
   vehicleCategoryId: "",
   vehicleTypeId: "",
   location: undefined,
+  vehicleBucketDescription: "",
   pageHeading: "",
   pageSubheading: "",
   metaTitle: "",
@@ -426,22 +427,58 @@ export const VEHICLE_BUCKET_MODES_ENUM = {
 // Vehicle Bucket Mode Options
 export const VEHICLE_BUCKET_MODES = [
   {
-    label: "Manual Selection (Vehicle Codes)",
+    label: "Vehicle Code Mode",
     value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_CODE,
-    description: "Manually select up to 30 specific vehicles",
+    description:
+      "Manually select up to 30 specific vehicles using vehicle codes",
   },
   {
-    label: "Auto-Fetch by Type",
+    label: "Vehicle Type Mode",
     value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_TYPE,
-    description: "Automatically fetch upto 30 vehicles of a specific type",
+    description:
+      "Automatically fetch upto 30 vehicles of a specific type using vehicle type",
   },
   {
-    label: "Auto-Fetch by Location",
+    label: "Location Co-ordinates Mode",
     value: VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES,
     description:
-      "Automatically fetch vehicles up to 30 near specific coordinates within a specific state/type",
+      "Automatically fetch vehicles up to 30 near specific coordinates within a specific state/type using location co-ordinates",
   },
 ] as const;
 
 export type VehicleBucketModeType =
   (typeof VEHICLE_BUCKET_MODES)[number]["value"];
+
+export const VEHICLE_BUCKET_GROUP_FILTER_DROPDOWN_OPTIONS = [
+  {
+    label: "All (Group)",
+    value: "all",
+  },
+  {
+    label: "Popular Rental Searches (Left Box)",
+    value: "POPULAR_RENTAL_SEARCHES",
+  },
+  {
+    label: "Popular Vehicle Pages (Right Box)",
+    value: "POPULAR_VEHICLE_PAGES",
+  },
+];
+
+export const VEHICLE_BUCKET_MODE_FILTER_DROPDOWN_OPTIONS = [
+  {
+    label: "All (Mode)",
+    value: "all",
+  },
+  {
+    label: "Vehicle Code Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_CODE,
+  },
+  {
+    label: "Vehicle Type Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_TYPE,
+  },
+  {
+    label: "Location Co-ordinates Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES,
+  },
+];

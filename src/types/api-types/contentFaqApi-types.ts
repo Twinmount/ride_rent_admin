@@ -1,31 +1,31 @@
+export enum FaqType {
+  SERIES = "series",
+  VEHICLE_BUCKET = "vehicle-bucket",
+}
+
 export interface ContentFaq {
   _id: string;
-  faqType: "series";
-  question?: string;
-  answer?: string;
-  seriesId?: string;
-  state?: "draft" | "published" | "archived";
-  createdAt: string;
-  updatedAt: string;
+  faqType: FaqType;
+  question: string;
+  answer: string;
+  targetId: string;
 }
 
 export interface CreateContentFaqRequest {
-  faqType: "series";
-  question?: string;
-  answer?: string;
-  seriesId?: string;
-  state?: "draft" | "published" | "archived";
+  faqType: FaqType;
+  question: string;
+  answer: string;
+  targetId: string;
 }
 
 export interface UpdateContentFaqRequest {
-  faqType: "series";
-  question?: string;
-  answer?: string;
-  seriesId?: string;
-  state?: "draft" | "published" | "archived";
+  faqType: FaqType;
+  question: string;
+  answer: string;
+  targetId: string;
 }
 
-export interface FetchSeriesFaqsResponse {
+export interface FetchFaqsResponse {
   success: boolean;
   data: ContentFaq[];
 }

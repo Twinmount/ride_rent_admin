@@ -7,6 +7,7 @@ export const useFormValidationToast = (form: UseFormReturn<any, any>) => {
 
   useEffect(() => {
     if (Object.keys(form.formState.errors).length > 0) {
+      console.error("form validation error", form.formState.errors);
       toast({
         variant: "destructive",
         title: "Validation Error",

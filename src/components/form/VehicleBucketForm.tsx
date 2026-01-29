@@ -9,12 +9,19 @@ import { VehicleBucketSchema } from "@/lib/validator";
 import { FormItemWrapper } from "./form-ui/FormItemWrapper";
 import StatesDropdown from "./dropdowns/StatesDropdown";
 import { Textarea } from "../ui/textarea";
-import { VehicleBucketFormDefaultValues } from "@/constants";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  VEHICLE_BUCKET_GROUP_FILTER_DROPDOWN_OPTIONS,
+  VehicleBucketFormDefaultValues,
+} from "@/constants";
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  SetURLSearchParams,
+} from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { addVehicleBucket, updateVehicleBucket } from "@/api/vehicle-bucket";
 import { FormContainer, FormSubmitButton } from "./form-ui";
-import VehicleBucketGroupDropdown from "./dropdowns/VehicleBucketGroupDropdown";
 import VehicleMultiSelectDropdown from "./dropdowns/VehicleMultiSelectDropdown";
 import { VehicleBucketType } from "@/types/api-types/API-types";
 import { sanitizeStringToSlug } from "@/lib/utils";
@@ -25,15 +32,19 @@ import VehicleTypesDropdown from "./dropdowns/VehicleTypesDropdown";
 import LocationPicker from "./LocationPicker";
 import VehicleBucketModeDropdown from "./dropdowns/VehicleBucketModeDropdown";
 import { useFormValidationToast } from "@/hooks/useFormValidationToast";
+import { SingleSelectDropdown } from "./dropdowns/SingleSelectDropdown";
+import RichTextEditorComponent from "./RichTextEditorComponent";
 
 type VehicleBucketFormProps = {
   type: "Add" | "Update";
   formData?: VehicleBucketType | null;
+  setSearchParams?: SetURLSearchParams;
 };
 
 export default function VehicleBucketForm({
   type,
   formData,
+  setSearchParams,
 }: VehicleBucketFormProps) {
   const [categoryId, setCategoryId] = useState<string | null>(null);
 
@@ -77,7 +88,14 @@ export default function VehicleBucketForm({
           queryKey: ["vehicle-bucket"],
         });
 
-        navigate("/manage-vehicle-bucket");
+        // If setSearchParams is provided (Add mode), set the vehicleBucketId to enable FAQ tab
+        if (type === "Add" && setSearchParams && data.result?.id) {
+          setSearchParams(
+            new URLSearchParams({ vehicleBucketId: data.result.id }),
+          );
+        } else {
+          navigate("/manage-vehicle-bucket");
+        }
       }
     } catch (error) {
       console.error(error);
@@ -94,7 +112,9 @@ export default function VehicleBucketForm({
     }
   }
 
-  const selectedBucketMode = form.watch("bucketMode");
+  const selectedBucketMode = form.watch("vehicleBucketMode");
+
+  const stateId = form.watch("stateId");
 
   const isLocationMode = selectedBucketMode === "LOCATION_COORDINATES";
   const isVehicleTypeMode = selectedBucketMode === "VEHICLE_TYPE";
@@ -105,7 +125,7 @@ export default function VehicleBucketForm({
       <FormContainer onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
-          name="bucketMode"
+          name="vehicleBucketMode"
           render={({ field }) => (
             <FormItemWrapper
               label="Bucket Mode"
@@ -160,107 +180,7 @@ export default function VehicleBucketForm({
                 }}
                 value={field.value}
                 placeholder="location"
-              />
-            </FormItemWrapper>
-          )}
-        />
-
-        {/* Show Category & Type for VEHICLE_TYPE and LOCATION_COORDINATES modes */}
-        {(isVehicleTypeMode || isLocationMode) && (
-          <>
-            {/* Vehicle Category */}
-            <FormField
-              control={form.control}
-              name="vehicleCategoryId"
-              render={({ field }) => {
-                return (
-                  <FormItemWrapper
-                    label="Vehicle Category"
-                    description="Category of the vehicle"
-                  >
-                    <VehicleCategoryDropdown
-                      onChangeHandler={(value) => {
-                        field.onChange(value);
-                        if (field.value !== value) {
-                          field.onChange(value);
-                          form.setValue("vehicleTypeId", "", {
-                            shouldValidate: false,
-                            shouldDirty: true,
-                          });
-                        }
-                      }}
-                      value={field.value}
-                      placeholder="Select category"
-                      setCategoryId={setCategoryId}
-                    />
-                  </FormItemWrapper>
-                );
-              }}
-            />
-
-            {/* Vehicle Type */}
-            <FormField
-              control={form.control}
-              name="vehicleTypeId"
-              render={({ field }) => {
-                return (
-                  <FormItemWrapper
-                    label="Vehicle Type"
-                    description={
-                      isVehicleTypeMode
-                        ? "All vehicles of this type will be automatically included"
-                        : "Vehicles of this type near the coordinates will be shown"
-                    }
-                  >
-                    <VehicleTypesDropdown
-                      vehicleCategoryId={categoryId || undefined}
-                      value={field.value}
-                      onChangeHandler={(value) => {
-                        field.onChange(value);
-                      }}
-                      isDisabled={!categoryId}
-                    />
-                  </FormItemWrapper>
-                );
-              }}
-            />
-          </>
-        )}
-
-        {isLocationMode && (
-          <FormField
-            control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItemWrapper
-                label="Vehicle Location (GPS Coordinates)"
-                description="Select coordinates on the map. Vehicles nearest to this location will be displayed."
-              >
-                <LocationPicker
-                  onChangeHandler={field.onChange}
-                  initialLocation={field.value}
-                  buttonText="Choose Location on Map"
-                  showDetails={true}
-                  buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
-                />
-              </FormItemWrapper>
-            )}
-          />
-        )}
-
-        {/* Section Type */}
-        <FormField
-          control={form.control}
-          name="displayGroup"
-          render={({ field }) => (
-            <FormItemWrapper
-              label="Footer Display Group"
-              description="Select where this bucket will be displayed in the public site footer"
-            >
-              <VehicleBucketGroupDropdown
-                onChangeHandler={field.onChange}
-                value={field.value}
-                placeholder="Select footer display group"
+                isDisabled={type === "Update"}
               />
             </FormItemWrapper>
           )}
@@ -355,6 +275,140 @@ export default function VehicleBucketForm({
           }}
         />
 
+        {/* Vehicle Selection */}
+        {isVehicleCodeMode && (
+          <FormField
+            control={form.control}
+            name="vehicleCodes"
+            render={({ field }) => (
+              <FormItemWrapper
+                label="Select Vehicles"
+                description={
+                  <span>
+                    Search and select up to 20 vehicles to include in this
+                    bucket.
+                    <br />
+                    Selected vehicles will be displayed in the order they are
+                    added.
+                  </span>
+                }
+              >
+                <VehicleMultiSelectDropdown
+                  selectedVehicleCodes={field.value || []}
+                  selectedStateId={stateId}
+                  onChange={field.onChange}
+                  maxSelections={20}
+                />
+              </FormItemWrapper>
+            )}
+          />
+        )}
+
+        {/* Show Category & Type for VEHICLE_TYPE and LOCATION_COORDINATES modes */}
+        {(isVehicleTypeMode || isLocationMode) && (
+          <>
+            {/* Vehicle Category */}
+            <FormField
+              control={form.control}
+              name="vehicleCategoryId"
+              render={({ field }) => {
+                return (
+                  <FormItemWrapper
+                    label="Vehicle Category"
+                    description="Category of the vehicle"
+                  >
+                    <VehicleCategoryDropdown
+                      onChangeHandler={(value) => {
+                        field.onChange(value);
+                        if (field.value !== value) {
+                          field.onChange(value);
+                          form.setValue("vehicleTypeId", "", {
+                            shouldValidate: false,
+                            shouldDirty: true,
+                          });
+                        }
+                      }}
+                      value={field.value}
+                      placeholder="Select category"
+                      setCategoryId={setCategoryId}
+                      isDisabled={type === "Update"}
+                    />
+                  </FormItemWrapper>
+                );
+              }}
+            />
+
+            {/* Vehicle Type */}
+            <FormField
+              control={form.control}
+              name="vehicleTypeId"
+              render={({ field }) => {
+                return (
+                  <FormItemWrapper
+                    label="Vehicle Type"
+                    description={
+                      isVehicleTypeMode
+                        ? "All vehicles of this type will be automatically included"
+                        : "Vehicles of this type near the coordinates will be shown"
+                    }
+                  >
+                    <VehicleTypesDropdown
+                      vehicleCategoryId={categoryId || undefined}
+                      value={field.value}
+                      onChangeHandler={(value) => {
+                        field.onChange(value);
+                      }}
+                      isDisabled={!categoryId}
+                    />
+                  </FormItemWrapper>
+                );
+              }}
+            />
+          </>
+        )}
+
+        {isLocationMode && (
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItemWrapper
+                label="Vehicle Location (GPS Coordinates)"
+                description="Select coordinates on the map. Vehicles nearest to this location will be displayed."
+              >
+                <LocationPicker
+                  onChangeHandler={field.onChange}
+                  initialLocation={field.value}
+                  buttonText="Choose Location on Map"
+                  showDetails={true}
+                  buttonClassName="w-full cursor-pointer bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900"
+                />
+              </FormItemWrapper>
+            )}
+          />
+        )}
+
+        {/* Section Type */}
+        <FormField
+          control={form.control}
+          name="displayGroup"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Footer Display Group"
+              description="Select where this bucket will be displayed in the public site footer"
+            >
+              <SingleSelectDropdown
+                options={VEHICLE_BUCKET_GROUP_FILTER_DROPDOWN_OPTIONS}
+                onChange={(value) => {
+                  field.onChange(value);
+                }}
+                value={field.value}
+                placeholder="Select footer display group"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="linkText"
@@ -376,6 +430,38 @@ export default function VehicleBucketForm({
               />
             </FormItemWrapper>
           )}
+        />
+
+        {/* Vehicle Bucket Description */}
+        <FormField
+          control={form.control}
+          name="vehicleBucketDescription"
+          render={({ field }) => {
+            const limit = 500;
+
+            return (
+              <FormItemWrapper
+                label="Vehicle Bucket Description"
+                description={
+                  <span className="flex">
+                    <span>
+                      Enter the vehicle bucket description for this bucket. It
+                      will be displayed as the info box description in the
+                      Next.js vehicle bucket page.
+                    </span>
+                    <span className="mt-1 text-sm text-gray-500">
+                      {field.value?.length || 0}/{limit}
+                    </span>
+                  </span>
+                }
+              >
+                <RichTextEditorComponent
+                  content={field.value || ""}
+                  onUpdate={(updatedContent) => field.onChange(updatedContent)}
+                />
+              </FormItemWrapper>
+            );
+          }}
         />
 
         {/* Series Page Heading */}
@@ -490,34 +576,6 @@ export default function VehicleBucketForm({
             );
           }}
         />
-
-        {/* Vehicle Selection */}
-        {isVehicleCodeMode && (
-          <FormField
-            control={form.control}
-            name="vehicleCodes"
-            render={({ field }) => (
-              <FormItemWrapper
-                label="Select Vehicles"
-                description={
-                  <span>
-                    Search and select up to 20 vehicles to include in this
-                    bucket.
-                    <br />
-                    Selected vehicles will be displayed in the order they are
-                    added.
-                  </span>
-                }
-              >
-                <VehicleMultiSelectDropdown
-                  selectedVehicleCodes={field.value || []}
-                  onChange={field.onChange}
-                  maxSelections={20}
-                />
-              </FormItemWrapper>
-            )}
-          />
-        )}
 
         {/* Submit */}
         <FormSubmitButton

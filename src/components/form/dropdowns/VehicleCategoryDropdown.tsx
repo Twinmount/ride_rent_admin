@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/select";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllCategories } from "@/api/vehicle-categories";
+import { useEffect } from "react";
 
 type DropdownProps = {
   value?: string; // This will be categoryId
@@ -36,6 +37,11 @@ const VehicleCategoryDropdown = ({
   const selectedCategory = categories.find(
     (category) => category.categoryId === value,
   );
+
+  // setCategoryId on mount
+  useEffect(() => {
+    setCategoryId?.(value || "");
+  }, [value, setCategoryId]);
 
   return (
     <Select
