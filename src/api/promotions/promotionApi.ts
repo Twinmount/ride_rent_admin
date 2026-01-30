@@ -20,7 +20,7 @@ export const addPromotion = async (
     const data = await API.post({
       slug: Slug.ADD_PROMOTION,
       body: {
-        stateId: stateId,
+        stateId: stateId || undefined,
         promotionLink: values.promotionLink,
         promotionImage: values.promotionImage,
         vehicleCategoryId: values.vehicleCategoryId,
@@ -91,12 +91,17 @@ export const fetchAllPromotions = async (urlParams: {
   stateId: string;
 }): Promise<FetchPromotionsResponse> => {
   try {
-    const queryParams = new URLSearchParams({
+    const params: Record<string, string> = {
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
-      stateId: urlParams.stateId,
-    }).toString();
+    };
+
+    if (urlParams.stateId) {
+      params.stateId = urlParams.stateId;
+    }
+
+    const queryParams = new URLSearchParams(params).toString();
 
     const slugWithParams = `${Slug.GET_ALL_PROMOTIONS}?${queryParams}`;
 
