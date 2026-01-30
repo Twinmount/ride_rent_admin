@@ -339,6 +339,7 @@ export interface PromotionType {
     | "brand-quick-links";
   title?: string;
   subtitle?: string;
+  active?: boolean;
 }
 
 export interface FetchPromotionsResponse {
