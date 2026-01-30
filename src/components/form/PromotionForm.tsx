@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
 
 import {
@@ -43,6 +43,29 @@ import { GcsFilePaths } from "@/constants/enum";
 import { deleteMultipleFiles } from "@/helpers/form";
 import PromotionFileUpload from "./file-uploads/PromotionsFileUpload";
 import CategoryDropdown from "./dropdowns/CategoryDropdown";
+import { IconRenderer } from "../IconRenderer/IconRenderer";
+import { IconName } from "../IconRenderer/icons";
+import { renderToStaticMarkup } from "react-dom/server";
+import { uploadSingleFile } from "@/api/file-upload";
+
+const iconList = [
+  "pub",
+  "residentialArea",
+  "residentialBuildings",
+  "waterfall",
+  "wildlife",
+  "windmill",
+  "zoo",
+  "airport",
+  "amusementPark",
+  "aquarium",
+  "artGallery",
+  "bar",
+  "beachUmberlla",
+  "beach",
+];
+
+const strokeWidthList = ["0.5", "0.75", "1", "1.25", "1.5", "1.75", "2"];
 
 type PromotionFormProps = {
   type: "Add" | "Update";
@@ -79,6 +102,32 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
     return "Upload an image or GIF with a maximum file size of 5MB. Landscape aspect ratio (4:3) is preferred. Recommended size: 800px x 600px.";
   };
 
+  const promotionImage = useWatch({
+    control: form.control,
+    name: "promotionImage",
+  });
+
+  const iconName = useWatch({
+    control: form.control,
+    name: "iconConfig.iconName",
+  });
+
+  const bgColor = useWatch({
+    control: form.control,
+    name: "iconConfig.bgColor",
+  });
+  const strokeColor = useWatch({
+    control: form.control,
+    name: "iconConfig.strokeColor",
+  });
+  const strokeWidth = useWatch({
+    control: form.control,
+    name: "iconConfig.strokeWidth",
+  });
+
+  // Effect to handle mutual exclusivity is better handled by handlers, but for initial load or external changes:
+  // If we have an iconName, we assume image should be empty. But we shouldn't force it here to avoid loops.
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof PromotionFormSchema>) {
     if (isFileUploading) {
@@ -94,10 +143,48 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
 
     try {
       let data;
+      // Prepare payload: if icon is selected, serialize it to promotionImage
+      const payload = { ...values };
+      if (
+        values.type === "listing-page-filter" &&
+        values.iconConfig?.iconName
+      ) {
+        // Generate SVG string
+        const svgString = renderToStaticMarkup(
+          <IconRenderer
+            name={values.iconConfig.iconName as IconName}
+            color={values.iconConfig.strokeColor}
+            strokeWidth={values.iconConfig.strokeWidth}
+            width={60}
+            height={60}
+          />,
+        );
+
+        // Create Blob and File
+        const blob = new Blob([svgString], { type: "image/svg+xml" });
+        const file = new File([blob], "icon-config.svg", {
+          type: "image/svg+xml",
+        });
+
+        // Upload to GCS
+        // Use a dummy progress callback
+        const uploadResponse = await uploadSingleFile(
+          GcsFilePaths.IMAGE,
+          file,
+          () => {},
+        );
+
+        if (uploadResponse?.result?.path) {
+          payload.promotionImage = uploadResponse.result.path;
+        } else {
+          throw new Error("Failed to upload generated icon.");
+        }
+      }
+
       if (type === "Add") {
-        data = await addPromotion(values, state.stateId as string);
+        data = await addPromotion(payload as any, state.stateId as string);
       } else if (type === "Update") {
-        data = await updatePromotion(values, promotionId as string);
+        data = await updatePromotion(payload as any, promotionId as string);
       }
 
       if (data) {
@@ -261,22 +348,203 @@ export default function PromotionForm({ type, formData }: PromotionFormProps) {
           />
 
           {/* Promotion Image */}
-          <FormField
-            control={form.control}
-            name="promotionImage"
-            render={({ field }) => (
-              <PromotionFileUpload
-                name={field.name}
-                label="Promotion Image"
-                description={getImageDescription()}
-                existingFile={formData?.promotionImage}
-                maxSizeMB={5}
-                setIsFileUploading={setIsFileUploading}
-                bucketFilePath={GcsFilePaths.IMAGE}
-                setDeletedImages={setDeletedImages}
+          <div
+            className={`transition-opacity duration-300 ${iconName ? "pointer-events-none opacity-40" : "opacity-100"}`}
+          >
+            <FormField
+              control={form.control}
+              name="promotionImage"
+              render={({ field }) => (
+                <div className="relative">
+                  <PromotionFileUpload
+                    name={field.name}
+                    label="Promotion Image"
+                    description={getImageDescription()}
+                    existingFile={formData?.promotionImage}
+                    maxSizeMB={5}
+                    setIsFileUploading={setIsFileUploading}
+                    bucketFilePath={GcsFilePaths.IMAGE}
+                    setDeletedImages={setDeletedImages}
+                  />
+                  {/* Overlay to deselect/clear image logic if needed, but file upload usually has clear. 
+                      Here we make it mutually exclusive: if icon selected, this is disabled.
+                  */}
+                </div>
+              )}
+            />
+          </div>
+
+          {/* Icon Configuration - Only for listing-page-filter */}
+          {watchedType === "listing-page-filter" && (
+            <div
+              className={`rounded-lg border border-gray-200 p-4 transition-opacity duration-300 ${promotionImage ? "pointer-events-none opacity-40" : "opacity-100"}`}
+            >
+              <FormLabel className="mb-4 block text-lg font-semibold">
+                Icon Configuration
+              </FormLabel>
+
+              <FormField
+                control={form.control}
+                name="iconConfig"
+                render={() => {
+                  return (
+                    <div className="flex flex-col gap-4">
+                      {/* Icon Name */}
+                      <FormField
+                        control={form.control}
+                        name="iconConfig.iconName"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col">
+                            <FormLabel>Icon Name</FormLabel>
+                            <FormControl>
+                              <select
+                                {...field}
+                                value={field.value || ""}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                  // If icon selected, clear image
+                                  if (e.target.value) {
+                                    form.setValue("promotionImage", "");
+                                  }
+                                }}
+                                className="rounded-md border px-3 py-2 shadow-sm"
+                              >
+                                <option value="">Select icon</option>
+                                {iconList.map((icon) => (
+                                  <option key={icon} value={icon}>
+                                    {icon}
+                                  </option>
+                                ))}
+                              </select>
+                            </FormControl>
+                            <FormDescription>
+                              Choose an icon for this filter.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="iconConfig.strokeWidth"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-col">
+                            <FormLabel>Stroke Width</FormLabel>
+                            <FormControl>
+                              <select
+                                {...field}
+                                className="rounded-md border px-3 py-2 shadow-sm"
+                              >
+                                <option value="">Select</option>
+                                {strokeWidthList.map((icon) => (
+                                  <option key={icon} value={icon}>
+                                    {icon}
+                                  </option>
+                                ))}
+                              </select>
+                            </FormControl>
+                            <FormDescription>
+                              Choose the stroke width.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <div className="flex justify-between gap-4">
+                        {/* Background Color */}
+                        <FormField
+                          control={form.control}
+                          name="iconConfig.bgColor"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-col">
+                              <FormLabel>Background Color</FormLabel>
+                              <FormControl>
+                                <input
+                                  type="color"
+                                  {...field}
+                                  className="h-10 w-24 cursor-pointer rounded border p-1"
+                                />
+                              </FormControl>
+                              <FormDescription>
+                                Select background color.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Stroke Color */}
+                        <FormField
+                          control={form.control}
+                          name="iconConfig.strokeColor"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-col">
+                              <FormLabel>Stroke Color</FormLabel>
+                              <FormControl>
+                                <input
+                                  type="color"
+                                  {...field}
+                                  className="h-10 w-24 cursor-pointer rounded border p-1"
+                                />
+                              </FormControl>
+                              <FormDescription>
+                                Choose the stroke color.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Preview */}
+                      {(iconName || bgColor || strokeColor || strokeWidth) && (
+                        <div className="mt-4 flex flex-col items-center justify-center">
+                          <div
+                            className="inline-flex h-[60px] w-[60px] items-center justify-center rounded-sm p-2 shadow-md"
+                            style={{
+                              backgroundColor: bgColor || "#fff",
+                            }}
+                          >
+                            {iconName ? (
+                              <IconRenderer
+                                name={iconName as IconName}
+                                color={strokeColor}
+                                strokeWidth={strokeWidth}
+                              />
+                            ) : (
+                              <span className="text-sm text-gray-400">
+                                No icon
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-2 text-sm text-gray-500">
+                            Icon Preview
+                          </div>
+
+                          {/* Deselect Icon Button */}
+                          {iconName && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="mt-2 text-red-500 hover:text-red-600"
+                              onClick={() => {
+                                form.setValue("iconConfig.iconName", "");
+                                // Optionally reset other config
+                              }}
+                            >
+                              Start Over / Upload Image
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }}
               />
-            )}
-          />
+            </div>
+          )}
 
           {/* Title Field */}
           <FormField
