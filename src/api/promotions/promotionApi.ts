@@ -103,7 +103,7 @@ export const fetchAllPromotions = async (urlParams: {
 
     const queryParams = new URLSearchParams(params).toString();
 
-    const slugWithParams = `${Slug.GET_ALL_PROMOTIONS}?${queryParams}`;
+    const slugWithParams = `${Slug.GET_ALL_PROMOTIONS_ADMIN}?${queryParams}`;
 
     const data = await API.get<FetchPromotionsResponse>({
       slug: slugWithParams,
@@ -130,6 +130,20 @@ export const deletePromotion = async (promotionId: string) => {
     return data;
   } catch (error) {
     console.error("Error deleting promotion:", error);
+    throw error;
+  }
+};
+
+// toggle promotion active status
+export const togglePromotionStatus = async (promotionId: string) => {
+  try {
+    const data = await API.patch({
+      slug: `${Slug.TOGGLE_PROMOTION_STATUS}?promotionId=${promotionId}`,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error toggling promotion status:", error);
     throw error;
   }
 };

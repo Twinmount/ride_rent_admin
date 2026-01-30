@@ -77,6 +77,8 @@ export enum Slug {
   PUT_PROMOTION = "/promotions",
   DELETE_PROMOTION = "/promotions",
   GET_ALL_PROMOTIONS = "/promotions/list",
+  GET_ALL_PROMOTIONS_ADMIN = "/promotions/admin/list",
+  TOGGLE_PROMOTION_STATUS = "/promotions/toggle-status",
 
   // Ride Promotions (redesign)
   ADD_RIDE_PROMOTION = "/ride-promotions",
