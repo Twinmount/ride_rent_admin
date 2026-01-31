@@ -520,6 +520,21 @@ export interface FetchDashboardAnalytics {
   statusCode: number;
 }
 
+export interface MostViewedVehicleType {
+  vehicleId: string;
+  vehicleModel: string;
+  vehicleCode: string;
+  // Add other fields if needed based on API response
+}
+
+export interface FetchMostViewedVehiclesResponse {
+  result: {
+    list: MostViewedVehicleType[];
+  };
+  status: string;
+  statusCode: number;
+}
+
 // Updated types (in your types file, e.g., types/api-types/API-types.ts or supplier-central.ts)
 export interface SupplierDetailedResponse {
   _id: string;

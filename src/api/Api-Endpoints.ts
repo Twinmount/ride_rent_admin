@@ -245,6 +245,9 @@ export enum Slug {
   GET_SRM_VEHICLES = "/srm/vehicles",
   PUT_SRM_VEHICLE = "/srm/vehicle",
 
+  // Popular vehicles endpoint
+  GET_POPULAR_VEHICLES = "/vehicle/popular",
+
   // nextjs cache revalidate route
   NEXTJS_REVALIDATE_CACHE = "/api/revalidate-cache",
 }
