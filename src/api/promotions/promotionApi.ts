@@ -20,7 +20,7 @@ export const addPromotion = async (
     const data = await API.post({
       slug: Slug.ADD_PROMOTION,
       body: {
-        stateId: stateId,
+        stateId: stateId || undefined,
         promotionLink: values.promotionLink,
         promotionImage: values.promotionImage,
         vehicleCategoryId: values.vehicleCategoryId,
@@ -91,14 +91,19 @@ export const fetchAllPromotions = async (urlParams: {
   stateId: string;
 }): Promise<FetchPromotionsResponse> => {
   try {
-    const queryParams = new URLSearchParams({
+    const params: Record<string, string> = {
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
-      stateId: urlParams.stateId,
-    }).toString();
+    };
 
-    const slugWithParams = `${Slug.GET_ALL_PROMOTIONS}?${queryParams}`;
+    if (urlParams.stateId) {
+      params.stateId = urlParams.stateId;
+    }
+
+    const queryParams = new URLSearchParams(params).toString();
+
+    const slugWithParams = `${Slug.GET_ALL_PROMOTIONS_ADMIN}?${queryParams}`;
 
     const data = await API.get<FetchPromotionsResponse>({
       slug: slugWithParams,
@@ -125,6 +130,20 @@ export const deletePromotion = async (promotionId: string) => {
     return data;
   } catch (error) {
     console.error("Error deleting promotion:", error);
+    throw error;
+  }
+};
+
+// toggle promotion active status
+export const togglePromotionStatus = async (promotionId: string) => {
+  try {
+    const data = await API.patch({
+      slug: `${Slug.TOGGLE_PROMOTION_STATUS}?promotionId=${promotionId}`,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error toggling promotion status:", error);
     throw error;
   }
 };

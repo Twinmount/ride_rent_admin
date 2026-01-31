@@ -77,6 +77,8 @@ export enum Slug {
   PUT_PROMOTION = "/promotions",
   DELETE_PROMOTION = "/promotions",
   GET_ALL_PROMOTIONS = "/promotions/list",
+  GET_ALL_PROMOTIONS_ADMIN = "/promotions/admin/list",
+  TOGGLE_PROMOTION_STATUS = "/promotions/toggle-status",
 
   // Ride Promotions (redesign)
   ADD_RIDE_PROMOTION = "/ride-promotions",
@@ -242,6 +244,9 @@ export enum Slug {
 
   GET_SRM_VEHICLES = "/srm/vehicles",
   PUT_SRM_VEHICLE = "/srm/vehicle",
+
+  // Popular vehicles endpoint
+  GET_POPULAR_VEHICLES = "/vehicle/popular",
 
   // nextjs cache revalidate route
   NEXTJS_REVALIDATE_CACHE = "/api/revalidate-cache",
