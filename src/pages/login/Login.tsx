@@ -17,7 +17,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 // phone input
-import { PhoneInput } from "react-international-phone";
+import {
+  defaultCountries,
+  parseCountry,
+  PhoneInput,
+} from "react-international-phone";
 import "react-international-phone/style.css";
 import Spinner from "@/components/general/Spinner";
 import { API } from "@/api/ApiService";
@@ -102,6 +106,16 @@ const LoginPage = ({ country }: { country: string }) => {
     }
   }
 
+  const countries = defaultCountries.map((country) => {
+    const parsed = parseCountry(country);
+    if (parsed.iso2 === "ae") {
+      const updatedCountry = [...country];
+      updatedCountry[3] = ".. ... ....."; // Extended to 10 digits for test account
+      return updatedCountry as (typeof defaultCountries)[number];
+    }
+    return country;
+  });
+
   return (
     <section
       className="flex-center relative h-screen bg-gray-100"
@@ -138,6 +152,7 @@ const LoginPage = ({ country }: { country: string }) => {
                       <PhoneInput
                         defaultCountry={country === "in" ? "in" : "ae"}
                         value={field.value}
+                        countries={countries}
                         onChange={(value, country) => {
                           field.onChange(value);
 

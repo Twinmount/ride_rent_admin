@@ -310,13 +310,32 @@ export interface FetchSpecificLinkResponse {
 }
 
 // single promotion type
-export interface PromotionType {
+export interface BlogPromotionType {
   promotionId: string;
   promotionImage: any;
   promotionLink: string;
 }
 
-//  get-all-promotions  API response
+export interface PromotionType {
+  promotionId: string;
+  promotionImage: any;
+  promotionLink: string;
+  vehicleCategoryId?: string;
+  type:
+    | "homepage"
+    | "listing-page"
+    | "city-listing-page"
+    | "series-listing-page"
+    | "brand-listing-page"
+    | "listing-page-filter"
+    | "city-quick-links"
+    | "series-quick-links"
+    | "brand-quick-links";
+  title?: string;
+  subtitle?: string;
+  active?: boolean;
+}
+
 export interface FetchPromotionsResponse {
   result: {
     list: PromotionType[];
@@ -490,6 +509,21 @@ export interface FetchDashboardAnalytics {
     totalCategories: number;
     totalVisits: number;
     allTimeVisits: number;
+  };
+  status: string;
+  statusCode: number;
+}
+
+export interface MostViewedVehicleType {
+  vehicleId: string;
+  vehicleModel: string;
+  vehicleCode: string;
+  // Add other fields if needed based on API response
+}
+
+export interface FetchMostViewedVehiclesResponse {
+  result: {
+    list: MostViewedVehicleType[];
   };
   status: string;
   statusCode: number;

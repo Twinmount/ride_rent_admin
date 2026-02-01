@@ -66,6 +66,11 @@ export const CountryFormDefaultValues: CountryFormType = {
 export const CityFormDefaultValues: CityFormType = {
   cityName: "",
   cityValue: "",
+  cityPageHeading: "",
+  cityPageSubheading: "",
+  cityMetaTitle: "",
+  cityMetaDescription: "",
+  cityBodyContent: "",
 };
 
 // Vehicle Category form default values
@@ -90,6 +95,10 @@ export const RecommendedLinkFormDefaultValues = {
 export const PromotionFormDefaultValue = {
   promotionImage: "",
   promotionLink: "",
+  vehicleCategoryId: "",
+  type: "homepage" as const,
+  title: "",
+  subtitle: "",
 };
 
 // blog promotion form default values

@@ -124,6 +124,23 @@ export const CityFormSchema = z.object({
       /^[a-z-]+$/,
       "City value should only contain lowercase letters and hyphens",
     ),
+  cityPageHeading: z
+    .string()
+    .max(100, "Page heading cannot exceed 100 characters")
+    .optional(),
+  cityPageSubheading: z
+    .string()
+    .max(200, "Page subheading cannot exceed 200 characters")
+    .optional(),
+  cityMetaTitle: z
+    .string()
+    .max(80, "Meta title cannot exceed 80 characters")
+    .optional(),
+  cityMetaDescription: z
+    .string()
+    .max(5000, "Meta description cannot exceed 5000 characters")
+    .optional(),
+  cityBodyContent: z.string().optional(),
 });
 // Category Form Schema
 export const CategoryFormSchema = z.object({
@@ -162,13 +179,51 @@ export const RecommendedLinkFormSchema = z.object({
 });
 
 // Ads Form Schema
-export const PromotionFormSchema = z.object({
-  promotionImage: z.string().min(1, "Promotion image is required"),
-  promotionLink: z
-    .string()
-    .min(1, "Link is required")
-    .url("Link must be a valid URL"),
-});
+export const PromotionFormSchema = z
+  .object({
+    promotionImage: z.string().optional(),
+    promotionLink: z
+      .string()
+      .min(1, "Link is required")
+      .url("Link must be a valid URL"),
+    vehicleCategoryId: z.string().optional(),
+    type: z.enum(
+      [
+        "homepage",
+        "listing-page",
+        "city-listing-page",
+        "series-listing-page",
+        "brand-listing-page",
+        "listing-page-filter",
+        "city-quick-links",
+        "series-quick-links",
+        "brand-quick-links",
+      ],
+      {
+        required_error: "Promotion type is required",
+      },
+    ),
+    title: z.string().max(100, "Title cannot exceed 100 characters").optional(),
+    subtitle: z
+      .string()
+      .max(200, "Subtitle cannot exceed 200 characters")
+      .optional(),
+    iconConfig: iconConfigSchema.optional(),
+  })
+  .refine(
+    (data) => {
+      // If listing-page-filter, we need either promotionImage OR iconConfig.iconName
+      if (data.type === "listing-page-filter") {
+        return !!data.promotionImage || !!data.iconConfig?.iconName;
+      }
+      // For other types, promotionImage is required
+      return !!data.promotionImage;
+    },
+    {
+      message: "Either an image or an icon is required",
+      path: ["promotionImage"], // Error will show on promotionImage field
+    },
+  );
 
 // blog promotion form schema
 export const BlogPromotionFormSchema = z.object({

@@ -125,8 +125,14 @@ export type CategoryFormType = {
 };
 
 export type CityFormType = {
+  cityId?: string;
   cityName: string;
   cityValue: string;
+  cityPageHeading?: string;
+  cityPageSubheading?: string;
+  cityMetaTitle?: string;
+  cityMetaDescription?: string;
+  cityBodyContent?: string;
 };
 
 export type LinkFormType = {
@@ -141,9 +147,24 @@ export type RecommendedLinkFormType = {
   link: string;
 };
 
+export type PromotionTypeEnum =
+  | "homepage"
+  | "listing-page"
+  | "city-listing-page"
+  | "series-listing-page"
+  | "brand-listing-page"
+  | "listing-page-filter"
+  | "city-quick-links"
+  | "series-quick-links"
+  | "brand-quick-links";
+
 export type PromotionFormType = {
   promotionImage: string;
   promotionLink: string;
+  vehicleCategoryId?: string;
+  type: PromotionTypeEnum;
+  title?: string;
+  subtitle?: string;
 };
 
 export type BlogPromotionPlacementType =

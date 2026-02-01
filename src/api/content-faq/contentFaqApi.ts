@@ -4,7 +4,6 @@ import {
   ContentFaqResponse,
   CreateContentFaqRequest,
   FaqType,
-  FetchFaqsResponse,
   UpdateContentFaqRequest,
 } from "@/types/api-types/contentFaqApi-types";
 
@@ -68,50 +67,6 @@ export const deleteContentFaq = async (
     });
   } catch (error) {
     console.error("Error deleting FAQ:", error);
-    throw error;
-  }
-};
-
-/**
- * Get all FAQs for a specific target ID (Series ID or Vehicle Bucket ID)
- */
-export const getContentFaqsByTarget = async (
-  targetId: string,
-): Promise<FetchFaqsResponse> => {
-  try {
-    const response = await API.get<FetchFaqsResponse>({
-      slug: `${Slug.GET_CONTENT_FAQ_BY_TARGET}/${targetId}`,
-    });
-
-    if (!response) {
-      throw new Error("Failed to fetch FAQs");
-    }
-
-    return response;
-  } catch (error) {
-    console.error("Error fetching FAQs:", error);
-    throw error;
-  }
-};
-
-/**
- * Get a single FAQ by ID
- */
-export const getContentFaqById = async (
-  faqId: string,
-): Promise<ContentFaqResponse> => {
-  try {
-    const response = await API.get<ContentFaqResponse>({
-      slug: `${Slug.CONTENT_FAQ}/${faqId}`,
-    });
-
-    if (!response) {
-      throw new Error("Failed to fetch FAQ");
-    }
-
-    return response;
-  } catch (error) {
-    console.error("Error fetching FAQ:", error);
     throw error;
   }
 };
