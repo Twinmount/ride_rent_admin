@@ -1,6 +1,7 @@
 export enum FaqType {
   SERIES = "series",
   VEHICLE_BUCKET = "vehicle-bucket",
+  CITY = "city",
 }
 
 export interface ContentFaq {

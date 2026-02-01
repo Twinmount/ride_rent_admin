@@ -21,11 +21,11 @@ import { toast } from "../ui/use-toast";
 import { isFaqEmpty } from "@/helpers/form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  createCityFaq,
-  updateCityFaq,
-  deleteCityFaq,
+  createContentFaq,
+  updateContentFaq,
+  deleteContentFaq,
 } from "@/api/content-faq";
-import { ContentFaq } from "@/types/api-types/contentFaqApi-types";
+import { ContentFaq, FaqType } from "@/types/api-types/contentFaqApi-types";
 
 export type CityFaqData = {
   faqs: ContentFaq[];
@@ -37,14 +37,10 @@ type CityFaqFormProps = {
   data: CityFaqData;
 };
 
-/**
- * City FAQ Form component - follows same visual pattern as SeriesFaqForm
- * but integrates with the /content-faq API for city FAQ operations
- */
 const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
   const [faqs, setFaqs] = useState<ContentFaq[]>(data.faqs);
   const [editingIndex, setEditingIndex] = useState<number | null>(
-    type === "Add" && data.faqs.length === 0 ? 0 : null
+    type === "Add" && data.faqs.length === 0 ? 0 : null,
   );
   const [errors, setErrors] = useState<{ [key: number]: string }>({});
   const [savingIndex, setSavingIndex] = useState<number | null>(null);
@@ -54,20 +50,20 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
   // Sync local state when data prop changes (after refetch)
   // Filter out any undefined or null values
   useEffect(() => {
-    const validFaqs = (data.faqs || []).filter((faq): faq is ContentFaq => 
-      faq !== null && faq !== undefined
+    const validFaqs = (data.faqs || []).filter(
+      (faq): faq is ContentFaq => faq !== null && faq !== undefined,
     );
     setFaqs(validFaqs);
   }, [data.faqs]);
 
   // Create FAQ mutation
   const createMutation = useMutation({
-    mutationFn: createCityFaq,
+    mutationFn: createContentFaq,
     onSuccess: (response) => {
       // Update local state with the returned FAQ (which now has an _id)
       if (savingIndex !== null) {
         setFaqs((prev) =>
-          prev.map((faq, i) => (i === savingIndex ? response.data : faq))
+          prev.map((faq, i) => (i === savingIndex ? response.data : faq)),
         );
       }
       queryClient.invalidateQueries({
@@ -93,7 +89,7 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
   // Update FAQ mutation
   const updateMutation = useMutation({
     mutationFn: ({ faqId, faqData }: { faqId: string; faqData: any }) =>
-      updateCityFaq(faqId, faqData),
+      updateContentFaq(faqId, faqData),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["city-faqs", data.cityId],
@@ -117,7 +113,7 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
 
   // Delete FAQ mutation
   const deleteMutation = useMutation({
-    mutationFn: deleteCityFaq,
+    mutationFn: (faqId: string) => deleteContentFaq(faqId, FaqType.CITY),
     onSuccess: (_data, faqId) => {
       // Remove from local state immediately
       setFaqs((prev) => prev.filter((f) => f._id !== faqId));
@@ -142,10 +138,10 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
   const handleChange = (
     index: number,
     field: keyof FAQItemType,
-    value: string
+    value: string,
   ) => {
     setFaqs((prev) =>
-      prev.map((faq, i) => (i === index ? { ...faq, [field]: value } : faq))
+      prev.map((faq, i) => (i === index ? { ...faq, [field]: value } : faq)),
     );
 
     // Clear error for this FAQ when user starts typing
@@ -161,7 +157,7 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
   const handleAddFaq = () => {
     // Check if there's an incomplete FAQ
     const incompleteIndex = faqs.findIndex((faq) =>
-      isFaqEmpty({ question: faq.question || "", answer: faq.answer || "" })
+      isFaqEmpty({ question: faq.question || "", answer: faq.answer || "" }),
     );
 
     if (incompleteIndex !== -1) {
@@ -188,13 +184,10 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
     // Add new FAQ and set it to editing mode
     const newFaq: ContentFaq = {
       _id: "",
-      faqType: "city",
+      faqType: FaqType.CITY,
       question: "",
       answer: "",
-      cityId: data.cityId,
-      state: "draft",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      targetId: data.cityId,
     };
     setFaqs((prev) => [...prev, newFaq]);
     setEditingIndex(faqs.length);
@@ -237,11 +230,10 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
     setSavingIndex(index);
 
     const faqData = {
-      faqType: "city" as const,
+      faqType: FaqType.CITY,
       question: faq.question?.trim(),
       answer: faq.answer?.trim(),
-      cityId: data.cityId,
-      state: faq.state || "draft",
+      targetId: data.cityId,
     };
 
     if (!faq._id) {
@@ -271,7 +263,7 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const isLoading =
@@ -300,7 +292,7 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
             {faqs.map((faq, index) => {
               // Skip rendering if faq is undefined
               if (!faq) return null;
-              
+
               return (
                 <div key={faq._id || `new-${index}`} className="relative">
                   <SortableFAQItem
