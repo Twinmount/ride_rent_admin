@@ -331,6 +331,8 @@ export type JobFormType = {
   level: string;
   experience: string;
   country: string;
+  metaTitle: string;
+  metaDescription: string;
   sections?: JobSectionDto[];
   aboutCompany?: string;
   fileUrl?: string | null;

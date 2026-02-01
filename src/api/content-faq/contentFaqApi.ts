@@ -4,6 +4,7 @@ import {
   ContentFaqResponse,
   CreateContentFaqRequest,
   FaqType,
+  FetchFaqsResponse,
   UpdateContentFaqRequest,
 } from "@/types/api-types/contentFaqApi-types";
 
@@ -67,6 +68,25 @@ export const deleteContentFaq = async (
     });
   } catch (error) {
     console.error("Error deleting FAQ:", error);
+    throw error;
+  }
+};
+
+export const getContentFaqsByTarget = async (
+  targetId: string,
+): Promise<FetchFaqsResponse> => {
+  try {
+    const response = await API.get<FetchFaqsResponse>({
+      slug: `${Slug.GET_CONTENT_FAQ_BY_TARGET}/${targetId}`,
+    });
+
+    if (!response) {
+      throw new Error("Failed to fetch series FAQs");
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error fetching FAQs:", error);
     throw error;
   }
 };
