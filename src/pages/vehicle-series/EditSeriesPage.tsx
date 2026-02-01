@@ -2,7 +2,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSeriesById } from "@/api/vehicle-series";
-import { getSeriesFaqs } from "@/api/content-faq";
+import { getContentFaqsByTarget } from "@/api/content-faq";
 import VehicleSeriesForm from "@/components/form/VehicleSeriesForm";
 import SeriesFaqForm from "@/components/form/SeriesFaqForm";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -28,12 +28,11 @@ export default function EditBrandPage() {
   // Fetch series FAQs
   const { data: faqData, isLoading: isFaqLoading } = useQuery({
     queryKey: ["series-faqs", vehicleSeriesId],
-    queryFn: () => getSeriesFaqs(vehicleSeriesId as string),
+    queryFn: () => getContentFaqsByTarget(vehicleSeriesId as string),
     enabled: !!vehicleSeriesId,
   });
 
   // Default FAQ data structure
-  // API returns: { status: 'SUCCESS', result: { success: true, data: [...] }, statusCode: 200 }
   const extractFaqs = () => {
     if (!faqData) return [];
     // The API wrapper adds result layer: faqData.result.data contains the FAQs

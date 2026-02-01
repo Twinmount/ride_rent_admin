@@ -3,7 +3,6 @@ import { X, Search, Loader2 } from "lucide-react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { searchVehicles } from "@/api/vehicle-bucket";
 import { cn } from "@/lib/utils";
-import { useAdminContext } from "@/context/AdminContext";
 
 type Vehicle = {
   id: string;
@@ -16,20 +15,20 @@ type Vehicle = {
 
 type VehicleMultiSelectDropdownProps = {
   selectedVehicleCodes: string[];
+  selectedStateId: string;
   onChange: (vehicleCodes: string[]) => void;
   maxSelections?: number;
 };
 
 export default function VehicleMultiSelectDropdown({
   selectedVehicleCodes = [],
+  selectedStateId,
   onChange,
-  maxSelections = 20,
+  maxSelections = 10,
 }: VehicleMultiSelectDropdownProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<Vehicle[]>([]);
-
-  const { state } = useAdminContext();
 
   // Store full vehicle objects to display details (like code)
   // key is vehicleCode
@@ -69,7 +68,7 @@ export default function VehicleMultiSelectDropdown({
       try {
         const response: any = await searchVehicles(
           debouncedSearchQuery,
-          state?.stateId,
+          selectedStateId,
         );
         const results = response.result || response || [];
 
@@ -92,7 +91,7 @@ export default function VehicleMultiSelectDropdown({
     };
 
     fetchVehicles();
-  }, [debouncedSearchQuery, selectedVehicleCodes, state?.stateId]);
+  }, [debouncedSearchQuery, selectedVehicleCodes, selectedStateId]);
 
   const handleSelectVehicle = (vehicle: Vehicle) => {
     if (selectedVehicleCodes.length >= maxSelections) return;
