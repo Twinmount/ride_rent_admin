@@ -28,7 +28,7 @@ export const SidebarItem = ({
 
       {featureStatus && (
         <span className="pointer-events-none absolute right-2 top-3 rounded px-1.5 py-0.5 text-[9px] font-semibold leading-none text-yellow">
-          {featureStatus}*
+          {featureStatus}
         </span>
       )}
     </div>
