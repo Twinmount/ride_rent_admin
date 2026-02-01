@@ -516,7 +516,7 @@ export default function VehicleBucketForm({
           )}
         />
 
-        {/* Vehicle Series Meta Title */}
+        {/* Meta Title */}
         <FormField
           control={form.control}
           name="metaTitle"
@@ -539,7 +539,7 @@ export default function VehicleBucketForm({
           )}
         />
 
-        {/* Series Meta Description */}
+        {/* Meta Description */}
         <FormField
           control={form.control}
           name="metaDescription"

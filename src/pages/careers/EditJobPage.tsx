@@ -6,7 +6,7 @@ import { useAdminContext } from "@/context/AdminContext";
 import JobsForm from "@/components/form/main-form/JobsForm";
 import { fetchJobById } from "@/api/careers";
 
-const CAREER_JOB_BY_ID = "CAREER_JOB_BY_ID";
+export const CAREER_JOB_BY_ID = "CAREER_JOB_BY_ID";
 
 export default function EditJobPage() {
   const navigate = useNavigate();
@@ -17,6 +17,9 @@ export default function EditJobPage() {
   const { data, isLoading } = useQuery({
     queryKey: [CAREER_JOB_BY_ID, jobId],
     queryFn: () => fetchJobById(jobId as string),
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: true,
   });
 
   return (

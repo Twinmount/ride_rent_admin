@@ -1,6 +1,16 @@
 import { VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT } from "@/constants";
 import * as z from "zod";
 
+export const MetaTitleSchema = z
+  .string()
+  .min(1, "Meta title is required")
+  .max(80, "Meta title must be 80 characters or less");
+
+export const MetaDescriptionSchema = z
+  .string()
+  .min(1, "Meta description is required")
+  .max(500, "Meta description must be 500 characters or less");
+
 // Vehicle Type Form Schema
 export const VehicleTypeFormSchema = z.object({
   name: z
@@ -703,14 +713,8 @@ export const VehicleBucketSchema = z
       .string()
       .min(1, "Page subheading is required")
       .max(200, "Page subheading cannot exceed 200 characters"),
-    metaTitle: z
-      .string()
-      .min(1, "Meta title is required")
-      .max(80, "Meta title cannot exceed 80 characters"),
-    metaDescription: z
-      .string()
-      .min(1, "Meta description is required")
-      .max(5000, "Meta description cannot exceed 5000 characters"),
+    metaTitle: MetaTitleSchema,
+    metaDescription: MetaDescriptionSchema,
 
     // Conditional fields (optional in schema, validated in refinement)
     vehicleCodes: z.array(z.string()).optional(),
@@ -856,6 +860,8 @@ export const JobFormSchema = z.object({
   country: z.string().refine((val) => countryOptions.includes(val as any), {
     message: "Please select a valid country.",
   }),
+  metaTitle: MetaTitleSchema,
+  metaDescription: MetaDescriptionSchema,
 
   sections: z
     .array(
