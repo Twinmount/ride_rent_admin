@@ -14,7 +14,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableFAQItem } from "./SortableFAQItem";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, Undo2 } from "lucide-react";
 import { FormSubmitButton } from "./form-ui";
 import { FAQItemType } from "@/types/formTypes";
 import { toast } from "../ui/use-toast";
@@ -26,6 +26,7 @@ import {
   deleteContentFaq,
 } from "@/api/content-faq/contentFaqApi";
 import { ContentFaq, FaqType } from "@/types/api-types/contentFaqApi-types";
+import { useNavigate } from "react-router-dom";
 
 export type VehicleBucketFaqData = {
   faqs: ContentFaq[];
@@ -49,6 +50,7 @@ const VehicleBucketFaqForm = ({ type, data }: VehicleBucketFaqFormProps) => {
   const [savingIndex, setSavingIndex] = useState<number | null>(null);
 
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   // Filter out any undefined or null values
   useEffect(() => {
@@ -180,7 +182,6 @@ const VehicleBucketFaqForm = ({ type, data }: VehicleBucketFaqFormProps) => {
       setEditingIndex(incompleteIndex);
       return;
     }
-
     // Clear any existing errors
     setErrors({});
 
@@ -261,6 +262,10 @@ const VehicleBucketFaqForm = ({ type, data }: VehicleBucketFaqFormProps) => {
     }
   };
 
+  const handleGoBack = () => {
+    navigate("/manage-vehicle-bucket");
+  };
+
   // DnD setup
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -337,9 +342,22 @@ const VehicleBucketFaqForm = ({ type, data }: VehicleBucketFaqFormProps) => {
             </>
           }
           isLoading={false}
-          variant="outline"
+          variant="default"
           type="button"
           onClick={handleAddFaq}
+          disabled={isLoading}
+        />
+
+        <FormSubmitButton
+          text={
+            <span className="flex items-center justify-start gap-2">
+              Go Back to List <Undo2 size={16} className="mb-1" />
+            </span>
+          }
+          isLoading={false}
+          variant="outline"
+          type="button"
+          onClick={handleGoBack}
           disabled={isLoading}
         />
       </div>
