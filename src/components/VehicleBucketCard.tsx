@@ -28,10 +28,10 @@ const VehicleBucketCard = ({ data }: VehicleBucketCardProps) => {
       VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS;
 
     if (value === POPULAR_RENTAL_SEARCHES) {
-      return "Popular Rental Searches";
+      return "Popular Rental Searches (Left box)";
     }
     if (value === POPULAR_VEHICLE_PAGES) {
-      return "Popular Vehicle Pages";
+      return "Popular Vehicle Pages (Right box)";
     }
     return "";
   };
@@ -82,9 +82,6 @@ const VehicleBucketCard = ({ data }: VehicleBucketCardProps) => {
   const BucketModeIcon = bucketModeInfo.icon;
 
   const displayGroupName = getDisplayGroupName(data.displayGroup);
-  const isPopularSearch =
-    data.displayGroup ===
-    VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS.POPULAR_RENTAL_SEARCHES;
 
   const vehicleBucketEditPageLink = `/manage-vehicle-bucket/edit/${data.id}?state=${data.stateValue}`;
 
@@ -117,11 +114,7 @@ const VehicleBucketCard = ({ data }: VehicleBucketCardProps) => {
 
                 {/* Display Group Badge - SECONDARY */}
                 <div
-                  className={`flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                    isPopularSearch
-                      ? "border-blue-100 bg-blue-50 text-blue-600"
-                      : "border-purple-100 bg-purple-50 text-purple-600"
-                  }`}
+                  className={`flex items-center gap-1 rounded-full border border-blue-100 bg-slate-800 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-300`}
                 >
                   <LayoutGrid size={10} />
                   {displayGroupName}

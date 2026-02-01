@@ -10,7 +10,8 @@ import { FormItemWrapper } from "./form-ui/FormItemWrapper";
 import StatesDropdown from "./dropdowns/StatesDropdown";
 import { Textarea } from "../ui/textarea";
 import {
-  VEHICLE_BUCKET_GROUP_FILTER_DROPDOWN_OPTIONS,
+  VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS,
+  VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT,
   VehicleBucketFormDefaultValues,
 } from "@/constants";
 import {
@@ -285,8 +286,9 @@ export default function VehicleBucketForm({
                 label="Select Vehicles"
                 description={
                   <span>
-                    Search and select up to 20 vehicles to include in this
-                    bucket.
+                    Search and select up to{" "}
+                    {VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT} vehicles to include
+                    in this bucket.
                     <br />
                     Selected vehicles will be displayed in the order they are
                     added.
@@ -297,7 +299,7 @@ export default function VehicleBucketForm({
                   selectedVehicleCodes={field.value || []}
                   selectedStateId={stateId}
                   onChange={field.onChange}
-                  maxSelections={20}
+                  maxSelections={VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT}
                 />
               </FormItemWrapper>
             )}
@@ -398,7 +400,7 @@ export default function VehicleBucketForm({
               description="Select where this bucket will be displayed in the public site footer"
             >
               <SingleSelectDropdown
-                options={VEHICLE_BUCKET_GROUP_FILTER_DROPDOWN_OPTIONS}
+                options={VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS}
                 onChange={(value) => {
                   field.onChange(value);
                 }}

@@ -24,7 +24,7 @@ export default function VehicleMultiSelectDropdown({
   selectedVehicleCodes = [],
   selectedStateId,
   onChange,
-  maxSelections = 20,
+  maxSelections = 10,
 }: VehicleMultiSelectDropdownProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);

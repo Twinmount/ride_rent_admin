@@ -1,3 +1,4 @@
+import { VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT } from "@/constants";
 import * as z from "zod";
 
 // Vehicle Type Form Schema
@@ -678,7 +679,7 @@ export const VehicleBucketSchema = z
         return (
           Array.isArray(data.vehicleCodes) &&
           data.vehicleCodes.length >= 1 &&
-          data.vehicleCodes.length <= 20
+          data.vehicleCodes.length <= VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT
         );
       }
       return true;

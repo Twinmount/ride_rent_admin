@@ -412,12 +412,6 @@ export const SERVICE_OPTIONS = [
   },
 ];
 
-// convert to a object
-export const VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS = {
-  POPULAR_RENTAL_SEARCHES: "POPULAR_RENTAL_SEARCHES",
-  POPULAR_VEHICLE_PAGES: "POPULAR_VEHICLE_PAGES",
-} as const;
-
 export const VEHICLE_BUCKET_MODES_ENUM = {
   VEHICLE_CODE: "VEHICLE_CODE",
   VEHICLE_TYPE: "VEHICLE_TYPE",
@@ -449,11 +443,15 @@ export const VEHICLE_BUCKET_MODES = [
 export type VehicleBucketModeType =
   (typeof VEHICLE_BUCKET_MODES)[number]["value"];
 
-export const VEHICLE_BUCKET_GROUP_FILTER_DROPDOWN_OPTIONS = [
-  {
-    label: "All (Group)",
-    value: "all",
-  },
+export const VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS = {
+  POPULAR_RENTAL_SEARCHES: "POPULAR_RENTAL_SEARCHES",
+  POPULAR_VEHICLE_PAGES: "POPULAR_VEHICLE_PAGES",
+} as const;
+
+export const VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS: {
+  label: string;
+  value: string;
+}[] = [
   {
     label: "Popular Rental Searches (Left Box)",
     value: "POPULAR_RENTAL_SEARCHES",
@@ -482,3 +480,5 @@ export const VEHICLE_BUCKET_MODE_FILTER_DROPDOWN_OPTIONS = [
     value: VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES,
   },
 ];
+
+export const VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT = 30;

@@ -12,7 +12,7 @@ import { VehicleBucketDisplayGroupType } from "@/types/types";
 import { SingleSelectDropdown } from "@/components/form/dropdowns/SingleSelectDropdown";
 import {
   VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS,
-  VEHICLE_BUCKET_GROUP_FILTER_DROPDOWN_OPTIONS,
+  VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS,
   VEHICLE_BUCKET_MODE_FILTER_DROPDOWN_OPTIONS,
   VehicleBucketModeType,
 } from "@/constants";
@@ -71,6 +71,10 @@ export default function ManageVehicleBucketPage() {
       </>
     );
 
+  const displayGroupDropdownOptions = [
+    { label: "All", value: "all" },
+    ...VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS,
+  ];
   return (
     <PageLayout heading={`Manage Vehicle Bucket in ${state?.stateName}`}>
       <div className="flex flex-wrap items-center gap-3 pl-2 pr-10">
@@ -83,10 +87,10 @@ export default function ManageVehicleBucketPage() {
 
         {/* display group dropdown */}
         <SingleSelectDropdown
-          options={VEHICLE_BUCKET_GROUP_FILTER_DROPDOWN_OPTIONS}
+          options={displayGroupDropdownOptions}
           value={displayGroup}
           onChange={(val) =>
-            setDisplayGroup(val as VehicleBucketDisplayGroupType | "all")
+            setDisplayGroup(val as VehicleBucketDisplayGroupType)
           }
           className="mb-4 w-44"
         />
