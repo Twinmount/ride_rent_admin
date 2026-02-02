@@ -2,6 +2,7 @@ export enum FaqType {
   SERIES = "series",
   VEHICLE_BUCKET = "vehicle-bucket",
   CITY = "city",
+  BRAND = "brand",
 }
 
 export interface ContentFaq {
@@ -27,8 +28,12 @@ export interface UpdateContentFaqRequest {
 }
 
 export interface FetchFaqsResponse {
-  success: boolean;
-  data: ContentFaq[];
+  result: {
+    success: boolean;
+    data: ContentFaq[];
+  };
+  status?: string;
+  statusCode?: number;
 }
 
 export interface ContentFaqResponse {

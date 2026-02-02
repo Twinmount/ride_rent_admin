@@ -47,6 +47,7 @@ export const BrandFormSchema = z.object({
     ),
   brandLogo: z.string().min(1, "Brand logo is required"),
   vehicleCategoryId: z.string().min(1, "Category is required"),
+  brandBodyContent: z.string().optional(),
 });
 
 // Country Form Schema

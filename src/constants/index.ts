@@ -33,6 +33,7 @@ export const BrandFormDefaultValues: BrandFormType = {
   brandValue: "",
   vehicleCategoryId: "",
   brandLogo: "",
+  brandBodyContent: "",
 };
 
 // State form default values

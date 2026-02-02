@@ -33,8 +33,8 @@ export default function AddVehicleBucketPage() {
     if (Array.isArray((faqData as any)?.result?.data)) {
       return (faqData as any).result.data;
     }
-    if (Array.isArray(faqData.data)) {
-      return faqData.data;
+    if (Array.isArray(faqData.result?.data)) {
+      return faqData.result.data;
     }
     return [];
   };

@@ -41,12 +41,10 @@ export default function EditCityPage() {
   const extractFaqs = () => {
     if (!faqData || isFaqError) return [];
     // The API wrapper adds result layer: faqData.result.data contains the FAQs
-    if (Array.isArray((faqData as any)?.result?.data)) {
-      return (faqData as any).result.data;
+    if (Array.isArray(faqData.result?.data)) {
+      return faqData.result.data;
     }
-    if (Array.isArray(faqData.data)) {
-      return faqData.data;
-    }
+
     return [];
   };
 
