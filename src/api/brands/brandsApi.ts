@@ -19,6 +19,7 @@ export const addBrand = async (
         brandName: values.brandName,
         brandValue: values.brandValue,
         brandLogo: values.brandLogo,
+        brandBodyContent: values.brandBodyContent,
       },
     });
     return data;
@@ -42,6 +43,7 @@ export const updateBrand = async (
         brandValue: values.brandValue,
         vehicleCategoryId: values.vehicleCategoryId,
         brandLogo: values.brandLogo,
+        brandBodyContent: values.brandBodyContent,
       },
     });
     return data;

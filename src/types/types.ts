@@ -97,6 +97,7 @@ export type BrandFormType = {
   brandValue: string;
   vehicleCategoryId: string;
   brandLogo: string;
+  brandBodyContent?: string;
 };
 
 export type IconConfig = z.infer<typeof iconConfigSchema>;
