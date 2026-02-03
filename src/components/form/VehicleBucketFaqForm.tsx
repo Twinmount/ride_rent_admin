@@ -14,7 +14,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { SortableFAQItem } from "./SortableFAQItem";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, Undo2 } from "lucide-react";
 import { FormSubmitButton } from "./form-ui";
 import { FAQItemType } from "@/types/formTypes";
 import { toast } from "../ui/use-toast";
@@ -24,20 +24,24 @@ import {
   createContentFaq,
   updateContentFaq,
   deleteContentFaq,
-} from "@/api/content-faq";
+} from "@/api/content-faq/contentFaqApi";
 import { ContentFaq, FaqType } from "@/types/api-types/contentFaqApi-types";
+import { useNavigate } from "react-router-dom";
 
-export type CityFaqData = {
+export type VehicleBucketFaqData = {
   faqs: ContentFaq[];
-  cityId: string;
+  vehicleBucketId: string;
 };
 
-type CityFaqFormProps = {
+type VehicleBucketFaqFormProps = {
   type: "Add" | "Update";
-  data: CityFaqData;
+  data: VehicleBucketFaqData;
 };
 
-const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
+/**
+ * Vehicle Bucket FAQ Form component
+ */
+const VehicleBucketFaqForm = ({ type, data }: VehicleBucketFaqFormProps) => {
   const [faqs, setFaqs] = useState<ContentFaq[]>(data.faqs);
   const [editingIndex, setEditingIndex] = useState<number | null>(
     type === "Add" && data.faqs.length === 0 ? 0 : null,
@@ -46,8 +50,8 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
   const [savingIndex, setSavingIndex] = useState<number | null>(null);
 
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  // Sync local state when data prop changes (after refetch)
   // Filter out any undefined or null values
   useEffect(() => {
     const validFaqs = (data.faqs || []).filter(
@@ -67,7 +71,7 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
         );
       }
       queryClient.invalidateQueries({
-        queryKey: ["city-faqs", data.cityId],
+        queryKey: ["vehicle-bucket-faqs", data.vehicleBucketId],
       });
       toast({
         title: "FAQ added successfully",
@@ -92,7 +96,7 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
       updateContentFaq(faqId, faqData),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["city-faqs", data.cityId],
+        queryKey: ["vehicle-bucket-faqs", data.vehicleBucketId],
       });
       toast({
         title: "FAQ updated successfully",
@@ -113,12 +117,13 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
 
   // Delete FAQ mutation
   const deleteMutation = useMutation({
-    mutationFn: (faqId: string) => deleteContentFaq(faqId, FaqType.CITY),
+    mutationFn: (faqId: string) =>
+      deleteContentFaq(faqId, FaqType.VEHICLE_BUCKET),
     onSuccess: (_data, faqId) => {
       // Remove from local state immediately
       setFaqs((prev) => prev.filter((f) => f._id !== faqId));
       queryClient.invalidateQueries({
-        queryKey: ["city-faqs", data.cityId],
+        queryKey: ["vehicle-bucket-faqs", data.vehicleBucketId],
       });
       toast({
         title: "FAQ deleted successfully",
@@ -177,17 +182,16 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
       setEditingIndex(incompleteIndex);
       return;
     }
-
     // Clear any existing errors
     setErrors({});
 
     // Add new FAQ and set it to editing mode
     const newFaq: ContentFaq = {
       _id: "",
-      faqType: FaqType.CITY,
+      faqType: FaqType.VEHICLE_BUCKET,
       question: "",
       answer: "",
-      targetId: data.cityId,
+      targetId: data.vehicleBucketId,
     };
     setFaqs((prev) => [...prev, newFaq]);
     setEditingIndex(faqs.length);
@@ -230,10 +234,10 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
     setSavingIndex(index);
 
     const faqData = {
-      faqType: FaqType.CITY,
+      faqType: FaqType.VEHICLE_BUCKET,
       question: faq.question?.trim(),
       answer: faq.answer?.trim(),
-      targetId: data.cityId,
+      targetId: data.vehicleBucketId,
     };
 
     if (!faq._id) {
@@ -256,6 +260,10 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
     if (active.id !== over.id) {
       setFaqs((items) => arrayMove(items, active.id, over.id));
     }
+  };
+
+  const handleGoBack = () => {
+    navigate("/manage-vehicle-bucket");
   };
 
   // DnD setup
@@ -334,9 +342,22 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
             </>
           }
           isLoading={false}
-          variant="outline"
+          variant="default"
           type="button"
           onClick={handleAddFaq}
+          disabled={isLoading}
+        />
+
+        <FormSubmitButton
+          text={
+            <span className="flex items-center justify-start gap-2">
+              Go Back to List <Undo2 size={16} className="mb-1" />
+            </span>
+          }
+          isLoading={false}
+          variant="outline"
+          type="button"
+          onClick={handleGoBack}
           disabled={isLoading}
         />
       </div>
@@ -344,4 +365,4 @@ const CityFaqForm = ({ type, data }: CityFaqFormProps) => {
   );
 };
 
-export default CityFaqForm;
+export default VehicleBucketFaqForm;

@@ -1,45 +1,42 @@
+export enum FaqType {
+  SERIES = "series",
+  VEHICLE_BUCKET = "vehicle-bucket",
+  CITY = "city",
+  BRAND = "brand",
+}
+
 export interface ContentFaq {
   _id: string;
-  faqType: "series" | "city";
-  question?: string;
-  answer?: string;
-  seriesId?: string;
-  cityId?: string;
-  state?: "draft" | "published" | "archived";
-  createdAt: string;
-  updatedAt: string;
+  faqType: FaqType;
+  question: string;
+  answer: string;
+  targetId: string;
 }
 
 export interface CreateContentFaqRequest {
-  faqType: "series" | "city";
-  question?: string;
-  answer?: string;
-  seriesId?: string;
-  cityId?: string;
-  state?: "draft" | "published" | "archived";
+  faqType: FaqType;
+  question: string;
+  answer: string;
+  targetId: string;
 }
 
 export interface UpdateContentFaqRequest {
-  faqType: "series" | "city";
-  question?: string;
-  answer?: string;
-  seriesId?: string;
-  cityId?: string;
-  state?: "draft" | "published" | "archived";
+  faqType: FaqType;
+  question: string;
+  answer: string;
+  targetId: string;
 }
 
-export interface FetchSeriesFaqsResponse {
-  success: boolean;
-  data: ContentFaq[];
-}
-
-export interface FetchCityFaqsResponse {
-  success: boolean;
-  data: ContentFaq[];
+export interface FetchFaqsResponse {
+  result: {
+    success: boolean;
+    data: ContentFaq[];
+  };
+  status?: string;
+  statusCode?: number;
 }
 
 export interface ContentFaqResponse {
   success: boolean;
   data: ContentFaq;
 }
-

@@ -97,6 +97,7 @@ export type BrandFormType = {
   brandValue: string;
   vehicleCategoryId: string;
   brandLogo: string;
+  brandBodyContent?: string;
 };
 
 export type IconConfig = z.infer<typeof iconConfigSchema>;
@@ -331,6 +332,8 @@ export type JobFormType = {
   level: string;
   experience: string;
   country: string;
+  metaTitle: string;
+  metaDescription: string;
   sections?: JobSectionDto[];
   aboutCompany?: string;
   fileUrl?: string | null;

@@ -9,17 +9,24 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAllVehicleBucket } from "@/api/vehicle-bucket";
 import { useAdminContext } from "@/context/AdminContext";
 import { VehicleBucketDisplayGroupType } from "@/types/types";
-import VehicleBucketGroupDropdown from "@/components/form/dropdowns/VehicleBucketGroupDropdown";
-import { VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS } from "@/constants";
+import { SingleSelectDropdown } from "@/components/form/dropdowns/SingleSelectDropdown";
+import {
+  VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS,
+  VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS,
+  VEHICLE_BUCKET_MODE_FILTER_DROPDOWN_OPTIONS,
+  VehicleBucketModeType,
+} from "@/constants";
 
 export default function ManageVehicleBucketPage() {
   const [searchParams] = useSearchParams();
   const [page, setPage] = useState(1);
   const { state } = useAdminContext();
-  const [displayGroup, setDisplayGroup] =
-    useState<VehicleBucketDisplayGroupType>(
-      VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS.POPULAR_RENTAL_SEARCHES,
-    );
+  const [displayGroup, setDisplayGroup] = useState<
+    VehicleBucketDisplayGroupType | "all"
+  >("all");
+  const [vehicleBucketMode, setVehicleBucketMode] = useState<
+    VehicleBucketModeType | "all"
+  >("all");
 
   const searchQuery = searchParams.get("search") || "";
 
@@ -30,6 +37,7 @@ export default function ManageVehicleBucketPage() {
       page,
       searchQuery,
       displayGroup,
+      vehicleBucketMode,
     ],
     queryFn: async () =>
       await fetchAllVehicleBucket({
@@ -37,6 +45,7 @@ export default function ManageVehicleBucketPage() {
         state: state?.stateId as string,
         page,
         displayGroup,
+        vehicleBucketMode,
       }),
     enabled: !!state?.stateId,
     staleTime: 0,
@@ -62,6 +71,10 @@ export default function ManageVehicleBucketPage() {
       </>
     );
 
+  const displayGroupDropdownOptions = [
+    { label: "All", value: "all" },
+    ...VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS,
+  ];
   return (
     <PageLayout heading={`Manage Vehicle Bucket in ${state?.stateName}`}>
       <div className="flex flex-wrap items-center gap-3 pl-2 pr-10">
@@ -73,10 +86,23 @@ export default function ManageVehicleBucketPage() {
         />
 
         {/* display group dropdown */}
-        <VehicleBucketGroupDropdown
-          onChangeHandler={setDisplayGroup}
+        <SingleSelectDropdown
+          options={displayGroupDropdownOptions}
           value={displayGroup}
-          className={"mb-4 w-44"}
+          onChange={(val) =>
+            setDisplayGroup(val as VehicleBucketDisplayGroupType)
+          }
+          className="mb-4 w-44"
+        />
+
+        {/* vehicle bucket mode dropdown */}
+        <SingleSelectDropdown
+          options={VEHICLE_BUCKET_MODE_FILTER_DROPDOWN_OPTIONS}
+          value={vehicleBucketMode}
+          onChange={(val) =>
+            setVehicleBucketMode(val as VehicleBucketModeType | "all")
+          }
+          className="mb-4 w-44"
         />
       </div>
 

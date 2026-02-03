@@ -26,6 +26,8 @@ import DeleteModal from "@/components/modal/DeleteModal";
 import JobFormDropdown from "../dropdowns/JobFormDropdown";
 import { addJob, deleteJobById, updateJob } from "@/api/careers";
 import { Plus, Trash2 } from "lucide-react";
+import { FormItemWrapper } from "../form-ui";
+import { CAREER_JOB_BY_ID } from "@/pages/careers/EditJobPage";
 
 export type JobFormSchemaType = z.infer<typeof JobFormSchema>;
 
@@ -67,9 +69,11 @@ export default function JobsForm({ type, formData }: JobFormProps) {
           className: "bg-yellow text-white",
         });
         queryClient.invalidateQueries({
-          queryKey: [CAREER_JOBS],
+          queryKey: [CAREER_JOBS, CAREER_JOB_BY_ID, jobId],
         });
-        navigate("/careers/jobs");
+        setTimeout(() => {
+          navigate("/careers/jobs");
+        }, 500);
       }
     } catch (error) {
       console.error(error);
@@ -426,6 +430,69 @@ export default function JobsForm({ type, formData }: JobFormProps) {
               </div>
             </FormItem>
           )}
+        />
+
+        {/*  Meta Title */}
+        <FormField
+          control={form.control}
+          name="metaTitle"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Meta Title"
+              description={
+                <span>
+                  Enter the meta title for this job post.
+                  <br /> 80 characters max.
+                </span>
+              }
+            >
+              <Input
+                placeholder="e.g., 'Luxury Car Rental Dubai'"
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* Meta Description */}
+        <FormField
+          control={form.control}
+          name="metaDescription"
+          render={({ field }) => {
+            const [charCount, setCharCount] = useState(
+              field.value?.length || 0,
+            );
+            const limit = 1000;
+
+            const handleInputChange = (
+              e: React.ChangeEvent<HTMLTextAreaElement>,
+            ) => {
+              setCharCount(e.target.value.length);
+              field.onChange(e);
+            };
+
+            return (
+              <FormItemWrapper
+                label="Meta Description"
+                description={
+                  <span className="flex flex-col">
+                    <span>Provide a meta description for this job post.</span>
+                    <span className="mt-1 text-sm text-gray-500">
+                      {charCount}/{limit} characters used
+                    </span>
+                  </span>
+                }
+              >
+                <Textarea
+                  placeholder="Meta Description"
+                  value={field.value}
+                  onChange={handleInputChange}
+                  className="textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
+                />
+              </FormItemWrapper>
+            );
+          }}
         />
 
         {/* Sections */}

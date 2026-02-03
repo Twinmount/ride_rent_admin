@@ -1,4 +1,15 @@
+import { VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT } from "@/constants";
 import * as z from "zod";
+
+export const MetaTitleSchema = z
+  .string()
+  .min(1, "Meta title is required")
+  .max(80, "Meta title must be 80 characters or less");
+
+export const MetaDescriptionSchema = z
+  .string()
+  .min(1, "Meta description is required")
+  .max(500, "Meta description must be 500 characters or less");
 
 // Vehicle Type Form Schema
 export const VehicleTypeFormSchema = z.object({
@@ -36,6 +47,7 @@ export const BrandFormSchema = z.object({
     ),
   brandLogo: z.string().min(1, "Brand logo is required"),
   vehicleCategoryId: z.string().min(1, "Category is required"),
+  brandBodyContent: z.string().optional(),
 });
 
 // Country Form Schema
@@ -660,51 +672,113 @@ export const VehicleSeriesSchema = z.object({
   seriesBodyContent: z.string().optional(),
 });
 
-export const VehicleBucketSchema = z.object({
-  stateId: z.string().min(1, "State is required"),
-  displayGroup: z.enum(["POPULAR_RENTAL_SEARCHES", "POPULAR_VEHICLE_PAGES"], {
-    required_error: "Section type is required",
-  }),
-  linkText: z
-    .string()
-    .min(1, "Link text is required")
-    .max(100, "Link text cannot exceed 100 characters"),
-
-  vehicleBucketName: z
-    .string()
-    .min(1, "Vehicle bucket name is required")
-    .max(100, "Vehicle bucket name is too long"),
-  vehicleBucketValue: z
-    .string()
-    .min(1, "Vehicle bucket value (slug) is required")
-    .max(100, "Vehicle bucket value is too long")
-    .regex(
-      /^[a-z0-9-]+$/,
-      "Slug must only contain lowercase letters, numbers, and hyphens",
+export const VehicleBucketSchema = z
+  .object({
+    vehicleBucketMode: z.enum(
+      ["VEHICLE_CODE", "VEHICLE_TYPE", "LOCATION_COORDINATES"],
+      {
+        required_error: "Bucket mode is required",
+      },
     ),
-  vehicleCodes: z
-    .array(z.string())
-    .min(1, "At least one vehicle must be selected")
-    .max(20, "Maximum 20 vehicles can be selected"),
-  pageHeading: z
-    .string()
-    .min(1, "Page heading is required")
-    .max(100, "Page heading cannot exceed 100 characters"),
-  pageSubheading: z
-    .string()
-    .min(1, "Page subheading is required")
-    .max(200, "Page subheading cannot exceed 200 characters"),
-  metaTitle: z
-    .string()
-    .min(1, "Meta title is required")
-    .max(80, "Meta title cannot exceed 80 characters"),
-  metaDescription: z
-    .string()
-    .min(1, "Meta description is required")
-    .max(5000, "Meta description cannot exceed 5000 characters"),
-});
 
-// Job form schema
+    // Always required fields
+    stateId: z.string().min(1, "State is required"),
+    displayGroup: z.enum(["POPULAR_RENTAL_SEARCHES", "POPULAR_VEHICLE_PAGES"], {
+      required_error: "Section type is required",
+    }),
+    linkText: z
+      .string()
+      .min(1, "Link text is required")
+      .max(100, "Link text cannot exceed 100 characters"),
+    vehicleBucketName: z
+      .string()
+      .min(1, "Vehicle bucket name is required")
+      .max(100, "Vehicle bucket name is too long"),
+    vehicleBucketValue: z
+      .string()
+      .min(1, "Vehicle bucket value (slug) is required")
+      .max(100, "Vehicle bucket value is too long")
+      .regex(
+        /^[a-z0-9-]+$/,
+        "Slug must only contain lowercase letters, numbers, and hyphens",
+      ),
+    vehicleBucketDescription: z
+      .string()
+      .min(1, "Bucket description is required")
+      .max(300, "Bucket description cannot exceed 300 characters"),
+    pageHeading: z
+      .string()
+      .min(1, "Page heading is required")
+      .max(100, "Page heading cannot exceed 100 characters"),
+    pageSubheading: z
+      .string()
+      .min(1, "Page subheading is required")
+      .max(200, "Page subheading cannot exceed 200 characters"),
+    metaTitle: MetaTitleSchema,
+    metaDescription: MetaDescriptionSchema,
+
+    // Conditional fields (optional in schema, validated in refinement)
+    vehicleCodes: z.array(z.string()).optional(),
+    vehicleCategoryId: z.string().optional(),
+    vehicleTypeId: z.string().optional(),
+    location: z.preprocess(
+      (value) => (value === null ? undefined : value),
+      z
+        .object({
+          lat: z.number(),
+          lng: z.number(),
+          address: z.string().optional(),
+        })
+        .optional(),
+    ),
+  })
+  .refine(
+    (data) => {
+      // VEHICLE_CODE mode: vehicleCodes is required
+      if (data.vehicleBucketMode === "VEHICLE_CODE") {
+        return (
+          Array.isArray(data.vehicleCodes) &&
+          data.vehicleCodes.length >= 1 &&
+          data.vehicleCodes.length <= VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT
+        );
+      }
+      return true;
+    },
+    {
+      message: "Vehicle codes: Select between 1 and 20 vehicles",
+      path: ["vehicleCodes"],
+    },
+  )
+  .refine(
+    (data) => {
+      // VEHICLE_TYPE mode: vehicleTypeId is required
+      if (data.vehicleBucketMode === "VEHICLE_TYPE") {
+        return !!data.vehicleTypeId && data.vehicleTypeId.trim() !== "";
+      }
+      return true;
+    },
+    {
+      message: "Vehicle type is required for this mode",
+      path: ["vehicleTypeId"],
+    },
+  )
+  .refine(
+    (data) => {
+      // LOCATION_COORDINATES mode: location is required
+      if (data.vehicleBucketMode === "LOCATION_COORDINATES") {
+        return (
+          !!data.location &&
+          typeof data.location.lat === "number" &&
+          typeof data.location.lng === "number"
+        );
+      }
+      return true;
+    },
+    {
+      message: "Location coordinates are required for this mode",
+      path: ["location"],
+    },
+  );
 
 export const locationOptions = [
   "Remote",
@@ -787,6 +861,8 @@ export const JobFormSchema = z.object({
   country: z.string().refine((val) => countryOptions.includes(val as any), {
     message: "Please select a valid country.",
   }),
+  metaTitle: MetaTitleSchema,
+  metaDescription: MetaDescriptionSchema,
 
   sections: z
     .array(

@@ -2,7 +2,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import FormSkelton from "@/components/skelton/FormSkelton";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCityById } from "@/api/cities";
-import { getCityFaqs } from "@/api/content-faq";
+import { getContentFaqsByTarget } from "@/api/content-faq";
 import CityForm from "@/components/form/CityForm";
 import CityFaqForm from "@/components/form/CityFaqForm";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -31,7 +31,7 @@ export default function EditCityPage() {
     isError: isFaqError,
   } = useQuery({
     queryKey: ["city-faqs", cityId],
-    queryFn: () => getCityFaqs(cityId as string),
+    queryFn: () => getContentFaqsByTarget(cityId as string),
     enabled: !!cityId,
     retry: false, // Don't retry on 404
   });
@@ -41,12 +41,10 @@ export default function EditCityPage() {
   const extractFaqs = () => {
     if (!faqData || isFaqError) return [];
     // The API wrapper adds result layer: faqData.result.data contains the FAQs
-    if (Array.isArray((faqData as any)?.result?.data)) {
-      return (faqData as any).result.data;
+    if (Array.isArray(faqData.result?.data)) {
+      return faqData.result.data;
     }
-    if (Array.isArray(faqData.data)) {
-      return faqData.data;
-    }
+
     return [];
   };
 

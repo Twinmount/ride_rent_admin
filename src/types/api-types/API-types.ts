@@ -1,6 +1,7 @@
 import { BannerType } from "@/api/states";
 import { IconConfig, Location, VehicleBucketDisplayGroupType } from "../types";
 import { RidePromotionCardType } from "../formTypes";
+import { VehicleBucketModeType } from "@/constants";
 
 // register response
 export interface RegisterResponse {
@@ -205,6 +206,7 @@ export interface BrandType {
   brandValue: string;
   brandLogo: any;
   vehicleCategoryId: string;
+  brandBodyContent?: string;
 }
 
 //  interface for the Brand GET ALL) API response
@@ -247,28 +249,21 @@ export interface FetchLinksResponse {
 
 export interface VehicleBucketType {
   id?: string;
+  vehicleBucketMode: VehicleBucketModeType;
   stateId: string;
   displayGroup: VehicleBucketDisplayGroupType;
   linkText: string;
   vehicleBucketName: string;
   vehicleBucketValue: string;
-  vehicleCodes: string[];
+  vehicleBucketDescription: string;
   pageHeading: string;
   pageSubheading: string;
   metaTitle: string;
   metaDescription: string;
-}
-
-// interface for the vehicle bucket (GET ALL) API response
-export interface FetchVehicleBucketsResponse {
-  status: string;
-  result: {
-    list: VehicleBucketType[]; // Array of vehicle buckets
-    page: number; // Current page number
-    total: number; // Total number of categories
-    totalNumberOfPages: number;
-  };
-  statusCode: number;
+  vehicleCodes?: string[];
+  vehicleCategoryId?: string;
+  vehicleTypeId?: string;
+  location?: Location;
 }
 
 export interface VehicleBucketListType extends VehicleBucketType {
