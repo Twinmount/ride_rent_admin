@@ -48,6 +48,14 @@ export const BrandFormSchema = z.object({
   brandLogo: z.string().min(1, "Brand logo is required"),
   vehicleCategoryId: z.string().min(1, "Category is required"),
   brandBodyContent: z.string().optional(),
+  brandMetaTitle: z
+    .string()
+    .max(80, "Meta title must be 80 characters or less")
+    .optional(),
+  brandMetaDescription: z
+    .string()
+    .max(500, "Meta description must be 500 characters or less")
+    .optional(),
 });
 
 // Country Form Schema

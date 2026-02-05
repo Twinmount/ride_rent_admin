@@ -207,6 +207,8 @@ export interface BrandType {
   brandLogo: any;
   vehicleCategoryId: string;
   brandBodyContent?: string;
+  brandMetaTitle?: string;
+  brandMetaDescription?: string;
 }
 
 //  interface for the Brand GET ALL) API response

@@ -184,6 +184,42 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
           )}
         />
 
+        {/* meta title */}
+        <FormField
+          control={form.control}
+          name="brandMetaTitle"
+          render={({ field }) => (
+            <FormItemWrapper
+              label={`Meta Title`}
+              description={`Add meta title for SEO`}
+            >
+              <Input
+                placeholder={`Meta title`}
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* meta description */}
+        <FormField
+          control={form.control}
+          name="brandMetaDescription"
+          render={({ field }) => (
+            <FormItemWrapper
+              label={`Meta Description`}
+              description={`Add meta description for SEO`}
+            >
+              <Input
+                placeholder={`Meta description`}
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
         {/* submit  */}
         <FormSubmitButton
           text={type === "Add" ? "Add Brand" : "Update Update"}
