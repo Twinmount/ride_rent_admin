@@ -155,6 +155,23 @@ const iconList = [
   "bar",
   "beachUmberlla",
   "beach",
+  "carRental",
+  "cafe",
+  "hotel",
+  "parkingGarage",
+  "restaurant",
+  "gasStation",
+  "taxiStand",
+  "highway",
+  "busStop",
+  "trainStation",
+  "happyFace",
+  "tyre",
+  "suv",
+  "sedan",
+  "offerTag",
+  "offerBadge",
+  "offerPercent",
 ];
 
 const strokeWidthList = ["0.5", "0.75", "1", "1.25", "1.5", "1.75", "2"];
