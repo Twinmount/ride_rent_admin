@@ -1,4 +1,7 @@
-import { VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT } from "@/constants";
+import {
+  TEXT_LIMITS,
+  VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT,
+} from "@/constants";
 import * as z from "zod";
 
 export const MetaTitleSchema = z
@@ -668,7 +671,10 @@ export const VehicleSeriesSchema = z.object({
   vehicleSeriesInfoDescription: z
     .string()
     .min(1, "Series Info description is required")
-    .max(300, "Series Info description cannot exceed 300 characters"),
+    .max(
+      TEXT_LIMITS.DESCRIPTION,
+      `Series Info description cannot exceed ${TEXT_LIMITS.DESCRIPTION} characters`,
+    ),
   vehicleSeriesMetaTitle: z
     .string()
     .min(1, "Series Meta title is required")
@@ -713,7 +719,10 @@ export const VehicleBucketSchema = z
     vehicleBucketDescription: z
       .string()
       .min(1, "Bucket description is required")
-      .max(300, "Bucket description cannot exceed 300 characters"),
+      .max(
+        TEXT_LIMITS.DETAILED_DESCRIPTION,
+        `Bucket description cannot exceed ${TEXT_LIMITS.DETAILED_DESCRIPTION} characters`,
+      ),
     pageHeading: z
       .string()
       .min(1, "Page heading is required")

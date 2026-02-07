@@ -10,6 +10,7 @@ import { FormItemWrapper } from "./form-ui/FormItemWrapper";
 import StatesDropdown from "./dropdowns/StatesDropdown";
 import { Textarea } from "../ui/textarea";
 import {
+  TEXT_LIMITS,
   VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS,
   VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT,
   VehicleBucketFormDefaultValues,
@@ -439,7 +440,7 @@ export default function VehicleBucketForm({
           control={form.control}
           name="vehicleBucketDescription"
           render={({ field }) => {
-            const limit = 500;
+            const limit = TEXT_LIMITS.DETAILED_DESCRIPTION;
 
             return (
               <FormItemWrapper
