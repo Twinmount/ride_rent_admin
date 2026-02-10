@@ -496,3 +496,10 @@ export const VEHICLE_BUCKET_MODE_FILTER_DROPDOWN_OPTIONS = [
 ];
 
 export const VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT = 30;
+
+// form text fields size limits
+export const TEXT_LIMITS = {
+  DESCRIPTION: 500,
+  DETAILED_DESCRIPTION: 2000,
+  META_DESCRIPTION: 180,
+} as const;
