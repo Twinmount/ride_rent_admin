@@ -17,6 +17,8 @@ import {
   AlertCircle,
   RefreshCcw,
   Users,
+  BadgePercent,
+  ClipboardList,
   Layers,
 } from "lucide-react";
 
@@ -88,6 +90,18 @@ export const sidebarContent: SidebarItem[] = [
     label: "Updates",
     link: "/alert-updates/dashboard",
     icon: AlertCircle,
+  },
+  {
+    type: "link",
+    label: "Coupen",
+    link: "/coupen/dashboard",
+    icon: BadgePercent,
+  },
+  {
+    type: "link",
+    label: "Orders",
+    link: "/orders/dashboard",
+    icon: ClipboardList,
   },
   // Vehicle Listings routes
   {

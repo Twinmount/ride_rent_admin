@@ -26,6 +26,8 @@ import { linkAndPromotionRoutes } from "./route-groups/linkAndPromotionRoutes";
 import { brandsAndSeriesRoutes } from "./route-groups/brandsAndSeriesRoutes";
 import { supplierRoutes } from "./route-groups/supplierCentralRoutes";
 import { updatesRoutes } from "./route-groups/updatesRoutes";
+import { coupenRoutes } from "./route-groups/coupenRoutes";
+import { orderRoutes } from "./route-groups/orderRoutes";
 import { vehicleBucketRoutes } from "./route-groups/vehicleBucketRoutes";
 
 // lazy imports
@@ -85,6 +87,9 @@ export const router = createBrowserRouter([
               // company routes
               ...companyRoutes,
 
+              // coupen routes
+              ...coupenRoutes,
+
               // category and vehicle type routes
               ...categoryAndVehicleTypeRoutes,
 
@@ -102,6 +107,8 @@ export const router = createBrowserRouter([
 
               // srm routes
               ...srmRoutes,
+
+              ...orderRoutes,
 
               // locations routes
               ...locationsRoutes,
