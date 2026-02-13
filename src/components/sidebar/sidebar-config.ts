@@ -17,6 +17,8 @@ import {
   AlertCircle,
   RefreshCcw,
   Users,
+  BadgePercent,
+  ClipboardList,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
@@ -83,6 +85,18 @@ export const sidebarContent: SidebarItem[] = [
     label: "Updates",
     link: "/alert-updates/dashboard",
     icon: AlertCircle,
+  },
+  {
+    type: "link",
+    label: "Coupen",
+    link: "/coupen/dashboard",
+    icon: BadgePercent,
+  },
+  {
+    type: "link",
+    label: "Orders",
+    link: "/orders/dashboard",
+    icon: ClipboardList,
   },
   // Vehicle Listings routes
   {

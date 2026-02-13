@@ -88,6 +88,17 @@ export enum Slug {
   POST_PROMOTED_COMPANY = "/company-promotion",
   DELETE_PROMOTED_COMPANY = "/company-promotion",
 
+  POST_COUPEN = "/coupon",
+  PUT_COUPON = "/coupon",
+  PUT_COUPON_STATUS = "/coupon/status",
+  GET_COUPON = "/coupon",
+  GET_COUPON_LIST = "/coupon/list",
+  POST_VALIDATE_COUPON = "/coupon/validate",
+  POST_APPLY_COUPON = "/coupon/apply",
+  GET_AVAILABLE_COUPONS = "/coupon/available",
+  DELETE_COUPON = "/coupon",
+  GET_COUPON_STATS = "/coupon/stats",
+  GET_COUPONS_VISIBLE_ON_CARD = "/coupon/visible-on-card",
   // vehicles end points
   POST_VEHICLE = "/vehicle",
   PUT_VEHICLE = "/vehicle/admin",
@@ -233,6 +244,10 @@ export enum Slug {
 
   GET_SRM_VEHICLES = "/srm/vehicles",
   PUT_SRM_VEHICLE = "/srm/vehicle",
+
+  GET_ALL_OREDERS = "/bookings/list",
+  GET_SRM_ORDER_DETAILS = "/srm-bookings",
+  DOWNLOAD_ORDER_DETAILS_EXCEL = "bookings/download/excel",
 
   // nextjs cache revalidate route
   NEXTJS_REVALIDATE_CACHE = "/api/revalidate-cache",

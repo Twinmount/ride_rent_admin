@@ -198,6 +198,7 @@ export type CompanyFormType = {
   phoneNumber?: string;
   email?: string;
   companyAddress: string;
+  commissionPercentage?: number;
   displayAddress: string;
   companyLanguages: string[];
   companyMetaTitle: string;
@@ -205,6 +206,8 @@ export type CompanyFormType = {
   accountType?: string;
   countryName?: string;
   location?: Location;
+  plan?: string;
+
 };
 
 export type CompanyStatusFormType = {

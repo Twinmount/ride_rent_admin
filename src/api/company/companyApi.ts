@@ -76,6 +76,7 @@ export const updateCompany = async (
         companyMetaTitle: values.companyMetaTitle,
         companyMetaDescription: values.companyMetaDescription,
         location: values.location,
+        commissionPercentage: values.commissionPercentage,
       },
     });
 

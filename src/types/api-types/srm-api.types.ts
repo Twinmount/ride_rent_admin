@@ -141,3 +141,122 @@ export interface FetchAllSRMVehiclesResponse {
   status: string;
   statusCode: number;
 }
+
+export interface BookingDetailsType {
+  bookingId: string;
+  userId: string;
+  vehicleId: string;
+  status: "CONFIRMED" | "CANCELLED" | "PENDING" | "COMPLETED";
+  startDate: string;
+  endDate: string;
+  customerEmail: string;
+  customerName: string;
+  customerMobile: string;
+  vehicleUrl: string;
+  rentalType: "daily" | "weekly" | "monthly" | "hourly";
+  rentalUnits: number;
+  vehicleCode: string;
+  vehicleTitle: string;
+  coupon: {
+    code: string;
+    discountAmount: number;
+    isConsumed: boolean;
+  };
+  payment: {
+    provider: string;
+    status: "SUCCESS" | "FAILED" | "PENDING";
+    amount: number;
+    currency: string;
+    paymentIntentId: string;
+    totalAmount: number;
+    reservationFees: number;
+    payOnPickup: number;
+    discountAmount: number;
+  };
+  pickupLocation: string;
+  dropLocation: string;
+  createdAt: string;
+  updatedAt: string;
+  vehicleDetails: {
+    vehicleCode: string;
+    brand: {
+      label: string;
+      value: string;
+    };
+    state: {
+      id: string;
+      label: string;
+      value: string;
+    };
+    photos: string[];
+    rentalDetails: {
+      day: {
+        enabled: boolean;
+        rentInAED: string;
+        mileageLimit: string;
+        unlimitedMileage: boolean;
+      };
+      week: {
+        enabled: boolean;
+        rentInAED: string;
+        mileageLimit: string;
+        unlimitedMileage: boolean;
+      };
+      month: {
+        enabled: boolean;
+        rentInAED: string;
+        mileageLimit: string;
+        unlimitedMileage: boolean;
+      };
+      hour: {
+        enabled: boolean;
+        rentInAED: string;
+        mileageLimit: string;
+        unlimitedMileage: boolean;
+        minBookingHours: string;
+      };
+    };
+    company: {
+      companyId: string;
+      companyProfile: string;
+      companyName: string;
+      companySpecs: {
+        isCryptoAccepted: boolean;
+        isSpotDeliverySupported: boolean;
+        isTabbySupported: boolean;
+        isCreditOrDebitCardsSupported: boolean;
+        isCashSupported: boolean;
+        isUPISupported: boolean;
+      };
+      contactDetails: {
+        email: string;
+        phone: string;
+        countryCode: string;
+        whatsappPhone: string;
+        whatsappCountryCode: string;
+      };
+      companyLanguages: string[];
+    };
+    description: string;
+    location: {
+      lat: number;
+      lng: number;
+      address: string;
+    };
+  };
+}
+
+export interface FetchAllBookingsResponse {
+  status: string;
+  result: {
+    status: string;
+    result: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+      list: BookingDetailsType[];
+    };
+  };
+  statusCode: number;
+}
