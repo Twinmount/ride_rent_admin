@@ -2,7 +2,7 @@ import { useState } from "react";
 import AdsSkelton from "@/components/skelton/AdsSkelton";
 import PromotionPreviewModal from "@/components/modal/PromotionPreviewModal";
 import { useQuery } from "@tanstack/react-query";
-import { PromotionType } from "@/types/api-types/API-types";
+import { BlogPromotionType } from "@/types/api-types/API-types";
 import Pagination from "@/components/Pagination";
 import { fetchAllAdvisorBlogPromotions } from "@/api/advisor";
 import FloatingActionButton from "@/components/general/FloatingActionButton";
@@ -13,7 +13,7 @@ import PageLayout from "@/components/common/PageLayout";
 export default function ManageRideBlogPromotionsPage() {
   const [page, setPage] = useState(1);
   const [selectedPromotion, setSelectedPromotion] =
-    useState<PromotionType | null>(null);
+    useState<BlogPromotionType | null>(null);
   const { country } = useAdminContext();
 
   const { data, isLoading } = useQuery({

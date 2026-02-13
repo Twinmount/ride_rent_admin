@@ -17,6 +17,7 @@ import SingleFileUpload from "./file-uploads/SingleFileUpload";
 import { FormContainer, FormItemWrapper, FormSubmitButton } from "./form-ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { useFormValidationToast } from "@/hooks/useFormValidationToast";
+import RichTextEditorComponent from "./RichTextEditorComponent";
 
 type BrandFormProps = {
   type: "Add" | "Update";
@@ -163,6 +164,59 @@ export default function BrandForm({ type, formData }: BrandFormProps) {
               bucketFilePath={GcsFilePaths.LOGOS}
               setDeletedImages={setDeletedImages}
             />
+          )}
+        />
+
+        {/* Brand Body Content - Rich Text Editor */}
+        <FormField
+          control={form.control}
+          name="brandBodyContent"
+          render={({ field }) => (
+            <FormItemWrapper
+              label="Brand Body Content"
+              description="Provide rich text content for the brand page. This will be displayed on the frontend."
+            >
+              <RichTextEditorComponent
+                content={field.value || ""}
+                onUpdate={(updatedContent) => field.onChange(updatedContent)}
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* meta title */}
+        <FormField
+          control={form.control}
+          name="brandMetaTitle"
+          render={({ field }) => (
+            <FormItemWrapper
+              label={`Meta Title`}
+              description={`Add meta title for SEO`}
+            >
+              <Input
+                placeholder={`Meta title`}
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
+          )}
+        />
+
+        {/* meta description */}
+        <FormField
+          control={form.control}
+          name="brandMetaDescription"
+          render={({ field }) => (
+            <FormItemWrapper
+              label={`Meta Description`}
+              description={`Add meta description for SEO`}
+            >
+              <Input
+                placeholder={`Meta description`}
+                {...field}
+                className="input-field"
+              />
+            </FormItemWrapper>
           )}
         />
 

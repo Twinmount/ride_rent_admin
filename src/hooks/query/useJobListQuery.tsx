@@ -22,6 +22,7 @@ export const useJobListQuery = ({
           limit,
         }),
       enabled,
+      staleTime: 0,
     }),
     page,
     setPage,

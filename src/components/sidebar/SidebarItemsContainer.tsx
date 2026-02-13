@@ -47,8 +47,8 @@ export default function SidebarItemsContainer({
       defaultValue={defaultOpenAccordion}
     >
       {sidebarContent.map((item) =>
-        // if the item is a link, render a sidebar item, which will act like a link with direct navigation, otherwise, if the type is "accordion", render an accordion
         item.type === "link" ? (
+          // direct link
           <AccordionItem
             key={item.link}
             value={item.label}
@@ -62,6 +62,7 @@ export default function SidebarItemsContainer({
               <SidebarItem
                 icon={item.icon}
                 label={item.label}
+                featureStatus={item.featureStatus}
                 onClick={() => {
                   handleNavigation(item.link);
                 }}
@@ -69,6 +70,7 @@ export default function SidebarItemsContainer({
             </AccordionTrigger>
           </AccordionItem>
         ) : (
+          // accordion
           <SidebarAccordion key={item.label} item={item} location={location} />
         ),
       )}

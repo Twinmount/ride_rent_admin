@@ -1,6 +1,7 @@
 import { BannerType } from "@/api/states";
-import { IconConfig, Location } from "../types";
+import { IconConfig, Location, VehicleBucketDisplayGroupType } from "../types";
 import { RidePromotionCardType } from "../formTypes";
+import { VehicleBucketModeType } from "@/constants";
 
 // register response
 export interface RegisterResponse {
@@ -205,6 +206,9 @@ export interface BrandType {
   brandValue: string;
   brandLogo: any;
   vehicleCategoryId: string;
+  brandBodyContent?: string;
+  brandMetaTitle?: string;
+  brandMetaDescription?: string;
 }
 
 //  interface for the Brand GET ALL) API response
@@ -245,6 +249,62 @@ export interface FetchLinksResponse {
   statusCode: number;
 }
 
+export interface VehicleBucketType {
+  id?: string;
+  vehicleBucketMode: VehicleBucketModeType;
+  stateId: string;
+  displayGroup: VehicleBucketDisplayGroupType;
+  linkText: string;
+  vehicleBucketName: string;
+  vehicleBucketValue: string;
+  vehicleBucketDescription: string;
+  pageHeading: string;
+  pageSubheading: string;
+  metaTitle: string;
+  metaDescription: string;
+  vehicleCodes?: string[];
+  vehicleCategoryId?: string;
+  vehicleTypeId?: string;
+  location?: Location;
+}
+
+export interface VehicleBucketListType extends VehicleBucketType {
+  stateValue: string;
+  pageVisitCount: number;
+}
+
+export interface FetchVehicleBucketListResponse {
+  result: {
+    list: VehicleBucketListType[];
+    page: number;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  status: string;
+  statusCode: number;
+}
+
+export interface FetchSpecificVehicleBucketResponse {
+  result: VehicleBucketType;
+  status: string;
+  statusCode: number;
+}
+
+export interface VehicleQuickSearchType {
+  id: string;
+  vehicleCode: string;
+  vehicleModel: string;
+  brandName: string;
+  vehicleName: string;
+  thumbnailUrl: string;
+}
+
+export interface VehicleBucketSearchResponse {
+  result: VehicleQuickSearchType[];
+  status: string;
+  statusCode: number;
+}
+
 //  interface for the link (by id)  API response
 export interface FetchSpecificLinkResponse {
   result: LinkType;
@@ -253,13 +313,32 @@ export interface FetchSpecificLinkResponse {
 }
 
 // single promotion type
-export interface PromotionType {
+export interface BlogPromotionType {
   promotionId: string;
   promotionImage: any;
   promotionLink: string;
 }
 
-//  get-all-promotions  API response
+export interface PromotionType {
+  promotionId: string;
+  promotionImage: any;
+  promotionLink: string;
+  vehicleCategoryId?: string;
+  type:
+    | "homepage"
+    | "listing-page"
+    | "city-listing-page"
+    | "series-listing-page"
+    | "brand-listing-page"
+    | "listing-page-filter"
+    | "city-quick-links"
+    | "series-quick-links"
+    | "brand-quick-links";
+  title?: string;
+  subtitle?: string;
+  active?: boolean;
+}
+
 export interface FetchPromotionsResponse {
   result: {
     list: PromotionType[];
@@ -433,6 +512,21 @@ export interface FetchDashboardAnalytics {
     totalCategories: number;
     totalVisits: number;
     allTimeVisits: number;
+  };
+  status: string;
+  statusCode: number;
+}
+
+export interface MostViewedVehicleType {
+  vehicleId: string;
+  vehicleModel: string;
+  vehicleCode: string;
+  // Add other fields if needed based on API response
+}
+
+export interface FetchMostViewedVehiclesResponse {
+  result: {
+    list: MostViewedVehicleType[];
   };
   status: string;
   statusCode: number;

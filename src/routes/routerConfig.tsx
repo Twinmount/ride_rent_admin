@@ -28,6 +28,7 @@ import { supplierRoutes } from "./route-groups/supplierCentralRoutes";
 import { updatesRoutes } from "./route-groups/updatesRoutes";
 import { coupenRoutes } from "./route-groups/coupenRoutes";
 import { orderRoutes } from "./route-groups/orderRoutes";
+import { vehicleBucketRoutes } from "./route-groups/vehicleBucketRoutes";
 
 // lazy imports
 const Dashboard = lazy(() => import("../pages/dashboard/Dashboard"));
@@ -122,6 +123,9 @@ export const router = createBrowserRouter([
               ...supplierRoutes,
 
               ...updatesRoutes,
+
+              // vehicle bucket routes
+              ...vehicleBucketRoutes,
             ],
           },
         ],

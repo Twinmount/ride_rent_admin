@@ -3,6 +3,7 @@ import {
   RidePromotionFormType,
   SRMCustomerDetailsFormType,
   SRMVehicleFormType,
+  VehicleBucketFormType,
 } from "@/types/formTypes";
 import {
   AdvisorBlogFormType,
@@ -32,6 +33,9 @@ export const BrandFormDefaultValues: BrandFormType = {
   brandValue: "",
   vehicleCategoryId: "",
   brandLogo: "",
+  brandBodyContent: "",
+  brandMetaTitle: "",
+  brandMetaDescription: "",
 };
 
 // State form default values
@@ -65,6 +69,11 @@ export const CountryFormDefaultValues: CountryFormType = {
 export const CityFormDefaultValues: CityFormType = {
   cityName: "",
   cityValue: "",
+  cityPageHeading: "",
+  cityPageSubheading: "",
+  cityMetaTitle: "",
+  cityMetaDescription: "",
+  cityBodyContent: "",
 };
 
 // Vehicle Category form default values
@@ -89,6 +98,10 @@ export const RecommendedLinkFormDefaultValues = {
 export const PromotionFormDefaultValue = {
   promotionImage: "",
   promotionLink: "",
+  vehicleCategoryId: "",
+  type: "homepage" as const,
+  title: "",
+  subtitle: "",
 };
 
 // blog promotion form default values
@@ -331,6 +344,8 @@ export const JobFormDefaultValues: JobFormType = {
   level: "",
   experience: "",
   country: "",
+  metaTitle: "",
+  metaDescription: "",
   sections: [
     {
       title: "Section 1",
@@ -364,6 +379,24 @@ export const RidePromotionFormDefaultValues: RidePromotionFormType = {
   ],
 };
 
+export const VehicleBucketFormDefaultValues: VehicleBucketFormType = {
+  vehicleBucketMode: "VEHICLE_CODE",
+  stateId: "",
+  displayGroup: "POPULAR_RENTAL_SEARCHES",
+  vehicleBucketName: "",
+  vehicleBucketValue: "",
+  linkText: "",
+  vehicleCodes: [],
+  vehicleCategoryId: "",
+  vehicleTypeId: "",
+  location: undefined,
+  vehicleBucketDescription: "",
+  pageHeading: "",
+  pageSubheading: "",
+  metaTitle: "",
+  metaDescription: "",
+};
+
 // form constants
 export const SERVICE_OPTIONS = [
   {
@@ -392,3 +425,81 @@ export const SERVICE_OPTIONS = [
     value: "desert-safari",
   },
 ];
+
+export const VEHICLE_BUCKET_MODES_ENUM = {
+  VEHICLE_CODE: "VEHICLE_CODE",
+  VEHICLE_TYPE: "VEHICLE_TYPE",
+  LOCATION_COORDINATES: "LOCATION_COORDINATES",
+} as const;
+
+// Vehicle Bucket Mode Options
+export const VEHICLE_BUCKET_MODES = [
+  {
+    label: "Vehicle Code Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_CODE,
+    description:
+      "Manually select up to 30 specific vehicles using vehicle codes",
+  },
+  {
+    label: "Vehicle Type Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_TYPE,
+    description:
+      "Automatically fetch upto 30 vehicles of a specific type using vehicle type",
+  },
+  {
+    label: "Location Co-ordinates Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES,
+    description:
+      "Automatically fetch vehicles up to 30 near specific coordinates within a specific state/type using location co-ordinates",
+  },
+] as const;
+
+export type VehicleBucketModeType =
+  (typeof VEHICLE_BUCKET_MODES)[number]["value"];
+
+export const VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS = {
+  POPULAR_RENTAL_SEARCHES: "POPULAR_RENTAL_SEARCHES",
+  POPULAR_VEHICLE_PAGES: "POPULAR_VEHICLE_PAGES",
+} as const;
+
+export const VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS: {
+  label: string;
+  value: string;
+}[] = [
+  {
+    label: "Popular Rental Searches (Left Box)",
+    value: "POPULAR_RENTAL_SEARCHES",
+  },
+  {
+    label: "Popular Vehicle Pages (Right Box)",
+    value: "POPULAR_VEHICLE_PAGES",
+  },
+];
+
+export const VEHICLE_BUCKET_MODE_FILTER_DROPDOWN_OPTIONS = [
+  {
+    label: "All (Mode)",
+    value: "all",
+  },
+  {
+    label: "Vehicle Code Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_CODE,
+  },
+  {
+    label: "Vehicle Type Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_TYPE,
+  },
+  {
+    label: "Location Co-ordinates Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES,
+  },
+];
+
+export const VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT = 30;
+
+// form text fields size limits
+export const TEXT_LIMITS = {
+  DESCRIPTION: 500,
+  DETAILED_DESCRIPTION: 2000,
+  META_DESCRIPTION: 180,
+} as const;

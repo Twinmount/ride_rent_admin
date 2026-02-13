@@ -36,9 +36,7 @@ export default function PageLayout({
           <PageHeading heading={heading} />
         </div>
         {/* sub heading */}
-        {subheading && (
-          <h2 className="text-md ml-10 text-gray-600">{subheading}</h2>
-        )}
+        {subheading && <h2 className="text-md text-gray-600">{subheading}</h2>}
       </div>
 
       {children}

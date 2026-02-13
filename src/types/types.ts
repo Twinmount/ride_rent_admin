@@ -1,3 +1,4 @@
+import { VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS } from "@/constants";
 import { iconConfigSchema } from "@/lib/validator";
 import { z } from "zod";
 
@@ -96,6 +97,9 @@ export type BrandFormType = {
   brandValue: string;
   vehicleCategoryId: string;
   brandLogo: string;
+  brandBodyContent?: string;
+  brandMetaTitle?: string;
+  brandMetaDescription?: string;
 };
 
 export type IconConfig = z.infer<typeof iconConfigSchema>;
@@ -124,8 +128,14 @@ export type CategoryFormType = {
 };
 
 export type CityFormType = {
+  cityId?: string;
   cityName: string;
   cityValue: string;
+  cityPageHeading?: string;
+  cityPageSubheading?: string;
+  cityMetaTitle?: string;
+  cityMetaDescription?: string;
+  cityBodyContent?: string;
 };
 
 export type LinkFormType = {
@@ -140,9 +150,24 @@ export type RecommendedLinkFormType = {
   link: string;
 };
 
+export type PromotionTypeEnum =
+  | "homepage"
+  | "listing-page"
+  | "city-listing-page"
+  | "series-listing-page"
+  | "brand-listing-page"
+  | "listing-page-filter"
+  | "city-quick-links"
+  | "series-quick-links"
+  | "brand-quick-links";
+
 export type PromotionFormType = {
   promotionImage: string;
   promotionLink: string;
+  vehicleCategoryId?: string;
+  type: PromotionTypeEnum;
+  title?: string;
+  subtitle?: string;
 };
 
 export type BlogPromotionPlacementType =
@@ -312,6 +337,8 @@ export type JobFormType = {
   level: string;
   experience: string;
   country: string;
+  metaTitle: string;
+  metaDescription: string;
   sections?: JobSectionDto[];
   aboutCompany?: string;
   fileUrl?: string | null;
@@ -319,3 +346,6 @@ export type JobFormType = {
 
 export type ApplicationTypes = "all" | "intern" | "career";
 export type ContentFor = "state" | "country" | "parentState";
+
+export type VehicleBucketDisplayGroupType =
+  keyof typeof VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS;

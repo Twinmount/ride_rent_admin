@@ -3,15 +3,16 @@ import { API } from "../ApiService";
 import {
   ContentFaqResponse,
   CreateContentFaqRequest,
-  FetchSeriesFaqsResponse,
+  FaqType,
+  FetchFaqsResponse,
   UpdateContentFaqRequest,
 } from "@/types/api-types/contentFaqApi-types";
 
 /**
- * Create a new FAQ for a series
+ * Create a new FAQ (Series or Vehicle Bucket)
  */
-export const createSeriesFaq = async (
-  data: CreateContentFaqRequest
+export const createContentFaq = async (
+  data: CreateContentFaqRequest,
 ): Promise<ContentFaqResponse> => {
   try {
     const response = await API.post<ContentFaqResponse>({
@@ -20,12 +21,12 @@ export const createSeriesFaq = async (
     });
 
     if (!response) {
-      throw new Error("Failed to create series FAQ");
+      throw new Error("Failed to create FAQ");
     }
 
     return response;
   } catch (error) {
-    console.error("Error creating series FAQ:", error);
+    console.error("Error creating FAQ:", error);
     throw error;
   }
 };
@@ -33,9 +34,9 @@ export const createSeriesFaq = async (
 /**
  * Update an existing FAQ
  */
-export const updateSeriesFaq = async (
+export const updateContentFaq = async (
   faqId: string,
-  data: UpdateContentFaqRequest
+  data: UpdateContentFaqRequest,
 ): Promise<ContentFaqResponse> => {
   try {
     const response = await API.put<ContentFaqResponse>({
@@ -44,12 +45,12 @@ export const updateSeriesFaq = async (
     });
 
     if (!response) {
-      throw new Error("Failed to update series FAQ");
+      throw new Error("Failed to update FAQ");
     }
 
     return response;
   } catch (error) {
-    console.error("Error updating series FAQ:", error);
+    console.error("Error updating FAQ:", error);
     throw error;
   }
 };
@@ -57,26 +58,26 @@ export const updateSeriesFaq = async (
 /**
  * Delete an FAQ
  */
-export const deleteSeriesFaq = async (faqId: string): Promise<void> => {
+export const deleteContentFaq = async (
+  faqId: string,
+  faqType: FaqType,
+): Promise<void> => {
   try {
     await API.delete({
-      slug: `${Slug.CONTENT_FAQ}/${faqId}?faqType=series`,
+      slug: `${Slug.CONTENT_FAQ}/${faqId}?faqType=${faqType}`,
     });
   } catch (error) {
-    console.error("Error deleting series FAQ:", error);
+    console.error("Error deleting FAQ:", error);
     throw error;
   }
 };
 
-/**
- * Get all FAQs for a specific series
- */
-export const getSeriesFaqs = async (
-  seriesId: string
-): Promise<FetchSeriesFaqsResponse> => {
+export const getContentFaqsByTarget = async (
+  targetId: string,
+): Promise<FetchFaqsResponse> => {
   try {
-    const response = await API.get<FetchSeriesFaqsResponse>({
-      slug: `${Slug.GET_CONTENT_FAQ_BY_SERIES}/${seriesId}`,
+    const response = await API.get<FetchFaqsResponse>({
+      slug: `${Slug.GET_CONTENT_FAQ_BY_TARGET}/${targetId}`,
     });
 
     if (!response) {
@@ -85,29 +86,7 @@ export const getSeriesFaqs = async (
 
     return response;
   } catch (error) {
-    console.error("Error fetching series FAQs:", error);
-    throw error;
-  }
-};
-
-/**
- * Get a single FAQ by ID
- */
-export const getSeriesFaqById = async (
-  faqId: string
-): Promise<ContentFaqResponse> => {
-  try {
-    const response = await API.get<ContentFaqResponse>({
-      slug: `${Slug.CONTENT_FAQ}/${faqId}`,
-    });
-
-    if (!response) {
-      throw new Error("Failed to fetch FAQ");
-    }
-
-    return response;
-  } catch (error) {
-    console.error("Error fetching FAQ:", error);
+    console.error("Error fetching FAQs:", error);
     throw error;
   }
 };

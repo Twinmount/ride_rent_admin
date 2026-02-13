@@ -19,12 +19,14 @@ import {
   Users,
   BadgePercent,
   ClipboardList,
+  Layers,
 } from "lucide-react";
 
 // Define the type for the items in the "accordion"
 export type SidebarSubItemType = {
   label: string;
   link: string;
+  featureStatus?: SidebarFeatureStatusType;
 };
 
 // Define the base type for common properties
@@ -34,10 +36,13 @@ type SidebarBase = {
   icon: any; // The icon component
 };
 
+export type SidebarFeatureStatusType = "BETA" | "WIP" | "NEW";
+
 // Define the type for a simple "link" item
 type SidebarLink = SidebarBase & {
   type: "link";
   link: string;
+  featureStatus?: SidebarFeatureStatusType;
 };
 
 // Define the type for an "accordion" item
@@ -191,6 +196,14 @@ export const sidebarContent: SidebarItem[] = [
     label: "Vehicle Series",
     icon: Group,
     link: "/manage-series",
+  },
+  // Vehicle Bucket
+  {
+    type: "link",
+    label: "Vehicle Bucket",
+    icon: Layers,
+    link: "/manage-vehicle-bucket",
+    featureStatus: "BETA",
   },
   // Locations routes
   {
