@@ -245,6 +245,7 @@ export default function VehicleBucketForm({
                   const sanitizedSlug = sanitizeStringToSlug(e.target.value);
                   form.setValue("vehicleBucketValue", sanitizedSlug);
                 }}
+                disabled={type === "Update"}
               />
             </FormItemWrapper>
           )}
@@ -412,7 +413,16 @@ export default function VehicleBucketForm({
               render={({ field }) => (
                 <FormItemWrapper
                   label="Brand Name"
-                  description="Select the vehicle brand under the chosen category"
+                  description={
+                    <span>
+                      Select the vehicle brand under the chosen category
+                      {type === "Add" && (
+                        <span className="mt-1 block text-xs text-orange">
+                          Cannot be changed after creation.
+                        </span>
+                      )}
+                    </span>
+                  }
                 >
                   <BrandsDropdown
                     vehicleCategoryId={categoryId || undefined}
@@ -436,14 +446,24 @@ export default function VehicleBucketForm({
               render={({ field }) => (
                 <FormItemWrapper
                   label="Vehicle Series"
-                  description="All vehicles of this series will be included in this bucket"
+                  description={
+                    <span>
+                      All vehicles of this series will be included in this
+                      bucket
+                      {type === "Add" && (
+                        <span className="mt-1 block text-xs text-orange">
+                          Cannot be changed after creation.
+                        </span>
+                      )}
+                    </span>
+                  }
                 >
                   <SeriesDropdown
                     value={field.value}
                     onChangeHandler={field.onChange}
                     stateId={stateId}
                     brandId={brandId || ""}
-                    isDisabled={!brandId}
+                    isDisabled={!brandId || type === "Update"}
                   />
                 </FormItemWrapper>
               )}

@@ -427,19 +427,18 @@ export const VEHICLE_BUCKET_MODES = [
     label: "Vehicle Type Mode",
     value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_TYPE,
     description:
-      "Automatically fetch upto 30 vehicles of a specific type using vehicle type",
+      "Automatically fetch vehicles of a specific type using vehicle type",
   },
   {
     label: "Location Co-ordinates Mode",
     value: VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES,
     description:
-      "Automatically fetch vehicles up to 30 near specific coordinates within a specific state/vehicle type",
+      "Automatically fetch vehicles near specific coordinates within a specific state/vehicle type",
   },
   {
     label: "Vehicle Series Mode",
     value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_SERIES,
-    description:
-      "Automatically fetch upto 30 vehicles of a specific vehicle series",
+    description: "Automatically fetch vehicles of a specific vehicle series",
   },
 ] as const;
 
