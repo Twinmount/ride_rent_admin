@@ -13,6 +13,7 @@ import {
   TEXT_LIMITS,
   VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS,
   VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT,
+  VEHICLE_BUCKET_MODES_ENUM,
   VehicleBucketFormDefaultValues,
 } from "@/constants";
 import {
@@ -36,6 +37,8 @@ import VehicleBucketModeDropdown from "./dropdowns/VehicleBucketModeDropdown";
 import { useFormValidationToast } from "@/hooks/useFormValidationToast";
 import { SingleSelectDropdown } from "./dropdowns/SingleSelectDropdown";
 import RichTextEditorComponent from "./RichTextEditorComponent";
+import BrandsDropdown from "./dropdowns/BrandsDropdown";
+import SeriesDropdown from "./dropdowns/SeriesDropdown";
 
 type VehicleBucketFormProps = {
   type: "Add" | "Update";
@@ -48,8 +51,12 @@ export default function VehicleBucketForm({
   formData,
   setSearchParams,
 }: VehicleBucketFormProps) {
-  const [categoryId, setCategoryId] = useState<string | null>(null);
-
+  const [categoryId, setCategoryId] = useState<string | null>(
+    formData?.vehicleCategoryId || null,
+  );
+  const [brandId, setBrandId] = useState<string | null>(
+    formData?.vehicleBrandId || null,
+  );
   const initialValues = formData || VehicleBucketFormDefaultValues;
 
   const navigate = useNavigate();
@@ -118,9 +125,13 @@ export default function VehicleBucketForm({
 
   const stateId = form.watch("stateId");
 
-  const isLocationMode = selectedBucketMode === "LOCATION_COORDINATES";
-  const isVehicleTypeMode = selectedBucketMode === "VEHICLE_TYPE";
-  const isVehicleCodeMode = selectedBucketMode === "VEHICLE_CODE";
+  const { VEHICLE_CODE, VEHICLE_TYPE, LOCATION_COORDINATES, VEHICLE_SERIES } =
+    VEHICLE_BUCKET_MODES_ENUM;
+
+  const isLocationMode = selectedBucketMode === LOCATION_COORDINATES;
+  const isVehicleTypeMode = selectedBucketMode === VEHICLE_TYPE;
+  const isVehicleCodeMode = selectedBucketMode === VEHICLE_CODE;
+  const isVehicleSeriesMode = selectedBucketMode === VEHICLE_SERIES;
 
   return (
     <Form {...form}>
@@ -148,15 +159,29 @@ export default function VehicleBucketForm({
                   field.onChange(value);
 
                   // Clear conditional fields when mode changes
-                  if (value === "VEHICLE_CODE") {
+                  if (value === VEHICLE_CODE) {
                     form.setValue("vehicleCategoryId", "");
                     form.setValue("vehicleTypeId", "");
                     form.setValue("location", undefined);
-                  } else if (value === "VEHICLE_TYPE") {
+                    form.setValue("vehicleBrandId", "");
+                    form.setValue("vehicleSeriesId", "");
+                  } else if (value === VEHICLE_TYPE) {
                     form.setValue("vehicleCodes", []);
                     form.setValue("location", undefined);
-                  } else if (value === "LOCATION_COORDINATES") {
+                    form.setValue("vehicleBrandId", "");
+                    form.setValue("vehicleSeriesId", "");
+                  } else if (value === LOCATION_COORDINATES) {
                     form.setValue("vehicleCodes", []);
+                    form.setValue("vehicleCategoryId", "");
+                    form.setValue("vehicleTypeId", "");
+                    form.setValue("vehicleBrandId", "");
+                    form.setValue("vehicleSeriesId", "");
+                  } else if (value === VEHICLE_SERIES) {
+                    form.setValue("vehicleCodes", []);
+                    form.setValue("vehicleCategoryId", "");
+                    form.setValue("vehicleTypeId", "");
+                    form.setValue("vehicleBrandId", "");
+                    form.setValue("location", undefined);
                   }
                 }}
                 value={field.value}
@@ -307,70 +332,127 @@ export default function VehicleBucketForm({
           />
         )}
 
-        {/* Show Category & Type for VEHICLE_TYPE and LOCATION_COORDINATES modes */}
+        {/* Vehicle Category */}
+        {(isVehicleTypeMode || isLocationMode || isVehicleSeriesMode) && (
+          <FormField
+            control={form.control}
+            name="vehicleCategoryId"
+            render={({ field }) => {
+              return (
+                <FormItemWrapper
+                  label="Vehicle Category"
+                  description="Category of the vehicle"
+                >
+                  <VehicleCategoryDropdown
+                    onChangeHandler={(value) => {
+                      field.onChange(value);
+                      if (field.value !== value) {
+                        field.onChange(value);
+                        form.setValue("vehicleTypeId", "", {
+                          shouldValidate: false,
+                          shouldDirty: true,
+                        });
+                        form.setValue("vehicleBrandId", "", {
+                          shouldValidate: false,
+                          shouldDirty: true,
+                        });
+                        form.setValue("vehicleSeriesId", "", {
+                          shouldValidate: false,
+                          shouldDirty: true,
+                        });
+                      }
+                    }}
+                    value={field.value}
+                    placeholder="Select category"
+                    setCategoryId={setCategoryId}
+                    isDisabled={type === "Update"}
+                  />
+                </FormItemWrapper>
+              );
+            }}
+          />
+        )}
+
+        {/* Vehicle Type */}
         {(isVehicleTypeMode || isLocationMode) && (
+          <FormField
+            control={form.control}
+            name="vehicleTypeId"
+            render={({ field }) => {
+              return (
+                <FormItemWrapper
+                  label="Vehicle Type"
+                  description={
+                    isVehicleTypeMode
+                      ? "All vehicles of this type will be automatically included"
+                      : "Vehicles of this type near the coordinates will be shown"
+                  }
+                >
+                  <VehicleTypesDropdown
+                    vehicleCategoryId={categoryId || undefined}
+                    value={field.value}
+                    onChangeHandler={(value) => {
+                      field.onChange(value);
+                    }}
+                    isDisabled={!categoryId}
+                  />
+                </FormItemWrapper>
+              );
+            }}
+          />
+        )}
+
+        {/* Vehicle Brand and Series : Vehicle Series Mode */}
+        {isVehicleSeriesMode && (
           <>
-            {/* Vehicle Category */}
+            {/* Vehicle Brand */}
             <FormField
               control={form.control}
-              name="vehicleCategoryId"
-              render={({ field }) => {
-                return (
-                  <FormItemWrapper
-                    label="Vehicle Category"
-                    description="Category of the vehicle"
-                  >
-                    <VehicleCategoryDropdown
-                      onChangeHandler={(value) => {
-                        field.onChange(value);
-                        if (field.value !== value) {
-                          field.onChange(value);
-                          form.setValue("vehicleTypeId", "", {
-                            shouldValidate: false,
-                            shouldDirty: true,
-                          });
-                        }
-                      }}
-                      value={field.value}
-                      placeholder="Select category"
-                      setCategoryId={setCategoryId}
-                      isDisabled={type === "Update"}
-                    />
-                  </FormItemWrapper>
-                );
-              }}
+              name="vehicleBrandId"
+              render={({ field }) => (
+                <FormItemWrapper
+                  label="Brand Name"
+                  description="Select the vehicle brand under the chosen category"
+                >
+                  <BrandsDropdown
+                    vehicleCategoryId={categoryId || undefined}
+                    value={field.value}
+                    onChangeHandler={(value) => {
+                      field.onChange(value);
+                      setBrandId(value);
+                      // Reset series when brand changes
+                      form.setValue("vehicleSeriesId", "");
+                    }}
+                    isDisabled={!categoryId || type === "Update"}
+                  />
+                </FormItemWrapper>
+              )}
             />
 
-            {/* Vehicle Type */}
+            {/* Vehicle Series */}
             <FormField
               control={form.control}
-              name="vehicleTypeId"
-              render={({ field }) => {
-                return (
-                  <FormItemWrapper
-                    label="Vehicle Type"
-                    description={
-                      isVehicleTypeMode
-                        ? "All vehicles of this type will be automatically included"
-                        : "Vehicles of this type near the coordinates will be shown"
-                    }
-                  >
-                    <VehicleTypesDropdown
-                      vehicleCategoryId={categoryId || undefined}
-                      value={field.value}
-                      onChangeHandler={(value) => {
-                        field.onChange(value);
-                      }}
-                      isDisabled={!categoryId}
-                    />
-                  </FormItemWrapper>
-                );
-              }}
+              name="vehicleSeriesId"
+              render={({ field }) => (
+                <FormItemWrapper
+                  label="Vehicle Series"
+                  description="All vehicles of this series will be included in this bucket"
+                >
+                  <SeriesDropdown
+                    value={field.value}
+                    onChangeHandler={field.onChange}
+                    stateId={stateId}
+                    brandId={brandId || ""}
+                    isDisabled={!brandId}
+                  />
+                </FormItemWrapper>
+              )}
             />
           </>
         )}
 
-        {isLocationMode && (
+        {/* Location Mode and Vehicle Series Mode */}
+        {(isLocationMode || isVehicleSeriesMode) && (
           <FormField
             control={form.control}
             name="location"

@@ -265,6 +265,8 @@ export interface VehicleBucketType {
   vehicleCodes?: string[];
   vehicleCategoryId?: string;
   vehicleTypeId?: string;
+  vehicleBrandId?: string;
+  vehicleSeriesId?: string;
   location?: Location;
 }
 
