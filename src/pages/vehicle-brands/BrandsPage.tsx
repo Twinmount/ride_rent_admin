@@ -13,7 +13,7 @@ export default function BrandsPage() {
 
   const [searchParams] = useSearchParams();
 
-  // ✅ Use the existing useCategories hook
+  //  Use the existing useCategories hook
   const {
     selectedCategory,
     setSelectedCategory,

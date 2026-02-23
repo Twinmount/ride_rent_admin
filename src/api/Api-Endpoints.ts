@@ -28,6 +28,7 @@ export enum Slug {
   PUT_CITY = "/city",
   DELETE_CITY = "/city",
   GET_ALL_CITIES = "/city/list",
+  GET_ALL_CITIES_PAGINATED = "/city/paginated/list",
 
   // Vehicle Categories Endpoints
   ADD_CATEGORY = "/vehicle-category",

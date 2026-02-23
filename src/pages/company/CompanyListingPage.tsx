@@ -13,6 +13,7 @@ import { useSearchParams } from "react-router-dom";
 import CompanyPageHeading from "../../components/CompanyPageHeading";
 import { useAdminContext } from "@/context/AdminContext";
 import { GenericTable } from "@/components/table/GenericTable";
+import { LimitType } from "@/types/types";
 
 interface CompanyListingPageProps {
   queryKey: string[];
@@ -27,7 +28,7 @@ export default function CompanyListingPage({
   isModified = false,
 }: CompanyListingPageProps) {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState<10 | 15 | 20 | 30>(10);
+  const [limit, setLimit] = useState<LimitType>(10);
   const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("DESC");
   const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
     null,

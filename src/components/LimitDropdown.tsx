@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuRadioGroup,
@@ -7,15 +7,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { ChevronDown } from 'lucide-react'
-
-type Limit = 10 | 15 | 20 | 30
+} from "@/components/ui/dropdown-menu";
+import { LimitType } from "@/types/types";
+import { ChevronDown } from "lucide-react";
 
 interface LimitDropdownProps {
-  limit: Limit
-  setLimit: (value: Limit) => void
-  isLoading: boolean
+  limit: LimitType;
+  setLimit: (value: LimitType) => void;
+  isLoading: boolean;
 }
 
 export function LimitDropdown({
@@ -23,6 +22,13 @@ export function LimitDropdown({
   setLimit,
   isLoading,
 }: LimitDropdownProps) {
+  const limits = [
+    { value: 10, label: "10" },
+    { value: 15, label: "15" },
+    { value: 20, label: "20" },
+    { value: 30, label: "30" },
+  ];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild disabled={isLoading}>
@@ -35,14 +41,18 @@ export function LimitDropdown({
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup
           value={limit.toString()}
-          onValueChange={(value) => setLimit(Number(value) as Limit)} // Type assertion here
+          onValueChange={(value) => setLimit(Number(value) as LimitType)}
         >
-          <DropdownMenuRadioItem value="10">10</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="15">15</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="20">20</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="30">30</DropdownMenuRadioItem>
+          {limits.map((limit) => (
+            <DropdownMenuRadioItem
+              key={limit.value}
+              value={limit.value.toString()}
+            >
+              {limit.label}
+            </DropdownMenuRadioItem>
+          ))}
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

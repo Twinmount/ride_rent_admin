@@ -232,7 +232,6 @@ export type CompanyFormType = {
   countryName?: string;
   location?: Location;
   plan?: string;
-
 };
 
 export type CompanyStatusFormType = {
@@ -349,3 +348,5 @@ export type ContentFor = "state" | "country" | "parentState";
 
 export type VehicleBucketDisplayGroupType =
   keyof typeof VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS;
+
+export type LimitType = 10 | 15 | 20 | 30;

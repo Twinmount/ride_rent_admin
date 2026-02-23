@@ -137,6 +137,17 @@ export interface FetchCitiesResponse {
   statusCode: number;
 }
 
+export interface FetchCitiesPaginatedResponse {
+  result: {
+    list: CityType[];
+    page: number;
+    total: number;
+    totalNumberOfPages: number;
+  };
+  status: string;
+  statusCode: number;
+}
+
 export interface FetchSpecificCityResponse {
   result: CityType;
   status: string;

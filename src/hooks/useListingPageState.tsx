@@ -2,16 +2,16 @@ import { CompanyType } from "@/types/api-types/vehicleAPI-types";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { LiveListingVehicleType } from "@/types/api-types/vehicleAPI-types";
+import { LimitType } from "@/types/types";
 
 export type SortOrder = "ASC" | "DESC";
-export type Limit = 10 | 15 | 20 | 30;
 
 export function useListingPageState(
-  defaultLimit: Limit = 10,
+  defaultLimit: LimitType = 10,
   defaultSort: SortOrder = "DESC",
 ) {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState<Limit>(defaultLimit);
+  const [limit, setLimit] = useState<LimitType>(defaultLimit);
   const [sortOrder, setSortOrder] = useState<SortOrder>(defaultSort);
   const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
     null,
