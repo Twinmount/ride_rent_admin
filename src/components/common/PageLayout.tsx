@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import PageHeading from "../general/PageHeading";
 
 type PageLayoutProps = {
-  heading: string;
-  subheading?: string;
+  heading: React.ReactNode;
+  subheading?: React.ReactNode;
   children: React.ReactNode;
   shouldRenderNavigation?: boolean;
   headingClassName?: string;
