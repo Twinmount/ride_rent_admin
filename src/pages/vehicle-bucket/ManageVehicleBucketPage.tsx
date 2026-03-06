@@ -55,18 +55,27 @@ export default function ManageVehicleBucketPage() {
   const totalItems = data?.result?.total || 0;
   const totalNumberOfPages = data?.result?.totalNumberOfPages || 1;
 
+  const { POPULAR_RENTAL_SEARCHES, POPULAR_VEHICLE_PAGES } =
+    VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS;
+
   const description =
-    displayGroup ===
-    VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS.POPULAR_RENTAL_SEARCHES ? (
+    displayGroup === POPULAR_RENTAL_SEARCHES ? (
       <>
         <strong className="font-semibold">
           Popular Rental Searches (Left Side Box)
         </strong>{" "}
       </>
-    ) : (
+    ) : displayGroup === POPULAR_VEHICLE_PAGES ? (
       <>
         <strong className="font-semibold">
           Popular Vehicle Pages (Right Side Box)
+        </strong>{" "}
+      </>
+    ) : (
+      <>
+        <strong className="font-semibold">
+          Both Popular Rental Searches and Popular Vehicle Pages (Left and Right
+          Side Box)
         </strong>{" "}
       </>
     );
@@ -75,6 +84,7 @@ export default function ManageVehicleBucketPage() {
     { label: "All", value: "all" },
     ...VEHICLE_BUCKET_DISPLAY_GROUP_FILTER_DROPDOWN_OPTIONS,
   ];
+
   return (
     <PageLayout heading={`Manage Vehicle Bucket in ${state?.stateName}`}>
       <div className="flex flex-wrap items-center gap-3 pl-2 pr-10">

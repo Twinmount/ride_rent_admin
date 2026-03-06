@@ -379,24 +379,6 @@ export const RidePromotionFormDefaultValues: RidePromotionFormType = {
   ],
 };
 
-export const VehicleBucketFormDefaultValues: VehicleBucketFormType = {
-  vehicleBucketMode: "VEHICLE_CODE",
-  stateId: "",
-  displayGroup: "POPULAR_RENTAL_SEARCHES",
-  vehicleBucketName: "",
-  vehicleBucketValue: "",
-  linkText: "",
-  vehicleCodes: [],
-  vehicleCategoryId: "",
-  vehicleTypeId: "",
-  location: undefined,
-  vehicleBucketDescription: "",
-  pageHeading: "",
-  pageSubheading: "",
-  metaTitle: "",
-  metaDescription: "",
-};
-
 // form constants
 export const SERVICE_OPTIONS = [
   {
@@ -430,6 +412,7 @@ export const VEHICLE_BUCKET_MODES_ENUM = {
   VEHICLE_CODE: "VEHICLE_CODE",
   VEHICLE_TYPE: "VEHICLE_TYPE",
   LOCATION_COORDINATES: "LOCATION_COORDINATES",
+  VEHICLE_SERIES: "VEHICLE_SERIES",
 } as const;
 
 // Vehicle Bucket Mode Options
@@ -444,18 +427,23 @@ export const VEHICLE_BUCKET_MODES = [
     label: "Vehicle Type Mode",
     value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_TYPE,
     description:
-      "Automatically fetch upto 30 vehicles of a specific type using vehicle type",
+      "Automatically fetch vehicles of a specific type using vehicle type",
   },
   {
     label: "Location Co-ordinates Mode",
     value: VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES,
     description:
-      "Automatically fetch vehicles up to 30 near specific coordinates within a specific state/type using location co-ordinates",
+      "Automatically fetch vehicles near specific coordinates within a specific state/vehicle type",
+  },
+  {
+    label: "Vehicle Series Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_SERIES,
+    description: "Automatically fetch vehicles of a specific vehicle series",
   },
 ] as const;
 
 export type VehicleBucketModeType =
-  (typeof VEHICLE_BUCKET_MODES)[number]["value"];
+  (typeof VEHICLE_BUCKET_MODES_ENUM)[keyof typeof VEHICLE_BUCKET_MODES_ENUM];
 
 export const VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS = {
   POPULAR_RENTAL_SEARCHES: "POPULAR_RENTAL_SEARCHES",
@@ -490,12 +478,36 @@ export const VEHICLE_BUCKET_MODE_FILTER_DROPDOWN_OPTIONS = [
     value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_TYPE,
   },
   {
+    label: "Vehicle Series Mode",
+    value: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_SERIES,
+  },
+  {
     label: "Location Co-ordinates Mode",
     value: VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES,
   },
 ];
 
 export const VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT = 30;
+
+export const VehicleBucketFormDefaultValues: VehicleBucketFormType = {
+  vehicleBucketMode: VEHICLE_BUCKET_MODES_ENUM.VEHICLE_CODE,
+  stateId: "",
+  displayGroup: VEHICLE_BUCKET_DISPLAY_GROUP_OPTIONS.POPULAR_RENTAL_SEARCHES,
+  vehicleBucketName: "",
+  vehicleBucketValue: "",
+  linkText: "",
+  vehicleCodes: [],
+  vehicleCategoryId: "",
+  vehicleTypeId: "",
+  location: undefined,
+  vehicleBrandId: "",
+  vehicleSeriesId: "",
+  vehicleBucketDescription: "",
+  pageHeading: "",
+  pageSubheading: "",
+  metaTitle: "",
+  metaDescription: "",
+};
 
 // form text fields size limits
 export const TEXT_LIMITS = {
