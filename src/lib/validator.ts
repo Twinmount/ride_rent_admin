@@ -1,4 +1,8 @@
-import { VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT } from "@/constants";
+import {
+  TEXT_LIMITS,
+  VEHICLE_BUCKET_MAX_VEHICLE_CODE_LIMIT,
+  VEHICLE_BUCKET_MODES_ENUM,
+} from "@/constants";
 import * as z from "zod";
 
 export const MetaTitleSchema = z
@@ -48,6 +52,14 @@ export const BrandFormSchema = z.object({
   brandLogo: z.string().min(1, "Brand logo is required"),
   vehicleCategoryId: z.string().min(1, "Category is required"),
   brandBodyContent: z.string().optional(),
+  brandMetaTitle: z
+    .string()
+    .max(80, "Meta title must be 80 characters or less")
+    .optional(),
+  brandMetaDescription: z
+    .string()
+    .max(500, "Meta description must be 500 characters or less")
+    .optional(),
 });
 
 // Country Form Schema
@@ -425,6 +437,7 @@ export const CompanyFormSchema = (isIndia: boolean) =>
         .string()
         .min(5, "Display address is required")
         .max(150, "Display address can be up to 150 characters"),
+      commissionPercentage: z.number().optional(),
       companyLanguages: z
         .array(z.string())
         .min(1, "At least one language must be selected"),
@@ -660,7 +673,10 @@ export const VehicleSeriesSchema = z.object({
   vehicleSeriesInfoDescription: z
     .string()
     .min(1, "Series Info description is required")
-    .max(300, "Series Info description cannot exceed 300 characters"),
+    .max(
+      TEXT_LIMITS.DESCRIPTION,
+      `Series Info description cannot exceed ${TEXT_LIMITS.DESCRIPTION} characters`,
+    ),
   vehicleSeriesMetaTitle: z
     .string()
     .min(1, "Series Meta title is required")
@@ -674,12 +690,9 @@ export const VehicleSeriesSchema = z.object({
 
 export const VehicleBucketSchema = z
   .object({
-    vehicleBucketMode: z.enum(
-      ["VEHICLE_CODE", "VEHICLE_TYPE", "LOCATION_COORDINATES"],
-      {
-        required_error: "Bucket mode is required",
-      },
-    ),
+    vehicleBucketMode: z.nativeEnum(VEHICLE_BUCKET_MODES_ENUM, {
+      required_error: "Bucket mode is required",
+    }),
 
     // Always required fields
     stateId: z.string().min(1, "State is required"),
@@ -705,7 +718,10 @@ export const VehicleBucketSchema = z
     vehicleBucketDescription: z
       .string()
       .min(1, "Bucket description is required")
-      .max(300, "Bucket description cannot exceed 300 characters"),
+      .max(
+        TEXT_LIMITS.DETAILED_DESCRIPTION,
+        `Bucket description cannot exceed ${TEXT_LIMITS.DETAILED_DESCRIPTION} characters`,
+      ),
     pageHeading: z
       .string()
       .min(1, "Page heading is required")
@@ -731,11 +747,13 @@ export const VehicleBucketSchema = z
         })
         .optional(),
     ),
+    vehicleBrandId: z.string().optional(),
+    vehicleSeriesId: z.string().optional(),
   })
   .refine(
     (data) => {
       // VEHICLE_CODE mode: vehicleCodes is required
-      if (data.vehicleBucketMode === "VEHICLE_CODE") {
+      if (data.vehicleBucketMode === VEHICLE_BUCKET_MODES_ENUM.VEHICLE_CODE) {
         return (
           Array.isArray(data.vehicleCodes) &&
           data.vehicleCodes.length >= 1 &&
@@ -752,7 +770,7 @@ export const VehicleBucketSchema = z
   .refine(
     (data) => {
       // VEHICLE_TYPE mode: vehicleTypeId is required
-      if (data.vehicleBucketMode === "VEHICLE_TYPE") {
+      if (data.vehicleBucketMode === VEHICLE_BUCKET_MODES_ENUM.VEHICLE_TYPE) {
         return !!data.vehicleTypeId && data.vehicleTypeId.trim() !== "";
       }
       return true;
@@ -765,7 +783,10 @@ export const VehicleBucketSchema = z
   .refine(
     (data) => {
       // LOCATION_COORDINATES mode: location is required
-      if (data.vehicleBucketMode === "LOCATION_COORDINATES") {
+      if (
+        data.vehicleBucketMode ===
+        VEHICLE_BUCKET_MODES_ENUM.LOCATION_COORDINATES
+      ) {
         return (
           !!data.location &&
           typeof data.location.lat === "number" &&
@@ -777,6 +798,24 @@ export const VehicleBucketSchema = z
     {
       message: "Location coordinates are required for this mode",
       path: ["location"],
+    },
+  )
+  .refine(
+    (data) => {
+      // VEHICLE_SERIES mode: vehicleSeriesId and vehicleBrandId are required
+      if (data.vehicleBucketMode === VEHICLE_BUCKET_MODES_ENUM.VEHICLE_SERIES) {
+        return (
+          !!data.vehicleSeriesId &&
+          data.vehicleSeriesId.trim() !== "" &&
+          !!data.vehicleBrandId &&
+          data.vehicleBrandId.trim() !== ""
+        );
+      }
+      return true;
+    },
+    {
+      message: "Vehicle series and brand are required for this mode",
+      path: ["vehicleSeriesId"],
     },
   );
 

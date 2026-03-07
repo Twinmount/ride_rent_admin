@@ -4,7 +4,6 @@ import * as z from "zod";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { Form, FormField } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { CompanyFormDefaultValues } from "@/constants";
 import { CompanyFormSchema } from "@/lib/validator";
@@ -13,8 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { updateCompany } from "@/api/company";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { GcsFilePaths } from "@/constants/enum";
 import { deleteMultipleFiles } from "@/helpers/form";
@@ -30,12 +28,20 @@ import { CompanyFormType } from "@/types/types";
 import LocationPicker from "../LocationPicker";
 import { FormCheckbox } from "../form-ui";
 import { FormFieldLayout } from "../form-ui";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 
 type CompanyFormProps = {
   type: "Update";
   formData?: CompanyFormType | null;
-  updateId?: string; // New prop to explicitly pass the ID (e.g., companyId or supplierId)
-  isSupplierPage?: boolean; // New prop to detect if this is from supplier details page
+  updateId?: string;
+  isSupplierPage?: boolean;
 };
 
 export default function CompanyForm({
@@ -45,7 +51,7 @@ export default function CompanyForm({
   isSupplierPage = false,
 }: CompanyFormProps) {
   const navigate = useNavigate();
-  const { companyId } = useParams<{ companyId: string }>(); // Keep for company routes, but fallback to prop
+  const { companyId } = useParams<{ companyId: string }>();
   const [isFileUploading, setIsFileUploading] = useState(false);
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
 
@@ -53,6 +59,7 @@ export default function CompanyForm({
 
   const isIndividual = formData?.accountType === "individual";
   const isIndia = formData?.countryName === "India";
+  const isBasicPlan = formData?.plan === "BASIC";
 
   const initialValues =
     formData && type === "Update"
@@ -64,7 +71,6 @@ export default function CompanyForm({
         }
       : CompanyFormDefaultValues;
 
-  // creating form
   type CompanySchemaType = z.infer<ReturnType<typeof CompanyFormSchema>>;
 
   const form = useForm<CompanySchemaType>({
@@ -78,7 +84,6 @@ export default function CompanyForm({
       return;
     }
 
-    // Use prop first, fallback to param (for backward compatibility with company routes)
     const idToUse = updateId || companyId;
 
     if (!idToUse) {
@@ -94,7 +99,6 @@ export default function CompanyForm({
       const data = await updateCompany(values, idToUse);
 
       if (data) {
-        // actually delete the images from the db, if any
         await deleteMultipleFiles(deletedImages);
 
         const entityName = isSupplierPage ? "Supplier" : "Company";
@@ -105,9 +109,8 @@ export default function CompanyForm({
 
         revalidateCompanyQueryCache(idToUse);
 
-        // Navigate based on page type
         if (isSupplierPage) {
-          navigate(-1); // Go back to previous page
+          navigate(-1);
         } else {
           navigate("/company/registrations/live");
         }
@@ -140,18 +143,99 @@ export default function CompanyForm({
   }
 
   const buttonText = isSupplierPage ? "Update Supplier" : "Update Company";
+useEffect(() => {
+  if (!isBasicPlan) {
+    form.setValue("commissionPercentage", 0, {
+      shouldValidate: false,
+      shouldDirty: false,
+    });
+  }
+}, [isBasicPlan, form]);
+  // Commission percentage options
+  const commissionOptions = [
+    { value: "0", label: "0%" },
+    { value: "5", label: "5%" },
+    { value: "10", label: "10%" },
+    { value: "15", label: "15%" },
+    { value: "20", label: "20%" },
+    { value: "25", label: "25%" },
+    { value: "30", label: "30%" },
+  ];
 
   return (
     <Form {...form}>
       <FormContainer onSubmit={form.handleSubmit(onSubmit)}>
-        {/* displaying agent contact info such as agentId, email, and phone with copy buttons*/}
+
+        {/* Subscription & Commission – ONLY FOR BASIC PLAN */}
+        {isBasicPlan && (
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 space-y-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Subscription & Commission
+            </h3>
+
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-gray-700">
+                Plan Status:
+              </span>
+              <Badge variant="secondary" className="bg-gray-200 text-gray-700">
+                {formData?.plan} Plan
+              </Badge>
+            </div>
+
+            {/* Commission Dropdown */}
+            <FormField
+              control={form.control}
+              name="commissionPercentage"
+              render={({ field }) => (
+                <FormItemWrapper
+                  label="Commission Percentage"
+                  description="Select the commission percentage you want to charge from this company on each booking."
+                >
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={field.value?.toString() ?? "0"}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select commission percentage" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {commissionOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItemWrapper>
+              )}
+            />
+          </div>
+        )}
+        {!isBasicPlan && (
+          <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Subscription
+            </h3>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-gray-700">
+                Plan Status:
+              </span>
+              <Badge variant="default" className="bg-green-600 text-white">
+                {formData?.plan} Subscribed
+              </Badge>
+            </div>
+          </div>
+        )}
+
+
+        {/* Agent Contact Info */}
         <AgentContactInfo
           agentId={initialValues?.agentId}
           email={initialValues?.email}
           phoneNumber={initialValues?.phoneNumber}
         />
 
-        {/* company name */}
+        {/* Company Name */}
         <FormField
           control={form.control}
           name="companyName"
@@ -169,7 +253,7 @@ export default function CompanyForm({
           )}
         />
 
-        {/* company logo */}
+        {/* Company Logo */}
         <FormField
           control={form.control}
           name="companyLogo"
@@ -197,7 +281,7 @@ export default function CompanyForm({
           )}
         />
 
-        {/* trade license */}
+        {/* Trade License */}
         <FormField
           control={form.control}
           name="commercialLicense"
@@ -219,8 +303,7 @@ export default function CompanyForm({
                     ? `Company Registration / GST Registration / Trade License,`
                     : isIndia && isIndividual
                       ? "Commercial Registration / Tourist Permit"
-                      : `commercial license,
-                  `}{" "}
+                      : `commercial license,`}{" "}
                   maximum file size 5MB.
                 </>
               }
@@ -239,7 +322,7 @@ export default function CompanyForm({
           )}
         />
 
-        {/* expiry date */}
+        {/* Expiry Date */}
         {!isIndia && (
           <FormField
             control={form.control}
@@ -261,7 +344,7 @@ export default function CompanyForm({
                   selected={field.value}
                   onChange={(date: Date | null) => field.onChange(date)}
                   dateFormat="dd/MM/yyyy"
-                  wrapperClassName="datePicker text-base  "
+                  wrapperClassName="datePicker text-base"
                   placeholderText="DD/MM/YYYY"
                 />
               </FormFieldLayout>
@@ -269,7 +352,7 @@ export default function CompanyForm({
           />
         )}
 
-        {/* registration number */}
+        {/* Registration Number */}
         <FormField
           control={form.control}
           name="regNumber"
@@ -303,7 +386,7 @@ export default function CompanyForm({
           )}
         />
 
-        {/* no registration checkbox for India */}
+        {/* No Registration Checkbox for India */}
         {isIndia && !isIndividual && (
           <FormField
             control={form.control}
@@ -319,7 +402,6 @@ export default function CompanyForm({
                   onChange={(checked) => {
                     field.onChange(checked);
                     if (checked) {
-                      // clear regNumber when checkbox is checked
                       form.setValue("regNumber", "");
                     }
                   }}
@@ -330,7 +412,7 @@ export default function CompanyForm({
           />
         )}
 
-        {/* company languages */}
+        {/* Company Languages */}
         <FormField
           control={form.control}
           name="companyLanguages"
@@ -353,6 +435,7 @@ export default function CompanyForm({
           )}
         />
 
+        {/* Office Location */}
         <FormField
           control={form.control}
           name="location"
@@ -361,7 +444,7 @@ export default function CompanyForm({
               label="Office Location"
               description={
                 <span>
-                  Enter the GSP location where the company is registered or
+                  Enter the GPS location where the company is registered or
                   operates.
                 </span>
               }
@@ -377,13 +460,14 @@ export default function CompanyForm({
           )}
         />
 
+        {/* Company Address */}
         <FormField
           control={form.control}
           name="companyAddress"
           render={({ field }) => {
             const [charCount, setCharCount] = useState(
               field.value?.length || 0,
-            ); // To track character count
+            );
 
             const handleInputChange = (
               e: React.ChangeEvent<HTMLTextAreaElement>,
@@ -412,15 +496,15 @@ export default function CompanyForm({
                 <Textarea
                   placeholder="Company Address"
                   {...field}
-                  className={`textarea h-28 rounded-xl transition-all duration-300`} // Dynamic height
-                  onChange={handleInputChange} // Handle change to track character count
+                  className={`textarea h-28 rounded-xl transition-all duration-300`}
+                  onChange={handleInputChange}
                 />
               </FormItemWrapper>
             );
           }}
         />
 
-        {/* Display Address - NEW FIELD */}
+        {/* Display Address */}
         <FormField
           control={form.control}
           name="displayAddress"
@@ -464,13 +548,13 @@ export default function CompanyForm({
           }}
         />
 
-        {/* Company  Meta Title */}
+        {/* Company Meta Title */}
         <FormField
           control={form.control}
           name="companyMetaTitle"
           render={({ field }) => (
             <FormItemWrapper
-              label="Vehicle Meta Title"
+              label="Company Meta Title"
               description={
                 <span>
                   Enter the meta title for this company. This will be used as
@@ -522,7 +606,7 @@ export default function CompanyForm({
                 }
               >
                 <Textarea
-                  placeholder="Vehicle  Meta Description"
+                  placeholder="Company Meta Description"
                   value={field.value}
                   onChange={handleInputChange}
                   className="textarea h-44 rounded-2xl border-none outline-none ring-0 transition-all duration-300 focus:ring-0"
@@ -532,7 +616,7 @@ export default function CompanyForm({
           }}
         />
 
-        {/* Submit */}
+        {/* Submit Button */}
         <FormSubmitButton
           text={buttonText}
           isLoading={form.formState.isSubmitting}

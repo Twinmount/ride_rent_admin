@@ -207,6 +207,8 @@ export interface BrandType {
   brandLogo: any;
   vehicleCategoryId: string;
   brandBodyContent?: string;
+  brandMetaTitle?: string;
+  brandMetaDescription?: string;
 }
 
 //  interface for the Brand GET ALL) API response
@@ -263,6 +265,8 @@ export interface VehicleBucketType {
   vehicleCodes?: string[];
   vehicleCategoryId?: string;
   vehicleTypeId?: string;
+  vehicleBrandId?: string;
+  vehicleSeriesId?: string;
   location?: Location;
 }
 

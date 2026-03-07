@@ -98,6 +98,8 @@ export type BrandFormType = {
   vehicleCategoryId: string;
   brandLogo: string;
   brandBodyContent?: string;
+  brandMetaTitle?: string;
+  brandMetaDescription?: string;
 };
 
 export type IconConfig = z.infer<typeof iconConfigSchema>;
@@ -221,6 +223,7 @@ export type CompanyFormType = {
   phoneNumber?: string;
   email?: string;
   companyAddress: string;
+  commissionPercentage?: number;
   displayAddress: string;
   companyLanguages: string[];
   companyMetaTitle: string;
@@ -228,6 +231,8 @@ export type CompanyFormType = {
   accountType?: string;
   countryName?: string;
   location?: Location;
+  plan?: string;
+
 };
 
 export type CompanyStatusFormType = {

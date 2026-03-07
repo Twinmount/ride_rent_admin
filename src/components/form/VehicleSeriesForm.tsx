@@ -15,7 +15,7 @@ import { sanitizeStringToSlug } from "@/lib/utils";
 // import { FormContainer } from "./form-ui/FormContainer";
 import VehicleCategoryDropdown from "./dropdowns/VehicleCategoryDropdown";
 import RichTextEditorComponent from "./RichTextEditorComponent";
-import { VehicleSeriesFormDefaultValues } from "@/constants";
+import { TEXT_LIMITS, VehicleSeriesFormDefaultValues } from "@/constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { addVehicleSeries, updateVehicleSeries } from "@/api/vehicle-series";
@@ -299,7 +299,7 @@ export default function VehicleSeriesForm({
             const [charCount, setCharCount] = useState(
               field.value?.length || 0,
             );
-            const limit = 300;
+            const limit = TEXT_LIMITS.DESCRIPTION;
 
             const handleInputChange = (
               e: React.ChangeEvent<HTMLTextAreaElement>,
