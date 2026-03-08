@@ -437,6 +437,7 @@ export const CompanyFormSchema = (isIndia: boolean) =>
         .string()
         .min(5, "Display address is required")
         .max(150, "Display address can be up to 150 characters"),
+      updatedAt: z.string().optional(),
       commissionPercentage: z.number().optional(),
       companyLanguages: z
         .array(z.string())

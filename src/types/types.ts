@@ -232,6 +232,7 @@ export type CompanyFormType = {
   countryName?: string;
   location?: Location;
   plan?: string;
+  updatedAt?: string;
 
 };
 

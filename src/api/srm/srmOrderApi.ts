@@ -15,6 +15,8 @@ export const fetchAllBookings = async (urlParams: {
   search?: string;
 }): Promise<FetchAllBookingsResponse> => {
   try {
+    const normalizedSearch = urlParams.search?.trim();
+
     // Generate query params
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
@@ -22,8 +24,9 @@ export const fetchAllBookings = async (urlParams: {
       sortOrder: urlParams.sortOrder,
     });
 
-    if (urlParams.search) {
-      queryParams.append("search", urlParams.search);
+    if (normalizedSearch) {
+      // Backend `/bookings/list` filters by `bookingId`.
+      queryParams.append("bookingId", normalizedSearch);
     }
 
     const slugWithParams = `${Slug.GET_ALL_OREDERS}?${queryParams}`;
@@ -70,14 +73,16 @@ export const downloadBookingDetailsExcel = async (urlParams: {
   search?: string;
 }): Promise<void> => {
   try {
+    const normalizedSearch = urlParams.search?.trim();
+
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
     });
 
-    if (urlParams.search) {
-      queryParams.append("search", urlParams.search);
+    if (normalizedSearch) {
+      queryParams.append("bookingId", normalizedSearch);
     }
 
     const slugWithParams = `${Slug.DOWNLOAD_ORDER_DETAILS_EXCEL}?${queryParams}`;
