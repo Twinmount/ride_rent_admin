@@ -155,7 +155,7 @@
 //   );
 // }
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { Download } from "lucide-react";
@@ -192,6 +192,11 @@ export default function BookingDetailsListingPage({
   const [isDownloading, setIsDownloading] = useState(false);
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
+
+  // Ensure search always starts from first page to avoid empty/irrelevant slices.
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
 
   // Fetch bookings data
   const { data, isLoading } = useQuery({
@@ -259,7 +264,7 @@ export default function BookingDetailsListingPage({
         <div className="flex-1 max-w-md">
           <SearchBox
             placeholder="Search bookings"
-            searchDescription="Search by Booking ID, Customer Name, Email, or Vehicle Code"
+            searchDescription="Search by Booking ID (example: BID406693)"
           />
         </div>
 

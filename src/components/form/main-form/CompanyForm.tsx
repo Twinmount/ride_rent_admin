@@ -143,14 +143,27 @@ export default function CompanyForm({
   }
 
   const buttonText = isSupplierPage ? "Update Supplier" : "Update Company";
-useEffect(() => {
-  if (!isBasicPlan) {
-    form.setValue("commissionPercentage", 0, {
-      shouldValidate: false,
-      shouldDirty: false,
-    });
-  }
-}, [isBasicPlan, form]);
+  useEffect(() => {
+    if (!isBasicPlan) {
+      form.setValue("commissionPercentage", 0, {
+        shouldValidate: false,
+        shouldDirty: false,
+      });
+    }
+  }, [isBasicPlan, form]);
+
+  const selectedCommission = form.watch("commissionPercentage");
+  const hasExistingCommission =
+    formData?.commissionPercentage !== undefined &&
+    formData?.commissionPercentage !== null;
+  const rawCommissionUpdatedAt =
+    (formData as any)?.updatedAt ||
+    (formData as any)?.updatedDate ||
+    (formData as any)?.modifiedAt;
+  const formattedCommissionUpdatedAt =
+    rawCommissionUpdatedAt && !Number.isNaN(new Date(rawCommissionUpdatedAt).getTime())
+      ? new Date(rawCommissionUpdatedAt).toLocaleString()
+      : null;
   // Commission percentage options
   const commissionOptions = [
     { value: "0", label: "0%" },
@@ -169,9 +182,22 @@ useEffect(() => {
         {/* Subscription & Commission – ONLY FOR BASIC PLAN */}
         {isBasicPlan && (
           <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Subscription & Commission
-            </h3>
+            <div className="flex items-start justify-between gap-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Subscription & Commission
+              </h3>
+
+              {hasExistingCommission && (
+                <div className="text-right text-xs text-gray-600">
+                  <p className="font-semibold text-gray-900">
+                    Current Commission Percentage: {(selectedCommission ?? formData?.commissionPercentage ?? 0)}%
+                  </p>
+                  <p>
+                    Last Updated: {formattedCommissionUpdatedAt || "N/A"}
+                  </p>
+                </div>
+              )}
+            </div>
 
             <div className="flex items-center gap-3">
               <span className="text-sm font-medium text-gray-700">
