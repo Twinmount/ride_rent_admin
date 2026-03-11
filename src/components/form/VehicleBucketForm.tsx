@@ -581,7 +581,7 @@ export default function VehicleBucketForm({
                   This will be displayed as the <strong>heading</strong> of the
                   page.
                   <br />
-                  100 characters max.
+                  {TEXT_LIMITS.PAGE_HEADING} characters max.
                 </span>
               }
             >
@@ -606,7 +606,7 @@ export default function VehicleBucketForm({
                   This will be displayed as the <strong>sub-heading</strong> of
                   the page.
                   <br />
-                  200 characters max.
+                  {TEXT_LIMITS.PAGE_SUB_HEADING} characters max.
                 </span>
               }
             >
@@ -629,7 +629,7 @@ export default function VehicleBucketForm({
               description={
                 <span>
                   Enter the meta title for this bucket.
-                  <br /> 80 characters max.
+                  <br /> {TEXT_LIMITS.META_TITLE} characters max.
                 </span>
               }
             >
@@ -650,7 +650,7 @@ export default function VehicleBucketForm({
             const [charCount, setCharCount] = useState(
               field.value?.length || 0,
             );
-            const limit = 1000;
+            const limit = TEXT_LIMITS.META_DESCRIPTION;
 
             const handleInputChange = (
               e: React.ChangeEvent<HTMLTextAreaElement>,
