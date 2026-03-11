@@ -176,11 +176,13 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
+import { Download, Eye } from "lucide-react";
 import { BookingDetailsType } from "@/types/api-types/srm-api.types";
 
 export const bookingDetailsColumns = (
   onViewDetails?: (booking: BookingDetailsType) => void,
+  onDownloadInvoice?: (booking: BookingDetailsType) => void,
+  downloadingInvoiceId?: string | null,
 ): ColumnDef<BookingDetailsType>[] => [
   {
     accessorKey: "bookingId",
@@ -350,6 +352,26 @@ export const bookingDetailsColumns = (
             {createdAt ? new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
           </div>
         </div>
+      );
+    },
+  },
+  {
+    id: "invoice",
+    header: "Invoice",
+    cell: ({ row }) => {
+      const booking = row.original;
+      const isDownloadingInvoice = downloadingInvoiceId === booking.bookingId;
+
+      return (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onDownloadInvoice?.(booking)}
+          disabled={isDownloadingInvoice}
+        >
+          <Download className="h-4 w-4 mr-2" />
+          {isDownloadingInvoice ? "Downloading..." : "Invoice"}
+        </Button>
       );
     },
   },
