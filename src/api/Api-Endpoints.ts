@@ -192,6 +192,7 @@ export enum Slug {
   // excel data download endpoints
   GET_DOWNLOAD_VEHICLE_DATA = "/vehicle/download/excel",
   GET_DOWNLOAD_COMPANY_DATA = "/company/download/excel",
+  DOWNLOAD_BOOKING_INVOICE = "/bookings",
 
   // Blogs Endpoints
   ADD_BLOG = "/blogs",
