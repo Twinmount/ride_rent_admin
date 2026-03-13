@@ -155,7 +155,7 @@
 //   );
 // }
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { Download } from "lucide-react";
@@ -172,7 +172,11 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { bookingDetailsColumns } from "@/components/table/columns/SrmOrderListingColumn";
 import BookingDetailsModal from "@/components/modal/SrmOrderDetailModal";
-import { downloadBookingDetailsExcel, fetchAllBookings } from "@/api/srm/srmOrderApi";
+import {
+  downloadBookingDetailsExcel,
+  downloadBookingInvoice,
+  fetchAllBookings,
+} from "@/api/srm/srmOrderApi";
 
 interface BookingDetailsListingPageProps {
   queryKey: string[];
@@ -190,8 +194,14 @@ export default function BookingDetailsListingPage({
     null,
   );
   const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadingInvoiceId, setDownloadingInvoiceId] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search") || "";
+
+  // Ensure search always starts from first page to avoid empty/irrelevant slices.
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm]);
 
   // Fetch bookings data
   const { data, isLoading } = useQuery({
@@ -242,6 +252,27 @@ export default function BookingDetailsListingPage({
     }
   };
 
+  const handleDownloadInvoice = async (booking: BookingDetailsType) => {
+    try {
+      setDownloadingInvoiceId(booking.bookingId);
+      await downloadBookingInvoice(booking.bookingId);
+      toast({
+        title: "Invoice downloaded",
+        description: `Invoice downloaded for booking ${booking.bookingId}.`,
+        className: "bg-green-500 text-white",
+      });
+    } catch (error) {
+      console.error("Invoice download failed:", error);
+      toast({
+        variant: "destructive",
+        title: "Invoice download failed",
+        description: "Failed to download the invoice. Please try again.",
+      });
+    } finally {
+      setDownloadingInvoiceId(null);
+    }
+  };
+
   return (
     <section className="container mx-auto min-h-screen py-5 md:py-7">
       {/* Header */}
@@ -259,7 +290,7 @@ export default function BookingDetailsListingPage({
         <div className="flex-1 max-w-md">
           <SearchBox
             placeholder="Search bookings"
-            searchDescription="Search by Booking ID, Customer Name, Email, or Vehicle Code"
+            searchDescription="Search by Booking ID (example: BID406693)"
           />
         </div>
 
@@ -288,7 +319,11 @@ export default function BookingDetailsListingPage({
 
       {/* Table */}
       <GenericTable<BookingDetailsType>
-        columns={bookingDetailsColumns(handleViewDetails)}
+        columns={bookingDetailsColumns(
+          handleViewDetails,
+          handleDownloadInvoice,
+          downloadingInvoiceId,
+        )}
         data={data?.result?.result?.list || []}
         loading={isLoading}
         loadingText="Fetching booking details..."

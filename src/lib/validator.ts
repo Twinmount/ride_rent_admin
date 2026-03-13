@@ -8,12 +8,18 @@ import * as z from "zod";
 export const MetaTitleSchema = z
   .string()
   .min(1, "Meta title is required")
-  .max(80, "Meta title must be 80 characters or less");
+  .max(
+    TEXT_LIMITS.META_TITLE,
+    `Meta title must be ${TEXT_LIMITS.META_TITLE} characters or less`,
+  );
 
 export const MetaDescriptionSchema = z
   .string()
   .min(1, "Meta description is required")
-  .max(500, "Meta description must be 500 characters or less");
+  .max(
+    TEXT_LIMITS.META_DESCRIPTION,
+    `Meta description must be ${TEXT_LIMITS.META_DESCRIPTION} characters or less`,
+  );
 
 // Vehicle Type Form Schema
 export const VehicleTypeFormSchema = z.object({
@@ -437,6 +443,7 @@ export const CompanyFormSchema = (isIndia: boolean) =>
         .string()
         .min(5, "Display address is required")
         .max(150, "Display address can be up to 150 characters"),
+      updatedAt: z.string().optional(),
       commissionPercentage: z.number().optional(),
       companyLanguages: z
         .array(z.string())
@@ -725,11 +732,18 @@ export const VehicleBucketSchema = z
     pageHeading: z
       .string()
       .min(1, "Page heading is required")
-      .max(100, "Page heading cannot exceed 100 characters"),
+      .max(
+        TEXT_LIMITS.PAGE_HEADING,
+        `Page heading cannot exceed ${TEXT_LIMITS.PAGE_HEADING} characters`,
+      ),
+
     pageSubheading: z
       .string()
       .min(1, "Page subheading is required")
-      .max(200, "Page subheading cannot exceed 200 characters"),
+      .max(
+        TEXT_LIMITS.PAGE_SUB_HEADING,
+        `Page subheading cannot exceed ${TEXT_LIMITS.PAGE_SUB_HEADING} characters`,
+      ),
     metaTitle: MetaTitleSchema,
     metaDescription: MetaDescriptionSchema,
 

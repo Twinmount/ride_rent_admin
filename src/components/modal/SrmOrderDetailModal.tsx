@@ -388,7 +388,7 @@ export default function BookingDetailsModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+        <DialogHeader className="pr-12">
           <DialogTitle className="flex items-center justify-between">
             <span className="text-2xl">Booking Details</span>
             <Badge className={`${statusColors[booking.status]} text-white`}>
@@ -459,10 +459,10 @@ export default function BookingDetailsModal({
               Customer Information
             </h3>
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
+              {/* <div>
                 <p className="text-muted-foreground">Customer ID</p>
                 <p className="font-medium text-xs break-all">{booking.userId || "N/A"}</p>
-              </div>
+              </div> */}
               <div>
                 <p className="text-muted-foreground">Name</p>
                 <p className="font-medium">{booking.customerName || "N/A"}</p>
@@ -516,7 +516,7 @@ export default function BookingDetailsModal({
                   </div>
                 </div>
 
-                {booking.vehicleDetails.description && (
+                {/* {booking.vehicleDetails.description && (
                   <div className="mt-4">
                     <p className="text-muted-foreground mb-2">Description</p>
                     <div 
@@ -524,7 +524,7 @@ export default function BookingDetailsModal({
                       dangerouslySetInnerHTML={{ __html: booking.vehicleDetails.description }}
                     />
                   </div>
-                )}
+                )} */}
 
                 {/* Rental Details */}
                 <div className="mt-4">

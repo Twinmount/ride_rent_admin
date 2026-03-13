@@ -22,6 +22,10 @@ export default function CompanyDetailsPage() {
   const formData = data?.result
     ? {
         ...data?.result,
+        updatedAt:
+          data?.result?.updatedAt ||
+          (data?.result as any)?.updatedDate ||
+          (data?.result as any)?.modifiedAt,
         expireDate: data?.result?.expireDate
           ? new Date(data.result.expireDate)
           : undefined,

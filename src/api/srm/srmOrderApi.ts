@@ -15,6 +15,8 @@ export const fetchAllBookings = async (urlParams: {
   search?: string;
 }): Promise<FetchAllBookingsResponse> => {
   try {
+    const normalizedSearch = urlParams.search?.trim();
+
     // Generate query params
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
@@ -22,8 +24,9 @@ export const fetchAllBookings = async (urlParams: {
       sortOrder: urlParams.sortOrder,
     });
 
-    if (urlParams.search) {
-      queryParams.append("search", urlParams.search);
+    if (normalizedSearch) {
+      // Backend `/bookings/list` filters by `bookingId`.
+      queryParams.append("bookingId", normalizedSearch);
     }
 
     const slugWithParams = `${Slug.GET_ALL_OREDERS}?${queryParams}`;
@@ -70,14 +73,16 @@ export const downloadBookingDetailsExcel = async (urlParams: {
   search?: string;
 }): Promise<void> => {
   try {
+    const normalizedSearch = urlParams.search?.trim();
+
     const queryParams = new URLSearchParams({
       page: urlParams.page.toString(),
       limit: urlParams.limit.toString(),
       sortOrder: urlParams.sortOrder,
     });
 
-    if (urlParams.search) {
-      queryParams.append("search", urlParams.search);
+    if (normalizedSearch) {
+      queryParams.append("bookingId", normalizedSearch);
     }
 
     const slugWithParams = `${Slug.DOWNLOAD_ORDER_DETAILS_EXCEL}?${queryParams}`;
@@ -106,6 +111,36 @@ export const downloadBookingDetailsExcel = async (urlParams: {
     }
   } catch (error) {
     console.error('Error downloading booking details Excel:', error);
+    throw error;
+  }
+};
+
+export const downloadBookingInvoice = async (
+  bookingId: string,
+): Promise<void> => {
+  try {
+    const response = await API.get<Blob>({
+      slug: `${Slug.DOWNLOAD_BOOKING_INVOICE}/${bookingId}/invoice/download`,
+      axiosConfig: { responseType: "blob" },
+    });
+
+    if (!response) {
+      throw new Error("Failed to download booking invoice");
+    }
+
+    const url = window.URL.createObjectURL(response);
+    const link = document.createElement("a");
+    const safeBookingId = bookingId.trim() || "booking";
+
+    link.href = url;
+    link.setAttribute("download", `invoice-${safeBookingId}.pdf`);
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Error downloading booking invoice:", error);
     throw error;
   }
 };

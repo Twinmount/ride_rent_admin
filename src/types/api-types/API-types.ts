@@ -396,6 +396,10 @@ export interface companyType {
   countryName?: string;
   countryId: string;
   location: Location;
+  createdAt?: string;
+  updatedAt?: string;
+  updatedDate?: string;
+  modifiedAt?: string;
 }
 
 //  interface for the get-all-companies  API response
