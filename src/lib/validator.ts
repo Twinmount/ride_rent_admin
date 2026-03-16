@@ -380,6 +380,7 @@ export const PrimaryFormSchema = z
       )
       .optional(),
     disablePriceMatching: z.boolean().optional().default(false),
+    managerId: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -962,4 +963,19 @@ export const RidePromotionFormSchema = z.object({
     .array(RidePromotionCardSchema)
     .max(4, "You can only add up to 4 promotion cards")
     .min(1, "At least 1 promotion card is required"),
+});
+
+// Manager Form Schema – used in AddManagerDialog for both Add and Edit flows.
+export const ManagerSchema = z.object({
+  profilePicture: z.string().optional(),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .max(60, "Name must be 60 characters or fewer"),
+  gender: z.enum(["male", "female", "other"], {
+    required_error: "Gender is required",
+  }),
+  phoneNumber: z.string().min(6, "Provide a valid phone number"),
+  languages: z.array(z.string()).optional(),
+  workingHours: z.array(z.any()).optional(),
 });

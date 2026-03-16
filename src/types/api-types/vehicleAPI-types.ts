@@ -403,6 +403,7 @@ export type GetPrimaryForm = {
   displayAddress: string;
   isVehicleModified: boolean;
   disablePriceMatching?: boolean;
+  managerId?: string;
 };
 
 // Specification form get all response
