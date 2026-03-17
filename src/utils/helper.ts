@@ -29,7 +29,7 @@ export const generateVehicleBucketPublicSiteLink = (
   bucketValue: string,
 ) => {
   const domain = getPublicPlatformDomainWithCountry();
-  return `${domain}/${stateName}/offers/${bucketValue}`;
+  return `${domain}/${stateName}/offer/${bucketValue}`;
 };
 
 export const getPublicPlatformDomainWithCountry = (country: string = "ae") => {
