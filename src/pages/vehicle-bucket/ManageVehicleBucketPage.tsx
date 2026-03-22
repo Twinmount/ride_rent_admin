@@ -135,12 +135,7 @@ export default function ManageVehicleBucketPage() {
 
       <FloatingActionButton
         href={`/manage-vehicle-bucket/add`}
-        label={
-          totalItems >= 20
-            ? `Max Limit Reached (${totalItems})`
-            : "New Vehicle Bucket"
-        }
-        disabled={totalItems >= 20}
+        label={"New Vehicle Bucket"}
       />
     </PageLayout>
   );
