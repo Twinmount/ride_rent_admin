@@ -52,7 +52,7 @@ export default function ManageVehicleBucketPage() {
   });
 
   const vehicleBucketList = data?.result?.list || [];
-  const totalItems = data?.result?.total || 0;
+  // const totalItems = data?.result?.total || 0;
   const totalNumberOfPages = data?.result?.totalNumberOfPages || 1;
 
   const { POPULAR_RENTAL_SEARCHES, POPULAR_VEHICLE_PAGES } =
