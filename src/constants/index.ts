@@ -511,9 +511,9 @@ export const VehicleBucketFormDefaultValues: VehicleBucketFormType = {
 
 // form text fields size limits
 export const TEXT_LIMITS = {
-  PAGE_HEADING: 300,
-  PAGE_SUB_HEADING: 800,
-  DESCRIPTION: 1000,
+  PAGE_HEADING: 120,
+  PAGE_SUB_HEADING: 400,
+  DESCRIPTION: 500,
   DETAILED_DESCRIPTION: 2000,
   META_TITLE: 80,
   META_DESCRIPTION: 180,
