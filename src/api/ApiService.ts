@@ -208,6 +208,7 @@ export class ApiService {
    */
   public async delete<T>({
     slug,
+    body,
     axiosConfig = {},
     queryParameters = {},
   }: APIParameters): Promise<T | undefined> {
@@ -215,6 +216,7 @@ export class ApiService {
       return
     }
     const response = await this.axios.delete<ApiResponse<T>>(slug, {
+      data: body,
       ...axiosConfig,
       params: queryParameters,
     })

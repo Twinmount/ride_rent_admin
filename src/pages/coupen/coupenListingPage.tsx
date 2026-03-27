@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Copy, Edit, Trash2, Eye } from "lucide-react";
 import { format } from "date-fns";
-
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SortDropdown } from "@/components/SortDropdown";
@@ -38,6 +37,7 @@ import {
   updateCouponStatus,
   deleteCoupon,
   CouponType,
+  CouponListResponse,
 } from "@/api/coupen";
 import {
   Dialog,
@@ -390,7 +390,7 @@ export default function CouponListingPage({
 
   // Calculate stats from data
   const stats = {
-    total: data?.result?.count || 0,
+    total: data?.result?.total || 0,
     active:
       data?.result?.list?.filter((c) => c.status === "ACTIVE").length || 0,
     inactive:
@@ -469,7 +469,27 @@ export default function CouponListingPage({
     try {
       await deleteCoupon(selectedCoupon._id);
 
-      queryClient.invalidateQueries({
+      queryClient.setQueriesData<CouponListResponse>(
+        { queryKey },
+        (oldData) => {
+          if (!oldData?.result?.list) return oldData;
+
+          const updatedList = oldData.result.list.filter(
+            (coupon) => coupon._id !== selectedCoupon._id
+          );
+
+          return {
+            ...oldData,
+            result: {
+              ...oldData.result,
+              list: updatedList,
+              total: Math.max(0, oldData.result.total - 1),
+            },
+          };
+        }
+      );
+
+      await queryClient.invalidateQueries({
         queryKey,
       });
 
