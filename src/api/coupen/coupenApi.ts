@@ -100,7 +100,7 @@ export interface CouponListResponse {
   status: string;
   result: {
     list: CouponType[];
-    count: number;
+    total: number;
     page: number;
     limit: number;
     totalNumberOfPages: number;
