@@ -5,12 +5,34 @@ import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
+import { ENV } from "@/config/env.config";
 
 interface RichTextEditorProps {
   content?: string; // Initial content
   onUpdate: (content: string) => void; // Callback when content changes
   isBlog?: boolean; // Check if its a blog to render h1 and h2 tag as the 'description' in level-one form (semantically) doesn't require those two tags
 }
+
+const domain = ENV.PUBLIC_SITE_DOMAIN || "https://ride.rent";
+
+// CustomLink Link to conditionally remove nofollow for internal links
+const CustomLink = Link.extend({
+  renderHTML({ HTMLAttributes }) {
+    const href: string = HTMLAttributes.href ?? "";
+    const isInternal = href.startsWith(domain);
+
+    return [
+      "a",
+      {
+        ...HTMLAttributes,
+        rel: isInternal
+          ? "noopener noreferrer"
+          : "noopener noreferrer nofollow",
+      },
+      0,
+    ];
+  },
+});
 
 export default function RichTextEditorComponent({
   content = "",
@@ -21,7 +43,7 @@ export default function RichTextEditorComponent({
     extensions: [
       StarterKit,
       Underline,
-      Link,
+      CustomLink,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       TextStyle,
       Color,
