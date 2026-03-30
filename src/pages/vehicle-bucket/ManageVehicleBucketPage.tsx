@@ -52,7 +52,7 @@ export default function ManageVehicleBucketPage() {
   });
 
   const vehicleBucketList = data?.result?.list || [];
-  const totalItems = data?.result?.total || 0;
+  // const totalItems = data?.result?.total || 0;
   const totalNumberOfPages = data?.result?.totalNumberOfPages || 1;
 
   const { POPULAR_RENTAL_SEARCHES, POPULAR_VEHICLE_PAGES } =
@@ -135,12 +135,7 @@ export default function ManageVehicleBucketPage() {
 
       <FloatingActionButton
         href={`/manage-vehicle-bucket/add`}
-        label={
-          totalItems >= 20
-            ? `Max Limit Reached (${totalItems})`
-            : "New Vehicle Bucket"
-        }
-        disabled={totalItems >= 20}
+        label={"New Vehicle Bucket"}
       />
     </PageLayout>
   );
