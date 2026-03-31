@@ -17,10 +17,10 @@ import { ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 
 type LanguagesDropdownProps = {
+  isIndia: boolean;
   value: string[];
   onChangeHandler: (value: string[]) => void;
   placeholder?: string;
-  isIndia?: boolean;
 };
 
 const globalLanguages = [
@@ -91,7 +91,7 @@ const CompanyLanguagesDropdown = ({
     let updatedSelectedLanguages: string[];
     if (selectedLanguages.includes(language)) {
       updatedSelectedLanguages = selectedLanguages.filter(
-        (lang) => lang !== language,
+        (lang) => lang !== language
       );
     } else {
       updatedSelectedLanguages = [...selectedLanguages, language];
@@ -101,7 +101,7 @@ const CompanyLanguagesDropdown = ({
   };
 
   const filteredLanguages = languages.filter((language) =>
-    language.toLowerCase().includes(searchTerm.toLowerCase()),
+    language.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -114,10 +114,10 @@ const CompanyLanguagesDropdown = ({
           {selectedLanguages.length > 0
             ? `${selectedLanguages.length} ${placeholder} selected`
             : `Choose ${placeholder}`}
-          <ChevronDown className="h-6 w-6 opacity-50" />
+          <ChevronDown className="w-6 h-6 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 md:w-96">
+      <PopoverContent className="md:w-96 p-0 z-[105]">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder={`Search ${placeholder}...`}
@@ -125,19 +125,19 @@ const CompanyLanguagesDropdown = ({
           />
           <CommandList>
             {filteredLanguages.length === 0 ? (
-              <CommandEmpty>No {placeholder} found.</CommandEmpty>
+               <CommandEmpty>No {placeholder} found.</CommandEmpty>
             ) : (
               <CommandGroup>
                 {filteredLanguages.map((language) => (
                   <CommandItem
                     key={language}
                     onSelect={() => handleSelectLanguage(language)}
-                    className="mt-1 flex items-center gap-x-2"
+                    className="flex items-center mt-1 gap-x-2"
                   >
                     <Checkbox
                       checked={selectedLanguages.includes(language)}
                       onCheckedChange={() => handleSelectLanguage(language)}
-                      className="bg-white data-[state=checked]:border-none data-[state=checked]:bg-yellow"
+                      className="bg-white data-[state=checked]:bg-yellow data-[state=checked]:border-none"
                     />
                     {language}
                   </CommandItem>
