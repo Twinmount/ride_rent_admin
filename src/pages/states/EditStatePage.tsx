@@ -59,6 +59,8 @@ export default function EditLocationPage() {
     enabled: !!stateId && activeTab === "banner",
     retry: false,
     refetchOnWindowFocus: false,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const { data: promotionData, isFetching: isPromotionFetching } = useQuery({
