@@ -33,6 +33,8 @@ export default function EditCountryPage() {
     enabled: !!countryId && activeTab === "banner",
     retry: false,
     refetchOnWindowFocus: false,
+    staleTime: 0,
+    gcTime: 0,
   });
 
   const { data: promotionData, isFetching: isPromotionFetching } = useQuery({
