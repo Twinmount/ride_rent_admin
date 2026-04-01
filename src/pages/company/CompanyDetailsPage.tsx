@@ -84,7 +84,79 @@ export default function CompanyDetailsPage() {
       {isLoading ? (
         <FormSkelton />
       ) : (
-        <CompanyForm type="Update" formData={formData} />
+        <CompanyForm type="Update" formData={formData}>
+          {/* ── Managers Section ── */}
+          {agentId && (
+            <div className="w-full max-w-[800px] mx-auto mb-10 p-6 bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col items-start text-left">
+              <div className="flex w-full items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow/10">
+                    <Users className="h-4 w-4 text-yellow" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-base font-semibold text-gray-900 leading-tight">
+                      Managers
+                    </h3>
+                    <p className="text-xs text-gray-400">
+                      {managers.length}/{MAX_MANAGERS} managers
+                    </p>
+                  </div>
+                </div>
+                {managers.length < MAX_MANAGERS && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setManagerToEdit(null);
+                      setIsManagerDialogOpen(true);
+                    }}
+                    className="flex items-center gap-1.5 text-xs font-semibold text-yellow hover:text-darkYellow transition-colors border-none outline-none bg-transparent"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    Add Manager
+                  </button>
+                )}
+              </div>
+
+              {isManagersLoading ? (
+                <div className="flex w-full justify-center py-6">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-yellow border-t-transparent" />
+                </div>
+              ) : managers.length === 0 ? (
+                <div className="flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 py-8 text-center">
+                  <Users className="h-8 w-8 text-gray-300 mb-2" />
+                  <p className="text-sm text-gray-400">No managers added yet.</p>
+                  <p className="text-xs text-gray-300 mt-1">
+                    Managers can be assigned to vehicles.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-3">
+                  {managers.map((manager) => (
+                    <ManagerCard
+                      key={manager.id}
+                      manager={manager}
+                      onEdit={(m) => {
+                        setManagerToEdit(m);
+                        setIsManagerDialogOpen(true);
+                      }}
+                      onDelete={handleDeleteManager}
+                      isDeleting={
+                        isDeletingManager && deletingManagerId === manager.id
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+
+              <AddManagerDialog
+                open={isManagerDialogOpen}
+                onOpenChange={setIsManagerDialogOpen}
+                agentId={agentId}
+                managerToEdit={managerToEdit}
+              />
+            </div>
+          )}
+        </CompanyForm>
       )}
 
       {data?.result.approvalStatus === "APPROVED" && (
@@ -94,77 +166,6 @@ export default function CompanyDetailsPage() {
           >
             Manually add new vehicle under this company?
           </Link>
-        </div>
-      )}
-
-      {/* ── Managers Section ── */}
-      {agentId && (
-        <div className="w-full max-w-[800px] mx-auto mb-10 p-6 bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col items-start text-left">
-          <div className="flex w-full items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow/10">
-                <Users className="h-4 w-4 text-yellow" />
-              </div>
-              <div className="text-left">
-                <h3 className="text-base font-semibold text-gray-900 leading-tight">
-                  Managers
-                </h3>
-                <p className="text-xs text-gray-400">
-                  {managers.length}/{MAX_MANAGERS} managers
-                </p>
-              </div>
-            </div>
-            {managers.length < MAX_MANAGERS && (
-              <button
-                onClick={() => {
-                  setManagerToEdit(null);
-                  setIsManagerDialogOpen(true);
-                }}
-                className="flex items-center gap-1.5 text-xs font-semibold text-yellow hover:text-darkYellow transition-colors border-none outline-none bg-transparent"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                Add Manager
-              </button>
-            )}
-          </div>
-
-          {isManagersLoading ? (
-            <div className="flex w-full justify-center py-6">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-yellow border-t-transparent" />
-            </div>
-          ) : managers.length === 0 ? (
-            <div className="flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 py-8 text-center">
-              <Users className="h-8 w-8 text-gray-300 mb-2" />
-              <p className="text-sm text-gray-400">No managers added yet.</p>
-              <p className="text-xs text-gray-300 mt-1">
-                Managers can be assigned to vehicles.
-              </p>
-            </div>
-          ) : (
-            <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-3">
-              {managers.map((manager) => (
-                <ManagerCard
-                  key={manager.id}
-                  manager={manager}
-                  onEdit={(m) => {
-                    setManagerToEdit(m);
-                    setIsManagerDialogOpen(true);
-                  }}
-                  onDelete={handleDeleteManager}
-                  isDeleting={
-                    isDeletingManager && deletingManagerId === manager.id
-                  }
-                />
-              ))}
-            </div>
-          )}
-
-          <AddManagerDialog
-            open={isManagerDialogOpen}
-            onOpenChange={setIsManagerDialogOpen}
-            agentId={agentId}
-            managerToEdit={managerToEdit}
-          />
         </div>
       )}
     </section>
