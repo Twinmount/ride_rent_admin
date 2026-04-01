@@ -42,6 +42,7 @@ type CompanyFormProps = {
   formData?: CompanyFormType | null;
   updateId?: string;
   isSupplierPage?: boolean;
+  children?: React.ReactNode;
 };
 
 export default function CompanyForm({
@@ -49,6 +50,7 @@ export default function CompanyForm({
   formData,
   updateId,
   isSupplierPage = false,
+  children,
 }: CompanyFormProps) {
   const navigate = useNavigate();
   const { companyId } = useParams<{ companyId: string }>();
@@ -615,6 +617,9 @@ useEffect(() => {
             );
           }}
         />
+
+        {/* Children (e.g. Managers block) */}
+        {children}
 
         {/* Submit Button */}
         <FormSubmitButton

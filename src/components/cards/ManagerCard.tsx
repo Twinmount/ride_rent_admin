@@ -36,6 +36,7 @@ export default function ManagerCard({ manager, onEdit, onDelete, isDeleting }: M
           <div className="flex items-center gap-1.5 flex-shrink-0">
             {onEdit && (
               <button
+                type="button"
                 onClick={() => onEdit(manager)}
                 className="flex h-8 w-8 items-center justify-center rounded-lg border-none bg-gray-50 text-gray-400 outline-none transition-colors hover:bg-yellow/10 hover:text-yellow"
                 title="Edit manager"
@@ -45,6 +46,7 @@ export default function ManagerCard({ manager, onEdit, onDelete, isDeleting }: M
             )}
             {onDelete && (
               <button
+                type="button"
                 onClick={() => onDelete(manager)}
                 disabled={isDeleting}
                 className="flex h-8 w-8 items-center justify-center rounded-lg border-none bg-gray-50 text-gray-400 outline-none transition-colors hover:bg-red-50 hover:text-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
