@@ -46,6 +46,7 @@ export default function VehiclesFormUpdatePage() {
   const isIndia = companyData?.result?.countryName === "India";
   const countryId = companyData?.result?.countryId || "";
   const companyLocation = companyData?.result?.location || null;
+  const agentId = companyData?.result?.agentId || "";
 
   // Using custom hook
   const {
@@ -132,6 +133,7 @@ export default function VehiclesFormUpdatePage() {
                   countryId={countryId}
                   companyLocation={companyLocation}
                   isAddOrIncomplete={isAddOrIncomplete}
+                  agentId={agentId}
                 />
               )}
             </Suspense>

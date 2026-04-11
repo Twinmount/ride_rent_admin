@@ -54,5 +54,6 @@ export const buildCommonPrimaryDetails = (
     tempCitys: values.tempCitys,
     isVehicleModified: values.isVehicleModified.toString(),
     disablePriceMatching: values?.disablePriceMatching || false,
+    managerId: values.managerId || null,
   };
 };

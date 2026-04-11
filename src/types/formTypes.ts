@@ -93,6 +93,7 @@ export type PrimaryFormType = {
   displayAddress: string;
   isVehicleModified: boolean;
   disablePriceMatching?: boolean;
+  managerId?: string;
 };
 
 export type CompanyFormType = {};

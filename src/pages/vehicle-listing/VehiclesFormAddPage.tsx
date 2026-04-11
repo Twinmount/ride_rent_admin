@@ -53,6 +53,7 @@ export default function VehiclesFormAddPage() {
   const isIndia = companyData?.result?.countryName === "India";
   const countryId = companyData?.result?.countryId || "";
   const companyLocation = companyData?.result?.location || null;
+  const agentId = companyData?.result?.agentId || "";
 
   // Handle tab change based on levelsFilled state
   const handleTabChange = (value: string) => {
@@ -136,6 +137,7 @@ export default function VehiclesFormAddPage() {
                   isIndia={isIndia}
                   countryId={countryId}
                   companyLocation={companyLocation}
+                  agentId={agentId}
                 />
               )}
             </Suspense>

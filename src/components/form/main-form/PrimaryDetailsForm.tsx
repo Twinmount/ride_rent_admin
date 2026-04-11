@@ -64,6 +64,7 @@ import StatesDropdownForVehicleForm from "../dropdowns/StatesDropdownForVehicleF
 import LocationPicker from "../LocationPicker";
 import { saveRentalPricesApi } from "../SeriesPriceTable";
 import SingleFileUpload from "../file-uploads/SingleFileUpload";
+import ManagerDropdown from "../dropdowns/ManagerDropdown";
 
 type PrimaryFormProps = {
   type: "Add" | "Update";
@@ -75,6 +76,7 @@ type PrimaryFormProps = {
   countryId: string;
   companyLocation: Location | null;
   isAddOrIncomplete?: boolean;
+  agentId?: string;
 };
 
 type CityType = {
@@ -95,6 +97,7 @@ export default function PrimaryDetailsForm({
   countryId,
   companyLocation,
   isAddOrIncomplete,
+  agentId,
 }: PrimaryFormProps) {
   const [isPhotosUploading, setIsPhotosUploading] = useState(false);
   const [isThumbnailUploading, setIsThumbnailUploading] = useState(false);
@@ -113,6 +116,10 @@ export default function PrimaryDetailsForm({
     [],
   );
   const [showPhotoChangeWarning, setShowPhotoChangeWarning] = useState(true);
+  
+  const [selectedManagerId, setSelectedManagerId] = useState<string>(
+    formData?.managerId || "",
+  );
 
   const [countryCode, setCountryCode] = useState<string>(() => {
     const code = initialCountryCode || (isIndia ? "+91" : "+971");
@@ -296,7 +303,7 @@ export default function PrimaryDetailsForm({
     try {
       const data = await handleLevelOneFormSubmission(
         type,
-        { ...values, cityIds, tempCitys } as PrimaryFormType,
+        { ...values, cityIds, tempCitys, managerId: selectedManagerId } as PrimaryFormType,
         {
           countryCode,
           userId,
@@ -1535,6 +1542,27 @@ export default function PrimaryDetailsForm({
               </FormItemWrapper>
             )}
           />
+
+          {/* Assign Manager – optional */}
+          {agentId && (
+            <FormItemWrapper
+              label={
+                <span>
+                  Assign Manager{" "}
+                  <span className="text-sm font-normal text-gray-400">
+                    (optional)
+                  </span>
+                </span>
+              }
+              description="Assign a manager responsible for this vehicle. You can also add a new manager from the dropdown."
+            >
+              <ManagerDropdown
+                agentId={agentId}
+                value={selectedManagerId}
+                onChangeHandler={setSelectedManagerId}
+              />
+            </FormItemWrapper>
+          )}
 
           {/* Vehicle Description */}
           <FormField
