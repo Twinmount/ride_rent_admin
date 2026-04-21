@@ -386,7 +386,10 @@ export const PrimaryFormSchema = z
       )
       .optional(),
     disablePriceMatching: z.boolean().optional().default(false),
-    managerId: z.string().optional(),
+    managerId: z.preprocess(
+      (value) => (value === null ? undefined : value),
+      z.string().optional(),
+    ),
   })
   .refine(
     (data) => {
