@@ -393,7 +393,7 @@ export function mapGetPrimaryFormToPrimaryFormType(
     displayAddress: data.displayAddress,
     isVehicleModified: data.isVehicleModified,
     disablePriceMatching: data.disablePriceMatching || false,
-    managerId: data.managerId,
+    managerId: data.managerId ?? undefined,
   };
 }
 

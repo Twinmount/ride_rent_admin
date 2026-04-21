@@ -164,6 +164,10 @@ export default function PrimaryDetailsForm({
   }, [initialCountryCode]);
 
   useEffect(() => {
+    setSelectedManagerId(formData?.managerId ?? "");
+  }, [formData?.managerId]);
+
+  useEffect(() => {
     if (type === "Update" && formData?.vehiclePhotos) {
       setOriginalVehiclePhotos([...formData.vehiclePhotos]);
     }
