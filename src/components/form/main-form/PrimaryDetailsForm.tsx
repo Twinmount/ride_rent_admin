@@ -18,7 +18,6 @@ import { PrimaryFormSchema } from "@/lib/validator";
 import { PrimaryFormType } from "@/types/formTypes";
 import YearPicker from "../YearPicker";
 import { Label } from "@/components/ui/label";
-import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import RentalDetailsFormField from "../RentalDetailsFormField";
 import MultipleFileUpload from "../file-uploads/MultipleFileUpload";
@@ -116,7 +115,7 @@ export default function PrimaryDetailsForm({
     [],
   );
   const [showPhotoChangeWarning, setShowPhotoChangeWarning] = useState(true);
-  
+
   const [selectedManagerId, setSelectedManagerId] = useState<string>(
     formData?.managerId || "",
   );
@@ -139,12 +138,12 @@ export default function PrimaryDetailsForm({
 
   const initialValues = formData
     ? {
-        ...formData,
-        cityIds: [
-          ...formData.cityIds,
-          ...(formData.tempCitys ?? []).map((city: CityType) => city.cityId),
-        ],
-      }
+      ...formData,
+      cityIds: [
+        ...formData.cityIds,
+        ...(formData.tempCitys ?? []).map((city: CityType) => city.cityId),
+      ],
+    }
     : getPrimaryFormDefaultValues(isIndia, countryCode);
 
   // Define your form.
@@ -1088,9 +1087,8 @@ export default function PrimaryDetailsForm({
                     <span className="text-sm text-gray-500">(DD/MM/YYYY)</span>
                   </span>
                 }
-                description={`Enter the expiry date for the Registration Card ${
-                  isIndia ? "" : "/ Mulkia"
-                } in the format DD/MM/YYYY.`}
+                description={`Enter the expiry date for the Registration Card ${isIndia ? "" : "/ Mulkia"
+                  } in the format DD/MM/YYYY.`}
               >
                 <DatePicker
                   selected={field.value}
@@ -1143,7 +1141,7 @@ export default function PrimaryDetailsForm({
           />
 
           {/* Phone / Whatsapp Number */}
-          <FormField
+          {/* <FormField
             control={form.control}
             name="phoneNumber"
             render={({ field }) => (
@@ -1182,7 +1180,7 @@ export default function PrimaryDetailsForm({
                 />
               </FormItemWrapper>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
@@ -1210,11 +1208,10 @@ export default function PrimaryDetailsForm({
                         <span className="mt-2">Loading...</span>
                       ) : (
                         <span
-                          className={`mt-2 select-none underline ${
-                            companyLocation
+                          className={`mt-2 select-none underline ${companyLocation
                               ? "cursor-pointer text-blue-700"
                               : "cursor-not-allowed text-gray-400"
-                          }`}
+                            }`}
                           onClick={() => {
                             if (!companyLocation) return;
                             toast({

@@ -327,7 +327,7 @@ export const PrimaryFormSchema = z
       month: RentalDetailTypeSchema,
       hour: HourlyRentalDetailTypeSchema, // Uses schema with minBookingHours
     }),
-    phoneNumber: z.string().min(6, "Provide a valid mobile number"),
+    phoneNumber: z.string().optional(),
     stateId: z.string().min(1, "State  is required"),
     cityIds: z
       .array(z.string().min(1, "City ID is required"))
